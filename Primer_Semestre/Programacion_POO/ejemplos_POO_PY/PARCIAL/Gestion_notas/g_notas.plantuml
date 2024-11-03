@@ -1,0 +1,34 @@
+@startuml Gestor_Notas
+
+class Nota {
+    - tipo_evaluacion: string
+    - ponderacion: float
+    - nota_obtenida: float
+    + __init__(tipo_evaluacion: string, ponderacion: float, nota_obtenida: float)
+}
+
+class Estudiante {
+    - nombre: string
+    - codigo: string
+    - materia: string
+    - notas: list[Nota]
+    + __init__(nombre: string, codigo: string, materia: string)
+    + agregar_nota(nota: Nota): void
+    + calcular_promedio(): float
+}
+
+class  SistemaGestionNotas {
+    + estudiantes: list[Estudiante]
+    + mostrar_menu_principal(): string
+    + agregar_estudiante(): void
+    + agregar_nota_estudiante(): void
+    + mostrar_submenu_tipo_evaluacion(): string
+    + mostrar_informacion_notas(): void
+    + calcular_promedio_estudiante(): void
+}
+
+SistemaGestionNotas--> "*" Estudiante: contiene
+SistemaGestionNotas--> "*" Nota: contiene
+
+@enduml
+

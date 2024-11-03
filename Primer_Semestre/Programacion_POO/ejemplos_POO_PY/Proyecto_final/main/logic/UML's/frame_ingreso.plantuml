@@ -1,0 +1,17 @@
+@startuml Frame_ingreso
+
+class FrameIngreso {
+    - parent: tk.Frame
+    + __init__(parent)
+    + convertir_mayusculas(event)
+    + crear_widgets()
+    - entrada_ciudad: tk.Entry
+    - entrada_fecha: tk.Entry
+    - entrada_temperatura: tk.Entry
+    - entrada_humedad: tk.Entry
+    - entrada_presion_at: tk.Entry
+}
+
+FrameIngreso --|> tk.Frame
+
+@enduml

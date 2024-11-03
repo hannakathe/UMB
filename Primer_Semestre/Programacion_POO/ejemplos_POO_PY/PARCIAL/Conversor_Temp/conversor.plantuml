@@ -1,0 +1,21 @@
+@startuml Conversor_Temperatura
+
+class Ciudad {
+    - ciudad: str
+    - temp_ciudad: float
+    + __init__(ciudad: str, temp_ciudad: float)
+    + obtener_temperatura(ciudad: str): float
+}
+
+class ConvTemp {
+    - kelvin: float
+    - fahrenheit: float
+    + __init__(kelvin: float, fahrenheit: float)
+    + convertir_temperatura(temp_ciudad: float, opcion_conversion: str): float
+}
+
+Ciudad "1" -- "1" ConvTemp
+
+@enduml
+
+

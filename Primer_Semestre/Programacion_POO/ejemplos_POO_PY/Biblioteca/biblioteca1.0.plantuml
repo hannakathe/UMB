@@ -1,0 +1,46 @@
+@startuml Biblioteca
+
+class Biblioteca {
+    - fecha_entrega: List<String>
+    - fecha_salida: List<String>
+    - cont_usuarios: int
+    - cont_libros: int
+    + inscribir(nombre: String, documento: String, email: String, tipo_de_membresia: String): void
+    + consultar(documento: String): void
+    + consultar_libro(titulo: String, categoria: String, autor: String): void
+    + listar_lib(): void
+    + listar_usu(): void
+    + agregar(titulo: String, isbn: String, autor: String, categoria: String, cantidad: int): void
+    + eliminar(titulo: String): void
+    + actualizar_fechas(titulo: String, fecha_salida: String, fecha_ingreso: String): void
+    + eliminar_libro_pedido(titulo: String): void
+}
+
+class Usuarios {
+    - libros_pedidos: List[str]
+    - cont_lib_usu: int
+    - nombre: List[str]
+    - documento: List[str]
+    - email: List[str]
+    - tipo_de_membresia: List[str]
+    - pasword: List[str]
+    + inscribir(nombre: str, documento: str, email: str, tipo_de_membresia: str, pasword: str): None
+    + pedir_libro(titulo: str, tipo_de_membresia: str, fecha_ingreso: datetime): None
+    + verificar_devolucion_tardia(fecha_devolucion_real: datetime, fecha_devolucion_esperada: datetime): None
+    + devolver_lib(titulo: str): None
+    + listar_lib_usu(): None
+}
+
+class Libros {
+    - titulo: List<String>
+    - categoria: List<String>
+    - autor: List<String>
+    - isbn: List<String>
+    - cantidad: List<Integer>
+}
+
+Biblioteca "1" --> "*" Usuarios
+Biblioteca "1" --> "1" Libros
+
+@enduml
+

@@ -1,0 +1,36 @@
+@startuml Nequi
+
+class MetaRecaudo {
+    - monto_objetivo: float
+    - fecha_establecimiento: date
+    - estado: str
+    - ahorro_actual: float
+    + __init__(monto_objetivo: float)
+    + __str__(): str
+}
+
+class BancoDigital {
+    - saldo_total: float
+    - metas_recaudo: list
+    - usuarios: dict
+    - usuario_actual: str
+    + __init__()
+    + autenticar_usuario(): bool
+    + inscribir_usuario(): None
+    + menu_principal(): None
+    + ver_saldo_total(): None
+    + ingresar_dinero(monto: float): None
+    + enviar_dinero(monto: float): None
+    + retirar_dinero(monto: float, tipo: str): None
+    + establecer_meta_de_ahorro(monto_objetivo: float): None
+    + ver_metas_de_ahorro(): None
+    + ejecutar(): None
+}
+
+MetaRecaudo -- BancoDigital
+
+@enduml
+
+
+
+

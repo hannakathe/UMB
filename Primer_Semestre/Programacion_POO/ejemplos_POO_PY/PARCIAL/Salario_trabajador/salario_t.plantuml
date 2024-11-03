@@ -1,0 +1,29 @@
+@startuml Salario_Trabajador
+
+class Trabajador {
+  - nombre: str
+  - documento: str
+  - salario_base: float
+  - descuentos: float
+  - aux_transporte: float
+  + __init__(nombre, documento, salario_base, descuentos, aux_transporte)
+  + calcular_salario_total(horas_extras, valor_hora_extra)
+}
+
+class Horas_Extras {
+  <<hereda de>> Trabajador
+  + calcular_horas_extras(valor_hora_extra, horas_extras)
+}
+
+class Registro_Trabajadores {
+  - trabajadores: list
+  + __init__()
+  + agregar_trabajador(trabajador)
+  + listar_trabajadores()
+}
+
+Trabajador <|-- Horas_Extras
+
+@enduml
+
+

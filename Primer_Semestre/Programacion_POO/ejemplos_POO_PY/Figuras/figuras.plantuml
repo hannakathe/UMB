@@ -1,0 +1,78 @@
+@startuml Figuras
+
+abstract class Figura {
+    + calcular_area(): float
+    + calcular_perimetro(): float
+}
+
+class Cuadrado {
+    - lado: float
+    + calcular_area(): float
+}
+
+class Rectangulo {
+    - lado_1: float
+    - lado_2: float
+    + calcular_area(): float
+}
+
+class Triangulo {
+    - base: float
+    - altura: float
+    + calcular_area(): float
+}
+
+class Rombo {
+    - diagonal_l: float
+    - digonal_c: float
+    + calcular_area(): float
+}
+
+class Pentagono {
+    - lado: float
+    + calcular_area(): float
+}
+
+class Hexagono {
+    - lado: float
+    + calcular_area(): float
+}
+
+class Circulo {
+    - radio: float
+    + calcular_area(): float
+}
+
+class Trapecio {
+    - base_l: float
+    - base_c: float
+    - altura: float
+    + calcular_area(): float
+}
+
+class Paralelogramo {
+    - base: float
+    - altura: float
+    + calcular_area(): float
+}
+
+class Gestor_Figuras {
+    - figuras: List<Figura>
+    + agregar_figura(figura: Figura): void
+    + imprimir_areas(): void
+}
+
+Figura <-- Cuadrado
+Figura <-- Rectangulo
+Figura <-- Triangulo
+Figura <-- Rombo
+Figura <-- Pentagono
+Figura <-- Hexagono
+Figura <-- Circulo
+Figura <-- Trapecio
+Figura <-- Paralelogramo
+
+
+@enduml
+
+

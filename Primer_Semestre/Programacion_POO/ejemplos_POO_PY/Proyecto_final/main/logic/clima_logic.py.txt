@@ -1,0 +1,87 @@
+# boot.py -- run on boot-up
+from machine import Pin
+from utime import sleep
+
+class Leds:
+    def __init__(self, positions, pause=0.5, parpadeos=1):
+        self.leds = [Pin(pos, Pin.OUT) for pos in positions]
+        self.pause = pause
+        self.parpadeos = parpadeos
+
+class Ejercicio1(Leds):
+    def encendido_individual(self, reverse=False):
+        while True:
+            indices = range(len(self.leds))
+            if reverse:
+                indices = reversed(indices)
+            for i in indices:
+                self._encender_unico_led(i)
+                
+    def _encender_unico_led(self, index):
+        for i, led in enumerate(self.leds):
+            led.value(1 if i == index else 0)
+        sleep(self.pause)
+
+class Ejercicio2(Leds):
+    def secuencia_izquierda_a_derecha(self):
+        while True:
+            for i in range(len(self.leds)):
+                self._encender_unico_led(i)
+    
+    def secuencia_derecha_a_izquierda(self):
+        while True:
+            for i in reversed(range(len(self.leds))):
+                self._encender_unico_led(i)
+
+    def secuencia_alternante(self):
+        while True:
+            for i in range(0, len(self.leds), 2):
+                self._encender_y_apagar_leds([i])
+            for i in range(1, len(self.leds), 2):
+                self._encender_y_apagar_leds([i])
+    
+    def _encender_unico_led(self, index):
+        for i, led in enumerate(self.leds):
+            led.value(1 if i == index else 0)
+        sleep(self.pause)
+    
+    def _encender_y_apagar_leds(self, indices):
+        for i, led in enumerate(self.leds):
+            led.value(1 if i in indices else 0)
+        sleep(self.pause)
+
+
+class Ejercicio3(Leds):
+    def parpadeo_secuencial(self, reverse=False):
+        if reverse:
+            self.leds = self.leds[::-1]
+        while True:
+            for led in self.leds:
+                led.value(1)
+                sleep(self.pause)
+                led.value(0)
+                sleep(self.pause)
+
+class Ejercicio4(Leds):
+    def parpadeo_individual(self, reverse=False):
+        leds = self.leds[::-1] if reverse else self.leds
+        for led in leds:
+            for _ in range(self.parpadeos * 2):
+                led.value(not led.value())
+                sleep(self.pause)
+
+class Ejercicio5(Leds):
+    def parpadeo_general(self, reverse=False):
+        leds_list_pin = [Pin(pos, Pin.OUT) for pos in self.leds]
+        ejercicio3 = Ejercicio3(leds_list_pin, self.pause)
+        ejercicio3.parpadeo_secuencial(reverse)
+
+class Ejercicio6(Leds):
+    def parpadeo_parcial(self, inicio, final, reverse=False):
+        leds = self.leds[inicio:final]
+        if reverse:
+            leds = reversed(leds)
+        for led in leds:
+            for _ in range(self.parpadeos * 2):
+                led.value(not led.value())
+                sleep(self.pause)

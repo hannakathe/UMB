@@ -1,0 +1,16 @@
+@startuml Frame_resultado
+
+class FrameResultado {
+    - parent: tk.Tk
+    - tipo_clima: str
+    - ciudad: str
+    - fecha: str
+    - temperatura: float
+    - humedad: int
+    - presion: int
+    + __init__(parent, tipo_clima, ciudad, fecha, temperatura, humedad, presion)
+    + create_widgets()
+    + show()
+}
+
+@enduml

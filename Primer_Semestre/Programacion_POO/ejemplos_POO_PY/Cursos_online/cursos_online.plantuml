@@ -1,0 +1,73 @@
+@startuml cursos_online
+
+class Curso {
+    -nombre: String
+    -duracion: int
+    -precio_base: float
+    -descripcion: String
+    -estudiantes: List<Estudiante>
+
+    +__init__(nombre: String, duracion: int, precio_base: float, descripcion: String)
+    +inscribir_estudiante(estudiante: Estudiante): void
+    +dar_info(): String
+    +precio(): float
+}
+
+class Python {
+    -nivel: String
+    -proyecto: String
+
+    +__init__(duracion: int, nivel: String, proyecto: String)
+    +dar_info(): String
+}
+
+class Java {
+    -nivel: String
+    -proyecto: String
+
+    +__init__(duracion: int, nivel: String, proyecto: String)
+    +dar_info(): String
+}
+
+class CSharp {
+    -nivel: String
+    -proyecto: String
+
+    +__init__(duracion: int, nivel: String, proyecto: String)
+    +dar_info(): String
+}
+
+class JS {
+    -nivel: String
+    -proyecto: String
+
+    +__init__(duracion: int, nivel: String, proyecto: String)
+    +dar_info(): String
+}
+
+class HTML_CSS {
+    -nivel: String
+    -proyecto: String
+
+    +__init__(duracion: int, nivel: String, proyecto: String)
+    +dar_info(): String
+}
+
+class Estudiante {
+    -nombre: String
+    -email: String
+
+    +__init__(nombre: String, email: String)
+}
+
+Python --> Curso
+Java --> Curso
+CSharp --> Curso
+JS --> Curso
+HTML_CSS --> Curso
+
+Curso "1" --> "*" Estudiante : contiene
+
+Estudiante --> Curso : inscrito en
+
+@enduml

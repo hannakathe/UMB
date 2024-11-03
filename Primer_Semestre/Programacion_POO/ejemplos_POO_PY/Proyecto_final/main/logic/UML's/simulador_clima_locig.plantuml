@@ -1,0 +1,47 @@
+@startuml Logic_Clima
+class Clima {
+    - temperatura: float
+    - humedad: float
+    - presion: float
+    + __init__(temperatura: float, humedad: float, presion: float)
+    {abstract} + obtener_condiciones(): abstract
+}
+ABC <|-- Clima
+
+class CalculosClimaCalido {
+    - clima: Clima
+    + __init__(clima: Clima)
+    {abstract} + determinar_clima(): abstract
+    + soleado(temperatura: float, humedad: float, presion: float): bool
+    + parcialmente_nublado(temperatura: float, humedad: float, presion: float): bool
+    ...
+}
+class CalculosClimaFrio {
+    - clima: Clima
+    + __init__(clima: Clima)
+    {abstract} + determinar_clima(): abstract
+    + soleado(temperatura: float, humedad: float, presion: float): bool
+    + parcialmente_nublado(temperatura: float, humedad: float, presion: float): bool
+    ...
+}
+Clima <|-- CalculosClimaCalido
+Clima <|-- CalculosClimaFrio
+
+class ClimaTipico {
+    - ciudad: str
+    - fecha: str
+    + __init__(ciudad: str, fecha: str)
+    + obtener_clima_ciudad_fecha(): str
+}
+class CalculoClima {
+    - ciudad: str
+    - fecha: str
+    + __init__(ciudad: str, fecha: str, temperatura: float, humedad: float, presion: float)
+    + determinar_clima(): str
+    + obtener_condiciones(): tuple
+}
+CalculoClima <|-- ClimaTipico
+CalculoClima <|-- CalculosClimaCalido
+CalculoClima <|-- CalculosClimaFrio
+
+@enduml

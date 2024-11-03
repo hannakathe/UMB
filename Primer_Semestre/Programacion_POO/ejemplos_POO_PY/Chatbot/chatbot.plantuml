@@ -1,0 +1,18 @@
+@startuml Chatbot
+
+class Preguntas {
+    - _pares: list
+    + __init__()
+    + obtener_pares(): list
+}
+
+class Chatbot {
+    - preguntas: Preguntas
+    + __init__()
+    + chatear()
+}
+
+Preguntas "1" --> "*" Chatbot : has
+
+@enduml
+

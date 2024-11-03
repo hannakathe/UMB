@@ -1,0 +1,35 @@
+@startuml Casilleros
+
+class Casillero {
+    - numero: int
+    - estado: str
+    - codigo_estudiante: str
+    - nombre_estudiante: str
+    - piso: int
+    + __init__(numero: int, estado='disponible', codigo_estudiante=None, nombre_estudiante=None, piso=None)
+    + alquilar(codigo_estudiante: str, nombre_estudiante: str): void
+    + devolver(): void
+    + __str__(): str
+}
+
+class Inventario {
+    - casilleros: list
+    + __init__()
+    + agregar_casilleros(): void
+    + buscar_por_estado(estado: str): list
+    + buscar_casillero(criterio: str, valor: str): any
+    + mostrar_inventario(): void
+}
+
+class Main {
+    - inventario: Inventario
+    + __init__()
+    + mostrar_menu(): void
+}
+
+Casillero "1" --> "*" Inventario : contiene
+Main --> Inventario : contiene
+
+@enduml
+
+

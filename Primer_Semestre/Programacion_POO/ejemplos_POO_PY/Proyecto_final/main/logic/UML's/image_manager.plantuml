@@ -1,0 +1,10 @@
+@startuml image_manager
+
+class ImageManager {
+    - tipo_clima: str
+    + __init__(tipo_clima: str)
+    + get_image(tipo_dato: str): str
+    + create_image_label(parent: tk.Tk, tipo_dato: str, width: int, height: int, x: int, y: int): tk.Label
+}
+
+@enduml

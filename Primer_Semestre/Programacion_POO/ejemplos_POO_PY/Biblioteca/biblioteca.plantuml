@@ -1,0 +1,44 @@
+@startuml Biblioteca
+
+class Biblioteca {
+    - nombre: List[str]
+    - documento: List[str]
+    - email: List[str]
+    - tipo_de_membresia: List[str]
+    - pasword: List[str]
+    - titulo: List[str]
+    - categoria: List[str]
+    - autor: List[str]
+    - isbn: List[str]
+    - fecha_entrega: List[datetime]
+    - fecha_devolucion: List[datetime]
+    - cantidad: List[int]
+    - cont_usuarios: int
+    - cont_libros: int
+    + inscribir(nombre: str, documento: str, email: str, tipo_de_membresia: str, pasword: str): None
+    + consultar(documento: str): None
+    + consultar_libro(titulo: str, categoria: str, autor: str): None
+    + listar_lib(): None
+    + listar_usu(): None
+    + agregar(titulo: str, isbn: str, autor: str, categoria: str, cantidad: int): None
+    + eliminar(titulo: str): None
+    + eliminar_libro_pedido(titulo: str): None
+}
+
+class Usuarios {
+    - libros_pedidos: List[str]
+    - cont_lib_usu: int
+    + pedir_lib(titulo: str): None
+    + devolver_lib(titulo: str): None
+    + listar_lib_usu(): None
+}
+
+@enduml
+
+
+
+
+
+
+
+

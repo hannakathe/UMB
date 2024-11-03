@@ -1,0 +1,27 @@
+@startuml Simulador_Ui
+skinparam class {
+    BackgroundColor White
+    ArrowColor #707070
+    BorderColor #707070
+}
+
+class VentanaPrincipal {
+    - clima_calculator: type
+    + __init__(clima_calculator: type)
+    + salir_pantalla_completa(event=None): void
+    + crear_contenido(): void
+    + salir_programa(): void
+    + calcular_clima(): void
+}
+
+class FrameIngreso
+class FrameResultado
+class CalculoClima
+class tk.Tk
+
+VentanaPrincipal --|> tk.Tk
+VentanaPrincipal "1" -- "1..*" FrameIngreso
+VentanaPrincipal "1" -- "1..1" FrameResultado
+VentanaPrincipal "1" -- "1..1" CalculoClima
+
+@enduml
