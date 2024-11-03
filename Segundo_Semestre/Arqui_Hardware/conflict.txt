@@ -1,4 +1,0 @@
-Archivo para control de conflictos 1
-segundo cambio desde main
-conflicto, cambio rama developer
-
