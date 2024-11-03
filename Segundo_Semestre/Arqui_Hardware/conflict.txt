@@ -1,2 +1,2 @@
 Archivo para control de conflictos 1
-
+conflicto, cambio rama developer
