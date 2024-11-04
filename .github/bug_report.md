@@ -1,4 +1,4 @@
-## 🐛 Bug Report
+🐛 Bug Report
 
 **Descripción del error**
 Una breve descripción del error.
