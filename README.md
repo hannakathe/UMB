@@ -17,13 +17,8 @@ La estructura del repositorio está organizada por semestre y curso, con el fin 
 
 La organización del repositorio es la siguiente:
 
-├── Primer_Semestre/ │ ├── Curso_1/ │ ├── Curso_2/ │ └── ... 
-
-├── Segundo_Semestre/ │ ├── Curso_1/ │ ├── Curso_2/ │ └── ... 
-
-├── Tercer_Semestre/ │ ├── Curso_1/ │ ├── Curso_2/ │ └── ... └── 
-
 📦 Trabajos_Universidad/
+
 ├── 📜 README.md                 # Descripción general del repositorio
 
 ├── 📜 LICENCIA.md               # (Opcional) Licencia para uso del repositorio
