@@ -17,10 +17,34 @@ La estructura del repositorio está organizada por semestre y curso, con el fin 
 
 La organización del repositorio es la siguiente:
 
-├── Primer_Semestre/ │ ├── Curso_1/ │ ├── Curso_2/ │ └── ... 
-├── Segundo_Semestre/ │ ├── Curso_1/ │ ├── Curso_2/ │ └── ... 
-├── Tercer_Semestre/ │ ├── Curso_1/ │ ├── Curso_2/ │ └── ... 
-
+📦 Trabajos_Universidad/
+├── 📜 README.md                 # Descripción general del repositorio
+├── 📜 LICENCIA.md               # (Opcional) Licencia para uso del repositorio
+├── 📂 Primer_Semestre/
+│   ├── 📂 Curso_1_Nombre/
+│   │   ├── 📂 Apuntes/          # Resúmenes y notas de clase
+│   │   ├── 📂 Tareas/           # Archivos de tareas y ejercicios
+│   │   ├── 📂 Proyectos/        # Código y documentos de proyectos
+│   │   ├── 📂 Exámenes/         # Material de preparación para exámenes y prácticas (si aplica)
+│   │   └── 📜 README.md         # Información específica del curso
+│   ├── 📂 Curso_2_Nombre/
+│   │   ├── 📂 Apuntes/
+│   │   ├── 📂 Tareas/
+│   │   ├── 📂 Proyectos/
+│   │   └── 📜 README.md
+│   └── ...
+├── 📂 Segundo_Semestre/
+│   ├── 📂 Curso_1_Nombre/
+│   │   ├── 📂 Apuntes/
+│   │   ├── 📂 Tareas/
+│   │   ├── 📂 Proyectos/
+│   │   └── 📜 README.md
+│   ├── 📂 Curso_2_Nombre/
+│   └── ...
+├── 📂 Tercer_Semestre/
+│   ├── 📂 Curso_1_Nombre/
+│   └── ...
+└── ...
 
 
 Cada carpeta de curso contiene subcarpetas o archivos específicos de las actividades y proyectos realizados en ese curso. 
