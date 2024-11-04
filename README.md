@@ -1,4 +1,4 @@
-# Trabajos Universitarios
+# Trabajos de la Universidad
 
 ### Universidad [Manuela Beltrán]
 ### Facultad de [Ingenieria]
