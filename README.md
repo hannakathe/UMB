@@ -1,6 +1,7 @@
 # Trabajos de la Universidad.
 
-### Universidad [Manuela Beltrán]
+### Universidad [Manuela Beltrán] ![image](https://github.com/user-attachments/assets/62df4efb-56bc-494b-8618-8e068b898324)
+
 ### Facultad de [Ingenieria]
 ### Carrera: [Ingenieria de Software]
 
