@@ -1,0 +1,47 @@
+ROUTER 1
+
+> enable
+#configure terminal
+()#interface g0/0
+	No shutdown
+	Ip add 192.168.0.1 255.255.255.0
+()#interface serial 0/0/0
+	No shutdown
+	Ip add 10.0.0.1 255.255.255.252
+()#ip route 10.0.0.4 255.255.255.252 10.0.0.2
+()#ip route 192.168.100.0 255.255.255.0 10.0.0.2
+
+ROUTER 2
+
+> enable
+#configure terminal
+()#interface g0/0
+	No shutdown
+	Ip add 10.0.0.5 255.255.255.252
+()#interface serial 0/0/0
+	No shutdown
+	Ip add 10.0.0.2 255.255.255.252
+()#interface g0/1
+	No shutdown
+	Ip add 192.168.100.1 255.255.255.0
+()#ip route 192.168.200.0 255.255.255.0 10.0.0.2 
+()#ip route 192.168.0.0 255.255.255.0 10.0.0.1 
+
+
+
+ROUTER 3
+
+> enable
+#configure terminal
+()#interface g0/0
+	No shutdown
+	Ip add 10.0.0.6 255.255.255.252
+()#interface g0/1
+	No shutdown
+	Ip add 192.168.200.1 255.255.255.0
+()#ip route 192.168.100.0 255.255.255.0 10.0.0.5
+()#ip route 192.168.0.0 255.255.255.0 10.0.0.5
+
+
+
+
