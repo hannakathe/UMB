@@ -1,5 +1,5 @@
 from machine import Pin, SoftI2C, ADC
-import ssd1306
+import ssd1306 
 
 class Oled:
     def __init__(self):

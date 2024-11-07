@@ -4,7 +4,7 @@ import time
 
 class MqttClient :
     def __init__(self, callback):
-      MQTT_CLIENT_ID = "estacion-incendio-harold141"
+      MQTT_CLIENT_ID = "estacion-incendio"
       MQTT_BROKER    = "broker.hivemq.com"
       MQTT_USER      = ""
       MQTT_PASSWORD  = ""
