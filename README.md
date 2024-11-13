@@ -23,8 +23,6 @@ La organización del repositorio es la siguiente:
 
 ├── 📜 README.md                 # Descripción general del repositorio
 
-├── 📜 LICENCIA.md               # (Opcional) Licencia para uso del repositorio
-
 ├── 📂 Primer_Semestre/
 
 │   ├── 📂 Curso_1_Nombre/
