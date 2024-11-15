@@ -4,11 +4,11 @@ import time
 
 class MqttClient :
     def __init__(self, callback):
-      MQTT_CLIENT_ID = "estacion-incendio-2"
+      MQTT_CLIENT_ID = "estacion-incendio"
       MQTT_BROKER    = "broker.hivemq.com"
       MQTT_USER      = ""
       MQTT_PASSWORD  = ""
-      self.MQTT_TOPIC      = "alarma/piso-2"
+      self.MQTT_TOPIC      = "alarma/piso-3"
       MQTT_TOPIC_SUSCRIBE   = "alarma/piso-3"
 
       led = Pin(2, Pin.OUT)
@@ -19,7 +19,7 @@ class MqttClient :
         client.set_callback(callback)
         client.connect()
         client.subscribe(MQTT_TOPIC_SUSCRIBE)
-        client.subscribe("alarma/piso-1")
+        client.subscribe("alarma/piso-3")
         led.value(1)
         return client
 

@@ -56,7 +56,7 @@ def play_tone(pin, frequency, duration):
         pwm.deinit()  # Detener la señal PWM
 
 def play_mario():
-    print("Marcador 7: Reproduciendo melodia de Mario...")
+    print("Marcador 7: Reproduciendo melodía de Mario...")
     for note, duration in melody:
         frequency = tones.get(note, 0)  # Obtener la frecuencia de la nota o silencio
         play_tone(buzzer_pin, frequency, duration)
@@ -64,18 +64,25 @@ def play_mario():
 # Verifica si hay fuego y publica en MQTT
 def check_fire():
     if fire_sensor_pin.value() == 0:
-        #print("Marcador 8: ¡Fuego detectado!")
+        print("Marcador 8: ¡Fuego detectado!")
         client.publish("1")
         play_mario()
     else:
-        #print("Marcador 9: No hay fuego.")
+        print("Marcador 9: No hay fuego.")
         client.publish("0")
         
 
 
 # Bucle principal
+# Bucle principal
 def main():
-    while True:
-        client.client.wait_msg()
+    try:
+        print("Marcador 12: Iniciando el programa principal...")
+
+        while True:
+            check_fire()
+            time.sleep(1)  # Esperar 1 segundo antes de verificar nuevamente
+    except KeyboardInterrupt:
+        print("Marcador 13: Detenido por el usuario.")
     
 main()
