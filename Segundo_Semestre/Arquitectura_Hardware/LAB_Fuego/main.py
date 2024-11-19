@@ -76,13 +76,7 @@ def check_fire():
 # Bucle principal
 # Bucle principal
 def main():
-    try:
-        print("Marcador 12: Iniciando el programa principal...")
-
-        while True:
-            check_fire()
-            time.sleep(1)  # Esperar 1 segundo antes de verificar nuevamente
-    except KeyboardInterrupt:
-        print("Marcador 13: Detenido por el usuario.")
+    while True:
+        client.client.wait_msg()
     
 main()
