@@ -5,30 +5,34 @@ ROUTER 1
 ipv6 unicast-routing
 ()#interface g0/0
 	no shutdown
-	ip add 10.0.0.2 255.255.255.252
+	ip add 192.168.40.1 255.255.255.252
 	ipv6 address FE80::1 link-local 
 	ipv6 address 2001:db8:1::1/64
-()#interface g0/1
+()#interface g0/0/0
 	no shutdown
-	ip add 192.168.40.1 255.255.255.0
+	ip add 10.0.0.2 255.255.255.0
 	ipv6 address FE80::2 link-local 
     ipv6 address 2001:db8:2::1/64
-()#interface serial 0/0/0
+()#interface serial 0/1/0
 	No shutdown
 	Ip add 10.0.0.5 255.255.255.252
 	ipv6 address FE80::3 link-local 
     ipv6 address 2001:db8:3::1/64
+()#interface serial 0/2/0
+	No shutdown
+	Ip add 10.0.0.18 255.255.255.252
+	ipv6 address FE80::3 link-local 
+    ipv6 address 2001:db8:4::1/64
+()#interface serial 0/3/0
+	No shutdown
+	Ip add 10.0.0.21 255.255.255.252
+	ipv6 address FE80::3 link-local 
+    ipv6 address 2001:db8:5::1/64
 
-()#ip route 10.0.0.12 255.255.255.252 10.0.0.1
-()#ip route 10.0.0.8 255.255.255.252 10.0.0.6
-
-()#ip route 192.168.10.0 255.255.255.0 10.0.0.1 50
-()#ip route 192.168.20.0 255.255.255.0 10.0.0.1 100
-()#ip route 192.168.30.0 255.255.255.0 10.0.0.1 150
-
-()#ip route 192.168.10.0 255.255.255.0 10.0.0.6 150
-()#ip route 192.168.20.0 255.255.255.0 10.0.0.6 100
-()#ip route 192.168.30.0 255.255.255.0 10.0.0.6 50
+()#ip route 
+.
+.
+.
 
 ()#ipv6 route 
 .
