@@ -1,6 +1,7 @@
+package generadores;
 import java.util.Scanner;
 
-public class ParesPQ {
+public class NumerosPares {
     public static void generadorPares(){
         Scanner scanner =new Scanner(System.in);
         System.out.print("Ingresa el número inicial (Entero): ");
@@ -13,11 +14,8 @@ public class ParesPQ {
         for (int i=p;i<=q;i++){
             if (i%2==0) {
                 System.out.println(i+" Es un numero par");
-            } else{
-                System.out.println(i+" No es par");
             }
         }
         scanner.close();
-
     }
 }
