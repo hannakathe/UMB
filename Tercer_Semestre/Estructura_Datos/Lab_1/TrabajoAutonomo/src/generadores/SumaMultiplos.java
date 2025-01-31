@@ -36,9 +36,5 @@ public class SumaMultiplos {
         }
     }
     
-    public static void main(String[] args) {
-        // Llamamos al método para generar y mostrar la suma en la interfaz
-        generarSuma();
-    }
 }
 
