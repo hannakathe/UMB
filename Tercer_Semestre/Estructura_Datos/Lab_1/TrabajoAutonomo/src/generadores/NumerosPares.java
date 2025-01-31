@@ -1,21 +1,26 @@
 package generadores;
-import java.util.Scanner;
+
+import javax.swing.JOptionPane;
 
 public class NumerosPares {
-    public static void generadorPares(){
-        Scanner scanner =new Scanner(System.in);
-        System.out.print("Ingresa el número inicial (Entero): ");
-        int p = scanner.nextInt();
-        
-        System.out.print("Ingresa el número final (Entero): ");
-        int q = scanner.nextInt();
+    public static void generadorPares() {
+        // Pedir el número inicial
+        String inputP = JOptionPane.showInputDialog("Ingresa el número inicial (Entero): ");
+        int p = Integer.parseInt(inputP); // Convertir el valor ingresado a entero
 
+        // Pedir el número final
+        String inputQ = JOptionPane.showInputDialog("Ingresa el número final (Entero): ");
+        int q = Integer.parseInt(inputQ); // Convertir el valor ingresado a entero
 
-        for (int i=p;i<=q;i++){
-            if (i%2==0) {
-                System.out.println(i+" Es un numero par");
+        // Generar y mostrar los números pares en el rango
+        StringBuilder resultado = new StringBuilder();
+        for (int i = p; i <= q; i++) {
+            if (i % 2 == 0) {
+                resultado.append(i).append(" Es un número par\n");
             }
         }
-        scanner.close();
+
+        // Mostrar el resultado en un cuadro de mensaje
+        JOptionPane.showMessageDialog(null, resultado.toString(), "Números Pares", JOptionPane.INFORMATION_MESSAGE);
     }
 }
