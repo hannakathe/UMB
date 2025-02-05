@@ -18,13 +18,13 @@ public class VehiculoService {
             String marca = scanner.nextLine();
             vehiculos[i] = new Vehiculo(marca);
 
-            for (int anio = 2019; anio <= 2023; anio++) {
+            for (int year = 2019; year <= 2023; year++) {
                 double precio;
                 do {
-                    System.out.print("Ingrese el precio para " + marca + " en el año " + anio + ": ");
+                    System.out.print("Ingrese el precio para " + marca + " en el año " + year + ": ");
                     precio = scanner.nextDouble();
                     try {
-                        vehiculos[i].setPrecio(anio, precio);
+                        vehiculos[i].setPrecio(year, precio);
                     } catch (IllegalArgumentException e) {
                         System.out.println(e.getMessage());
                     }
@@ -44,23 +44,23 @@ public class VehiculoService {
         }
     }
 
-    public void mostrarAutoMasBaratoCadaAno() {
-        for (int anio = 2019; anio <= 2023; anio++) {
+    public void mostrarAutoMasBaratoCadaAño() {
+        for (int year = 2019; year <= 2023; year++) {
             Vehiculo masBarato = vehiculos[0];
             for (Vehiculo vehiculo : vehiculos) {
-                if (vehiculo.getPrecio(anio) < masBarato.getPrecio(anio)) {
+                if (vehiculo.getPrecio(year) < masBarato.getPrecio(year)) {
                     masBarato = vehiculo;
                 }
             }
-            System.out.println("El auto más barato del año " + anio + " es " + masBarato.getMarca() + " con un precio de $" + masBarato.getPrecio(anio));
+            System.out.println("El auto más barato del año " + year + " es " + masBarato.getMarca() + " con un precio de $" + masBarato.getPrecio(year));
         }
     }
 
-    public void mostrarPromedioPrecioRango(int anio) {
+    public void mostrarPromedioPrecioRango(int year) {
         double suma = 0;
         int contador = 0;
         for (Vehiculo vehiculo : vehiculos) {
-            double precio = vehiculo.getPrecio(anio);
+            double precio = vehiculo.getPrecio(year);
             if (precio >= 30_000_000 && precio <= 50_000_000) {
                 suma += precio;
                 contador++;
@@ -68,9 +68,9 @@ public class VehiculoService {
         }
         if (contador > 0) {
             double promedio = suma / contador;
-            System.out.println("El promedio de los autos que cuestan entre 30 y 50 millones en el año " + anio + " es $" + promedio);
+            System.out.println("El promedio de los autos que cuestan entre 30 y 50 millones en el año " + year + " es $" + promedio);
         } else {
-            System.out.println("No hay autos en el rango de 30 a 50 millones en el año " + anio);
+            System.out.println("No hay autos en el rango de 30 a 50 millones en el año " + year);
         }
     }
 }

@@ -12,7 +12,7 @@ public class MainVehiculos {
         vehiculoService.agregarVehiculos();
 
         vehiculoService.mostrarListaAutos();
-        vehiculoService.mostrarAutoMasBaratoCadaAno();
+        vehiculoService.mostrarAutoMasBaratoCadaAño();
 
         System.out.print("Ingrese el año para calcular el promedio de precios entre 30 y 50 millones: ");
         int anio = scanner.nextInt();

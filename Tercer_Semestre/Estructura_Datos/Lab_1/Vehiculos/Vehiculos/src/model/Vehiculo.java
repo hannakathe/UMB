@@ -13,16 +13,16 @@ public class Vehiculo {
         return marca;
     }
 
-    public void setPrecio(int anio, double precio) {
+    public void setPrecio(int year, double precio) {
         if (precio > 0) {
-            this.precios[anio - 2019] = precio;
+            this.precios[year - 2019] = precio;
         } else {
             throw new IllegalArgumentException("Solo se permiten valores positivos.");
         }
     }
 
-    public double getPrecio(int anio) {
-        return this.precios[anio - 2019];
+    public double getPrecio(int year) {
+        return this.precios[year - 2019];
     }
 
     public double[] getPrecios() {
