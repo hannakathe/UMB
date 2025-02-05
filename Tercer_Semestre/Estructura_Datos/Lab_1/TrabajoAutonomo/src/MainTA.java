@@ -3,7 +3,7 @@ import generadores.MultiplosDeTres;
 import generadores.SumaMultiplos;
 import otros.RecorrerMatrizInversa;
 import otros.ImprimirArreglo;
-
+import otros.CalculadoraFiguras;
 
 import javax.swing.JOptionPane;
 
@@ -32,6 +32,11 @@ public class MainTA {
         System.out.println("");
 
         SumaMultiplos.generarSuma();
+
+        System.out.println("---- Clase abstracta calculo area de figuras ----");
+        System.out.println("");
+
+        CalculadoraFiguras.iniciar();
 
         System.out.println("---- Ingresar y Imprimir Arreglos Genéricos ----");
         System.out.println("");
