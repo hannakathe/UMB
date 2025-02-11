@@ -27,12 +27,12 @@ public abstract class Figura {
 
 // Clase Circulo que hereda de Figura y representa un círculo
 class Circulo extends Figura {
-    public Circulo(double radio) {
-        super("Círculo", radio, 0); // El radio es dimension1, dimension2 no se usa en el círculo
+    public Circulo(double radio) { //constructor de la clase circulo 
+        super("Círculo", radio, 0); // El radio es dimension1, dimension2 no se usa en el círculo // super para inicializar correctamente los atributos de Figura.
     }
 
     // Implementación del cálculo del área del círculo
-    @Override
+    @Override // sobreescribe el metodo abstracto de la clase padre Figura
     public double calcularArea() {
         return Math.PI * dimension1 * dimension1; // Área = π * radio^2
     }

@@ -59,21 +59,21 @@ public class MainTA {
                 continuar = false;
             } else {
                 // Obtener el tamaño del arreglo
-                String tamanioInput = JOptionPane.showInputDialog(null, "Ingrese el tamaño del arreglo:");
-                int tamanio = Integer.parseInt(tamanioInput);
+                String tamañoInput = JOptionPane.showInputDialog(null, "Ingrese el tamaño del arreglo:");
+                int tamaño = Integer.parseInt(tamañoInput);
 
                 // Ingresar y imprimir el arreglo según el tipo seleccionado
                 switch (tipoArreglo) {
                     case "Enteros":
-                        Integer[] numeros = ImprimirArreglo.ingresarArregloEnteros(tamanio);
+                        Integer[] numeros = ImprimirArreglo.ingresarArregloEnteros(tamaño);
                         ImprimirArreglo.imprimirArreglo(numeros);
                         break;
                     case "Cadenas":
-                        String[] cadenas = ImprimirArreglo.ingresarArregloCadenas(tamanio);
+                        String[] cadenas = ImprimirArreglo.ingresarArregloCadenas(tamaño);
                         ImprimirArreglo.imprimirArreglo(cadenas);
                         break;
                     case "Booleanos":
-                        Boolean[] booleanos = ImprimirArreglo.ingresarArregloBooleanos(tamanio);
+                        Boolean[] booleanos = ImprimirArreglo.ingresarArregloBooleanos(tamaño);
                         ImprimirArreglo.imprimirArreglo(booleanos);
                         break;
                     default:

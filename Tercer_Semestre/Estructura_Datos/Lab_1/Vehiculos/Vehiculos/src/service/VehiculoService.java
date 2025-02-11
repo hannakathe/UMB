@@ -35,7 +35,7 @@ public class VehiculoService {
                         vehiculos[i].setPrecio(year, precio);
                     } catch (IllegalArgumentException e) {
                         // Si el precio es inválido (negativo o cero), se muestra el mensaje de error
-                        System.out.println(e.getMessage());
+                        System.out.println(e.getMessage()); // La e es la referencia al objeto de la excepción que contiene información sobre el error.
                     }
                 } while (precio <= 0);  // Repite si el precio no es válido (mayor que cero)
             }

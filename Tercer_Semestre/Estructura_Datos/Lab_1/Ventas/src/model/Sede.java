@@ -36,7 +36,7 @@ public class Sede {
         double suma = 0;  // Variable para acumular la suma de las ventas.
         
         // Itera sobre todas las ventas de la sede para sumarlas.
-        for (double venta : ventas) {
+        for (double venta : ventas) { // Esta estructura es un bucle for-each en Java. Se usa para iterar sobre elementos de un arreglo o una colección sin necesidad de manejar índices manualmente.
             suma += venta;
         }
         

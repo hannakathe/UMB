@@ -4,71 +4,77 @@ package otros;
 // Importamos la librería necesaria para los cuadros de diálogo
 import javax.swing.*;
 
-// Declaramos la clase pública "ImprimirArreglo"
 public class ImprimirArreglo {
 
-    // Método genérico para imprimir un arreglo de cualquier tipo (Integer, String, Boolean, etc.)
+    // Método genérico para imprimir un arreglo de cualquier tipo
     public static <T> void imprimirArreglo(T[] arreglo) {
-        // Utilizamos StringBuilder para construir la cadena de salida de manera eficiente
         StringBuilder sb = new StringBuilder();
-        
-        // Iteramos sobre cada elemento del arreglo
         for (T elemento : arreglo) {
-            sb.append(elemento).append(" "); // Agregamos el elemento al StringBuilder con un espacio
+            sb.append(elemento).append(" ");
         }
-
-        // Mostramos el contenido del arreglo en un cuadro de diálogo
         JOptionPane.showMessageDialog(null, sb.toString(), "Arreglo", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    // Método para solicitar al usuario un arreglo de enteros con un tamaño específico
-    public static Integer[] ingresarArregloEnteros(int tamanio) {
-        // Creamos un arreglo de tipo Integer con el tamaño especificado por el usuario
-        Integer[] arreglo = new Integer[tamanio];
-
-        // Bucle para solicitar cada elemento del arreglo
-        for (int i = 0; i < tamanio; i++) {
-            // Pedimos al usuario que ingrese un número entero
-            String input = JOptionPane.showInputDialog(null, "Ingrese el elemento " + (i + 1) + " del arreglo:");
-            
-            // Convertimos el valor ingresado de String a Integer y lo almacenamos en el arreglo
-            arreglo[i] = Integer.parseInt(input);
+    // Método para solicitar al usuario un arreglo de enteros
+    public static Integer[] ingresarArregloEnteros(int tamaño) {
+        Integer[] arreglo = new Integer[tamaño];
+        for (int i = 0; i < tamaño; i++) {
+            while (true) { // Se usa un bucle infinito para asegurar que el usuario ingrese un valor válido antes de continuar
+                try {
+                    String input = JOptionPane.showInputDialog(null, "Ingrese el elemento " + (i + 1) + " del arreglo:");
+                    if (input == null) { // Si el usuario cancela la entrada
+                        JOptionPane.showMessageDialog(null, "Entrada cancelada. Se asignará 0.");
+                        arreglo[i] = 0;
+                        break;
+                    }
+                    arreglo[i] = Integer.parseInt(input);
+                    break; // Salimos del bucle si la conversión es exitosa
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "Se muestra un mensaje de error si el usuario introduce un valor no numérico.");
+                }
+            }
         }
-        
-        // Retornamos el arreglo con los valores ingresados
         return arreglo;
     }
 
-    // Método para solicitar al usuario un arreglo de cadenas (Strings) con un tamaño específico
-    public static String[] ingresarArregloCadenas(int tamanio) {
-        // Creamos un arreglo de tipo String con el tamaño especificado
-        String[] arreglo = new String[tamanio];
-
-        // Bucle para solicitar cada elemento del arreglo
-        for (int i = 0; i < tamanio; i++) {
-            // Pedimos al usuario que ingrese una cadena y la almacenamos en el arreglo
-            arreglo[i] = JOptionPane.showInputDialog(null, "Ingrese el elemento " + (i + 1) + " del arreglo:");
+    // Método para solicitar un arreglo de cadenas
+    public static String[] ingresarArregloCadenas(int tamaño) {
+        String[] arreglo = new String[tamaño];
+        for (int i = 0; i < tamaño; i++) {
+            while (true) { // Se asegura que el usuario no deje el campo vacío
+                String input = JOptionPane.showInputDialog(null, "Ingrese el elemento " + (i + 1) + " del arreglo:");
+                if (input == null || input.trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Entrada vacía o cancelada. Se asignará una cadena vacía.");
+                    arreglo[i] = "";
+                } else {
+                    arreglo[i] = input;
+                }
+                break;
+            }
         }
-        
-        // Retornamos el arreglo con los valores ingresados
         return arreglo;
     }
 
-    // Método para solicitar al usuario un arreglo de valores booleanos con un tamaño específico
-    public static Boolean[] ingresarArregloBooleanos(int tamanio) {
-        // Creamos un arreglo de tipo Boolean con el tamaño especificado
-        Boolean[] arreglo = new Boolean[tamanio];
-
-        // Bucle para solicitar cada elemento del arreglo
-        for (int i = 0; i < tamanio; i++) {
-            // Pedimos al usuario que ingrese un valor booleano (true/false)
-            String input = JOptionPane.showInputDialog(null, "Ingrese el elemento " + (i + 1) + " del arreglo (true/false):");
-            
-            // Convertimos la entrada de String a Boolean y la almacenamos en el arreglo
-            arreglo[i] = Boolean.parseBoolean(input);
+    // Método para solicitar un arreglo de valores booleanos
+    public static Boolean[] ingresarArregloBooleanos(int tamaño) {
+        Boolean[] arreglo = new Boolean[tamaño];
+        for (int i = 0; i < tamaño; i++) {
+            while (true) { // Se usa un bucle para validar la entrada del usuario
+                String input = JOptionPane.showInputDialog(null, "Ingrese el elemento " + (i + 1) + " del arreglo (true/false):");
+                if (input == null) { // Si el usuario cancela la entrada
+                    JOptionPane.showMessageDialog(null, "Entrada cancelada. Se asignará false.");
+                    arreglo[i] = false;
+                    break;
+                }
+                input = input.trim().toLowerCase(); // Se normaliza la entrada para evitar errores
+                if (input.equals("true") || input.equals("false")) {
+                    arreglo[i] = Boolean.parseBoolean(input);
+                    break;
+                } else {
+                    JOptionPane.showMessageDialog(null, "Por favor, ingrese 'true' o 'false'.");
+                }
+            }
         }
-        
-        // Retornamos el arreglo con los valores ingresados
         return arreglo;
     }
 }

@@ -24,10 +24,10 @@ public class MainVehiculos {
 
         // Solicita al usuario un año para calcular el promedio de precios en el rango de 30 a 50 millones
         System.out.print("Ingrese el año para calcular el promedio de precios entre 30 y 50 millones: ");
-        int anio = scanner.nextInt();  // Lee el año seleccionado por el usuario
+        int año = scanner.nextInt();  // Lee el año seleccionado por el usuario
 
         // Muestra el promedio de precios de los vehículos en el rango de 30 a 50 millones para el año ingresado
-        vehiculoService.mostrarPromedioPrecioRango(anio);
+        vehiculoService.mostrarPromedioPrecioRango(año);
 
         // Cierra el objeto Scanner para liberar los recursos del sistema
         scanner.close();

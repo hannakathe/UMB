@@ -2,11 +2,13 @@ package otros;
 
 import javax.swing.JOptionPane;
 
+//Maneja menu y las instancias de las clases de Figura.java
+
 public class CalculadoraFiguras {
     public static void iniciar() {
-        boolean continuar = true; // Bandera para controlar el bucle de selección de figuras
+        boolean continuar = true; // varialble para controlar el bucle de selección de figuras
 
-        // Bucle principal que permite al usuario seleccionar una figura y calcular su área
+        // Menu: Bucle principal que permite al usuario seleccionar una figura y calcular su área
         while (continuar) {
             String[] opciones = {"Círculo", "Rectángulo", "Triángulo", "Cuadrado", "Pentágono", "Salir"};
             // Mostrar cuadro de diálogo con las opciones disponibles
@@ -31,7 +33,7 @@ public class CalculadoraFiguras {
             switch (seleccion) {
                 case "Círculo":
                     double radio = pedirDouble("Ingrese el radio del círculo:");
-                    figura = new Circulo(radio);
+                    figura = new Circulo(radio); //Instancia la Clase circulo (objeto basado en la clase circulo)
                     break;
                 case "Rectángulo":
                     double baseR = pedirDouble("Ingrese la base del rectángulo:");
@@ -54,7 +56,7 @@ public class CalculadoraFiguras {
                     break;
             }
 
-            // Si la figura no es null (es decir, se creó correctamente), mostramos su área
+            // Si la entrada de valores se cancela, mostramos su área normalmente 0.0 
             if (figura != null) {
                 figura.mostrarArea();
             }
