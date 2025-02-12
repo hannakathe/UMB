@@ -81,7 +81,7 @@ public class VehiculoService {
         for (Vehiculo vehiculo : vehiculos) {
             double precio = vehiculo.getPrecio(year);  // Obtiene el precio del vehículo para el año específico
             // Verifica si el precio está dentro del rango de 30 a 50 millones
-            if (precio >= 30_000_000 && precio <= 50_000_000) {
+            if (precio >= 30 && precio <= 50) {
                 suma += precio;  // Acumula el precio
                 contador++;  // Incrementa el contador
             }
