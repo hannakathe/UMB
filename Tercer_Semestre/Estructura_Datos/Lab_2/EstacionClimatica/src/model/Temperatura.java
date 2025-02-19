@@ -13,17 +13,17 @@ public class Temperatura {
         this.minima = minima;
     }
 
-    // Método para obtener el nombre del día
+    // Método para obtener el nombre del día, Getter Dia
     public String getDia() {
         return dia;
     }
 
-    // Método para obtener la temperatura máxima
+    // Método para obtener la temperatura máxima, Getter Maxima
     public double getMaxima() {
         return maxima;
     }
 
-    // Método para obtener la temperatura mínima
+    // Método para obtener la temperatura mínima, Getter Minima
     public double getMinima() {
         return minima;
     }

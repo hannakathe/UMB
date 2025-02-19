@@ -19,15 +19,16 @@ public class EstacionClimaticaGUI extends JFrame { // La clase extiende JFrame, 
     private JTable table; // Tabla para mostrar los datos.
     private DefaultTableModel tableModel; // Modelo de la tabla.
     private JTextField diaField, maxField, minField, rangoMinField, rangoMaxField; // Campos de texto para ingresar datos.
-    private JComboBox<String> diaComboBox; // ComboBox para seleccionar días.
+    private JComboBox<String> diaComboBox; // ComboBox para seleccionar días. Menu desplegable. 
 
     public EstacionClimaticaGUI() { // Constructor de la interfaz gráfica.
         setTitle("Estación Climática"); // Título de la ventana.
         setSize(750, 500); // Dimensiones de la ventana.
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Cierra la aplicación al cerrar la ventana.
-        setLayout(new BorderLayout()); // Usa un diseño de "BorderLayout" para organizar los componentes.
+        setLayout(new BorderLayout()); // Usa un diseño de "BorderLayout" para organizar los componentes. //TODO 
         ImageIcon icono = new ImageIcon("EstacionClimatica/src/resources/icon.png"); 
         setIconImage(icono.getImage());
+        
 
         // Panel de entrada de datos.
         JPanel inputPanel = new JPanel(new GridLayout(2, 4, 5, 5)); // Panel con una cuadrícula de 2 filas y 4 columnas.
