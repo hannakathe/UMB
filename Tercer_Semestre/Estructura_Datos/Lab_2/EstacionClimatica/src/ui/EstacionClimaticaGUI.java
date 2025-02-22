@@ -119,6 +119,11 @@ public class EstacionClimaticaGUI extends JFrame { // La clase extiende JFrame, 
                 return;
             }
 
+
+            // Métodos de interacción con los datos.
+
+
+            // Lógica para agregar temperatura ingresada.
             estacion.agregarTemperatura(dia, max, min); // Agrega los datos a la estación climática.
             tableModel.addRow(new Object[]{dia, max, min}); // Agrega la nueva fila a la tabla.
 
@@ -139,13 +144,13 @@ public class EstacionClimaticaGUI extends JFrame { // La clase extiende JFrame, 
         try {
             double min = Double.parseDouble(rangoMinField.getText().trim());
             double max = Double.parseDouble(rangoMaxField.getText().trim());
-            actualizarTabla(estacion.filtrarPorRango(min, max)); // Filtra y actualiza la tabla.
+            actualizarTabla(estacion.filtrarPorRango(min, max)); // Filtra y actualiza la tabla. Filtra los datos según el rango ingresado.
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Ingrese valores numéricos válidos.");
         }
     }
 
-    private void filtrarPorMinimaBajoCero(ActionEvent e) {
+    private void filtrarPorMinimaBajoCero(ActionEvent e) { // Filtra y muestra temperaturas bajo 0°C.
         actualizarTabla(estacion.filtrarPorMinimaBajoCero());
     }
 
@@ -156,18 +161,18 @@ public class EstacionClimaticaGUI extends JFrame { // La clase extiende JFrame, 
             return;
         }
 
-        double media = estacion.calcularMediaPorDia(diaSeleccionado);
+        double media = estacion.calcularMediaPorDia(diaSeleccionado); // Calcula la media de temperaturas para un día seleccionado.
         JOptionPane.showMessageDialog(this, "Media de " + diaSeleccionado + ": " + media);
     }
 
-    private void mostrarTodosLosDatos(ActionEvent e) {
+    private void mostrarTodosLosDatos(ActionEvent e) { // Muestra todos los datos registrados en la estación.
         actualizarTabla(estacion.obtenerTodasLasTemperaturas());
     }
 
     private void actualizarTabla(List<Temperatura> datos) {
         tableModel.setRowCount(0); // Limpia la tabla.
         for (Temperatura t : datos) {
-            tableModel.addRow(new Object[]{t.getDia(), t.getMaxima(), t.getMinima()}); // Agrega cada temperatura.
+            tableModel.addRow(new Object[]{t.getDia(), t.getMaxima(), t.getMinima()}); // Agrega cada temperatura. // Refresca los datos en la tabla.
         }
     }
 }
