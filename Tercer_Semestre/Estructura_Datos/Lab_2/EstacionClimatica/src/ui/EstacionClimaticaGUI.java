@@ -25,7 +25,7 @@ public class EstacionClimaticaGUI extends JFrame { // La clase extiende JFrame, 
         setTitle("Estación Climática"); // Título de la ventana.
         setSize(750, 500); // Dimensiones de la ventana.
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Cierra la aplicación al cerrar la ventana.
-        setLayout(new BorderLayout()); // Usa un diseño de "BorderLayout" para organizar los componentes. //TODO 
+        setLayout(new BorderLayout()); // Usa un diseño de "BorderLayout" para organizar los componentes. 
         ImageIcon icono = new ImageIcon("EstacionClimatica/src/resources/icon.png"); 
         setIconImage(icono.getImage());
         

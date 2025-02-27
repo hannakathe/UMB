@@ -65,14 +65,14 @@ public class FlotaUI extends JFrame {
         panelIngresoVentas.setBorder(new TitledBorder("Ingreso de Ventas por Bus y Día"));
         
         // Panel contenedor para el ingreso y resultados
-        tabbedPanePrincipal = new JTabbedPane();
+        tabbedPanePrincipal = new JTabbedPane(); //Geera varias pestañas en donde se ve el ingresos de ventas
         JPanel panelIngresoCompleto = new JPanel(new BorderLayout());
         panelIngresoCompleto.add(panelConfiguracion, BorderLayout.NORTH);
         panelIngresoCompleto.add(new JScrollPane(panelIngresoVentas), BorderLayout.CENTER);
         tabbedPanePrincipal.addTab("Ingreso de Ventas", panelIngresoCompleto);
         
         // Pestaña de Resultados (inicialmente deshabilitada)
-        tabbedResultados = new JTabbedPane();
+        tabbedResultados = new JTabbedPane(); //Geera varias pestañas en donde se ven los resultados
         JPanel panelResultados = new JPanel(new BorderLayout());
         panelResultados.add(tabbedResultados, BorderLayout.CENTER);
         tabbedPanePrincipal.addTab("Resultados", panelResultados);
