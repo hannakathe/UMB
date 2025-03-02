@@ -25,17 +25,17 @@ public class Bus {
         return nombre;
     }
 
-    // Método que establece la lista de ventas para un día específico (0 = Lunes, 6 = Domingo)
+    // Setter. Método que establece la lista de ventas para un día específico (0 = Lunes, 6 = Domingo)
     public void setVentasParaDia(int dia, List<Double> ventas) {
         ventasDiarias.set(dia, ventas);
     }
 
-    // Método que devuelve la lista de ventas de un día específico
+    // Getter. Método que devuelve la lista de ventas de un día específico
     public List<Double> getVentasPorDia(int dia) {
         return ventasDiarias.get(dia);
     }
 
-    // Método que devuelve todas las ventas de la semana
+    // Getter. Método que devuelve todas las ventas de la semana
     public List<List<Double>> getVentasDiarias() {
         return ventasDiarias;
     }
@@ -50,7 +50,9 @@ public class Bus {
     }
 
     // Método que calcula el promedio de ventas de la semana
-    @SuppressWarnings("unused")
+    @SuppressWarnings("unused") /*se usa para evitar que el compilador genere advertencias sobre 
+                                variables, métodos o clases que están declarados pero no utilizados 
+                                en el código. */
     public double calcularPromedioVentas() {
         double suma = 0;
         for (int i = 0; i < 7; i++) { // Suma todas las ventas de cada día
@@ -88,6 +90,10 @@ public class Bus {
         BigDecimal promedio = new BigDecimal(Double.toString(promedioDouble));
         
         // Se calcula el factor de incremento (ejemplo: 10% se convierte en 1.1)
+        /*Si tienes un precio de $100 y lo aumentas en 10%, en lugar de calcular el 10% de 100 y sumarlo, puedes usar un factor de incremento: */
+        /*Nuevo valor=Valor original×Factor de incremento */
+        /*Factor de incremento=1+ 100/Porcentaje de aumento*/
+        
         BigDecimal factor = BigDecimal.ONE.add(new BigDecimal(Double.toString(porcentaje))
                 .divide(new BigDecimal("100"), 10, RoundingMode.HALF_UP));
 

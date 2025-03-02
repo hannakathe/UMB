@@ -70,7 +70,7 @@ public class ArrayUI extends JFrame {
 
         // Ajuste del tamaño de la tabla cuando se redimensiona la ventana
         addComponentListener(new ComponentAdapter() {
-            @Override
+            @Override //Método está sobrescribiendo
             public void componentResized(ComponentEvent e) {
                 scrollPane.setPreferredSize(new Dimension(getWidth() - 50, getHeight() - 150));
                 scrollPane.revalidate();

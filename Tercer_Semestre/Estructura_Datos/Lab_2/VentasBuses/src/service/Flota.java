@@ -26,7 +26,7 @@ public class Flota {
         }
     }
 
-    // Método que devuelve la lista de buses de la flota.
+    // Getter Método que devuelve la lista de buses de la flota.
     public List<Bus> getBuses() {
         return buses;
     }
@@ -35,7 +35,7 @@ public class Flota {
     public void mostrarVentasSobrePromedio() {
         for (Bus bus : buses) {
             // Calculamos el promedio de ventas del bus.
-            double promedio = bus.calcularPromedioVentas();
+            double promedio = bus.calcularPromedioVentas(); //Obtiene el metodo para calcular el promedio de Bus
             System.out.println("\nVentas sobre el promedio para " + bus.getNombre() + ":");
 
             // Recorremos los 7 días de la semana verificando si la venta del día supera el promedio.
