@@ -19,22 +19,25 @@ public class EstacionClimatica {
     private List<Temperatura> temperaturas = new ArrayList<>();
 
     // Método para agregar una nueva temperatura a la lista.
-    // Recibe tres parámetros: el nombre del día, la temperatura máxima y la mínima.
-    // Luego, crea un objeto de la clase "Temperatura" y lo añade a la lista "temperaturas".
+    /* Recibe tres parámetros: el nombre del día, la temperatura máxima y la mínima.
+    Luego, crea un objeto de la clase "Temperatura" y lo añade a la lista "temperaturas". */
+    
     public void agregarTemperatura(String dia, double maxima, double minima) {
         temperaturas.add(new Temperatura(dia, maxima, minima));
     }
 
     // Método para filtrar temperaturas dentro de un rango dado.
-    // Este método recibe dos parámetros: "min" (mínimo) y "max" (máximo).
-    // Retorna una lista con todas las temperaturas cuya mínima es mayor o igual a "min" y cuya máxima es menor o igual a "max".
+    /* Este método recibe dos parámetros: "min" (mínimo) y "max" (máximo).
+    Retorna una lista con todas las temperaturas cuya mínima es mayor o igual a "min" y cuya máxima es menor o igual a "max".*/ 
+
     public List<Temperatura> filtrarPorRango(double min, double max) {
-        List<Temperatura> resultado = new ArrayList<>(); // Lista auxiliar para almacenar los resultados.
+        List<Temperatura> resultado = new ArrayList<>(); // Lista auxiliar para almacenar los resultados de tem entre los rangos dados. 
         
         // Recorremos todas las temperaturas almacenadas.
         for (Temperatura t : temperaturas) {
-            // Verificamos si la temperatura mínima es mayor o igual al valor "min" 
-            // y la temperatura máxima es menor o igual al valor "max".
+            /* Verificamos si la temperatura mínima es mayor o igual al valor "min" 
+            y la temperatura máxima es menor o igual al valor "max". */ 
+
             if (t.getMinima() >= min && t.getMaxima() <= max) { 
                 resultado.add(t); // Si cumple la condición, agregamos la temperatura a la lista "resultado".
             }
@@ -45,7 +48,7 @@ public class EstacionClimatica {
     // Método para filtrar temperaturas con mínima por debajo de cero.
     // Retorna una lista de temperaturas donde la temperatura mínima es menor a 0.
     public List<Temperatura> filtrarPorMinimaBajoCero() {
-        List<Temperatura> resultado = new ArrayList<>(); // Lista auxiliar para almacenar los resultados.
+        List<Temperatura> resultado = new ArrayList<>(); // Lista auxiliar para almacenar los resultados temperaturas menores a 0. 
         
         // Recorremos todas las temperaturas almacenadas.
         for (Temperatura t : temperaturas) {
@@ -74,7 +77,9 @@ public class EstacionClimatica {
 
         // Si no se encontró ninguna temperatura para ese día, retornamos 0.
         // Si sí hay datos, calculamos el promedio total dividiendo la suma entre el contador.
-        return (contador == 0) ? 0 : suma / contador;
+        return (contador == 0) ? 0 : suma / contador; /* Pregunta si el contador es igual a 0, si es true, devulve 0, 
+                                                        si es false, la suma total, segun el dia, 
+                                                        pasa a dividirse entre el contador */ 
     }
 
     // Método para obtener todas las temperaturas almacenadas en la lista.

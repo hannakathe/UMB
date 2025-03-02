@@ -25,7 +25,7 @@ public class EstacionClimaticaGUI extends JFrame { // La clase extiende JFrame, 
         setTitle("Estación Climática"); // Título de la ventana.
         setSize(750, 500); // Dimensiones de la ventana.
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Cierra la aplicación al cerrar la ventana.
-        setLayout(new BorderLayout()); // Usa un diseño de "BorderLayout" para organizar los componentes. //TODO 
+        setLayout(new BorderLayout()); // Usa un diseño de "BorderLayout" para organizar los componentes. 
         ImageIcon icono = new ImageIcon("EstacionClimatica/src/resources/icon.png"); 
         setIconImage(icono.getImage());
         
@@ -46,25 +46,25 @@ public class EstacionClimaticaGUI extends JFrame { // La clase extiende JFrame, 
         // Se agregan etiquetas y campos de texto al panel.
         inputPanel.add(new JLabel("Día:"));
         inputPanel.add(diaField);
-        inputPanel.add(new JLabel("Máx:"));
+        inputPanel.add(new JLabel("Temp Máx:"));
         inputPanel.add(maxField);
-        inputPanel.add(new JLabel("Mín:"));
+        inputPanel.add(new JLabel("Temp Mín:"));
         inputPanel.add(minField);
 
         // Botón para agregar una temperatura.
         JButton addButton = new JButton("Agregar");
-        addButton.addActionListener(this::agregarTemperatura); // Asocia el evento al botón.
+        addButton.addActionListener(this::agregarTemperatura); // Asocia el evento al botón, agregarTemperatura().
         inputPanel.add(addButton);
 
         // Botón para mostrar todos los datos.
         JButton showAllButton = new JButton("Mostrar Todo");
-        showAllButton.addActionListener(this::mostrarTodosLosDatos);
+        showAllButton.addActionListener(this::mostrarTodosLosDatos); // Asocia el evento al botón, mostrarTodosLosDatos(). 
         inputPanel.add(showAllButton);
 
         add(inputPanel, BorderLayout.NORTH); // Agrega el panel en la parte superior de la ventana.
 
         // Configuración de la tabla.
-        tableModel = new DefaultTableModel(new String[]{"Día", "Máx", "Mín"}, 0); // Define las columnas de la tabla.
+        tableModel = new DefaultTableModel(new String[]{"Día", "Máx", "Mín"}, 0); // Define las columnas de la tabla (labels).
         table = new JTable(tableModel); // Crea la tabla con el modelo definido.
         add(new JScrollPane(table), BorderLayout.CENTER); // Agrega la tabla con barra de desplazamiento al centro.
 
@@ -89,7 +89,7 @@ public class EstacionClimaticaGUI extends JFrame { // La clase extiende JFrame, 
         // Panel para filtrar temperaturas bajo 0°C.
         JPanel bajoCeroPanel = new JPanel(new BorderLayout());
         JButton filtroBajoCeroButton = new JButton("Filtrar < 0°C");
-        filtroBajoCeroButton.addActionListener(this::filtrarPorMinimaBajoCero);
+        filtroBajoCeroButton.addActionListener(this::filtrarPorMinimaBajoCero); // Asigna el evento de filtrado.
         bajoCeroPanel.setBorder(BorderFactory.createTitledBorder("Temperaturas < 0°C"));
         bajoCeroPanel.add(filtroBajoCeroButton, BorderLayout.CENTER);
         filterPanel.add(bajoCeroPanel); // Se añade el panel al contenedor de filtros.
@@ -98,7 +98,7 @@ public class EstacionClimaticaGUI extends JFrame { // La clase extiende JFrame, 
         JPanel mediaPanel = new JPanel(new BorderLayout());
         diaComboBox = new JComboBox<>(); // ComboBox para seleccionar un día.
         JButton calcularMediaButton = new JButton("Calcular Media");
-        calcularMediaButton.addActionListener(this::calcularMediaPorDia);
+        calcularMediaButton.addActionListener(this::calcularMediaPorDia); // Asigna el evento de filtrado.
         mediaPanel.setBorder(BorderFactory.createTitledBorder("Calcular Media"));
         mediaPanel.add(diaComboBox, BorderLayout.NORTH);
         mediaPanel.add(calcularMediaButton, BorderLayout.SOUTH);

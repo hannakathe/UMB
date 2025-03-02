@@ -125,3 +125,4 @@ public class Bus {
         return sb.toString(); // Retorna la lista de ventas en formato de texto
     }
 }
+ 

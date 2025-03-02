@@ -1,10 +1,11 @@
 // Definimos el paquete al que pertenece esta clase, en este caso, "model".
-// Esto significa que la clase "Temperatura" forma parte del paquete "model",
-// lo que ayuda a organizar mejor nuestro código cuando trabajamos con múltiples clases.
+/* Esto significa que la clase "Temperatura" forma parte del paquete "model",
+ lo que ayuda a organizar mejor nuestro código cuando trabajamos con múltiples clases. */ 
 package model;
 
-// Definimos la clase "Temperatura". Esta clase representa la información de temperatura
-// de un determinado día, incluyendo el nombre del día y las temperaturas máxima y mínima.
+/*Definimos la clase "Temperatura". Esta clase representa la información de temperatura
+ de un determinado día, incluyendo el nombre del día y las temperaturas máxima y mínima. */   
+ 
 public class Temperatura {
 
     // Atributo privado "dia" que almacena el nombre del día en formato de cadena (String).
@@ -16,10 +17,11 @@ public class Temperatura {
     // Atributo privado "minima" que almacena la temperatura mínima del día en formato de número decimal (double).
     private double minima; 
 
-    // Constructor de la clase. Un constructor es un método especial que se ejecuta 
-    // cuando se crea un objeto de esta clase. Su función es inicializar los atributos.
-    // Recibe tres parámetros: un String (dia) y dos valores double (maxima y minima),
-    // los cuales se asignan a los atributos correspondientes de la clase.
+    /*Constructor de la clase. Un constructor es un método especial que se ejecuta 
+    cuando se crea un objeto de esta clase. Su función es inicializar los atributos.
+    Recibe tres parámetros: un String (dia) y dos valores double (maxima y minima),
+    los cuales se asignan a los atributos correspondientes de la clase.*/
+    
     public Temperatura(String dia, double maxima, double minima) {
         this.dia = dia;        // Asignamos el valor del parámetro "dia" al atributo de la clase "dia".
         this.maxima = maxima;  // Asignamos el valor del parámetro "maxima" al atributo de la clase "maxima".
