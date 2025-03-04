@@ -22,7 +22,7 @@ public class OrdenamientoUI extends JFrame {
         setSize(600, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
-        ImageIcon icono = new ImageIcon("src/resources/icon.png"); 
+        ImageIcon icono = new ImageIcon("Algoritmos/src/resources/icon.png"); 
         setIconImage(icono.getImage());
 
         // Panel superior
