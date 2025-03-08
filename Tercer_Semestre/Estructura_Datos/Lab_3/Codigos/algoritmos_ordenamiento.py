@@ -5,6 +5,10 @@ import time
 n = 1000  # Cantidad de números
 lista = [random.randint(100, 7000) for _ in range(n)]
 
+# Mostrar la lista original
+print("Lista original:")
+print(lista)
+
 # Algoritmos de ordenamiento
 def burbuja(arr):
     n = len(arr)
@@ -74,15 +78,20 @@ def quick_sort(arr):
     return quick_sort(left) + middle + quick_sort(right)
 
 # Medición de tiempos
-for sort_func in [burbuja, insercion, seleccion, shell_sort, heap_sort]:
-    arr_copy = lista[:]
+def medir_tiempo(algoritmo, arr, es_quick_sort=False):
+    arr_copy = arr[:]
     start = time.time()
-    sort_func(arr_copy)
+    if es_quick_sort:
+        arr_copy = algoritmo(arr_copy)
+    else:
+        algoritmo(arr_copy)
     end = time.time()
-    print(f"{sort_func.__name__}: {round((end - start) * 1000, 5)} ms")
+    print(f"{algoritmo.__name__}: {round((end - start) * 1000, 5)} ms")
+    print("")
+    print(f"Lista ordenada con {algoritmo.__name__}:")
+    print("")
+    print(arr_copy[:10], "...", arr_copy[-10:])  # Muestra solo los primeros y últimos 10 elementos
+    print("-" * 150)
 
-# Quick Sort aparte porque devuelve una nueva lista
-start = time.time()
-sorted_list = quick_sort(lista[:])
-end = time.time()
-print(f"quick_sort: {round((end - start) * 1000, 5)} ms")
+for sort_func in [burbuja, insercion, seleccion, shell_sort, heap_sort, quick_sort]:
+    medir_tiempo(sort_func, lista, es_quick_sort=(sort_func == quick_sort))

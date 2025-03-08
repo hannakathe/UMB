@@ -14,11 +14,12 @@ vector<int> generateRandomArray(int size, int min, int max) {
 }
 
 void printArray(const vector<int> &arr) {
-    for (size_t i = 0; i < min(arr.size(), size_t(10)); i++) {
+    size_t n = arr.size();
+    for (size_t i = 0; i < min(n, size_t(10)); i++) {
         cout << arr[i] << " ";
     }
     cout << "... ";
-    for (size_t i = max(0, (int)arr.size() - 10); i < arr.size(); i++) {
+    for (size_t i = max<size_t>(0, n > 10 ? n - 10 : 0); i < n; i++) {
         cout << arr[i] << " ";
     }
     cout << endl;
@@ -26,7 +27,7 @@ void printArray(const vector<int> &arr) {
 
 void burbuja(vector<int> &arr) {
     int n = arr.size();
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n - 1; i++) {  // Optimizado, se reduce una iteración innecesaria
         for (int j = 0; j < n - i - 1; j++) {
             if (arr[j] > arr[j + 1]) swap(arr[j], arr[j + 1]);
         }
@@ -34,8 +35,10 @@ void burbuja(vector<int> &arr) {
 }
 
 void insercion(vector<int> &arr) {
-    for (size_t i = 1; i < arr.size(); i++) {
-        int key = arr[i], j = i - 1;
+    int n = arr.size();
+    for (int i = 1; i < n; i++) {
+        int key = arr[i];
+        int j = i - 1;
         while (j >= 0 && arr[j] > key) {
             arr[j + 1] = arr[j];
             j--;
@@ -46,7 +49,7 @@ void insercion(vector<int> &arr) {
 
 void seleccion(vector<int> &arr) {
     int n = arr.size();
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n - 1; i++) { // Corrección: iterar hasta n - 1
         int minIdx = i;
         for (int j = i + 1; j < n; j++) {
             if (arr[j] < arr[minIdx]) minIdx = j;
@@ -59,7 +62,8 @@ void shellSort(vector<int> &arr) {
     int n = arr.size();
     for (int gap = n / 2; gap > 0; gap /= 2) {
         for (int i = gap; i < n; i++) {
-            int temp = arr[i], j = i;
+            int temp = arr[i];
+            int j = i;
             while (j >= gap && arr[j - gap] > temp) {
                 arr[j] = arr[j - gap];
                 j -= gap;
@@ -88,18 +92,23 @@ void heapSort(vector<int> &arr) {
     }
 }
 
-vector<int> quickSort(vector<int> arr) {
-    if (arr.size() <= 1) return arr;
-    int pivot = arr[arr.size() / 2];
-    vector<int> left, middle, right;
-    for (int x : arr) {
-        if (x < pivot) left.push_back(x);
-        else if (x == pivot) middle.push_back(x);
-        else right.push_back(x);
+void quickSort(vector<int> &arr, int low, int high) {
+    if (low >= high) return;
+    int pivot = arr[low + (high - low) / 2];
+    int i = low, j = high;
+    while (i <= j) {
+        while (arr[i] < pivot) i++;
+        while (arr[j] > pivot) j--;
+        if (i <= j) {
+            swap(arr[i], arr[j]);
+            i++;
+            j--;
+        }
     }
-    left = quickSort(left);
-    right = quickSort(right);
-    left.insert(left.end(), middle.begin(), middle.end());
-    left.insert(left.end(), right.begin(), right.end());
-    return left;
+    quickSort(arr, low, j);
+    quickSort(arr, i, high);
+}
+
+void quickSort(vector<int> &arr) {
+    if (!arr.empty()) quickSort(arr, 0, arr.size() - 1);
 }
