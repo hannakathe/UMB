@@ -1,8 +1,16 @@
-#include <iostream>
+//LINK DE COMPILADOR ONLINE
+//https://www.mycompiler.io/es/new/cpp
+
+
+
+
+
+/*#include <iostream>
 #include <vector>
 #include <cstdlib>
 #include <ctime>
 #include <algorithm>
+
 using namespace std;
 
 vector<int> generateRandomArray(int size, int min, int max) {
@@ -27,7 +35,7 @@ void printArray(const vector<int> &arr) {
 
 void burbuja(vector<int> &arr) {
     int n = arr.size();
-    for (int i = 0; i < n - 1; i++) {  // Optimizado, se reduce una iteración innecesaria
+    for (int i = 0; i < n - 1; i++) {
         for (int j = 0; j < n - i - 1; j++) {
             if (arr[j] > arr[j + 1]) swap(arr[j], arr[j + 1]);
         }
@@ -49,7 +57,7 @@ void insercion(vector<int> &arr) {
 
 void seleccion(vector<int> &arr) {
     int n = arr.size();
-    for (int i = 0; i < n - 1; i++) { // Corrección: iterar hasta n - 1
+    for (int i = 0; i < n - 1; i++) {
         int minIdx = i;
         for (int j = i + 1; j < n; j++) {
             if (arr[j] < arr[minIdx]) minIdx = j;
@@ -112,3 +120,43 @@ void quickSort(vector<int> &arr, int low, int high) {
 void quickSort(vector<int> &arr) {
     if (!arr.empty()) quickSort(arr, 0, arr.size() - 1);
 }
+
+int main() {
+    srand(time(0));  // Inicializa la semilla para números aleatorios
+
+    int size = 20;   // Tamaño del arreglo
+    vector<int> arr = generateRandomArray(size, 1, 100);
+
+    cout << "Arreglo original:" << endl;
+    printArray(arr);
+
+    vector<int> arr1 = arr, arr2 = arr, arr3 = arr, arr4 = arr, arr5 = arr, arr6 = arr;
+
+    burbuja(arr1);
+    cout << "Ordenado por Burbuja:" << endl;
+    printArray(arr1);
+
+    insercion(arr2);
+    cout << "Ordenado por Inserción:" << endl;
+    printArray(arr2);
+
+    seleccion(arr3);
+    cout << "Ordenado por Selección:" << endl;
+    printArray(arr3);
+
+    shellSort(arr4);
+    cout << "Ordenado por Shell Sort:" << endl;
+    printArray(arr4);
+
+    heapSort(arr5);
+    cout << "Ordenado por Heap Sort:" << endl;
+    printArray(arr5);
+
+    quickSort(arr6);
+    cout << "Ordenado por Quick Sort:" << endl;
+    printArray(arr6);
+
+    return 0;
+}
+
+*/

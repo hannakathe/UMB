@@ -1,7 +1,9 @@
+// Función para generar un array de números aleatorios dentro de un rango específico
 function generateRandomArray(size, min, max) {
     return Array.from({ length: size }, () => Math.floor(Math.random() * (max - min + 1)) + min);
 }
 
+// Definimos el tamaño del array y generamos los valores aleatorios
 let n = 1000;
 let array = generateRandomArray(n, 100, 7000);
 
@@ -9,17 +11,22 @@ console.log("Lista original:");
 console.log(array);
 
 // Algoritmos de ordenamiento
+
+// 1. Ordenamiento de burbuja (Bubble Sort)
+// Recorre repetidamente el array comparando elementos adyacentes y los intercambia si están en el orden incorrecto.
 function burbuja(arr) {
     let n = arr.length;
     for (let i = 0; i < n; i++) {
         for (let j = 0; j < n - i - 1; j++) {
             if (arr[j] > arr[j + 1]) {
-                [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+                [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]]; // Intercambio de valores
             }
         }
     }
 }
 
+// 2. Ordenamiento por inserción (Insertion Sort)
+// Divide el array en dos partes: ordenada y no ordenada, insertando cada elemento en su posición correcta.
 function insercion(arr) {
     for (let i = 1; i < arr.length; i++) {
         let key = arr[i];
@@ -32,6 +39,8 @@ function insercion(arr) {
     }
 }
 
+// 3. Ordenamiento por selección (Selection Sort)
+// Busca el elemento más pequeño y lo coloca en la posición correcta en cada iteración.
 function seleccion(arr) {
     let n = arr.length;
     for (let i = 0; i < n; i++) {
@@ -41,10 +50,12 @@ function seleccion(arr) {
                 minIdx = j;
             }
         }
-        [arr[i], arr[minIdx]] = [arr[minIdx], arr[i]];
+        [arr[i], arr[minIdx]] = [arr[minIdx], arr[i]]; // Intercambio de valores
     }
 }
 
+// 4. Ordenamiento Shell (Shell Sort)
+// Usa un "gap" para comparar elementos distantes y reducir el número de intercambios necesarios.
 function shellSort(arr) {
     let n = arr.length;
     let gap = Math.floor(n / 2);
@@ -62,6 +73,8 @@ function shellSort(arr) {
     }
 }
 
+// 5. Ordenamiento HeapSort (Ordenamiento por montículos)
+// Construye un heap y extrae el máximo en cada iteración.
 function heapify(arr, n, i) {
     let largest = i;
     let left = 2 * i + 1;
@@ -85,6 +98,8 @@ function heapSort(arr) {
     }
 }
 
+// 6. Ordenamiento QuickSort
+// Divide el array en subarrays más pequeños con elementos menores y mayores a un pivote.
 function quickSort(arr) {
     if (arr.length <= 1) return arr;
     let pivot = arr[Math.floor(arr.length / 2)];
@@ -94,9 +109,9 @@ function quickSort(arr) {
     return quickSort(left).concat(middle, quickSort(right));
 }
 
-// Medición de tiempos
+// Función para medir el tiempo de ejecución de cada algoritmo
 function measureTime(algorithm, arr, isQuickSort = false) {
-    let arrCopy = [...arr];
+    let arrCopy = [...arr]; // Se crea una copia del array original para no modificarlo
     let start = performance.now();
     if (isQuickSort) {
         arrCopy = algorithm(arrCopy);
@@ -104,12 +119,14 @@ function measureTime(algorithm, arr, isQuickSort = false) {
         algorithm(arrCopy);
     }
     let end = performance.now();
+
     console.log(`${algorithm.name}: ${(end - start).toFixed(5)} ms`);
     console.log(`Lista ordenada con ${algorithm.name}:`);
-    console.log(arrCopy.slice(0, 10), "...", arrCopy.slice(-10));
+    console.log(arrCopy.slice(0, 10), "...", arrCopy.slice(-10)); // Muestra los primeros y últimos 10 elementos
     console.log("-".repeat(150));
 }
 
+// Ejecutamos cada algoritmo y medimos el tiempo de ejecución
 [burbuja, insercion, seleccion, shellSort, heapSort, quickSort].forEach(algo => {
     measureTime(algo, array, algo === quickSort);
 });
