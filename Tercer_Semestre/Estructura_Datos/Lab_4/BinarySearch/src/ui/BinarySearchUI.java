@@ -9,20 +9,27 @@ import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// Clase principal que representa la interfaz gráfica para realizar búsquedas binarias
 public class BinarySearchUI extends JFrame {
+    // Componentes de la interfaz gráfica
     private JTextField cantidadField;
     private JTextArea entradaArea, salidaArea, busquedaArea;
     private JButton generarButton, buscarButton, limpiarButton;
     private JLabel tiempoLabel;
 
+    // Modelo para almacenar los números ordenados
     private BinarySearchModel binarySearchModel;
 
+    // Constructor de la clase
     public BinarySearchUI() {
         setTitle("Búsqueda Binaria");
         setSize(600, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
+        ImageIcon icono = new ImageIcon("BinarySearch/src/resources/icon.png"); 
+        setIconImage(icono.getImage());
 
+        // Panel superior para ingresar la cantidad de números y generar la lista
         JPanel topPanel = new JPanel(new GridLayout(1, 3, 5, 5));
         topPanel.add(new JLabel("Cantidad de números:"));
         cantidadField = new JTextField();
@@ -31,6 +38,7 @@ public class BinarySearchUI extends JFrame {
         topPanel.add(generarButton);
         add(topPanel, BorderLayout.NORTH);
 
+        // Panel central para mostrar los números generados, ingresar números a buscar y mostrar resultados
         JPanel centerPanel = new JPanel(new GridLayout(3, 1, 5, 5));
         entradaArea = new JTextArea(5, 40);
         entradaArea.setBorder(BorderFactory.createTitledBorder("Números Generados (Ordenados)"));
@@ -44,32 +52,37 @@ public class BinarySearchUI extends JFrame {
 
         add(centerPanel, BorderLayout.CENTER);
 
+        // Panel inferior con botones para buscar y limpiar
         JPanel bottomPanel = new JPanel(new FlowLayout());
         buscarButton = new JButton("Buscar");
         limpiarButton = new JButton("Limpiar");
-        tiempoLabel = new JLabel("Tiempo: ---");
+        //tiempoLabel = new JLabel("Tiempo: ---");
 
         bottomPanel.add(buscarButton);
         bottomPanel.add(limpiarButton);
-        bottomPanel.add(tiempoLabel);
+        //bottomPanel.add(tiempoLabel);
         add(bottomPanel, BorderLayout.SOUTH);
 
+        // Asignar acciones a los botones
         generarButton.addActionListener(e -> generarNumerosOrdenados());
         buscarButton.addActionListener(e -> buscarNumeros());
         limpiarButton.addActionListener(e -> limpiarCampos());
     }
 
+    // Método para generar números aleatorios, ordenarlos y mostrarlos en la interfaz
     private void generarNumerosOrdenados() {
         try {
             int cantidad = Integer.parseInt(cantidadField.getText());
             if (cantidad <= 0) throw new NumberFormatException("Debe ser mayor a 0");
 
+            // Generar números únicos aleatorios
             Set<Integer> numerosUnicos = new HashSet<>();
             Random rand = new Random();
             while (numerosUnicos.size() < cantidad) {
                 numerosUnicos.add(rand.nextInt(1_500_001));
             }
 
+            // Ordenar los números generados
             List<Integer> sortedList = new ArrayList<>(numerosUnicos);
             Collections.sort(sortedList);
             binarySearchModel = new BinarySearchModel(sortedList.stream().mapToInt(i -> i).toArray());
@@ -90,6 +103,7 @@ public class BinarySearchUI extends JFrame {
         }
     }
 
+    // Método para buscar números en la lista ordenada
     private void buscarNumeros() {
         try {
             if (binarySearchModel == null) {
@@ -97,11 +111,14 @@ public class BinarySearchUI extends JFrame {
                 return;
             }
 
+            // Obtener los números a buscar desde el área de texto
             String[] numerosTexto = busquedaArea.getText().split("[,\\s]+");
             List<Integer> numerosABuscar = Arrays.stream(numerosTexto).map(String::trim).map(Integer::parseInt).collect(Collectors.toList());
 
+            // Realizar la búsqueda binaria y obtener resultados
             HashMap<Integer, Long[]> resultados = BinarySearchService.searchNumbers(binarySearchModel.getSortedNumbers(), numerosABuscar);
 
+            // Mostrar los resultados en el área de salida
             StringBuilder sb = new StringBuilder();
             for (Map.Entry<Integer, Long[]> entry : resultados.entrySet()) {
                 sb.append("Número ").append(entry.getKey())
@@ -116,6 +133,7 @@ public class BinarySearchUI extends JFrame {
         }
     }
 
+    // Método para limpiar todos los campos de la interfaz
     private void limpiarCampos() {
         cantidadField.setText("");
         entradaArea.setText("");
