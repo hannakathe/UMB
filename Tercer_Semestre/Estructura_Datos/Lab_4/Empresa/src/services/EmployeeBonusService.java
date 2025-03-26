@@ -31,7 +31,7 @@ public class EmployeeBonusService {
 
     // Método para obtener la lista de empleados cuyo salario es menor al promedio.
     public static List<Employee> getEmployeesBelowAverage(List<Employee> employees, float averageSalary) {
-        return employees.stream() // Convertimos la lista en un stream.
+        return employees.stream() // Convertimos la lista en un stream. ??? REVISAR
                 .filter(emp -> emp.getSalary() < averageSalary) // Filtramos empleados con salario menor al promedio.
                 .collect(Collectors.toList()); // Convertimos el resultado en una lista.
     }
