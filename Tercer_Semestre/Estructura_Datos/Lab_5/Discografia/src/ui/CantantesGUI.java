@@ -27,7 +27,7 @@ public class CantantesGUI extends JFrame {
     // Datos predefinidos de cantantes (nombre, disco, ventas)
     private final Object[][] cantantesPredefinidos = {
         {"Queen", "Greatest Hits", 25000000},
-        // ... (resto de datos predefinidos)
+        // ... (resto de datos predefinidos) //AGREGAR EL RESTO DE CANTANTES PREDEFINIDOS
     };
 
     // Constructor de la ventana principal
