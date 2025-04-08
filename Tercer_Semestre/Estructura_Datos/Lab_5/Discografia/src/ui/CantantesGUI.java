@@ -27,7 +27,26 @@ public class CantantesGUI extends JFrame {
     // Datos predefinidos de cantantes (nombre, disco, ventas)
     private final Object[][] cantantesPredefinidos = {
         {"Queen", "Greatest Hits", 25000000},
-        // ... (resto de datos predefinidos) //AGREGAR EL RESTO DE CANTANTES PREDEFINIDOS
+        {"Michael Jackson", "Thriller", "66000000"},
+        {"AC/DC", "Back in Black", "50000000"},
+        {"Pink Floyd", "The Dark Side of the Moon", "45000000"},
+        {"Whitney Houston", "The Bodyguard", "45000000"},
+        {"Eagles", "Their Greatest Hits (1971–1975)", "44000000"},
+        {"Bee Gees", "Saturday Night Fever", "40000000"},
+        {"Fleetwood Mac", "Rumours", "40000000"},
+        {"Led Zeppelin", "Led Zeppelin IV", "37000000"},
+        {"Shania Twain", "Come On Over", "40000000"},
+        {"Celine Dion", "Falling into You", "32000000"},
+        {"Adele", "21", "31000000"},
+        {"The Beatles", "Sgt. Pepper's Lonely Hearts Club Band", "32000000"},
+        {"Nirvana", "Nevermind", "30000000"},
+        {"Backstreet Boys", "Millennium", "24000000"},
+        {"Madonna", "The Immaculate Collection", "30000000"},
+        {"Eminem", "The Marshall Mathers LP", "25000000"},
+        {"Linkin Park", "Hybrid Theory", "27000000"},
+        {"Taylor Swift", "1989", "22000000"},
+        {"Ed Sheeran", "Divide", "22000000"},
+        {"Bad Bunny", "YHLQMDLG", "4000000"}
     };
 
     // Constructor de la ventana principal
