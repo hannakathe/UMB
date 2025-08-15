@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Scanner</title>
+</head>
+<body>
+    <h1>QR Code Scanner</h1>
+
+    <form id="qrform">
+        <label for="info">Ingresa la información:</label><br>
+        <input type="text" id="info" name="info" required><br><br>
+        
+        <button type="submit">Enviar</button>
+    </form>
+    <script>
+        document.getElementById('qrform').addEventListener('submit',function(e){
+            e.preventDefault();
+            alert('Form submited')
+        })
+    </script>
+
+</body>
+</html>

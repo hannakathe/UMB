@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Scanner</title>
+</head>
+<body>
+    <h1>QR Code Scanner</h1>
+
+    <form id="qrForm">
+        <label for="info">Ingresa la información:</label><br>
+        <input type="text" id="info_input" name="info" required><br><br>
+        
+        <button type="submit">Enviar</button>
+    </form>
+    <img id="qrImage" src="" alt="QR Code">
+    <script>
+        document.getElementById('qrForm').addEventListener('submit',function(e){
+            e.preventDefault();
+            let data=document.getElementById('info_input').value;
+            let size=100;
+            let endpoint = "https://api.apgy.in/qr/?";
+            let url_endpoint = endpoint + 'data=' + data + '&size='+ size;
+            document.getElementById('qrImage').src=url_endpoint
+        });
+    </script>
+
+</body>
+</html>
