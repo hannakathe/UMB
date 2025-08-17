@@ -8,21 +8,27 @@
 <body>
     <h1>QR Code Scanner</h1>
 
-    <form id="qrForm">
-        <label for="info">Ingresa la información:</label><br>
-        <input type="text" id="info_input" name="info" required><br><br>
+    <form id="qrForm"> <!--Formulario con identificador unico q se llama de js-->
+        <label for="data_info">Ingresa la información:</label><br>
+        <input type="text" id="data_input" name="data_info" required><br><br> <!--input en donde se ingresa el texto-->
+        <label for="size_info">Ingresa la el tamaño:</label><br>
+        <input type="number" id="size_input" name="size" required><br><br> <!--input en donde se ingresa el tamaño QR-->
         
-        <button type="submit">Enviar</button>
+        <button type="submit">Enviar</button> <!--boton q envia el formulario-->
     </form>
-    <img id="qrImage" src="" alt="QR Code">
-    <script>
-        document.getElementById('qrForm').addEventListener('submit',function(e){
+    <img id="qrImage" src="" alt="QR Code"> <!--imagen vacia, se le asignara una url-->
+    <script> //Bloque de JS
+        document.getElementById('qrForm').addEventListener('submit',function(e){ 
+            // document. representa toda la página web cargada en el navegador.
+            // getElementById() busca dentro del documento mediante el id, el elemento html q se va a manipular
+            // addEventListener() es un método de JS que permite escuchar (o suscribirse) a un evento que ocurre sobre un elemento HTML.
             e.preventDefault();
-            let data=document.getElementById('info_input').value;
-            let size=100;
-            let endpoint = "https://api.apgy.in/qr/?";
-            let url_endpoint = endpoint + 'data=' + data + '&size='+ size;
-            document.getElementById('qrImage').src=url_endpoint
+            //Normalmente, cuando envías un formulario (submit), el navegador recarga la página o la manda a un servidor. e.preventDefault(); evita esa recarga automática.
+            let data=document.getElementById('data_input').value; //obtiene valor del id data_input
+            let size=document.getElementById('size_input').value; //obtiene valor del id size_input
+            let endpoint = "https://api.apgy.in/qr/?"; //se crea la url
+            let url_endpoint = endpoint + 'data=' + data + '&size='+ size; // se concadenan las variables para crear la url
+            document.getElementById('qrImage').src=url_endpoint //Asigna la URL generada al src de la <img>. El navegador descargará esa imagen y mostrará el QR.
         });
     </script>
 
