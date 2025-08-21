@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dragon Ball • Planetas</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <h1 class="title">Planetas • Dragon Ball</h1>
+    <form id="search-form" class="search">
+      <input id="search-input" type="search" placeholder="Buscar planeta…" aria-label="Buscar planeta" />
+      <button type="submit">Buscar</button>
+      <button type="button" id="clear-search" class="secondary">Limpiar</button>
+    </form>
+  </header>
+
+  <main class="container">
+    <section id="status" class="status" aria-live="polite"></section>
+
+    <section id="grid" class="grid" aria-label="Listado de planetas">
+      <!-- Tarjetas inyectadas por JS -->
+    </section>
+
+    <nav class="pager" aria-label="Paginación">
+      <button id="prev-btn" class="secondary" disabled>← Anterior</button>
+      <span id="page-indicator" class="page-indicator">Página 1</span>
+      <button id="next-btn" class="secondary">Siguiente →</button>
+    </nav>
+  </main>
+
+  <footer class="site-footer">
+    <small>Datos: Dragon Ball API • Proyecto académico</small>
+  </footer>
+
+  <script src="./js/api.js"></script>
+  <script src="./js/planets.js"></script>
+</body>
+</html>
