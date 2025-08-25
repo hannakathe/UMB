@@ -1,0 +1,227 @@
+CREATE DATABASE IF NOT EXISTS PAIS_RIO;
+USE PAIS_RIO;   
+
+-- DROP DATABASE PAIS_RIO;
+
+-- ==============================
+-- CREAR TABLAS
+-- ==============================
+
+
+-- TIPO_PAIS
+CREATE TABLE IF NOT EXISTS TIPO_PAIS (
+    ID_TIPO_PAIS VARCHAR(100) PRIMARY KEY,
+    NOMBRE_TIPO_PAIS VARCHAR(100) NOT NULL
+);
+
+-- FORMA_GOBIERNO
+CREATE TABLE IF NOT EXISTS FORMA_GOBIERNO (
+    ID_FORMA_GOBIERNO INT AUTO_INCREMENT PRIMARY KEY,
+    NOMBRE_FORMA_GOBIERNO VARCHAR(100) NOT NULL
+);
+
+-- PAIS
+CREATE TABLE IF NOT EXISTS PAIS (
+    ID_PAIS CHAR(5) PRIMARY KEY,
+    NOMBRE_PAIS VARCHAR(100) NOT NULL,
+    ID_TIPO_PAIS VARCHAR(100) NOT NULL,
+    ID_FORMA_GOBIERNO INT NOT NULL,
+    ID_COLONIZADOR CHAR(5) NOT NULL,
+    CONTINENTE VARCHAR(100) NOT NULL,
+
+    FOREIGN KEY(ID_FORMA_GOBIERNO) REFERENCES FORMA_GOBIERNO(ID_FORMA_GOBIERNO),
+    FOREIGN KEY(ID_COLONIZADOR) REFERENCES PAIS(ID_PAIS),
+    CHECK (ID_PAIS <> ID_COLONIZADOR),
+    FOREIGN KEY(ID_TIPO_PAIS) REFERENCES TIPO_PAIS(ID_TIPO_PAIS)
+);
+
+-- TIPO_RIO
+CREATE TABLE IF NOT EXISTS TIPO_RIO (
+    ID_TIPO_RIO INT AUTO_INCREMENT PRIMARY KEY,
+    NOMBRE_TIPO_RIO VARCHAR(100) NOT NULL
+);
+
+-- RIO
+CREATE TABLE IF NOT EXISTS RIO (
+    ID_RIO CHAR(5) PRIMARY KEY,
+    NOMBRE_RIO VARCHAR(100) NOT NULL,
+    LONGITUD INT NOT NULL,
+    CAUDAL_M3S INT NOT NULL,
+    ID_TIPO_RIO INT NOT NULL,
+
+    FOREIGN KEY(ID_TIPO_RIO) REFERENCES TIPO_RIO(ID_TIPO_RIO)
+);
+
+-- PRODUCTO
+CREATE TABLE IF NOT EXISTS PRODUCTO (
+    ID_PRODUCTO INT AUTO_INCREMENT PRIMARY KEY,
+    NOMBRE_PRODUCTO VARCHAR(100) NOT NULL
+);
+
+-- TIPO_COMERCIO
+CREATE TABLE IF NOT EXISTS TIPO_COMERCIO (
+    ID_TIPO_COMERCIO INT AUTO_INCREMENT PRIMARY KEY,
+    NOMBRE_TIPO_COMERCIO VARCHAR(100) NOT NULL
+);
+
+-- COMERCIO
+CREATE TABLE IF NOT EXISTS COMERCIO (
+    ID_PAIS_ORIGEN CHAR(5) NOT NULL,
+    ID_PAIS_DESTINO CHAR(5) NOT NULL,
+    ID_PRODUCTO INT NOT NULL,
+    ID_TIPO_COMERCIO INT NOT NULL,
+    VOLUMEN_COMERCIO INT NOT NULL,
+    PRIMARY KEY(ID_PAIS_ORIGEN, ID_PAIS_DESTINO, ID_PRODUCTO),
+    FOREIGN KEY(ID_PAIS_ORIGEN) REFERENCES PAIS(ID_PAIS),
+    FOREIGN KEY(ID_PAIS_DESTINO) REFERENCES PAIS(ID_PAIS),
+    FOREIGN KEY(ID_PRODUCTO) REFERENCES PRODUCTO(ID_PRODUCTO),
+    CHECK (ID_PAIS_ORIGEN <> ID_PAIS_DESTINO)
+);
+
+-- LIMITE
+CREATE TABLE IF NOT EXISTS LIMITE (
+    ID_PAIS1 CHAR(5) NOT NULL,
+    ID_PAIS2 CHAR(5) NOT NULL,
+    LONGITUD_LIMITE INT NOT NULL,
+    PRIMARY KEY(ID_PAIS1, ID_PAIS2),
+    FOREIGN KEY(ID_PAIS1) REFERENCES PAIS(ID_PAIS),
+    FOREIGN KEY(ID_PAIS2) REFERENCES PAIS(ID_PAIS),
+    CHECK (ID_PAIS1 <> ID_PAIS2)
+);
+
+-- RIO_NACIONAL
+CREATE TABLE IF NOT EXISTS RIO_NACIONAL (
+    ID_RIO CHAR(5) NOT NULL,
+    ID_PAIS CHAR(5) NOT NULL,
+    PRIMARY KEY(ID_RIO, ID_PAIS),
+    FOREIGN KEY(ID_RIO) REFERENCES RIO(ID_RIO),
+    FOREIGN KEY(ID_PAIS) REFERENCES PAIS(ID_PAIS)
+);
+
+-- RIO_INTERNACIONAL
+CREATE TABLE IF NOT EXISTS RIO_INTERNACIONAL (
+    ID_RIO CHAR(5) NOT NULL,
+    ID_PAIS1 CHAR(5) NOT NULL,
+    ID_PAIS2 CHAR(5) NOT NULL,
+    PRIMARY KEY(ID_RIO, ID_PAIS1, ID_PAIS2),
+    FOREIGN KEY(ID_RIO) REFERENCES RIO(ID_RIO),
+    FOREIGN KEY(ID_PAIS1) REFERENCES PAIS(ID_PAIS),
+    FOREIGN KEY(ID_PAIS2) REFERENCES PAIS(ID_PAIS),
+    CHECK (ID_PAIS1 <> ID_PAIS2)
+);
+
+
+
+
+
+-- ==============================
+-- INSERTAR DATOS   
+-- ==============================
+-- ==============================
+-- INSERTS DE EJEMPLO
+-- ==============================
+
+-- 1. TIPOS DE PAÍS
+INSERT INTO TIPO_PAIS (ID_TIPO_PAIS, NOMBRE_TIPO_PAIS) VALUES
+('SOB', 'Soberano'),
+('DEP', 'Dependencia'),
+('COL', 'Colonia'),
+('REG', 'Región Autónoma'),
+('FED', 'Federación');
+
+-- 2. FORMAS DE GOBIERNO
+INSERT INTO FORMA_GOBIERNO (NOMBRE_FORMA_GOBIERNO) VALUES
+('República'),
+('Monarquía'),
+('Dictadura'),
+('Federación'),
+('Comunidad Autónoma');
+
+-- 3. PAÍSES (ejemplo: algunos colonizados por España, Portugal, Reino Unido)
+-- Nota: el colonizador debe existir como país también, así que pongo a España (1) y Portugal (2) primero.
+INSERT INTO PAIS (ID_PAIS, NOMBRE_PAIS, ID_TIPO_PAIS, ID_FORMA_GOBIERNO, ID_COLONIZADOR, CONTINENTE) VALUES
+(1, 'España', 'SOB', 2, 1, 'Europa'),  -- se referencia a sí misma para no violar la FK
+(2, 'Portugal', 'SOB', 2, 2, 'Europa'),
+(3, 'Colombia', 'SOB', 1, 1, 'América'),
+(4, 'Brasil', 'FED', 4, 2, 'América'),
+(5, 'Argentina', 'SOB', 1, 1, 'América');
+
+-- 4. TIPOS DE RÍO
+INSERT INTO TIPO_RIO (NOMBRE_TIPO_RIO) VALUES
+('Nacional'),
+('Internacional'),
+('Afluente'),
+('Principal'),
+('Subterráneo');
+
+-- 5. RÍOS
+INSERT INTO RIO (ID_RIO, NOMBRE_RIO, LONGITUD, CAUDAL_M3S, ID_TIPO_RIO) VALUES
+(101, 'Amazonas', 6400, 209000, 2),
+(102, 'Magdalena', 1528, 7200, 1),
+(103, 'Orinoco', 2140, 33000, 2),
+(104, 'Ebro', 910, 600, 1),
+(105, 'Douro', 897, 500, 2);
+
+-- 6. PRODUCTOS
+INSERT INTO PRODUCTO (NOMBRE_PRODUCTO) VALUES
+('Café'),
+('Soja'),
+('Vino'),
+('Petróleo'),
+('Carne de Res');
+
+-- 7. TIPOS DE COMERCIO
+INSERT INTO TIPO_COMERCIO (NOMBRE_TIPO_COMERCIO) VALUES
+('Exportación'),
+('Importación'),
+('Intercambio'),
+('Tránsito'),
+('Acuerdo Bilateral');
+
+-- 8. COMERCIO (ejemplos de intercambios entre países)
+INSERT INTO COMERCIO (ID_PAIS_ORIGEN, ID_PAIS_DESTINO, ID_PRODUCTO, ID_TIPO_COMERCIO, VOLUMEN_COMERCIO) VALUES
+(3, 5, 1, 1, 5000),  -- Colombia exporta café a Argentina
+(4, 3, 2, 1, 7000),  -- Brasil exporta soja a Colombia
+(5, 1, 5, 1, 3000),  -- Argentina exporta carne a España
+(2, 4, 3, 1, 2500),  -- Portugal exporta vino a Brasil
+(1, 3, 4, 1, 6000);  -- España exporta petróleo a Colombia
+
+-- 9. LÍMITES
+INSERT INTO LIMITE (ID_PAIS1, ID_PAIS2, LONGITUD_LIMITE) VALUES
+(3, 5, 2000), -- Colombia con Argentina
+(3, 4, 1600), -- Colombia con Brasil
+(4, 5, 1200), -- Brasil con Argentina
+(1, 2, 1300), -- España con Portugal
+(5, 2, 900);  -- Argentina con Portugal (ejemplo ficticio)
+
+-- 10. RÍOS NACIONALES
+INSERT INTO RIO_NACIONAL (ID_RIO, ID_PAIS) VALUES
+(102, 3), -- Magdalena en Colombia
+(104, 1), -- Ebro en España
+(105, 2), -- Duero en Portugal
+(103, 5), -- Orinoco en Argentina (ejemplo ficticio)
+(101, 4); -- Amazonas en Brasil
+
+-- 11. RÍOS INTERNACIONALES
+INSERT INTO RIO_INTERNACIONAL (ID_RIO, ID_PAIS1, ID_PAIS2) VALUES
+(101, 3, 4), -- Amazonas entre Colombia y Brasil
+(101, 4, 5), -- Amazonas entre Brasil y Argentina
+(103, 3, 5), -- Orinoco entre Colombia y Argentina (ficticio)
+(105, 1, 2), -- Duero entre España y Portugal
+(103, 4, 5); -- Orinoco entre Brasil y Argentina
+
+
+-- ==============================
+-- CONSULTAS DE TABLAS
+-- ==============================
+SELECT * FROM TIPO_PAIS;
+SELECT * FROM FORMA_GOBIERNO;
+SELECT * FROM PAIS;
+SELECT * FROM TIPO_RIO;
+SELECT * FROM RIO;
+SELECT * FROM PRODUCTO;
+SELECT * FROM TIPO_COMERCIO;
+SELECT * FROM COMERCIO;
+SELECT * FROM LIMITE;
+SELECT * FROM RIO_NACIONAL;
+SELECT * FROM RIO_INTERNACIONAL;

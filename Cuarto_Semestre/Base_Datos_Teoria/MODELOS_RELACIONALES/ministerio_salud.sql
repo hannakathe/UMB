@@ -1,0 +1,187 @@
+CREATE DATABASE IF NOT EXISTS MINISTERIO_SALUD;
+USE MINISTERIO_SALUD;
+
+-- DROP DATABASE MINISTERIO_SALUD;
+
+-- ==============================
+-- CREAR TABLAS
+-- ==============================
+
+-- HOSPITAL
+CREATE TABLE IF NOT EXISTS HOSPITAL (
+    ID_HOSPITAL CHAR(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci PRIMARY KEY,
+    NOMBRE_HOSPITAL VARCHAR(100) NOT NULL,
+    DIRECCION VARCHAR(200) NOT NULL,
+    TELEFONO VARCHAR(15) NOT NULL,
+    EMAIL VARCHAR(100) UNIQUE,
+    CANTIDAD_CAMAS INT NOT NULL
+);
+
+-- SALA
+CREATE TABLE IF NOT EXISTS SALA (
+    ID_SALA CHAR(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci PRIMARY KEY,
+    NOMBRE_SALA VARCHAR(100) NOT NULL,
+    CAPACIDAD INT NOT NULL,
+    ID_HOSPITAL CHAR(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+
+    FOREIGN KEY(ID_HOSPITAL) REFERENCES HOSPITAL(ID_HOSPITAL)
+);
+
+-- MEDICO
+CREATE TABLE IF NOT EXISTS MEDICO (
+    ID_MEDICO CHAR(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci PRIMARY KEY,
+    CEDULA_MEDICO VARCHAR(20) UNIQUE,
+    NOMBRE VARCHAR(100) NOT NULL,
+    APELLIDO VARCHAR(100) NOT NULL,
+    ESPECIALIDAD VARCHAR(100) NOT NULL,
+    TELEFONO VARCHAR(15) NOT NULL,
+    EMAIL VARCHAR(100) UNIQUE,
+    ID_HOSPITAL CHAR(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+
+    FOREIGN KEY(ID_HOSPITAL) REFERENCES HOSPITAL(ID_HOSPITAL)
+);
+
+-- LABORATORIO
+CREATE TABLE IF NOT EXISTS LABORATORIO (
+    ID_LABORATORIO CHAR(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci PRIMARY KEY,
+    NOMBRE_LABORATORIO VARCHAR(100) NOT NULL,
+    DIRECCION VARCHAR(200) NOT NULL,
+    TELEFONO VARCHAR(15) NOT NULL,
+    EMAIL VARCHAR(100) UNIQUE
+);
+
+-- SERVICIO
+CREATE TABLE IF NOT EXISTS SERVICIO (
+    ID_SERVICIO CHAR(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci PRIMARY KEY,
+    ID_LABORATORIO CHAR(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+    NOMBRE_SERVICIO VARCHAR(100) NOT NULL,
+    DESCRIPCION VARCHAR(200),
+    FECHA_SERVICIO DATE NOT NULL,
+    COSTO DECIMAL(10,2) NOT NULL,
+
+    FOREIGN KEY(ID_LABORATORIO) REFERENCES LABORATORIO(ID_LABORATORIO)
+);
+
+-- PACIENTE
+CREATE TABLE IF NOT EXISTS PACIENTE (
+    ID_PACIENTE CHAR(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci PRIMARY KEY,
+    CEDULA_PACIENTE VARCHAR(20) UNIQUE,
+    NUMERO_CAMA INT NOT NULL,
+    NOMBRE VARCHAR(100) NOT NULL,
+    APELLIDO VARCHAR(100) NOT NULL,
+    FECHA_NACIMIENTO DATE NOT NULL,
+    DIRECCION VARCHAR(200) NOT NULL,
+    TELEFONO VARCHAR(15) NOT NULL,
+    EMAIL VARCHAR(100) UNIQUE,
+    ID_HOSPITAL CHAR(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+    ID_SALA CHAR(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+
+    FOREIGN KEY(ID_HOSPITAL) REFERENCES HOSPITAL(ID_HOSPITAL),
+    FOREIGN KEY(ID_SALA) REFERENCES SALA(ID_SALA)
+);
+
+-- ATENCION
+CREATE TABLE IF NOT EXISTS ATENCION (
+    ID_ATENCION CHAR(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci PRIMARY KEY,
+    ID_PACIENTE CHAR(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+    ID_MEDICO CHAR(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+    FECHA_ATENCION DATE NOT NULL,
+
+    FOREIGN KEY(ID_PACIENTE) REFERENCES PACIENTE(ID_PACIENTE),
+    FOREIGN KEY(ID_MEDICO) REFERENCES MEDICO(ID_MEDICO)
+);
+
+-- DIAGNOSTICO
+CREATE TABLE IF NOT EXISTS DIAGNOSTICO (
+    ID_DIAGNOSTICO CHAR(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci PRIMARY KEY,
+    ID_ATENCION CHAR(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+    DESCRIPCION VARCHAR(200) NOT NULL,
+    FECHA_DIAGNOSTICO DATE NOT NULL,
+
+    FOREIGN KEY(ID_ATENCION) REFERENCES ATENCION(ID_ATENCION)
+);
+
+
+
+-- ==========================================
+-- INSERTAR DATOS   
+-- ==========================================
+
+-- HOSPITAL
+INSERT INTO HOSPITAL VALUES
+('H001','Hospital Central','Av. Principal 123, Ciudad A','555-1234','central@hospital.com',200),
+('H002','Hospital Regional Norte','Calle Norte 45, Ciudad B','555-2345','norte@hospital.com',150),
+('H003','Hospital Regional Sur','Av. Sur 678, Ciudad C','555-3456','sur@hospital.com',180),
+('H004','Hospital Militar','Base Militar Zona D','555-4567','militar@hospital.com',300),
+('H005','Hospital Infantil','Av. Niños 89, Ciudad E','555-5678','infantil@hospital.com',120);
+
+-- SALA
+INSERT INTO SALA VALUES
+('S001','Sala Emergencias',50,'H001'),
+('S002','Sala Cuidados Intensivos',30,'H001'),
+('S003','Sala Pediatría',40,'H005'),
+('S004','Sala Cirugía',25,'H002'),
+('S005','Sala General',60,'H003');
+
+-- LABORATORIO
+INSERT INTO LABORATORIO VALUES
+('L001','Lab Clínico Central','Av. Salud 123, Ciudad A','555-6789','labcentral@labs.com'),
+('L002','Lab Norte','Calle 50, Ciudad B','555-7890','labnorte@labs.com'),
+('L003','Lab Sur','Av. Sur 22, Ciudad C','555-8901','labsur@labs.com'),
+('L004','Lab Militar','Base Militar, Zona D','555-9012','labmilitar@labs.com'),
+('L005','Lab Infantil','Av. Niños 12, Ciudad E','555-0123','labinfantil@labs.com');
+
+-- SERVICIO
+INSERT INTO SERVICIO VALUES
+('SV001','L001','Análisis de Sangre','Exámenes completos de sangre','2025-01-10',50.00),
+('SV002','L002','Prueba COVID','Detección rápida de antígenos','2025-01-12',30.00),
+('SV003','L003','Radiografía','Estudio de rayos X','2025-01-15',80.00),
+('SV004','L004','Resonancia Magnética','Imagen de alta resolución','2025-01-20',500.00),
+('SV005','L005','Prueba de Alergia','Detección de alérgenos comunes','2025-01-25',60.00);
+
+-- MEDICO
+INSERT INTO MEDICO VALUES
+('M001','12345678','Juan','Pérez','Cardiología','555-1111','juanp@hospital.com','H001'),
+('M002','23456789','María','Gómez','Pediatría','555-2222','mariag@hospital.com','H005'),
+('M003','34567890','Carlos','Ramírez','Cirugía General','555-3333','carlosr@hospital.com','H002'),
+('M004','45678901','Ana','López','Medicina Interna','555-4444','anal@hospital.com','H003'),
+('M005','56789012','Pedro','Martínez','Neurología','555-5555','pedrom@hospital.com','H004');
+
+-- PACIENTE
+INSERT INTO PACIENTE VALUES
+('P001','87654321',101,'Luis','Torres','1990-05-10','Calle 1, Ciudad A','555-6666','luist@paciente.com','H001','S001'),
+('P002','76543210',102,'Carmen','Sánchez','1985-08-15','Calle 2, Ciudad B','555-7777','carmens@paciente.com','H001','S002'),
+('P003','65432109',201,'Diego','Fernández','2012-03-20','Calle 3, Ciudad E','555-8888','diegof@paciente.com','H005','S003'),
+('P004','54321098',301,'Elena','Vargas','1975-11-25','Calle 4, Ciudad C','555-9999','elenav@paciente.com','H003','S005'),
+('P005','43210987',401,'Mateo','Ríos','1968-07-30','Calle 5, Ciudad D','555-0000','mateor@paciente.com','H002','S004');
+
+-- ATENCION
+INSERT INTO ATENCION VALUES
+('A001','P001','M001','2025-02-01'),
+('A002','P002','M003','2025-02-02'),
+('A003','P003','M002','2025-02-03'),
+('A004','P004','M004','2025-02-04'),
+('A005','P005','M005','2025-02-05');
+
+-- DIAGNOSTICO
+INSERT INTO DIAGNOSTICO VALUES
+('D001','A001','Hipertensión controlada','2025-02-01'),
+('D002','A002','Apendicitis aguda','2025-02-02'),
+('D003','A003','Bronquitis infantil','2025-02-03'),
+('D004','A004','Diabetes tipo II','2025-02-04'),
+('D005','A005','Migraña crónica','2025-02-05');
+
+
+
+-- ==============================
+-- CONSULTAS DE TABLAS
+-- ==============================
+
+SELECT * FROM HOSPITAL;
+SELECT * FROM SALA;
+SELECT * FROM MEDICO;
+SELECT * FROM LABORATORIO;
+SELECT * FROM SERVICIO;
+SELECT * FROM PACIENTE;
+SELECT * FROM ATENCION;
+SELECT * FROM DIAGNOSTICO;
