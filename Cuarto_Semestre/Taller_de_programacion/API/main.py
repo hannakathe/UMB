@@ -44,7 +44,7 @@ def crear_producto(producto: Producto):
         "data": producto.dict()
     }
 
-@app.get("/productos/")
+@app.get("/producto/")
 def listar_productos():
     conn = sqlite3.connect('miwebsite.db')
     cursor = conn.cursor()
