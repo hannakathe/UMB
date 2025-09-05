@@ -89,3 +89,28 @@ async def obtener_significado(nombre: str = Form(...)):
         })
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
+
+# enpoint sentimientos
+@app.post("/analizar-sentimiento")
+async def analizar_sentimiento(mensaje: str = Form(...)):
+    try:
+        respuesta = client.chat.completions.create(
+            extra_headers={
+                "HTTP-Referer": "",
+                "X-Title": "",
+            },
+            model="gpt-oss-20b:free",
+            messages=[
+                {"role": "system", "content": "Eres un experto en análisis de sentimientos. Analiza el siguiente mensaje y responde únicamente con una de estas etiquetas: positivo, negativo o neutro."},
+                {"role": "user", "content": f"Analiza el sentimiento del siguiente mensaje: '{mensaje}'"}
+            ]
+        )
+        sentimiento = respuesta.choices[0].message.content.strip().lower()
+        if sentimiento not in ["positivo", "negativo", "neutro"]:
+            sentimiento = "neutro"
+        return JSONResponse(content={
+            "mensaje": mensaje,
+            "sentimiento": sentimiento
+        })
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
