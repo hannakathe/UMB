@@ -1,9 +1,18 @@
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, status, Form
+from fastapi.responses import JSONResponse
 import sqlite3
 from models.producto import Producto
+from openai import OpenAI
+
+
+#API KEY: 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
 
 app = FastAPI()
 
+client = OpenAI(
+  base_url="https://openrouter.ai/api/v1",
+  api_key="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",
+)
 
 @app.get("/")
 def inicio():
@@ -55,3 +64,28 @@ def listar_productos():
         "message": "Lista de productos",
         "data": [{"id": row[0], "nombre": row[1], "precio": row[2]} for row in productos]
     }
+    
+    
+#Segundo endpoint con openai
+@app.post("/significado-nombre")
+async def obtener_significado(nombre: str = Form(...)):
+    try:
+        respuesta = client.chat.completions.create(
+            extra_headers={
+                "HTTP-Referer": "", # Optional. Site URL for rankings on openrouter.ai.
+                "X-Title": "", # Optional. Site title for rankings on openrouter.ai.
+            },
+            model="gpt-oss-20b:free",
+            messages=[
+                {"role": "system", "content": "Eres un experto en etimología de nombres."},
+                {"role": "user", "content": f"¿Cuál es el significado del nombre {nombre}?"}
+            ]
+        )
+
+        significado = respuesta.choices[0].message.content.strip()
+        return JSONResponse(content={
+            "nombre": nombre,
+            "significado": significado
+        })
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
