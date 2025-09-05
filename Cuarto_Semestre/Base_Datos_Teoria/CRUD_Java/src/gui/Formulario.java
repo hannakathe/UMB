@@ -1,30 +1,45 @@
 package gui;
+// Define el paquete donde está esta clase (en este caso "gui").
+// Se suele usar para las clases relacionadas con la interfaz gráfica.
 
 import service.DataArticulo;
+// Importa la clase de servicio que contiene los métodos CRUD para interactuar con la BD.
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import javax.swing.*;  
+import javax.swing.table.DefaultTableModel;  
+import java.sql.ResultSet;  
+import java.sql.SQLException;  
+// Importaciones necesarias para trabajar con Swing (interfaz gráfica),
+// modelos de tabla y conexiones SQL.
 
 public class Formulario extends JFrame {
+    // La clase Formulario hereda de JFrame, por lo que representa una ventana.
 
+    // Campos de texto para capturar los datos del artículo.
     private JTextField txtCodigo, txtNombre, txtUnidad, txtPrecio, txtCantidad, txtMarca;
+
+    // Botones para realizar acciones CRUD y salir.
     private JButton btnNuevo, btnGrabar, btnModificar, btnEliminar, btnSalir;
+
+    // Tabla y modelo para mostrar los artículos.
     private JTable tabla;
     private DefaultTableModel modeloTabla;
+
+    // Objeto de la capa de servicio para acceder a la BD.
     private DataArticulo data;
 
+    // ------------------ CONSTRUCTOR ------------------
     public Formulario() {
-        setTitle("Gestión de Artículos");
-        setSize(850, 450);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setLayout(null);
+        // Configuración básica de la ventana.
+        setTitle("Gestión de Artículos");          // Título de la ventana
+        setSize(850, 450);                         // Tamaño de la ventana
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Cierra la app al cerrar ventana
+        setLocationRelativeTo(null);               // Centra la ventana en pantalla
+        setLayout(null);                           // Usa posiciones absolutas (sin layout manager)
 
-        data = new DataArticulo();
+        data = new DataArticulo();                 // Inicializa la capa de servicio
 
-        // Labels y TextFields
+        // ------------------ LABELS Y CAMPOS ------------------
         JLabel lblCodigo = new JLabel("Código:");
         lblCodigo.setBounds(20, 20, 100, 25);
         add(lblCodigo);
@@ -73,7 +88,7 @@ public class Formulario extends JFrame {
         txtMarca.setBounds(130, 220, 150, 25);
         add(txtMarca);
 
-        // Botones
+        // ------------------ BOTONES ------------------
         btnNuevo = new JButton("Nuevo");
         btnNuevo.setBounds(20, 270, 100, 30);
         add(btnNuevo);
@@ -94,26 +109,28 @@ public class Formulario extends JFrame {
         btnSalir.setBounds(460, 270, 100, 30);
         add(btnSalir);
 
-        // Tabla
+        // ------------------ TABLA ------------------
         String[] columnas = { "Código", "Nombre", "Unidad", "Precio", "Stock", "Marca" };
-        modeloTabla = new DefaultTableModel(null, columnas);
+        modeloTabla = new DefaultTableModel(null, columnas); // Modelo vacío con columnas definidas
         tabla = new JTable(modeloTabla);
 
-        JScrollPane scroll = new JScrollPane(tabla);
+        JScrollPane scroll = new JScrollPane(tabla); // Scroll para la tabla
         scroll.setBounds(320, 20, 500, 200);
         add(scroll);
 
-        // Acciones
-        btnSalir.addActionListener(_ -> System.exit(0));
-        btnNuevo.addActionListener(_ -> limpiarCampos());
-        btnGrabar.addActionListener(_ -> grabarArticulo());
-        btnModificar.addActionListener(_ -> modificarArticulo());
-        btnEliminar.addActionListener(_ -> eliminarArticulo());
+        // ------------------ ACCIONES DE BOTONES ------------------
+        btnSalir.addActionListener(_ -> System.exit(0));    // Cierra la aplicación
+        btnNuevo.addActionListener(_ -> limpiarCampos());   // Limpia los campos
+        btnGrabar.addActionListener(_ -> grabarArticulo()); // Inserta artículo
+        btnModificar.addActionListener(_ -> modificarArticulo()); // Modifica artículo
+        btnEliminar.addActionListener(_ -> eliminarArticulo());   // Elimina artículo
 
-        cargarDatos();
+        cargarDatos(); // Cargar los datos desde la BD al iniciar
     }
 
+    // ------------------ MÉTODOS AUXILIARES ------------------
     private void limpiarCampos() {
+        // Limpia todos los campos de texto
         txtCodigo.setText("");
         txtNombre.setText("");
         txtUnidad.setText("");
@@ -123,10 +140,13 @@ public class Formulario extends JFrame {
     }
 
     private void cargarDatos() {
+        // Limpia la tabla antes de recargar los datos
         modeloTabla.setRowCount(0);
         try {
+            // Consulta todos los artículos desde la BD
             ResultSet rs = data.listarArticulos();
             while (rs.next()) {
+                // Crea una fila con los valores del artículo
                 Object[] fila = {
                         rs.getString("ART_COD"),
                         rs.getString("ART_NOM"),
@@ -135,6 +155,7 @@ public class Formulario extends JFrame {
                         rs.getInt("ART_STK"),
                         rs.getString("ART_MARCA")
                 };
+                // Agrega la fila al modelo de la tabla
                 modeloTabla.addRow(fila);
             }
         } catch (SQLException e) {
@@ -144,9 +165,11 @@ public class Formulario extends JFrame {
 
     private void grabarArticulo() {
         try {
+            // Convierte texto a números para precio y cantidad
             int precio = Integer.parseInt(txtPrecio.getText().trim());
             int cantidad = Integer.parseInt(txtCantidad.getText().trim());
 
+            // Inserta artículo usando DataArticulo
             data.insertarArticulo(
                     txtCodigo.getText().trim(),
                     txtNombre.getText().trim(),
@@ -154,8 +177,8 @@ public class Formulario extends JFrame {
                     precio,
                     cantidad,
                     txtMarca.getText().trim());
-            cargarDatos();
-            limpiarCampos();
+            cargarDatos();   // Refresca la tabla
+            limpiarCampos(); // Limpia los campos
         } catch (NumberFormatException nfe) {
             JOptionPane.showMessageDialog(this, "Precio y Cantidad deben ser números válidos.");
         } catch (Exception e) {
@@ -164,61 +187,58 @@ public class Formulario extends JFrame {
     }
 
     private void modificarArticulo() {
-    try {
-        String codigo = txtCodigo.getText().trim();
-        if (codigo.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Debes ingresar un código de artículo.");
-            return;
+        try {
+            String codigo = txtCodigo.getText().trim();
+            if (codigo.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Debes ingresar un código de artículo.");
+                return;
+            }
+
+            // Busca el artículo en la BD
+            ResultSet rs = data.buscarArticulo(codigo);
+            if (!rs.next()) {
+                JOptionPane.showMessageDialog(this, "No se encontró un artículo con ese código.");
+                return;
+            }
+
+            // Si un campo está vacío, conserva el valor actual de la BD
+            String nombre = txtNombre.getText().trim().isEmpty()
+                    ? rs.getString("ART_NOM")
+                    : txtNombre.getText().trim();
+
+            String unidad = txtUnidad.getText().trim().isEmpty()
+                    ? rs.getString("ART_UNI")
+                    : txtUnidad.getText().trim();
+
+            int precio = txtPrecio.getText().trim().isEmpty()
+                    ? rs.getInt("ART_PRE")
+                    : Integer.parseInt(txtPrecio.getText().trim());
+
+            int cantidad = txtCantidad.getText().trim().isEmpty()
+                    ? rs.getInt("ART_STK")
+                    : Integer.parseInt(txtCantidad.getText().trim());
+
+            String marca = txtMarca.getText().trim().isEmpty()
+                    ? rs.getString("ART_MARCA")
+                    : txtMarca.getText().trim();
+
+            // Actualiza el artículo
+            data.modificarArticulo(codigo, nombre, unidad, precio, cantidad, marca);
+
+            cargarDatos();
+            JOptionPane.showMessageDialog(this, "Artículo actualizado correctamente.");
+
+        } catch (NumberFormatException nfe) {
+            JOptionPane.showMessageDialog(this, "Precio y Cantidad deben ser números válidos.");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al modificar: " + e.getMessage());
         }
-
-        // Traer los valores actuales desde la BD
-        ResultSet rs = data.buscarArticulo(codigo);
-        if (!rs.next()) {
-            JOptionPane.showMessageDialog(this, "No se encontró un artículo con ese código.");
-            return;
-        }
-
-        // Si el campo está vacío, conservar el valor actual de la BD
-        String nombre = txtNombre.getText().trim().isEmpty()
-                ? rs.getString("ART_NOM")
-                : txtNombre.getText().trim();
-
-        String unidad = txtUnidad.getText().trim().isEmpty()
-                ? rs.getString("ART_UNI")
-                : txtUnidad.getText().trim();
-
-        int precio = txtPrecio.getText().trim().isEmpty()
-                ? rs.getInt("ART_PRE")
-                : Integer.parseInt(txtPrecio.getText().trim());
-
-        int cantidad = txtCantidad.getText().trim().isEmpty()
-                ? rs.getInt("ART_STK")
-                : Integer.parseInt(txtCantidad.getText().trim());
-
-        String marca = txtMarca.getText().trim().isEmpty()
-                ? rs.getString("ART_MARCA")
-                : txtMarca.getText().trim();
-
-        // Llamada al servicio para actualizar
-        data.modificarArticulo(codigo, nombre, unidad, precio, cantidad, marca);
-
-        cargarDatos();
-        JOptionPane.showMessageDialog(this, "Artículo actualizado correctamente.");
-
-    } catch (NumberFormatException nfe) {
-        JOptionPane.showMessageDialog(this, "Precio y Cantidad deben ser números válidos.");
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error al modificar: " + e.getMessage());
     }
-}
-
-
-
 
     private void eliminarArticulo() {
         try {
-            data.eliminarArticulo(txtCodigo.getText());
-            cargarDatos();
+            data.eliminarArticulo(txtCodigo.getText()); // Elimina artículo según el código ingresado
+            cargarDatos(); // Refresca la tabla
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error al eliminar: " + e.getMessage());
         }
