@@ -52,4 +52,15 @@ public class DataArticulo {
         ps.close();
         con.close();
     }
+
+    public ResultSet buscarArticulo(String cod) throws SQLException {
+    Connection con = Conexion.getConexion();
+    String sql = "SELECT * FROM ARTICULO WHERE ART_COD=?";
+    PreparedStatement ps = con.prepareStatement(sql);
+    ps.setString(1, cod);
+    return ps.executeQuery();
 }
+
+}
+
+

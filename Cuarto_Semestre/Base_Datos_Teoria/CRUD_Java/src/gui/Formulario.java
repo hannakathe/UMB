@@ -95,7 +95,7 @@ public class Formulario extends JFrame {
         add(btnSalir);
 
         // Tabla
-        String[] columnas = {"Código", "Nombre", "Unidad", "Precio", "Stock", "Marca"};
+        String[] columnas = { "Código", "Nombre", "Unidad", "Precio", "Stock", "Marca" };
         modeloTabla = new DefaultTableModel(null, columnas);
         tabla = new JTable(modeloTabla);
 
@@ -144,36 +144,76 @@ public class Formulario extends JFrame {
 
     private void grabarArticulo() {
         try {
+            int precio = Integer.parseInt(txtPrecio.getText().trim());
+            int cantidad = Integer.parseInt(txtCantidad.getText().trim());
+
             data.insertarArticulo(
-                    txtCodigo.getText(),
-                    txtNombre.getText(),
-                    txtUnidad.getText(),
-                    Integer.parseInt(txtPrecio.getText()),
-                    Integer.parseInt(txtCantidad.getText()),
-                    txtMarca.getText()
-            );
+                    txtCodigo.getText().trim(),
+                    txtNombre.getText().trim(),
+                    txtUnidad.getText().trim(),
+                    precio,
+                    cantidad,
+                    txtMarca.getText().trim());
             cargarDatos();
             limpiarCampos();
+        } catch (NumberFormatException nfe) {
+            JOptionPane.showMessageDialog(this, "Precio y Cantidad deben ser números válidos.");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error al grabar: " + e.getMessage());
         }
     }
 
     private void modificarArticulo() {
-        try {
-            data.modificarArticulo(
-                    txtCodigo.getText(),
-                    txtNombre.getText(),
-                    txtUnidad.getText(),
-                    Integer.parseInt(txtPrecio.getText()),
-                    Integer.parseInt(txtCantidad.getText()),
-                    txtMarca.getText()
-            );
-            cargarDatos();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error al modificar: " + e.getMessage());
+    try {
+        String codigo = txtCodigo.getText().trim();
+        if (codigo.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debes ingresar un código de artículo.");
+            return;
         }
+
+        // Traer los valores actuales desde la BD
+        ResultSet rs = data.buscarArticulo(codigo);
+        if (!rs.next()) {
+            JOptionPane.showMessageDialog(this, "No se encontró un artículo con ese código.");
+            return;
+        }
+
+        // Si el campo está vacío, conservar el valor actual de la BD
+        String nombre = txtNombre.getText().trim().isEmpty()
+                ? rs.getString("ART_NOM")
+                : txtNombre.getText().trim();
+
+        String unidad = txtUnidad.getText().trim().isEmpty()
+                ? rs.getString("ART_UNI")
+                : txtUnidad.getText().trim();
+
+        int precio = txtPrecio.getText().trim().isEmpty()
+                ? rs.getInt("ART_PRE")
+                : Integer.parseInt(txtPrecio.getText().trim());
+
+        int cantidad = txtCantidad.getText().trim().isEmpty()
+                ? rs.getInt("ART_STK")
+                : Integer.parseInt(txtCantidad.getText().trim());
+
+        String marca = txtMarca.getText().trim().isEmpty()
+                ? rs.getString("ART_MARCA")
+                : txtMarca.getText().trim();
+
+        // Llamada al servicio para actualizar
+        data.modificarArticulo(codigo, nombre, unidad, precio, cantidad, marca);
+
+        cargarDatos();
+        JOptionPane.showMessageDialog(this, "Artículo actualizado correctamente.");
+
+    } catch (NumberFormatException nfe) {
+        JOptionPane.showMessageDialog(this, "Precio y Cantidad deben ser números válidos.");
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error al modificar: " + e.getMessage());
     }
+}
+
+
+
 
     private void eliminarArticulo() {
         try {
