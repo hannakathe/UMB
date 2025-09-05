@@ -12,26 +12,16 @@ public class DataArticulo {
     // Esta clase contiene métodos para realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar)
     // sobre la tabla "ARTICULO" de la base de datos.
 
-    // ------------------ MÉTODO LISTAR ------------------
-    public ResultSet listarArticulos() throws SQLException {
-        // Obtiene una conexión a la base de datos usando la clase Conexion.
-        Connection con = Conexion.getConexion();
-        // Consulta SQL para seleccionar todos los registros de la tabla ARTICULO.
-        String sql = "SELECT * FROM ARTICULO";
-        // Se crea un Statement para ejecutar la consulta.
-        Statement st = con.createStatement();
-        // Se ejecuta la consulta y se devuelve un ResultSet con los datos.
-        return st.executeQuery(sql);
-    }
+    
 
-    // ------------------ MÉTODO INSERTAR ------------------
+    // ------------------ MÉTODO INSERTAR C------------------
     public void insertarArticulo(String cod, String nom, String uni, int pre, int stk, String marca) throws SQLException {
         Connection con = Conexion.getConexion();
-        // Consulta SQL con parámetros (?) para evitar inyección SQL.
-        String sql = "INSERT INTO ARTICULO VALUES (?,?,?,?,?,?)";
+        // Consulta SQL con parámetros (?= Valores columnas de la tabla, datos puros) para evitar inyección SQL.
+        String sql = "INSERT INTO ARTICULO VALUES (?,?,?,?,?,?)"; //? marcadores de posicion
         // Se prepara la consulta SQL con PreparedStatement.
         PreparedStatement ps = con.prepareStatement(sql);
-        // Se asignan valores a cada parámetro de la consulta.
+        // Se asignan valores a cada parámetro de la consulta. Vinculacion con marcadores de posicion. 
         ps.setString(1, cod);     // Código del artículo
         ps.setString(2, nom);     // Nombre
         ps.setString(3, uni);     // Unidad
@@ -45,7 +35,19 @@ public class DataArticulo {
         con.close();
     }
 
-    // ------------------ MÉTODO MODIFICAR ------------------
+    // ------------------ MÉTODO LISTAR R------------------
+    public ResultSet listarArticulos() throws SQLException {
+        // Obtiene una conexión a la base de datos usando la clase Conexion.
+        Connection con = Conexion.getConexion();
+        // Consulta SQL para seleccionar todos los registros de la tabla ARTICULO.
+        String sql = "SELECT * FROM ARTICULO";
+        // Se crea un Statement para ejecutar la consulta.
+        Statement st = con.createStatement();
+        // Se ejecuta la consulta y se devuelve un ResultSet con los datos.
+        return st.executeQuery(sql);
+    }
+
+    // ------------------ MÉTODO MODIFICAR U------------------
     public void modificarArticulo(String cod, String nom, String uni, int pre, int stk, String marca) throws SQLException {
         Connection con = Conexion.getConexion();
         // Consulta SQL para actualizar un artículo, buscando por su código (ART_COD).
@@ -64,7 +66,7 @@ public class DataArticulo {
         con.close();
     }
 
-    // ------------------ MÉTODO ELIMINAR ------------------
+    // ------------------ MÉTODO ELIMINAR D------------------
     public void eliminarArticulo(String cod) throws SQLException {
         Connection con = Conexion.getConexion();
         // Consulta SQL para eliminar un artículo por su código.

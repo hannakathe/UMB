@@ -8,11 +8,11 @@ import java.sql.DriverManager;  // Clase que maneja la conexión con la base de 
 import java.sql.SQLException;   // Manejo de excepciones al trabajar con SQL.
 
 public class Conexion {
-    // Constante que contiene la URL de conexión a la base de datos MySQL.
-    // jdbc:mysql:// → Indica el tipo de base de datos y protocolo.
+    // Constante que contiene la URL de conexión a la base de datos MySQL. Con formato jdbc:mysql://<host>:<puerto>/<nombre_base_de_datos>
+    // jdbc:mysql:// → Indica el tipo de base de datos y protocolo. JDBC (Java Database Connectivity)
     // 127.0.0.1:3306 → Dirección IP (localhost) y puerto por defecto de MySQL.
     // VENTAS → Nombre de la base de datos a la que se conectará.
-    // useSSL=false → Desactiva el uso de SSL (útil en entornos locales).
+    // useSSL=false → Desactiva el uso de SSL (útil en entornos locales). Es un protocolo de seguridad (cifrado) que protege las comunicaciones en línea, como las que llegan a una base de datos.
     // serverTimezone=UTC → Ajusta el uso horario para evitar problemas de zona horaria.
     private static final String URL = "jdbc:mysql://127.0.0.1:3306/VENTAS?useSSL=false&serverTimezone=UTC";
 
