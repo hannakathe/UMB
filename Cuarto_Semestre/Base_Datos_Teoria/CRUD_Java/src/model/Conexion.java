@@ -26,6 +26,16 @@ public class Conexion {
     // Este método se usará en el proyecto para obtener la conexión con la base de datos.
     // Puede lanzar una excepción SQLException si ocurre un error en la conexión.
     public static Connection getConexion() throws SQLException {
+        try {
+            // Carga explícitamente el driver de MySQL en memoria.
+            // Aunque en versiones recientes no siempre es obligatorio,
+            // a veces evita el error "No suitable driver found".
+            Class.forName("com.mysql.cj.jdbc.Driver"); 
+        } catch (ClassNotFoundException e) {
+            // Si el driver no está en el classpath, lanza una excepción SQL personalizada.
+            throw new SQLException("No se encontró el driver de MySQL en el classpath.", e);
+        }
+
         // DriverManager.getConnection() establece la conexión utilizando la URL, usuario y contraseña definidos arriba.
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
