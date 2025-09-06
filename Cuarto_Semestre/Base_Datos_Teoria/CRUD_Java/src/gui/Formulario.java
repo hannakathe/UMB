@@ -1,14 +1,15 @@
 package gui;
 // Define el paquete donde está esta clase (en este caso "gui").
+
 // Se suele usar para las clases relacionadas con la interfaz gráfica.
 
 import service.DataArticulo;
 // Importa la clase de servicio que contiene los métodos CRUD para interactuar con la BD.
 
-import javax.swing.*;  
-import javax.swing.table.DefaultTableModel;  
-import java.sql.ResultSet;  
-import java.sql.SQLException;  
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 // Importaciones necesarias para trabajar con Swing (interfaz gráfica),
 // modelos de tabla y conexiones SQL.
 
@@ -31,13 +32,17 @@ public class Formulario extends JFrame {
     // ------------------ CONSTRUCTOR ------------------
     public Formulario() {
         // Configuración básica de la ventana.
-        setTitle("Gestión de Artículos");          // Título de la ventana
-        setSize(850, 450);                         // Tamaño de la ventana
+        setTitle("Gestión de Artículos"); // Título de la ventana
+        setSize(850, 450); // Tamaño de la ventana
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Cierra la app al cerrar ventana
-        setLocationRelativeTo(null);               // Centra la ventana en pantalla
-        setLayout(null);                           // Usa posiciones absolutas (sin layout manager)
+        setLocationRelativeTo(null); // Centra la ventana en pantalla
+        setLayout(null); // Usa posiciones absolutas (sin layout manager)
 
-        data = new DataArticulo();                 // Inicializa la capa de servicio
+        data = new DataArticulo(); // Inicializa la capa de servicio
+
+
+
+
 
         // ------------------ LABELS Y CAMPOS ------------------
         JLabel lblCodigo = new JLabel("Código:");
@@ -111,7 +116,14 @@ public class Formulario extends JFrame {
 
         // ------------------ TABLA ------------------
         String[] columnas = { "Código", "Nombre", "Unidad", "Precio", "Stock", "Marca" };
-        modeloTabla = new DefaultTableModel(null, columnas); // Modelo vacío con columnas definidas
+        // Sobrescribimos DefaultTableModel para que las celdas no sean editables
+        modeloTabla = new DefaultTableModel(null, columnas) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Ninguna celda será editable
+            }
+        };
+
         tabla = new JTable(modeloTabla);
 
         JScrollPane scroll = new JScrollPane(tabla); // Scroll para la tabla
@@ -119,11 +131,11 @@ public class Formulario extends JFrame {
         add(scroll);
 
         // ------------------ ACCIONES DE BOTONES ------------------
-        btnSalir.addActionListener(_ -> System.exit(0));    // Cierra la aplicación
-        btnNuevo.addActionListener(_ -> limpiarCampos());   // Limpia los campos
+        btnSalir.addActionListener(_ -> System.exit(0)); // Cierra la aplicación
+        btnNuevo.addActionListener(_ -> limpiarCampos()); // Limpia los campos
         btnGrabar.addActionListener(_ -> grabarArticulo()); // Inserta artículo
         btnModificar.addActionListener(_ -> modificarArticulo()); // Modifica artículo
-        btnEliminar.addActionListener(_ -> eliminarArticulo());   // Elimina artículo
+        btnEliminar.addActionListener(_ -> eliminarArticulo()); // Elimina artículo
 
         cargarDatos(); // Cargar los datos desde la BD al iniciar
     }
@@ -177,7 +189,7 @@ public class Formulario extends JFrame {
                     precio,
                     cantidad,
                     txtMarca.getText().trim());
-            cargarDatos();   // Refresca la tabla
+            cargarDatos(); // Refresca la tabla
             limpiarCampos(); // Limpia los campos
         } catch (NumberFormatException nfe) {
             JOptionPane.showMessageDialog(this, "Precio y Cantidad deben ser números válidos.");
@@ -244,3 +256,5 @@ public class Formulario extends JFrame {
         }
     }
 }
+
+
