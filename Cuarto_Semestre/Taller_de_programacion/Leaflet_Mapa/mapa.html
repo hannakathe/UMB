@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mapa con LeafletJS y SelectBox</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map { height: 400px; width: 100%; }
+        #selector { margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <select id="selector">
+        <option value="0">Punto A</option>
+        <option value="1">Punto B</option>
+        <option value="2">Punto C</option>
+    </select>
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Coordenadas de ejemplo
+        const puntos = [
+            { nombre: "Punto A", coords: [4.701048726707697, -74.1463927228533] }, // Ciudad de México
+            { nombre: "Punto B", coords: [49.010146840991574, 2.550696461987166] },  // Madrid
+            { nombre: "Punto C", coords: [46.94800961612209, 7.447817335041771] }    // París
+        ];
+
+        // Inicializar el mapa centrado en el primer punto
+        const map = L.map('map').setView(puntos[0].coords, 5);
+
+        // Añadir capa base
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Añadir marcadores
+        puntos.forEach(p => {
+            L.marker(p.coords).addTo(map).bindPopup(p.nombre);
+        });
+
+        // Manejar el cambio en el select
+        document.getElementById('selector').addEventListener('change', function() {
+            const idx = this.value;
+            map.setView(puntos[idx].coords, 8*2);
+        });
+    </script>
+</body>
+</html>

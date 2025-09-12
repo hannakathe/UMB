@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Mapa con LeafletJS</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Coordenadas para centrar el mapa (ejemplo: Ciudad de México)
+        var lat = 48.87178652286846;
+        var lng = 2.3331369336326007;
+
+
+
+        // Crear el mapa
+        var map = L.map('map').setView([lat, lng], 13 * 5);
+
+        // Añadir capa base de OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Agregar un marcador
+        L.marker([lat, lng]).addTo(map)
+
+            .bindPopup(`
+        <div style="min-width:200px">
+            <h3>Título del Lugar</h3>
+            <img src="https://media.revistagq.com/photos/5ca5f49bbda59472de33dc11/4:3/w_1064,h_798,c_limit/tienda_moda_hombre_paris_5467.jpg" alt="Ángel de la Independencia" style="width:20%;height:auto;margin-bottom:8px;">
+            <p>Les Galeries Lafayette Haussmann son unos grandes almacenes de París situados en el Noveno Distrito de la capital francesa, en el Bulevar Haussmann.</p>
+            <a href="https://haussmann.galerieslafayette.com/" target="_blank">Más información</a>
+        </div>
+    `)
+            .openPopup();;
+
+
+
+
+    </script>
+</body>
+
+</html>
