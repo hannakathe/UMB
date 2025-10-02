@@ -63,6 +63,10 @@ public class CineFrame extends JFrame {
     private JTable tblFacturas;
     private DefaultTableModel modelFacturas;
 
+    // Consulta Relacional
+    private JTable tblConsultaRelacional;
+    private DefaultTableModel modelConsultaRelacional;
+
     public CineFrame(Connection con) {
         this.con = con;
         this.clienteCtrl = new ClienteController(con);
@@ -121,6 +125,9 @@ public class CineFrame extends JFrame {
         JButton btnListClientes = new JButton("Listar Clientes");
         btnListClientes.addActionListener(_ -> listarClientes());
         pClientes.add(btnListClientes, BorderLayout.SOUTH);
+
+        // CONSULTA GENERAL TODO
+        // (Se mueve la inicialización de pConsulta más abajo, después de su declaración)
 
         // 2. Peliculas
         JPanel pPeliculas = new JPanel(new BorderLayout());
@@ -260,6 +267,25 @@ public class CineFrame extends JFrame {
         JButton btnListFacturas = new JButton("Listar Facturas");
         btnListFacturas.addActionListener(_ -> listarFacturas());
         pFacturas.add(btnListFacturas, BorderLayout.SOUTH);
+        // consulta relacional
+        // 8. Consulta Relacional
+        JPanel pConsulta = new JPanel(new BorderLayout());
+
+        // Definir columnas según tu consulta SQL
+        modelConsultaRelacional = new DefaultTableModel(new Object[] {
+                "DocumentoCliente", "NombreCliente", "Pelicula",
+                "Sala", "Asiento", "ValorEntrada", "FechaFactura"
+        }, 0);
+
+        tblConsultaRelacional = new JTable(modelConsultaRelacional);
+        pConsulta.add(new JScrollPane(tblConsultaRelacional), BorderLayout.CENTER);
+
+        JButton btnListConsulta = new JButton("Ejecutar Consulta");
+        btnListConsulta.addActionListener(_ -> listarConsultaRelacional());
+        pConsulta.add(btnListConsulta, BorderLayout.SOUTH);
+
+        // Agregar tab
+        tabs.addTab("Consulta Relacional", pConsulta);
 
         // Add tabs
         tabs.addTab("Clientes", pClientes);
@@ -433,6 +459,50 @@ public class CineFrame extends JFrame {
     }
 
     // ---------- acciones ----------
+    // consulta relacional
+    private void listarConsultaRelacional() {
+        try {
+            modelConsultaRelacional.setRowCount(0); // limpiar tabla
+            String sql = "SELECT " +
+                    "c.documento AS DocumentoCliente, " +
+                    "c.nombre AS NombreCliente, " +
+                    "p.titulo AS Pelicula, " +
+                    "s.tipo_sala AS Sala, " +
+                    "a.numero_silla AS Asiento, " +
+                    "e.valor AS ValorEntrada, " +
+                    "f.fecha AS FechaFactura " +
+                    "FROM entradas e " +
+                    "JOIN clientes c ON e.cliente_documento = c.documento " +
+                    "JOIN funciones fn ON e.funcion_id = fn.id " +
+                    "JOIN peliculas p ON fn.pelicula_id = p.id " +
+                    "JOIN salas s ON fn.sala_id = s.id " +
+                    "JOIN asientos a ON e.asiento_id = a.id " +
+                    "JOIN facturas f ON f.cliente_documento = c.documento";
+
+            var stmt = con.createStatement();
+            var rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                modelConsultaRelacional.addRow(new Object[] {
+                        rs.getString("DocumentoCliente"),
+                        rs.getString("NombreCliente"),
+                        rs.getString("Pelicula"),
+                        rs.getString("Sala"),
+                        rs.getString("Asiento"),
+                        rs.getDouble("ValorEntrada"),
+                        rs.getString("FechaFactura")
+                });
+            }
+
+            rs.close();
+            stmt.close();
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error ejecutando consulta: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+
     // clientes
     private void actualizarCliente() {
         try {
@@ -919,39 +989,38 @@ public class CineFrame extends JFrame {
 
     // limpiar campos
     private void limpiarCampos() {
-    // Clientes
-    txtDoc.setText("");
-    txtNombre.setText("");
-    txtTel.setText("");
+        // Clientes
+        txtDoc.setText("");
+        txtNombre.setText("");
+        txtTel.setText("");
 
-    // Películas
-    txtTitulo.setText("");
-    txtGenero.setText("");
+        // Películas
+        txtTitulo.setText("");
+        txtGenero.setText("");
 
-    // Salas
-    txtTipoSala.setText("");
-    txtCapacidad.setText("");
+        // Salas
+        txtTipoSala.setText("");
+        txtCapacidad.setText("");
 
-    // Funciones
-    txtPeliculaIdF.setText("");
-    txtSalaIdF.setText("");
-    txtFechaHoraF.setText("");
+        // Funciones
+        txtPeliculaIdF.setText("");
+        txtSalaIdF.setText("");
+        txtFechaHoraF.setText("");
 
-    // Asientos
-    txtSalaIdA.setText("");
-    txtNumeroSillaA.setText("");
+        // Asientos
+        txtSalaIdA.setText("");
+        txtNumeroSillaA.setText("");
 
-    // Entradas
-    txtClienteEntrada.setText("");
-    txtFuncionEntrada.setText("");
-    txtAsientoEntrada.setText("");
-    txtValorEntrada.setText("");
+        // Entradas
+        txtClienteEntrada.setText("");
+        txtFuncionEntrada.setText("");
+        txtAsientoEntrada.setText("");
+        txtValorEntrada.setText("");
 
-    // Facturas
-    txtClienteFactura.setText("");
-    txtValorFactura.setText("");
-    txtDatosEmpresa.setText("");
-}
-
+        // Facturas
+        txtClienteFactura.setText("");
+        txtValorFactura.setText("");
+        txtDatosEmpresa.setText("");
+    }
 
 }
