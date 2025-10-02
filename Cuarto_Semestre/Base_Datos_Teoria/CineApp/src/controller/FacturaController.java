@@ -5,6 +5,7 @@ import model.DetalleFactura;
 import service.FacturaDAO;
 import service.DetalleFacturaDAO;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 public class FacturaController {
@@ -34,5 +35,16 @@ public class FacturaController {
         detalleDAO.insertar(d);
     }
 
-    public List<model.Factura> listar() throws Exception { return facturaDAO.listar(); }
+    public List<model.Factura> listar() throws Exception {
+        return facturaDAO.listar();
+    }
+
+    public void actualizar(int id, int clienteDoc, double valorTotal, String datosEmpresa) throws SQLException {
+        facturaDAO.actualizar(new Factura(id, clienteDoc, valorTotal, datosEmpresa));
+    }
+
+    public void eliminar(int id) throws SQLException {
+        facturaDAO.eliminar(id);
+    }
+
 }

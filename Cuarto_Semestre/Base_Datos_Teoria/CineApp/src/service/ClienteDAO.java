@@ -7,7 +7,10 @@ import java.util.List;
 
 public class ClienteDAO {
     private Connection con;
-    public ClienteDAO(Connection con) { this.con = con; }
+
+    public ClienteDAO(Connection con) {
+        this.con = con;
+    }
 
     public void insertar(Cliente c) throws SQLException {
         String sql = "INSERT INTO clientes(documento, nombre, telefono) VALUES(?,?,?)";
@@ -29,4 +32,23 @@ public class ClienteDAO {
         }
         return list;
     }
+
+    public void actualizar(Cliente c) throws SQLException {
+        String sql = "UPDATE clientes SET nombre=?, telefono=? WHERE documento=?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, c.getNombre());
+            ps.setString(2, c.getTelefono());
+            ps.setInt(3, c.getDocumento());
+            ps.executeUpdate();
+        }
+    }
+
+    public void eliminar(int documento) throws SQLException {
+        String sql = "DELETE FROM clientes WHERE documento=?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, documento);
+            ps.executeUpdate();
+        }
+    }
+
 }

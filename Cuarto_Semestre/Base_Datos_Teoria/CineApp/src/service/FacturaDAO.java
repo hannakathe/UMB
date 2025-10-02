@@ -7,7 +7,10 @@ import java.util.List;
 
 public class FacturaDAO {
     private Connection con;
-    public FacturaDAO(Connection con) { this.con = con; }
+
+    public FacturaDAO(Connection con) {
+        this.con = con;
+    }
 
     public int insertar(Factura f) throws SQLException {
         String sql = "INSERT INTO facturas(cliente_documento, valor_total, datos_empresa) VALUES(?,?,?)";
@@ -17,7 +20,8 @@ public class FacturaDAO {
             ps.setString(3, f.getDatosEmpresa());
             ps.executeUpdate();
             try (ResultSet rs = ps.getGeneratedKeys()) {
-                if (rs.next()) return rs.getInt(1);
+                if (rs.next())
+                    return rs.getInt(1);
             }
         }
         return -1;
@@ -38,4 +42,24 @@ public class FacturaDAO {
         }
         return list;
     }
+
+    public void actualizar(Factura f) throws SQLException {
+        String sql = "UPDATE facturas SET cliente_doc=?, valor_total=?, datos_empresa=? WHERE id=?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, f.getClienteDocumento());
+            ps.setDouble(2, f.getValorTotal());
+            ps.setString(3, f.getDatosEmpresa());
+            ps.setInt(4, f.getId());
+            ps.executeUpdate();
+        }
+    }
+
+    public void eliminar(int id) throws SQLException {
+        String sql = "DELETE FROM facturas WHERE id=?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        }
+    }
+
 }

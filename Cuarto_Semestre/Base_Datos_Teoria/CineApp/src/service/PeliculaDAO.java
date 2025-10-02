@@ -7,7 +7,10 @@ import java.util.List;
 
 public class PeliculaDAO {
     private Connection con;
-    public PeliculaDAO(Connection con) { this.con = con; }
+
+    public PeliculaDAO(Connection con) {
+        this.con = con;
+    }
 
     public void insertar(Pelicula p) throws SQLException {
         String sql = "INSERT INTO peliculas(titulo, genero) VALUES(?,?)";
@@ -28,4 +31,23 @@ public class PeliculaDAO {
         }
         return list;
     }
+
+    public void actualizar(Pelicula p) throws SQLException {
+        String sql = "UPDATE peliculas SET titulo=?, genero=? WHERE id=?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, p.getTitulo());
+            ps.setString(2, p.getGenero());
+            ps.setInt(3, p.getId());
+            ps.executeUpdate();
+        }
+    }
+
+    public void eliminar(int id) throws SQLException {
+        String sql = "DELETE FROM peliculas WHERE id=?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        }
+    }
+
 }

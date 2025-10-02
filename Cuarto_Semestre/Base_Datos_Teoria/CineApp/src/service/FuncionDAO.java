@@ -8,7 +8,10 @@ import java.util.List;
 
 public class FuncionDAO {
     private Connection con;
-    public FuncionDAO(Connection con) { this.con = con; }
+
+    public FuncionDAO(Connection con) {
+        this.con = con;
+    }
 
     public void insertar(Funcion f) throws SQLException {
         String sql = "INSERT INTO funciones(pelicula_id, sala_id, fecha_hora) VALUES(?,?,?)";
@@ -35,4 +38,24 @@ public class FuncionDAO {
         }
         return list;
     }
+
+    public void actualizar(Funcion f) throws SQLException {
+        String sql = "UPDATE funciones SET pelicula_id=?, sala_id=?, fecha_hora=? WHERE id=?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, f.getPeliculaId());
+            ps.setInt(2, f.getSalaId());
+            ps.setTimestamp(3, Timestamp.valueOf(f.getFechaHora()));
+            ps.setInt(4, f.getId());
+            ps.executeUpdate();
+        }
+    }
+
+    public void eliminar(int id) throws SQLException {
+        String sql = "DELETE FROM funciones WHERE id=?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        }
+    }
+
 }

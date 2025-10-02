@@ -7,7 +7,10 @@ import java.util.List;
 
 public class EntradaDAO {
     private Connection con;
-    public EntradaDAO(Connection con) { this.con = con; }
+
+    public EntradaDAO(Connection con) {
+        this.con = con;
+    }
 
     public int insertar(Entrada e) throws SQLException {
         String sql = "INSERT INTO entradas(cliente_documento, funcion_id, asiento_id, valor) VALUES(?,?,?,?)";
@@ -18,7 +21,8 @@ public class EntradaDAO {
             ps.setDouble(4, e.getValor());
             ps.executeUpdate();
             try (ResultSet rs = ps.getGeneratedKeys()) {
-                if (rs.next()) return rs.getInt(1);
+                if (rs.next())
+                    return rs.getInt(1);
             }
         }
         return -1;
@@ -40,4 +44,25 @@ public class EntradaDAO {
         }
         return list;
     }
+
+    public void actualizar(Entrada e) throws SQLException {
+        String sql = "UPDATE entradas SET cliente_doc=?, funcion_id=?, asiento_id=?, valor=? WHERE id=?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, e.getClienteDocumento());
+            ps.setInt(2, e.getFuncionId());
+            ps.setInt(3, e.getAsientoId());
+            ps.setDouble(4, e.getValor());
+            ps.setInt(5, e.getId());
+            ps.executeUpdate();
+        }
+    }
+
+    public void eliminar(int id) throws SQLException {
+        String sql = "DELETE FROM entradas WHERE id=?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        }
+    }
+
 }

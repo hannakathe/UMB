@@ -4,6 +4,7 @@ import model.Entrada;
 import service.EntradaDAO;
 import service.AsientoDAO;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 public class EntradaController {
@@ -43,5 +44,16 @@ public class EntradaController {
         return ps;
     }
 
-    public List<model.Entrada> listar() throws Exception { return dao.listar(); }
+    public List<model.Entrada> listar() throws Exception {
+        return dao.listar();
+    }
+
+    public void actualizar(int id, int clienteDoc, int funcionId, int asientoId, double valor) throws SQLException {
+        dao.actualizar(new Entrada(id, clienteDoc, funcionId, asientoId, valor));
+    }
+
+    public void eliminar(int id) throws SQLException {
+        dao.eliminar(id);
+    }
+
 }
