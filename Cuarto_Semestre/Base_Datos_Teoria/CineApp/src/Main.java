@@ -8,7 +8,7 @@ public class Main {
         // Ajusta credenciales si es necesario
         String url = "jdbc:mysql://localhost:3306/cine?serverTimezone=UTC";
         String user = "root";
-        String pass = "password"; // CAMBIA A TU CONTRASEÑA
+        String pass = "ADMIN202#"; // CAMBIA A TU CONTRASEÑA
 
         try {
             Connection con = DBConnection.getConnection(url, user, pass);

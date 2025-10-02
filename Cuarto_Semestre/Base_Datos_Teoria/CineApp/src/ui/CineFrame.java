@@ -16,7 +16,7 @@ public class CineFrame extends JFrame {
     private Connection con;
     private ClienteController clienteCtrl;
     private PeliculaController peliculaCtrl;
-    private SalaControllerHelper salaHelper; // helper for salas (we'll use SalaDAO directly)
+    // private SalaControllerHelper salaHelper; // helper for salas (we'll use SalaDAO directly)
     private FuncionController funcionCtrl;
     private AsientoDAO asientoDAO;
     private EntradaController entradaCtrl;
@@ -85,7 +85,7 @@ public class CineFrame extends JFrame {
         txtNombre = new JTextField();
         txtTel = new JTextField();
         JButton btnAddCliente = new JButton("Agregar Cliente");
-        btnAddCliente.addActionListener(e -> agregarCliente());
+        btnAddCliente.addActionListener(_ -> agregarCliente());
         pCliForm.add(new JLabel("Documento:")); pCliForm.add(txtDoc);
         pCliForm.add(new JLabel("Nombre:")); pCliForm.add(txtNombre);
         pCliForm.add(new JLabel("Teléfono:")); pCliForm.add(txtTel);
@@ -97,7 +97,7 @@ public class CineFrame extends JFrame {
         pClientes.add(new JScrollPane(tblClientes), BorderLayout.CENTER);
 
         JButton btnListClientes = new JButton("Listar Clientes");
-        btnListClientes.addActionListener(e -> listarClientes());
+        btnListClientes.addActionListener(_ -> listarClientes());
         pClientes.add(btnListClientes, BorderLayout.SOUTH);
 
         // 2. Peliculas
@@ -106,7 +106,7 @@ public class CineFrame extends JFrame {
         txtTitulo = new JTextField();
         txtGenero = new JTextField();
         JButton btnAddPelicula = new JButton("Agregar Pelicula");
-        btnAddPelicula.addActionListener(e -> agregarPelicula());
+        btnAddPelicula.addActionListener(_ -> agregarPelicula());
         pPelForm.add(new JLabel("Título:")); pPelForm.add(txtTitulo);
         pPelForm.add(new JLabel("Género:")); pPelForm.add(txtGenero);
         pPelForm.add(btnAddPelicula);
@@ -116,7 +116,7 @@ public class CineFrame extends JFrame {
         tblPeliculas = new JTable(modelPeliculas);
         pPeliculas.add(new JScrollPane(tblPeliculas), BorderLayout.CENTER);
         JButton btnListPeliculas = new JButton("Listar Películas");
-        btnListPeliculas.addActionListener(e -> listarPeliculas());
+        btnListPeliculas.addActionListener(_ -> listarPeliculas());
         pPeliculas.add(btnListPeliculas, BorderLayout.SOUTH);
 
         // 3. Salas
@@ -125,7 +125,7 @@ public class CineFrame extends JFrame {
         txtTipoSala = new JTextField();
         txtCapacidad = new JTextField();
         JButton btnAddSala = new JButton("Agregar Sala");
-        btnAddSala.addActionListener(e -> agregarSala());
+        btnAddSala.addActionListener(_ -> agregarSala());
         pSalaForm.add(new JLabel("Tipo Sala:")); pSalaForm.add(txtTipoSala);
         pSalaForm.add(new JLabel("Capacidad:")); pSalaForm.add(txtCapacidad);
         pSalaForm.add(btnAddSala);
@@ -135,7 +135,7 @@ public class CineFrame extends JFrame {
         tblSalas = new JTable(modelSalas);
         pSalas.add(new JScrollPane(tblSalas), BorderLayout.CENTER);
         JButton btnListSalas = new JButton("Listar Salas");
-        btnListSalas.addActionListener(e -> listarSalas());
+        btnListSalas.addActionListener(_ -> listarSalas());
         pSalas.add(btnListSalas, BorderLayout.SOUTH);
 
         // 4. Funciones
@@ -145,7 +145,7 @@ public class CineFrame extends JFrame {
         txtSalaIdF = new JTextField();
         txtFechaHoraF = new JTextField(); // formato: yyyy-MM-dd HH:mm
         JButton btnAddFuncion = new JButton("Agregar Función");
-        btnAddFuncion.addActionListener(e -> agregarFuncion());
+        btnAddFuncion.addActionListener(_ -> agregarFuncion());
         pFunForm.add(new JLabel("Pelicula ID:")); pFunForm.add(txtPeliculaIdF);
         pFunForm.add(new JLabel("Sala ID:")); pFunForm.add(txtSalaIdF);
         pFunForm.add(new JLabel("FechaHora (yyyy-MM-dd HH:mm):")); pFunForm.add(txtFechaHoraF);
@@ -156,7 +156,7 @@ public class CineFrame extends JFrame {
         tblFunciones = new JTable(modelFunciones);
         pFunciones.add(new JScrollPane(tblFunciones), BorderLayout.CENTER);
         JButton btnListFunciones = new JButton("Listar Funciones");
-        btnListFunciones.addActionListener(e -> listarFunciones());
+        btnListFunciones.addActionListener(_ -> listarFunciones());
         pFunciones.add(btnListFunciones, BorderLayout.SOUTH);
 
         // 5. Asientos
@@ -165,7 +165,7 @@ public class CineFrame extends JFrame {
         txtSalaIdA = new JTextField();
         txtNumeroSillaA = new JTextField();
         JButton btnAddAsiento = new JButton("Agregar Asiento");
-        btnAddAsiento.addActionListener(e -> agregarAsiento());
+        btnAddAsiento.addActionListener(_ -> agregarAsiento());
         pAsForm.add(new JLabel("Sala ID:")); pAsForm.add(txtSalaIdA);
         pAsForm.add(new JLabel("No. Silla:")); pAsForm.add(txtNumeroSillaA);
         pAsForm.add(btnAddAsiento);
@@ -175,7 +175,7 @@ public class CineFrame extends JFrame {
         tblAsientos = new JTable(modelAsientos);
         pAsientos.add(new JScrollPane(tblAsientos), BorderLayout.CENTER);
         JButton btnListAsientos = new JButton("Listar Asientos");
-        btnListAsientos.addActionListener(e -> listarAsientos());
+        btnListAsientos.addActionListener(_ -> listarAsientos());
         pAsientos.add(btnListAsientos, BorderLayout.SOUTH);
 
         // 6. Entradas
@@ -186,7 +186,7 @@ public class CineFrame extends JFrame {
         txtAsientoEntrada = new JTextField();
         txtValorEntrada = new JTextField();
         JButton btnAddEntrada = new JButton("Vender Entrada");
-        btnAddEntrada.addActionListener(e -> venderEntrada());
+        btnAddEntrada.addActionListener(_ -> venderEntrada());
         pEnForm.add(new JLabel("Documento Cliente:")); pEnForm.add(txtClienteEntrada);
         pEnForm.add(new JLabel("Funcion ID:")); pEnForm.add(txtFuncionEntrada);
         pEnForm.add(new JLabel("Asiento ID:")); pEnForm.add(txtAsientoEntrada);
@@ -198,7 +198,7 @@ public class CineFrame extends JFrame {
         tblEntradas = new JTable(modelEntradas);
         pEntradas.add(new JScrollPane(tblEntradas), BorderLayout.CENTER);
         JButton btnListEntradas = new JButton("Listar Entradas");
-        btnListEntradas.addActionListener(e -> listarEntradas());
+        btnListEntradas.addActionListener(_ -> listarEntradas());
         pEntradas.add(btnListEntradas, BorderLayout.SOUTH);
 
         // 7. Facturas
@@ -208,7 +208,7 @@ public class CineFrame extends JFrame {
         txtValorFactura = new JTextField();
         txtDatosEmpresa = new JTextField();
         JButton btnAddFactura = new JButton("Generar Factura");
-        btnAddFactura.addActionListener(e -> generarFactura());
+        btnAddFactura.addActionListener(_ -> generarFactura());
         pFacForm.add(new JLabel("Documento Cliente:")); pFacForm.add(txtClienteFactura);
         pFacForm.add(new JLabel("Valor Total:")); pFacForm.add(txtValorFactura);
         pFacForm.add(new JLabel("Datos Empresa:")); pFacForm.add(txtDatosEmpresa);
@@ -219,7 +219,7 @@ public class CineFrame extends JFrame {
         tblFacturas = new JTable(modelFacturas);
         pFacturas.add(new JScrollPane(tblFacturas), BorderLayout.CENTER);
         JButton btnListFacturas = new JButton("Listar Facturas");
-        btnListFacturas.addActionListener(e -> listarFacturas());
+        btnListFacturas.addActionListener(_ -> listarFacturas());
         pFacturas.add(btnListFacturas, BorderLayout.SOUTH);
 
         // Add tabs
