@@ -3,6 +3,8 @@ package ui;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.sql.Connection;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -78,6 +80,22 @@ public class CineFrame extends JFrame {
 
     private void initUI() {
         tabs = new JTabbedPane();
+
+        // limpiar campos
+
+        // Panel general para el botón Limpiar
+        JPanel pBotonGeneral = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        JButton btnLimpiar = new JButton("Limpiar");
+        btnLimpiar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                limpiarCampos();
+            }
+        });
+        pBotonGeneral.add(btnLimpiar);
+
+        // Lo agregamos al JFrame, debajo de los tabs
+        add(pBotonGeneral, BorderLayout.SOUTH);
 
         // 1. Clientes panel
         JPanel pClientes = new JPanel(new BorderLayout());
@@ -254,6 +272,14 @@ public class CineFrame extends JFrame {
 
         add(tabs, BorderLayout.CENTER);
 
+        listarClientes();
+        listarPeliculas();
+        listarSalas();
+        listarFunciones();
+        listarAsientos();
+        listarEntradas();
+        listarFacturas();
+
         // ----------- button actions ----------
         // clientes
 
@@ -299,6 +325,48 @@ public class CineFrame extends JFrame {
 
         JButton btnEliminarFactura = new JButton("Eliminar Factura");
         btnEliminarFactura.addActionListener(_ -> eliminarFactura());
+
+        // CLIENTES
+        JPanel pCliBtns = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        pCliBtns.add(btnActualizarCliente);
+        pCliBtns.add(btnEliminarCliente);
+        pClientes.add(pCliBtns, BorderLayout.SOUTH);
+
+        // PELÍCULAS
+        JPanel pPelBtns = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        pPelBtns.add(btnActualizarPelicula);
+        pPelBtns.add(btnEliminarPelicula);
+        pPeliculas.add(pPelBtns, BorderLayout.SOUTH);
+
+        // SALAS
+        JPanel pSalaBtns = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        pSalaBtns.add(btnActualizarSala);
+        pSalaBtns.add(btnEliminarSala);
+        pSalas.add(pSalaBtns, BorderLayout.SOUTH);
+
+        // FUNCIONES
+        JPanel pFunBtns = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        pFunBtns.add(btnActualizarFuncion);
+        pFunBtns.add(btnEliminarFuncion);
+        pFunciones.add(pFunBtns, BorderLayout.SOUTH);
+
+        // ASIENTOS
+        JPanel pAsBtns = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        pAsBtns.add(btnActualizarAsiento);
+        pAsBtns.add(btnEliminarAsiento);
+        pAsientos.add(pAsBtns, BorderLayout.SOUTH);
+
+        // ENTRADAS
+        JPanel pEnBtns = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        pEnBtns.add(btnActualizarEntrada);
+        pEnBtns.add(btnEliminarEntrada);
+        pEntradas.add(pEnBtns, BorderLayout.SOUTH);
+
+        // FACTURAS
+        JPanel pFacBtns = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        pFacBtns.add(btnActualizarFactura);
+        pFacBtns.add(btnEliminarFactura);
+        pFacturas.add(pFacBtns, BorderLayout.SOUTH);
 
         // -----------Listeners ----------
         // clientes
@@ -834,13 +902,56 @@ public class CineFrame extends JFrame {
 
     private void listarFacturas() {
         try {
-            java.util.List<model.Factura> list = facturaCtrl.listar();
+            java.util.List<Factura> list = facturaCtrl.listar();
             modelFacturas.setRowCount(0);
-            for (model.Factura f : list)
-                modelFacturas.addRow(
-                        new Object[] { f.getId(), f.getClienteDocumento(), f.getValorTotal(), f.getDatosEmpresa() });
+            for (Factura f : list) {
+                modelFacturas.addRow(new Object[] {
+                        f.getId(),
+                        f.getClienteDocumento(),
+                        f.getValorTotal(),
+                        f.getDatosEmpresa()
+                });
+            }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error listando facturas: " + ex.getMessage());
         }
     }
+
+    // limpiar campos
+    private void limpiarCampos() {
+    // Clientes
+    txtDoc.setText("");
+    txtNombre.setText("");
+    txtTel.setText("");
+
+    // Películas
+    txtTitulo.setText("");
+    txtGenero.setText("");
+
+    // Salas
+    txtTipoSala.setText("");
+    txtCapacidad.setText("");
+
+    // Funciones
+    txtPeliculaIdF.setText("");
+    txtSalaIdF.setText("");
+    txtFechaHoraF.setText("");
+
+    // Asientos
+    txtSalaIdA.setText("");
+    txtNumeroSillaA.setText("");
+
+    // Entradas
+    txtClienteEntrada.setText("");
+    txtFuncionEntrada.setText("");
+    txtAsientoEntrada.setText("");
+    txtValorEntrada.setText("");
+
+    // Facturas
+    txtClienteFactura.setText("");
+    txtValorFactura.setText("");
+    txtDatosEmpresa.setText("");
+}
+
+
 }
