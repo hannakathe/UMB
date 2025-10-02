@@ -236,17 +236,32 @@ public class CineFrame extends JFrame {
 
     // ---------- acciones ----------
     private void agregarCliente() {
-        try {
-            int doc = Integer.parseInt(txtDoc.getText());
-            String nombre = txtNombre.getText();
-            String tel = txtTel.getText();
-            clienteCtrl.insertar(doc, nombre, tel);
-            JOptionPane.showMessageDialog(this, "Cliente agregado.");
-            listarClientes();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+    try {
+        String docStr = txtDoc.getText().trim();
+        String nombre = txtNombre.getText().trim();
+        String tel = txtTel.getText().trim();
+
+        if(docStr.isEmpty() || nombre.isEmpty() || tel.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.");
+            return;
         }
+
+        int doc;
+        try {
+            doc = Integer.parseInt(docStr);
+        } catch(NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Documento inválido");
+            return;
+        }
+
+        clienteCtrl.insertar(doc, nombre, tel);
+        JOptionPane.showMessageDialog(this, "Cliente agregado.");
+        listarClientes();
+    } catch(Exception ex) {
+        JOptionPane.showMessageDialog(this, "Error agregando cliente: " + ex.getMessage());
     }
+}
+
 
     private void listarClientes() {
         try {
@@ -261,16 +276,23 @@ public class CineFrame extends JFrame {
     }
 
     private void agregarPelicula() {
-        try {
-            String titulo = txtTitulo.getText();
-            String genero = txtGenero.getText();
-            peliculaCtrl.insertar(titulo, genero);
-            JOptionPane.showMessageDialog(this, "Película agregada.");
-            listarPeliculas();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+    try {
+        String titulo = txtTitulo.getText().trim();
+        String genero = txtGenero.getText().trim();
+
+        if(titulo.isEmpty() || genero.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.");
+            return;
         }
+
+        peliculaCtrl.insertar(titulo, genero);
+        JOptionPane.showMessageDialog(this, "Película agregada.");
+        listarPeliculas();
+    } catch(Exception ex) {
+        JOptionPane.showMessageDialog(this, "Error agregando película: " + ex.getMessage());
     }
+}
+
 
     private void listarPeliculas() {
         try {
@@ -285,18 +307,32 @@ public class CineFrame extends JFrame {
     }
 
     private void agregarSala() {
-        try {
-            String tipo = txtTipoSala.getText();
-            int cap = Integer.parseInt(txtCapacidad.getText());
-            // Usaremos SalaDAO directamente
-            service.SalaDAO dao = new service.SalaDAO(con);
-            dao.insertar(new Sala(0, tipo, cap));
-            JOptionPane.showMessageDialog(this, "Sala agregada.");
-            listarSalas();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error agregando sala: " + ex.getMessage());
+    try {
+        String tipo = txtTipoSala.getText().trim();
+        String capStr = txtCapacidad.getText().trim();
+
+        if(tipo.isEmpty() || capStr.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.");
+            return;
         }
+
+        int cap;
+        try {
+            cap = Integer.parseInt(capStr);
+        } catch(NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Capacidad inválida");
+            return;
+        }
+
+        service.SalaDAO dao = new service.SalaDAO(con);
+        dao.insertar(new Sala(0, tipo, cap));
+        JOptionPane.showMessageDialog(this, "Sala agregada.");
+        listarSalas();
+    } catch(Exception ex) {
+        JOptionPane.showMessageDialog(this, "Error agregando sala: " + ex.getMessage());
     }
+}
+
 
     private void listarSalas() {
         try {
@@ -310,19 +346,42 @@ public class CineFrame extends JFrame {
     }
 
     private void agregarFuncion() {
-        try {
-            int peliId = Integer.parseInt(txtPeliculaIdF.getText());
-            int salaId = Integer.parseInt(txtSalaIdF.getText());
-            String fh = txtFechaHoraF.getText();
-            DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            LocalDateTime fechaHora = LocalDateTime.parse(fh, fmt);
-            funcionCtrl.insertar(peliId, salaId, fechaHora);
-            JOptionPane.showMessageDialog(this, "Función agregada.");
-            listarFunciones();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error agregando función: " + ex.getMessage());
+    try {
+        String peliIdStr = txtPeliculaIdF.getText().trim();
+        String salaIdStr = txtSalaIdF.getText().trim();
+        String fh = txtFechaHoraF.getText().trim();
+
+        if(peliIdStr.isEmpty() || salaIdStr.isEmpty() || fh.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.");
+            return;
         }
+
+        int peliId, salaId;
+        try {
+            peliId = Integer.parseInt(peliIdStr);
+            salaId = Integer.parseInt(salaIdStr);
+        } catch(NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "ID de película o sala inválido");
+            return;
+        }
+
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime fechaHora;
+        try {
+            fechaHora = LocalDateTime.parse(fh, fmt);
+        } catch(Exception e) {
+            JOptionPane.showMessageDialog(this, "FechaHora con formato incorrecto");
+            return;
+        }
+
+        funcionCtrl.insertar(peliId, salaId, fechaHora);
+        JOptionPane.showMessageDialog(this, "Función agregada.");
+        listarFunciones();
+    } catch(Exception ex) {
+        JOptionPane.showMessageDialog(this, "Error agregando función: " + ex.getMessage());
     }
+}
+
 
     private void listarFunciones() {
         try {
@@ -335,16 +394,34 @@ public class CineFrame extends JFrame {
     }
 
     private void agregarAsiento() {
-        try {
-            int salaId = Integer.parseInt(txtSalaIdA.getText());
-            String num = txtNumeroSillaA.getText();
-            asientoDAO.insertar(new Asiento(0, salaId, num, true));
-            JOptionPane.showMessageDialog(this, "Asiento agregado.");
-            listarAsientos();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error agregando asiento: " + ex.getMessage());
+    try {
+        String textoSala = txtSalaIdA.getText().trim();
+        String textoNum = txtNumeroSillaA.getText().trim();
+
+        if (textoSala.isEmpty() || textoNum.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.");
+            return;
         }
+
+        int salaId;
+        try {
+            salaId = Integer.parseInt(textoSala);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "ID de sala inválido");
+            return;
+        }
+
+        // número de silla puede ser string si es algo como "A1"
+        String num = textoNum;
+
+        asientoDAO.insertar(new Asiento(0, salaId, num, true));
+        JOptionPane.showMessageDialog(this, "Asiento agregado.");
+        listarAsientos();
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(this, "Error agregando asiento: " + ex.getMessage());
     }
+}
+
 
     private void listarAsientos() {
         try {
@@ -357,18 +434,37 @@ public class CineFrame extends JFrame {
     }
 
     private void venderEntrada() {
-        try {
-            int doc = Integer.parseInt(txtClienteEntrada.getText());
-            int funcionId = Integer.parseInt(txtFuncionEntrada.getText());
-            int asientoId = Integer.parseInt(txtAsientoEntrada.getText());
-            double valor = Double.parseDouble(txtValorEntrada.getText());
-            int id = entradaCtrl.crearEntrada(doc, funcionId, asientoId, valor);
-            JOptionPane.showMessageDialog(this, "Entrada vendida ID: " + id);
-            listarEntradas();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error vendiendo entrada: " + ex.getMessage());
+    try {
+        String docStr = txtClienteEntrada.getText().trim();
+        String funcionStr = txtFuncionEntrada.getText().trim();
+        String asientoStr = txtAsientoEntrada.getText().trim();
+        String valorStr = txtValorEntrada.getText().trim();
+
+        if(docStr.isEmpty() || funcionStr.isEmpty() || asientoStr.isEmpty() || valorStr.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.");
+            return;
         }
+
+        int doc, funcionId, asientoId;
+        double valor;
+        try {
+            doc = Integer.parseInt(docStr);
+            funcionId = Integer.parseInt(funcionStr);
+            asientoId = Integer.parseInt(asientoStr);
+            valor = Double.parseDouble(valorStr);
+        } catch(NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Datos numéricos inválidos");
+            return;
+        }
+
+        int id = entradaCtrl.crearEntrada(doc, funcionId, asientoId, valor);
+        JOptionPane.showMessageDialog(this, "Entrada vendida ID: " + id);
+        listarEntradas();
+    } catch(Exception ex) {
+        JOptionPane.showMessageDialog(this, "Error vendiendo entrada: " + ex.getMessage());
     }
+}
+
 
     private void listarEntradas() {
         try {
@@ -381,17 +477,34 @@ public class CineFrame extends JFrame {
     }
 
     private void generarFactura() {
-        try {
-            int doc = Integer.parseInt(txtClienteFactura.getText());
-            double valorTotal = Double.parseDouble(txtValorFactura.getText());
-            String datos = txtDatosEmpresa.getText();
-            int facturaId = facturaCtrl.crearFactura(doc, valorTotal, datos);
-            JOptionPane.showMessageDialog(this, "Factura creada ID: " + facturaId);
-            listarFacturas();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error creando factura: " + ex.getMessage());
+    try {
+        String docStr = txtClienteFactura.getText().trim();
+        String valorStr = txtValorFactura.getText().trim();
+        String datos = txtDatosEmpresa.getText().trim();
+
+        if(docStr.isEmpty() || valorStr.isEmpty() || datos.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.");
+            return;
         }
+
+        int doc;
+        double valorTotal;
+        try {
+            doc = Integer.parseInt(docStr);
+            valorTotal = Double.parseDouble(valorStr);
+        } catch(NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Documento o valor inválido");
+            return;
+        }
+
+        int facturaId = facturaCtrl.crearFactura(doc, valorTotal, datos);
+        JOptionPane.showMessageDialog(this, "Factura creada ID: " + facturaId);
+        listarFacturas();
+    } catch(Exception ex) {
+        JOptionPane.showMessageDialog(this, "Error creando factura: " + ex.getMessage());
     }
+}
+
 
     private void listarFacturas() {
         try {
