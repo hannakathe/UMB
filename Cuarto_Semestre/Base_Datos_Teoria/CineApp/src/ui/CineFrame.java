@@ -284,8 +284,8 @@ JTextField txtPeliculaConsulta = new JTextField();
 JTextField txtSalaConsulta = new JTextField();
 JTextField txtAsientoConsulta = new JTextField();
 JTextField txtValorConsulta = new JTextField();
-JTextField txtFechaFacturaConsulta = new JTextField();
-
+//JTextField txtFechaFacturaConsulta = new JTextField();
+JLabel lblFechaAuto = new JLabel("Fecha auto-generada");
 JButton btnAddConsulta = new JButton("Agregar");
 JButton btnUpdateConsulta = new JButton("Actualizar");
 JButton btnDeleteConsulta = new JButton("Eliminar");
@@ -303,7 +303,8 @@ pConsultaForm.add(txtAsientoConsulta);
 pConsultaForm.add(new JLabel("Valor:"));
 pConsultaForm.add(txtValorConsulta);
 pConsultaForm.add(new JLabel("Fecha Factura:"));
-pConsultaForm.add(txtFechaFacturaConsulta);
+//pConsultaForm.add(txtFechaFacturaConsulta);
+pConsultaForm.add(lblFechaAuto);
 pConsultaForm.add(btnAddConsulta);
 pConsultaForm.add(btnUpdateConsulta);
 pConsultaForm.add(btnDeleteConsulta);
@@ -333,15 +334,17 @@ pConsulta.add(pConsultaBtns, BorderLayout.SOUTH);
 tabs.addTab("Consulta Relacional", pConsulta);
 
 // Listeners para los botones de CRUD
-btnAddConsulta.addActionListener(_ -> agregarDesdeConsulta(
-        txtDocConsulta, txtNombreConsulta, txtPeliculaConsulta, 
-        txtSalaConsulta, txtAsientoConsulta, txtValorConsulta, 
-        txtFechaFacturaConsulta));
+// Modifica los listeners para no pasar el parámetro de fecha
+btnAddConsulta.addActionListener(_ -> {
+    agregarDesdeConsulta(txtDocConsulta, txtNombreConsulta, txtPeliculaConsulta, 
+                        txtSalaConsulta, txtAsientoConsulta, txtValorConsulta);
+    limpiarCamposConsulta(txtDocConsulta, txtNombreConsulta, txtPeliculaConsulta,
+                         txtSalaConsulta, txtAsientoConsulta, txtValorConsulta);
+});
 
 btnUpdateConsulta.addActionListener(_ -> actualizarDesdeConsulta(
         txtDocConsulta, txtNombreConsulta, txtPeliculaConsulta,
-        txtSalaConsulta, txtAsientoConsulta, txtValorConsulta,
-        txtFechaFacturaConsulta));
+        txtSalaConsulta, txtAsientoConsulta, txtValorConsulta));
 
 btnDeleteConsulta.addActionListener(_ -> eliminarDesdeConsulta());
 
@@ -355,7 +358,7 @@ tblConsultaRelacional.getSelectionModel().addListSelectionListener(e -> {
         txtSalaConsulta.setText(modelConsultaRelacional.getValueAt(fila, 3).toString());
         txtAsientoConsulta.setText(modelConsultaRelacional.getValueAt(fila, 4).toString());
         txtValorConsulta.setText(modelConsultaRelacional.getValueAt(fila, 5).toString());
-        txtFechaFacturaConsulta.setText(modelConsultaRelacional.getValueAt(fila, 6).toString());
+        // No cargamos la fecha porque ahora es automática
     }
 });
 
@@ -536,8 +539,8 @@ tblConsultaRelacional.getSelectionModel().addListSelectionListener(e -> {
     // ---------- CRUD para Consulta Relacional ----------
 
 private void agregarDesdeConsulta(JTextField txtDoc, JTextField txtNombre, JTextField txtPelicula,
-                                 JTextField txtSala, JTextField txtAsiento, JTextField txtValor,
-                                 JTextField txtFechaFactura) {
+                                 JTextField txtSala, JTextField txtAsiento, JTextField txtValor) {
+    // Eliminamos el parámetro JTextField txtFechaFactura
     try {
         // Validar campos obligatorios
         if (txtDoc.getText().trim().isEmpty() || txtNombre.getText().trim().isEmpty() ||
@@ -546,7 +549,7 @@ private void agregarDesdeConsulta(JTextField txtDoc, JTextField txtNombre, JText
             return;
         }
 
-        // 1. Verificar/crear cliente
+        // 1. Crear/actualizar cliente directamente
         int documento;
         try {
             documento = Integer.parseInt(txtDoc.getText().trim());
@@ -555,18 +558,13 @@ private void agregarDesdeConsulta(JTextField txtDoc, JTextField txtNombre, JText
             return;
         }
         
-        // Verificar si el cliente existe
-        Cliente clienteExistente = null;
+        // Intentar crear el cliente directamente
+        // Si ya existe, la base de datos lanzará una excepción por clave duplicada
         try {
-            clienteExistente = clienteCtrl.buscarPorDocumento(documento);
-        } catch (Exception e) {
-            // Cliente no existe, lo creamos
-        }
-        
-        if (clienteExistente == null) {
-            // Crear nuevo cliente
             clienteCtrl.insertar(documento, txtNombre.getText().trim(), "000-0000000");
-            JOptionPane.showMessageDialog(this, "Cliente creado automáticamente");
+        } catch (Exception e) {
+            // Si falla por duplicado, actualizar el cliente existente
+            clienteCtrl.actualizar(documento, txtNombre.getText().trim(), "000-0000000");
         }
 
         // 2. Buscar o crear película
@@ -604,7 +602,7 @@ private void agregarDesdeConsulta(JTextField txtDoc, JTextField txtNombre, JText
             return;
         }
 
-        // 4. Crear función si no existe
+        // 4. Crear función si no existe (usando fecha/hora actual)
         Funcion funcionExistente = buscarFuncion(peliculaId, salaId);
         int funcionId;
         
@@ -640,13 +638,11 @@ private void agregarDesdeConsulta(JTextField txtDoc, JTextField txtNombre, JText
         double valor = Double.parseDouble(txtValor.getText().trim());
         int entradaId = entradaCtrl.crearEntrada(documento, funcionId, asientoId, valor);
 
-        // 7. Crear factura si se proporciona fecha
-        if (!txtFechaFactura.getText().trim().isEmpty()) {
-            String datosEmpresa = "Cine XYZ - " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            facturaCtrl.crearFactura(documento, valor, datosEmpresa);
-        }
+        // 7. Crear factura automáticamente con fecha actual
+        String datosEmpresa = "Cine XYZ - " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        int facturaId = facturaCtrl.crearFactura(documento, valor, datosEmpresa);
 
-        JOptionPane.showMessageDialog(this, "Registro completo creado. Entrada ID: " + entradaId);
+        JOptionPane.showMessageDialog(this, "Registro completo creado.\nEntrada ID: " + entradaId + "\nFactura ID: " + facturaId);
         
         // Actualizar todas las listas
         actualizarTodasLasListas();
@@ -659,8 +655,8 @@ private void agregarDesdeConsulta(JTextField txtDoc, JTextField txtNombre, JText
 }
 
 private void actualizarDesdeConsulta(JTextField txtDoc, JTextField txtNombre, JTextField txtPelicula,
-                                    JTextField txtSala, JTextField txtAsiento, JTextField txtValor,
-                                    JTextField txtFechaFactura) {
+                                    JTextField txtSala, JTextField txtAsiento, JTextField txtValor) {
+    // Eliminamos el parámetro de fecha
     try {
         int fila = tblConsultaRelacional.getSelectedRow();
         if (fila == -1) {
@@ -675,7 +671,6 @@ private void actualizarDesdeConsulta(JTextField txtDoc, JTextField txtNombre, JT
         clienteCtrl.actualizar(documento, txtNombre.getText().trim(), "000-0000000");
 
         // Buscar la entrada relacionada y actualizarla
-        // Esto requiere una búsqueda más específica en tu base de datos
         List<Entrada> entradas = entradaCtrl.listar();
         for (Entrada entrada : entradas) {
             if (String.valueOf(entrada.getClienteDocumento()).equals(documentoOriginal)) {
@@ -683,6 +678,17 @@ private void actualizarDesdeConsulta(JTextField txtDoc, JTextField txtNombre, JT
                 double nuevoValor = Double.parseDouble(txtValor.getText().trim());
                 entradaCtrl.actualizar(entrada.getId(), documento, entrada.getFuncionId(), 
                                      entrada.getAsientoId(), nuevoValor);
+                
+                // Actualizar factura con nueva fecha
+                List<Factura> facturas = facturaCtrl.listar();
+                for (Factura factura : facturas) {
+                    if (factura.getClienteDocumento() == documento) {
+                        String nuevosDatosEmpresa = "Cine XYZ - Actualizado: " + 
+                                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+                        facturaCtrl.actualizar(factura.getId(), documento, nuevoValor, nuevosDatosEmpresa);
+                        break;
+                    }
+                }
                 break;
             }
         }
@@ -695,6 +701,18 @@ private void actualizarDesdeConsulta(JTextField txtDoc, JTextField txtNombre, JT
         JOptionPane.showMessageDialog(this, "Error actualizando registro: " + ex.getMessage());
     }
 }
+private void limpiarCamposConsulta(JTextField txtDoc, JTextField txtNombre, JTextField txtPelicula,
+                                  JTextField txtSala, JTextField txtAsiento, JTextField txtValor) {
+    // Eliminamos el parámetro de fecha
+    txtDoc.setText("");
+    txtNombre.setText("");
+    txtPelicula.setText("");
+    txtSala.setText("");
+    txtAsiento.setText("");
+    txtValor.setText("");
+}
+
+
 
 private void eliminarDesdeConsulta() {
     try {
