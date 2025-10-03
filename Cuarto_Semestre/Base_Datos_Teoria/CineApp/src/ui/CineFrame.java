@@ -14,61 +14,68 @@ import controller.*;
 import model.*;
 import service.*;
 
+// Clase principal que representa la ventana de la aplicación de cine
 public class CineFrame extends JFrame {
+    // Conexión a la base de datos
     private Connection con;
+    
+    // Controladores para cada entidad del sistema
     private ClienteController clienteCtrl;
     private PeliculaController peliculaCtrl;
-    // private SalaControllerHelper salaHelper; // helper for salas (we'll use
-    // SalaDAO directly)
+    // private SalaControllerHelper salaHelper; // helper para salas (usaremos SalaDAO directamente)
     private FuncionController funcionCtrl;
     private AsientoDAO asientoDAO;
     private EntradaController entradaCtrl;
     private FacturaController facturaCtrl;
 
-    // UI components
+    // Componentes de la interfaz de usuario
+    
+    // Panel de pestañas para organizar las diferentes secciones
     private JTabbedPane tabs;
 
-    // Clientes
+    // ---------- COMPONENTES PARA CLIENTES ----------
     private JTextField txtDoc, txtNombre, txtTel;
     private JTable tblClientes;
     private DefaultTableModel modelClientes;
 
-    // Peliculas
+    // ---------- COMPONENTES PARA PELÍCULAS ----------
     private JTextField txtTitulo, txtGenero;
     private JTable tblPeliculas;
     private DefaultTableModel modelPeliculas;
 
-    // Salas
+    // ---------- COMPONENTES PARA SALAS ----------
     private JTextField txtTipoSala, txtCapacidad;
     private JTable tblSalas;
     private DefaultTableModel modelSalas;
 
-    // Funciones
+    // ---------- COMPONENTES PARA FUNCIONES ----------
     private JTextField txtPeliculaIdF, txtSalaIdF, txtFechaHoraF;
     private JTable tblFunciones;
     private DefaultTableModel modelFunciones;
 
-    // Asientos
+    // ---------- COMPONENTES PARA ASIENTOS ----------
     private JTextField txtSalaIdA, txtNumeroSillaA;
     private JTable tblAsientos;
     private DefaultTableModel modelAsientos;
 
-    // Entradas
+    // ---------- COMPONENTES PARA ENTRADAS ----------
     private JTextField txtClienteEntrada, txtFuncionEntrada, txtAsientoEntrada, txtValorEntrada;
     private JTable tblEntradas;
     private DefaultTableModel modelEntradas;
 
-    // Facturas
+    // ---------- COMPONENTES PARA FACTURAS ----------
     private JTextField txtClienteFactura, txtValorFactura, txtDatosEmpresa;
     private JTable tblFacturas;
     private DefaultTableModel modelFacturas;
 
-    // Consulta Relacional
+    // ---------- COMPONENTES PARA CONSULTA RELACIONAL ----------
     private JTable tblConsultaRelacional;
     private DefaultTableModel modelConsultaRelacional;
 
+    // Constructor principal que recibe la conexión a la base de datos
     public CineFrame(Connection con) {
         this.con = con;
+        // Inicializar todos los controladores con la conexión a la base de datos
         this.clienteCtrl = new ClienteController(con);
         this.peliculaCtrl = new PeliculaController(con);
         this.funcionCtrl = new FuncionController(con);
@@ -76,39 +83,45 @@ public class CineFrame extends JFrame {
         this.entradaCtrl = new EntradaController(con);
         this.facturaCtrl = new FacturaController(con);
 
+        // Configurar propiedades básicas de la ventana
         setTitle("Cine App");
         setSize(1000, 650);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        initUI();
+        initUI(); // Inicializar la interfaz de usuario
     }
 
+    // Método para inicializar todos los componentes de la interfaz de usuario
     private void initUI() {
-        tabs = new JTabbedPane();
+        tabs = new JTabbedPane(); // Crear el panel de pestañas
 
-        // limpiar campos
-
-        // Panel general para el botón Limpiar
+        // ---------- PANEL GENERAL CON BOTÓN LIMPIAR ----------
+        // Panel para el botón Limpiar que se muestra en la parte inferior
         JPanel pBotonGeneral = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         JButton btnLimpiar = new JButton("Limpiar");
+        // Agregar listener para limpiar todos los campos cuando se presione el botón
         btnLimpiar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                limpiarCampos();
+                limpiarCampos(); // Llamar al método para limpiar campos
             }
         });
-        pBotonGeneral.add(btnLimpiar);
+        pBotonGeneral.add(btnLimpiar); // Agregar botón al panel
 
-        // Lo agregamos al JFrame, debajo de los tabs
+        // Agregar el panel del botón al frame en la posición sur (abajo)
         add(pBotonGeneral, BorderLayout.SOUTH);
 
-        // 1. Clientes panel
+        // ---------- PANEL 1: CLIENTES ----------
         JPanel pClientes = new JPanel(new BorderLayout());
+        // Panel del formulario para clientes con diseño de grilla
         JPanel pCliForm = new JPanel(new GridLayout(4, 2, 5, 5));
         txtDoc = new JTextField();
         txtNombre = new JTextField();
         txtTel = new JTextField();
         JButton btnAddCliente = new JButton("Agregar Cliente");
+        // Agregar listener para el botón de agregar cliente usando lambda
         btnAddCliente.addActionListener(_ -> agregarCliente());
+        
+        // Agregar componentes al formulario de clientes
         pCliForm.add(new JLabel("Documento:"));
         pCliForm.add(txtDoc);
         pCliForm.add(new JLabel("Nombre:"));
@@ -116,20 +129,19 @@ public class CineFrame extends JFrame {
         pCliForm.add(new JLabel("Teléfono:"));
         pCliForm.add(txtTel);
         pCliForm.add(btnAddCliente);
-        pClientes.add(pCliForm, BorderLayout.NORTH);
+        pClientes.add(pCliForm, BorderLayout.NORTH); // Agregar formulario en la parte norte
 
+        // Configurar modelo y tabla para mostrar clientes
         modelClientes = new DefaultTableModel(new Object[] { "Documento", "Nombre", "Telefono" }, 0);
         tblClientes = new JTable(modelClientes);
-        pClientes.add(new JScrollPane(tblClientes), BorderLayout.CENTER);
+        pClientes.add(new JScrollPane(tblClientes), BorderLayout.CENTER); // Agregar tabla con scroll
 
+        // Botón para listar clientes
         JButton btnListClientes = new JButton("Listar Clientes");
         btnListClientes.addActionListener(_ -> listarClientes());
         pClientes.add(btnListClientes, BorderLayout.SOUTH);
 
-        // CONSULTA GENERAL TODO
-        // (Se mueve la inicialización de pConsulta más abajo, después de su declaración)
-
-        // 2. Peliculas
+        // ---------- PANEL 2: PELÍCULAS ----------
         JPanel pPeliculas = new JPanel(new BorderLayout());
         JPanel pPelForm = new JPanel(new GridLayout(3, 2, 5, 5));
         txtTitulo = new JTextField();
@@ -143,6 +155,7 @@ public class CineFrame extends JFrame {
         pPelForm.add(btnAddPelicula);
         pPeliculas.add(pPelForm, BorderLayout.NORTH);
 
+        // Configurar modelo y tabla para películas
         modelPeliculas = new DefaultTableModel(new Object[] { "ID", "Título", "Género" }, 0);
         tblPeliculas = new JTable(modelPeliculas);
         pPeliculas.add(new JScrollPane(tblPeliculas), BorderLayout.CENTER);
@@ -150,7 +163,7 @@ public class CineFrame extends JFrame {
         btnListPeliculas.addActionListener(_ -> listarPeliculas());
         pPeliculas.add(btnListPeliculas, BorderLayout.SOUTH);
 
-        // 3. Salas
+        // ---------- PANEL 3: SALAS ----------
         JPanel pSalas = new JPanel(new BorderLayout());
         JPanel pSalaForm = new JPanel(new GridLayout(3, 2, 5, 5));
         txtTipoSala = new JTextField();
@@ -164,6 +177,7 @@ public class CineFrame extends JFrame {
         pSalaForm.add(btnAddSala);
         pSalas.add(pSalaForm, BorderLayout.NORTH);
 
+        // Configurar modelo y tabla para salas
         modelSalas = new DefaultTableModel(new Object[] { "ID", "Tipo Sala", "Capacidad" }, 0);
         tblSalas = new JTable(modelSalas);
         pSalas.add(new JScrollPane(tblSalas), BorderLayout.CENTER);
@@ -171,7 +185,7 @@ public class CineFrame extends JFrame {
         btnListSalas.addActionListener(_ -> listarSalas());
         pSalas.add(btnListSalas, BorderLayout.SOUTH);
 
-        // 4. Funciones
+        // ---------- PANEL 4: FUNCIONES ----------
         JPanel pFunciones = new JPanel(new BorderLayout());
         JPanel pFunForm = new JPanel(new GridLayout(4, 2, 5, 5));
         txtPeliculaIdF = new JTextField();
@@ -188,6 +202,7 @@ public class CineFrame extends JFrame {
         pFunForm.add(btnAddFuncion);
         pFunciones.add(pFunForm, BorderLayout.NORTH);
 
+        // Configurar modelo y tabla para funciones
         modelFunciones = new DefaultTableModel(new Object[] { "ID", "PeliculaID", "SalaID", "FechaHora" }, 0);
         tblFunciones = new JTable(modelFunciones);
         pFunciones.add(new JScrollPane(tblFunciones), BorderLayout.CENTER);
@@ -195,7 +210,7 @@ public class CineFrame extends JFrame {
         btnListFunciones.addActionListener(_ -> listarFunciones());
         pFunciones.add(btnListFunciones, BorderLayout.SOUTH);
 
-        // 5. Asientos
+        // ---------- PANEL 5: ASIENTOS ----------
         JPanel pAsientos = new JPanel(new BorderLayout());
         JPanel pAsForm = new JPanel(new GridLayout(3, 2, 5, 5));
         txtSalaIdA = new JTextField();
@@ -209,6 +224,7 @@ public class CineFrame extends JFrame {
         pAsForm.add(btnAddAsiento);
         pAsientos.add(pAsForm, BorderLayout.NORTH);
 
+        // Configurar modelo y tabla para asientos
         modelAsientos = new DefaultTableModel(new Object[] { "ID", "SalaID", "NoSilla", "Disponible" }, 0);
         tblAsientos = new JTable(modelAsientos);
         pAsientos.add(new JScrollPane(tblAsientos), BorderLayout.CENTER);
@@ -216,7 +232,7 @@ public class CineFrame extends JFrame {
         btnListAsientos.addActionListener(_ -> listarAsientos());
         pAsientos.add(btnListAsientos, BorderLayout.SOUTH);
 
-        // 6. Entradas
+        // ---------- PANEL 6: ENTRADAS ----------
         JPanel pEntradas = new JPanel(new BorderLayout());
         JPanel pEnForm = new JPanel(new GridLayout(5, 2, 5, 5));
         txtClienteEntrada = new JTextField();
@@ -236,6 +252,7 @@ public class CineFrame extends JFrame {
         pEnForm.add(btnAddEntrada);
         pEntradas.add(pEnForm, BorderLayout.NORTH);
 
+        // Configurar modelo y tabla para entradas
         modelEntradas = new DefaultTableModel(new Object[] { "ID", "ClienteDoc", "FuncionID", "AsientoID", "Valor" },
                 0);
         tblEntradas = new JTable(modelEntradas);
@@ -244,7 +261,7 @@ public class CineFrame extends JFrame {
         btnListEntradas.addActionListener(_ -> listarEntradas());
         pEntradas.add(btnListEntradas, BorderLayout.SOUTH);
 
-        // 7. Facturas
+        // ---------- PANEL 7: FACTURAS ----------
         JPanel pFacturas = new JPanel(new BorderLayout());
         JPanel pFacForm = new JPanel(new GridLayout(4, 2, 5, 5));
         txtClienteFactura = new JTextField();
@@ -261,108 +278,108 @@ public class CineFrame extends JFrame {
         pFacForm.add(btnAddFactura);
         pFacturas.add(pFacForm, BorderLayout.NORTH);
 
+        // Configurar modelo y tabla para facturas
         modelFacturas = new DefaultTableModel(new Object[] { "ID", "ClienteDoc", "ValorTotal", "DatosEmpresa" }, 0);
         tblFacturas = new JTable(modelFacturas);
         pFacturas.add(new JScrollPane(tblFacturas), BorderLayout.CENTER);
         JButton btnListFacturas = new JButton("Listar Facturas");
         btnListFacturas.addActionListener(_ -> listarFacturas());
         pFacturas.add(btnListFacturas, BorderLayout.SOUTH);
-        // consulta relacional tabs
         
-        // consulta relacional
-        // 8. Consulta Relacional
-        // En el método initUI(), modifica la sección de Consulta Relacional:
+        // ---------- PANEL 8: CONSULTA RELACIONAL ----------
+        // Panel para consulta relacional que muestra datos combinados de múltiples tablas
+        JPanel pConsulta = new JPanel(new BorderLayout());
 
-// 8. Consulta Relacional
-JPanel pConsulta = new JPanel(new BorderLayout());
+        // Panel superior con formulario para CRUD en la consulta relacional
+        JPanel pConsultaForm = new JPanel(new GridLayout(4, 4, 5, 5));
+        JTextField txtDocConsulta = new JTextField();
+        JTextField txtNombreConsulta = new JTextField();
+        JTextField txtPeliculaConsulta = new JTextField();
+        JTextField txtSalaConsulta = new JTextField();
+        JTextField txtAsientoConsulta = new JTextField();
+        JTextField txtValorConsulta = new JTextField();
+        //JTextField txtFechaFacturaConsulta = new JTextField();
+        JLabel lblFechaAuto = new JLabel("Fecha auto-generada"); // Etiqueta para fecha automática
+        JButton btnAddConsulta = new JButton("Agregar");
+        JButton btnUpdateConsulta = new JButton("Actualizar");
+        JButton btnDeleteConsulta = new JButton("Eliminar");
 
-// Panel superior con formulario para CRUD
-JPanel pConsultaForm = new JPanel(new GridLayout(4, 4, 5, 5));
-JTextField txtDocConsulta = new JTextField();
-JTextField txtNombreConsulta = new JTextField();
-JTextField txtPeliculaConsulta = new JTextField();
-JTextField txtSalaConsulta = new JTextField();
-JTextField txtAsientoConsulta = new JTextField();
-JTextField txtValorConsulta = new JTextField();
-//JTextField txtFechaFacturaConsulta = new JTextField();
-JLabel lblFechaAuto = new JLabel("Fecha auto-generada");
-JButton btnAddConsulta = new JButton("Agregar");
-JButton btnUpdateConsulta = new JButton("Actualizar");
-JButton btnDeleteConsulta = new JButton("Eliminar");
+        // Agregar componentes al formulario de consulta
+        pConsultaForm.add(new JLabel("Documento:"));
+        pConsultaForm.add(txtDocConsulta);
+        pConsultaForm.add(new JLabel("Nombre:"));
+        pConsultaForm.add(txtNombreConsulta);
+        pConsultaForm.add(new JLabel("Película:"));
+        pConsultaForm.add(txtPeliculaConsulta);
+        pConsultaForm.add(new JLabel("Sala:"));
+        pConsultaForm.add(txtSalaConsulta);
+        pConsultaForm.add(new JLabel("Asiento:"));
+        pConsultaForm.add(txtAsientoConsulta);
+        pConsultaForm.add(new JLabel("Valor:"));
+        pConsultaForm.add(txtValorConsulta);
+        pConsultaForm.add(new JLabel("Fecha Factura:"));
+        //pConsultaForm.add(txtFechaFacturaConsulta);
+        pConsultaForm.add(lblFechaAuto); // Mostrar que la fecha es automática
+        pConsultaForm.add(btnAddConsulta);
+        pConsultaForm.add(btnUpdateConsulta);
+        pConsultaForm.add(btnDeleteConsulta);
 
-pConsultaForm.add(new JLabel("Documento:"));
-pConsultaForm.add(txtDocConsulta);
-pConsultaForm.add(new JLabel("Nombre:"));
-pConsultaForm.add(txtNombreConsulta);
-pConsultaForm.add(new JLabel("Película:"));
-pConsultaForm.add(txtPeliculaConsulta);
-pConsultaForm.add(new JLabel("Sala:"));
-pConsultaForm.add(txtSalaConsulta);
-pConsultaForm.add(new JLabel("Asiento:"));
-pConsultaForm.add(txtAsientoConsulta);
-pConsultaForm.add(new JLabel("Valor:"));
-pConsultaForm.add(txtValorConsulta);
-pConsultaForm.add(new JLabel("Fecha Factura:"));
-//pConsultaForm.add(txtFechaFacturaConsulta);
-pConsultaForm.add(lblFechaAuto);
-pConsultaForm.add(btnAddConsulta);
-pConsultaForm.add(btnUpdateConsulta);
-pConsultaForm.add(btnDeleteConsulta);
+        // Definir columnas según la consulta SQL que une múltiples tablas
+        modelConsultaRelacional = new DefaultTableModel(new Object[] {
+                "DocumentoCliente", "NombreCliente", "Pelicula",
+                "Sala", "Asiento", "ValorEntrada", "FechaFactura"
+        }, 0);
 
-// Definir columnas según tu consulta SQL
-modelConsultaRelacional = new DefaultTableModel(new Object[] {
-        "DocumentoCliente", "NombreCliente", "Pelicula",
-        "Sala", "Asiento", "ValorEntrada", "FechaFactura"
-}, 0);
+        tblConsultaRelacional = new JTable(modelConsultaRelacional);
+        JScrollPane scrollConsulta = new JScrollPane(tblConsultaRelacional);
 
-tblConsultaRelacional = new JTable(modelConsultaRelacional);
-JScrollPane scrollConsulta = new JScrollPane(tblConsultaRelacional);
+        // Panel de botones para la consulta
+        JPanel pConsultaBtns = new JPanel(new FlowLayout());
+        //JButton btnListConsulta = new JButton("Ejecutar Consulta");
+        //btnListConsulta.addActionListener(_ -> listarConsultaRelacional());
+        //pConsultaBtns.add(btnListConsulta);
 
-// Panel de botones
-JPanel pConsultaBtns = new JPanel(new FlowLayout());
-//JButton btnListConsulta = new JButton("Ejecutar Consulta");
-//btnListConsulta.addActionListener(_ -> listarConsultaRelacional());
+        // Agregar componentes al panel principal de consulta
+        pConsulta.add(pConsultaForm, BorderLayout.NORTH);
+        pConsulta.add(scrollConsulta, BorderLayout.CENTER);
+        pConsulta.add(pConsultaBtns, BorderLayout.SOUTH);
 
-//pConsultaBtns.add(btnListConsulta);
+        // Agregar tab de consulta relacional
+        tabs.addTab("Consulta Relacional", pConsulta);
 
-// Agregar componentes al panel principal
-pConsulta.add(pConsultaForm, BorderLayout.NORTH);
-pConsulta.add(scrollConsulta, BorderLayout.CENTER);
-pConsulta.add(pConsultaBtns, BorderLayout.SOUTH);
+        // ---------- LISTENERS PARA BOTONES DE CONSULTA RELACIONAL ----------
+        // Listener para agregar desde la consulta relacional
+        btnAddConsulta.addActionListener(_ -> {
+            agregarDesdeConsulta(txtDocConsulta, txtNombreConsulta, txtPeliculaConsulta, 
+                                txtSalaConsulta, txtAsientoConsulta, txtValorConsulta);
+            limpiarCamposConsulta(txtDocConsulta, txtNombreConsulta, txtPeliculaConsulta,
+                                 txtSalaConsulta, txtAsientoConsulta, txtValorConsulta);
+        });
 
-// Agregar tab
-tabs.addTab("Consulta Relacional", pConsulta);
+        // Listener para actualizar desde la consulta relacional
+        btnUpdateConsulta.addActionListener(_ -> actualizarDesdeConsulta(
+                txtDocConsulta, txtNombreConsulta, txtPeliculaConsulta,
+                txtSalaConsulta, txtAsientoConsulta, txtValorConsulta));
 
-// Listeners para los botones de CRUD
-// Modifica los listeners para no pasar el parámetro de fecha
-btnAddConsulta.addActionListener(_ -> {
-    agregarDesdeConsulta(txtDocConsulta, txtNombreConsulta, txtPeliculaConsulta, 
-                        txtSalaConsulta, txtAsientoConsulta, txtValorConsulta);
-    limpiarCamposConsulta(txtDocConsulta, txtNombreConsulta, txtPeliculaConsulta,
-                         txtSalaConsulta, txtAsientoConsulta, txtValorConsulta);
-});
+        // Listener para eliminar desde la consulta relacional
+        btnDeleteConsulta.addActionListener(_ -> eliminarDesdeConsulta());
 
-btnUpdateConsulta.addActionListener(_ -> actualizarDesdeConsulta(
-        txtDocConsulta, txtNombreConsulta, txtPeliculaConsulta,
-        txtSalaConsulta, txtAsientoConsulta, txtValorConsulta));
+        // Listener para selección en tabla de consulta relacional
+        // Cuando se selecciona una fila, carga los datos en los campos del formulario
+        tblConsultaRelacional.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting() && tblConsultaRelacional.getSelectedRow() != -1) {
+                int fila = tblConsultaRelacional.getSelectedRow();
+                txtDocConsulta.setText(modelConsultaRelacional.getValueAt(fila, 0).toString());
+                txtNombreConsulta.setText(modelConsultaRelacional.getValueAt(fila, 1).toString());
+                txtPeliculaConsulta.setText(modelConsultaRelacional.getValueAt(fila, 2).toString());
+                txtSalaConsulta.setText(modelConsultaRelacional.getValueAt(fila, 3).toString());
+                txtAsientoConsulta.setText(modelConsultaRelacional.getValueAt(fila, 4).toString());
+                txtValorConsulta.setText(modelConsultaRelacional.getValueAt(fila, 5).toString());
+                // No cargamos la fecha porque ahora es automática
+            }
+        });
 
-btnDeleteConsulta.addActionListener(_ -> eliminarDesdeConsulta());
-
-// Listener para selección en tabla
-tblConsultaRelacional.getSelectionModel().addListSelectionListener(e -> {
-    if (!e.getValueIsAdjusting() && tblConsultaRelacional.getSelectedRow() != -1) {
-        int fila = tblConsultaRelacional.getSelectedRow();
-        txtDocConsulta.setText(modelConsultaRelacional.getValueAt(fila, 0).toString());
-        txtNombreConsulta.setText(modelConsultaRelacional.getValueAt(fila, 1).toString());
-        txtPeliculaConsulta.setText(modelConsultaRelacional.getValueAt(fila, 2).toString());
-        txtSalaConsulta.setText(modelConsultaRelacional.getValueAt(fila, 3).toString());
-        txtAsientoConsulta.setText(modelConsultaRelacional.getValueAt(fila, 4).toString());
-        txtValorConsulta.setText(modelConsultaRelacional.getValueAt(fila, 5).toString());
-        // No cargamos la fecha porque ahora es automática
-    }
-});
-
-        // Add tabs
+        // ---------- AGREGAR TODAS LAS PESTAÑAS AL PANEL PRINCIPAL ----------
         tabs.addTab("Clientes", pClientes);
         tabs.addTab("Películas", pPeliculas);
         tabs.addTab("Salas", pSalas);
@@ -371,8 +388,10 @@ tblConsultaRelacional.getSelectionModel().addListSelectionListener(e -> {
         tabs.addTab("Entradas", pEntradas);
         tabs.addTab("Facturas", pFacturas);
 
+        // Agregar el panel de pestañas al centro del frame
         add(tabs, BorderLayout.CENTER);
 
+        // ---------- CARGAR DATOS INICIALES EN LAS TABLAS ----------
         listarClientes();
         listarPeliculas();
         listarSalas();
@@ -382,96 +401,98 @@ tblConsultaRelacional.getSelectionModel().addListSelectionListener(e -> {
         listarFacturas();
         listarConsultaRelacional();
 
-        // ----------- button actions ----------
-        // clientes
-
+        // ---------- BOTONES ADICIONALES PARA OPERACIONES CRUD ----------
+        
+        // Botones para clientes
         JButton btnActualizarCliente = new JButton("Actualizar Cliente");
         btnActualizarCliente.addActionListener(_ -> actualizarCliente());
-
         JButton btnEliminarCliente = new JButton("Eliminar Cliente");
         btnEliminarCliente.addActionListener(_ -> eliminarCliente());
-        // peliculas
+        
+        // Botones para películas
         JButton btnActualizarPelicula = new JButton("Actualizar Película");
         btnActualizarPelicula.addActionListener(_ -> actualizarPelicula());
-
         JButton btnEliminarPelicula = new JButton("Eliminar Película");
         btnEliminarPelicula.addActionListener(_ -> eliminarPelicula());
-        // salas
+        
+        // Botones para salas
         JButton btnActualizarSala = new JButton("Actualizar Sala");
         btnActualizarSala.addActionListener(_ -> actualizarSala());
-
         JButton btnEliminarSala = new JButton("Eliminar Sala");
         btnEliminarSala.addActionListener(_ -> eliminarSala());
-        // funciones
+        
+        // Botones para funciones
         JButton btnActualizarFuncion = new JButton("Actualizar Función");
         btnActualizarFuncion.addActionListener(_ -> actualizarFuncion());
-
         JButton btnEliminarFuncion = new JButton("Eliminar Función");
         btnEliminarFuncion.addActionListener(_ -> eliminarFuncion());
-
-        // asientos
+        
+        // Botones para asientos
         JButton btnActualizarAsiento = new JButton("Actualizar Asiento");
         btnActualizarAsiento.addActionListener(_ -> actualizarAsiento());
-
         JButton btnEliminarAsiento = new JButton("Eliminar Asiento");
         btnEliminarAsiento.addActionListener(_ -> eliminarAsiento());
-        // entradas
+        
+        // Botones para entradas
         JButton btnActualizarEntrada = new JButton("Actualizar Entrada");
         btnActualizarEntrada.addActionListener(_ -> actualizarEntrada());
-
         JButton btnEliminarEntrada = new JButton("Eliminar Entrada");
         btnEliminarEntrada.addActionListener(_ -> eliminarEntrada());
-        // facturas
+        
+        // Botones para facturas
         JButton btnActualizarFactura = new JButton("Actualizar Factura");
         btnActualizarFactura.addActionListener(_ -> actualizarFactura());
-
         JButton btnEliminarFactura = new JButton("Eliminar Factura");
         btnEliminarFactura.addActionListener(_ -> eliminarFactura());
 
-        // CLIENTES
+        // ---------- PANELES DE BOTONES PARA CADA PESTAÑA ----------
+        
+        // Panel de botones para clientes
         JPanel pCliBtns = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         pCliBtns.add(btnActualizarCliente);
         pCliBtns.add(btnEliminarCliente);
         pClientes.add(pCliBtns, BorderLayout.SOUTH);
 
-        // PELÍCULAS
+        // Panel de botones para películas
         JPanel pPelBtns = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         pPelBtns.add(btnActualizarPelicula);
         pPelBtns.add(btnEliminarPelicula);
         pPeliculas.add(pPelBtns, BorderLayout.SOUTH);
 
-        // SALAS
+        // Panel de botones para salas
         JPanel pSalaBtns = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         pSalaBtns.add(btnActualizarSala);
         pSalaBtns.add(btnEliminarSala);
         pSalas.add(pSalaBtns, BorderLayout.SOUTH);
 
-        // FUNCIONES
+        // Panel de botones para funciones
         JPanel pFunBtns = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         pFunBtns.add(btnActualizarFuncion);
         pFunBtns.add(btnEliminarFuncion);
         pFunciones.add(pFunBtns, BorderLayout.SOUTH);
 
-        // ASIENTOS
+        // Panel de botones para asientos
         JPanel pAsBtns = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         pAsBtns.add(btnActualizarAsiento);
         pAsBtns.add(btnEliminarAsiento);
         pAsientos.add(pAsBtns, BorderLayout.SOUTH);
 
-        // ENTRADAS
+        // Panel de botones para entradas
         JPanel pEnBtns = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         pEnBtns.add(btnActualizarEntrada);
         pEnBtns.add(btnEliminarEntrada);
         pEntradas.add(pEnBtns, BorderLayout.SOUTH);
 
-        // FACTURAS
+        // Panel de botones para facturas
         JPanel pFacBtns = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         pFacBtns.add(btnActualizarFactura);
         pFacBtns.add(btnEliminarFactura);
         pFacturas.add(pFacBtns, BorderLayout.SOUTH);
 
-        // -----------Listeners ----------
-        // clientes
+        // ---------- LISTENERS PARA SELECCIÓN EN TABLAS ----------
+        // Cuando se selecciona una fila en una tabla, cargar los datos en los campos correspondientes
+        
+        // Listener para tabla de clientes
         tblClientes.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && tblClientes.getSelectedRow() != -1) {
                 int fila = tblClientes.getSelectedRow();
@@ -480,7 +501,8 @@ tblConsultaRelacional.getSelectionModel().addListSelectionListener(e -> {
                 txtTel.setText(modelClientes.getValueAt(fila, 2).toString());
             }
         });
-        // peliculas
+        
+        // Listener para tabla de películas
         tblPeliculas.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && tblPeliculas.getSelectedRow() != -1) {
                 int fila = tblPeliculas.getSelectedRow();
@@ -488,7 +510,8 @@ tblConsultaRelacional.getSelectionModel().addListSelectionListener(e -> {
                 txtGenero.setText(modelPeliculas.getValueAt(fila, 2).toString());
             }
         });
-        // salas
+        
+        // Listener para tabla de salas
         tblSalas.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && tblSalas.getSelectedRow() != -1) {
                 int fila = tblSalas.getSelectedRow();
@@ -496,7 +519,8 @@ tblConsultaRelacional.getSelectionModel().addListSelectionListener(e -> {
                 txtCapacidad.setText(modelSalas.getValueAt(fila, 2).toString());
             }
         });
-        // funciones
+        
+        // Listener para tabla de funciones
         tblFunciones.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && tblFunciones.getSelectedRow() != -1) {
                 int fila = tblFunciones.getSelectedRow();
@@ -505,7 +529,8 @@ tblConsultaRelacional.getSelectionModel().addListSelectionListener(e -> {
                 txtFechaHoraF.setText(modelFunciones.getValueAt(fila, 3).toString());
             }
         });
-        // asientos
+        
+        // Listener para tabla de asientos
         tblAsientos.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && tblAsientos.getSelectedRow() != -1) {
                 int fila = tblAsientos.getSelectedRow();
@@ -513,7 +538,8 @@ tblConsultaRelacional.getSelectionModel().addListSelectionListener(e -> {
                 txtNumeroSillaA.setText(modelAsientos.getValueAt(fila, 2).toString());
             }
         });
-        // entradas
+        
+        // Listener para tabla de entradas
         tblEntradas.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && tblEntradas.getSelectedRow() != -1) {
                 int fila = tblEntradas.getSelectedRow();
@@ -523,7 +549,8 @@ tblConsultaRelacional.getSelectionModel().addListSelectionListener(e -> {
                 txtValorEntrada.setText(modelEntradas.getValueAt(fila, 4).toString());
             }
         });
-        // facturas
+        
+        // Listener para tabla de facturas
         tblFacturas.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && tblFacturas.getSelectedRow() != -1) {
                 int fila = tblFacturas.getSelectedRow();
@@ -534,294 +561,303 @@ tblConsultaRelacional.getSelectionModel().addListSelectionListener(e -> {
         });
     }
 
-    // ---------- acciones ----------
-    // consulta relacional
-    // ---------- CRUD para Consulta Relacional ----------
+    // ---------- MÉTODOS PARA CONSULTA RELACIONAL ----------
 
-private void agregarDesdeConsulta(JTextField txtDoc, JTextField txtNombre, JTextField txtPelicula,
-                                 JTextField txtSala, JTextField txtAsiento, JTextField txtValor) {
-    // Eliminamos el parámetro JTextField txtFechaFactura
-    try {
-        // Validar campos obligatorios
-        if (txtDoc.getText().trim().isEmpty() || txtNombre.getText().trim().isEmpty() ||
-            txtPelicula.getText().trim().isEmpty() || txtValor.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Documento, Nombre, Película y Valor son obligatorios.");
-            return;
-        }
-
-        // 1. Crear/actualizar cliente directamente
-        int documento;
+    // Método para agregar un registro completo desde la consulta relacional
+    // Crea automáticamente todas las entidades relacionadas si no existen
+    private void agregarDesdeConsulta(JTextField txtDoc, JTextField txtNombre, JTextField txtPelicula,
+                                     JTextField txtSala, JTextField txtAsiento, JTextField txtValor) {
         try {
-            documento = Integer.parseInt(txtDoc.getText().trim());
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Documento debe ser numérico");
-            return;
-        }
-        
-        // Intentar crear el cliente directamente
-        // Si ya existe, la base de datos lanzará una excepción por clave duplicada
-        try {
-            clienteCtrl.insertar(documento, txtNombre.getText().trim(), "000-0000000");
-        } catch (Exception e) {
-            // Si falla por duplicado, actualizar el cliente existente
-            clienteCtrl.actualizar(documento, txtNombre.getText().trim(), "000-0000000");
-        }
-
-        // 2. Buscar o crear película
-        String tituloPelicula = txtPelicula.getText().trim();
-        Pelicula peliculaExistente = buscarPeliculaPorTitulo(tituloPelicula);
-        int peliculaId;
-        
-        if (peliculaExistente == null) {
-            // Crear nueva película
-            peliculaCtrl.insertar(tituloPelicula, "Genero Default");
-            // Obtener el ID de la película recién creada
-            List<Pelicula> peliculas = peliculaCtrl.listar();
-            peliculaId = peliculas.get(peliculas.size() - 1).getId();
-            JOptionPane.showMessageDialog(this, "Película creada automáticamente");
-        } else {
-            peliculaId = peliculaExistente.getId();
-        }
-
-        // 3. Buscar o crear sala
-        String tipoSala = txtSala.getText().trim();
-        Sala salaExistente = buscarSalaPorTipo(tipoSala);
-        int salaId;
-        
-        if (salaExistente == null && !tipoSala.isEmpty()) {
-            // Crear nueva sala
-            SalaDAO salaDAO = new SalaDAO(con);
-            salaDAO.insertar(new Sala(0, tipoSala, 50)); // Capacidad default 50
-            List<Sala> salas = salaDAO.listar();
-            salaId = salas.get(salas.size() - 1).getId();
-            JOptionPane.showMessageDialog(this, "Sala creada automáticamente");
-        } else if (salaExistente != null) {
-            salaId = salaExistente.getId();
-        } else {
-            JOptionPane.showMessageDialog(this, "Se requiere una sala válida");
-            return;
-        }
-
-        // 4. Crear función si no existe (usando fecha/hora actual)
-        Funcion funcionExistente = buscarFuncion(peliculaId, salaId);
-        int funcionId;
-        
-        if (funcionExistente == null) {
-            // Crear nueva función con fecha/hora actual
-            funcionCtrl.insertar(peliculaId, salaId, LocalDateTime.now());
-            List<Funcion> funciones = funcionCtrl.listar();
-            funcionId = funciones.get(funciones.size() - 1).getId();
-            JOptionPane.showMessageDialog(this, "Función creada automáticamente");
-        } else {
-            funcionId = funcionExistente.getId();
-        }
-
-        // 5. Buscar o crear asiento
-        String numeroAsiento = txtAsiento.getText().trim();
-        Asiento asientoExistente = buscarAsiento(salaId, numeroAsiento);
-        int asientoId;
-        
-        if (asientoExistente == null && !numeroAsiento.isEmpty()) {
-            // Crear nuevo asiento
-            asientoDAO.insertar(new Asiento(0, salaId, numeroAsiento, true));
-            List<Asiento> asientos = asientoDAO.listar();
-            asientoId = asientos.get(asientos.size() - 1).getId();
-            JOptionPane.showMessageDialog(this, "Asiento creado automáticamente");
-        } else if (asientoExistente != null) {
-            asientoId = asientoExistente.getId();
-        } else {
-            JOptionPane.showMessageDialog(this, "Se requiere un asiento válido");
-            return;
-        }
-
-        // 6. Crear entrada
-        double valor = Double.parseDouble(txtValor.getText().trim());
-        int entradaId = entradaCtrl.crearEntrada(documento, funcionId, asientoId, valor);
-
-        // 7. Crear factura automáticamente con fecha actual
-        String datosEmpresa = "Cine XYZ - " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-        int facturaId = facturaCtrl.crearFactura(documento, valor, datosEmpresa);
-
-        JOptionPane.showMessageDialog(this, "Registro completo creado.\nEntrada ID: " + entradaId + "\nFactura ID: " + facturaId);
-        
-        // Actualizar todas las listas
-        actualizarTodasLasListas();
-        listarConsultaRelacional();
-        
-    } catch (Exception ex) {
-        JOptionPane.showMessageDialog(this, "Error agregando registro: " + ex.getMessage());
-        ex.printStackTrace();
-    }
-}
-
-private void actualizarDesdeConsulta(JTextField txtDoc, JTextField txtNombre, JTextField txtPelicula,
-                                    JTextField txtSala, JTextField txtAsiento, JTextField txtValor) {
-    // Eliminamos el parámetro de fecha
-    try {
-        int fila = tblConsultaRelacional.getSelectedRow();
-        if (fila == -1) {
-            JOptionPane.showMessageDialog(this, "Seleccione un registro para actualizar");
-            return;
-        }
-
-        String documentoOriginal = modelConsultaRelacional.getValueAt(fila, 0).toString();
-        int documento = Integer.parseInt(txtDoc.getText().trim());
-
-        // Actualizar cliente
-        clienteCtrl.actualizar(documento, txtNombre.getText().trim(), "000-0000000");
-
-        // Buscar la entrada relacionada y actualizarla
-        List<Entrada> entradas = entradaCtrl.listar();
-        for (Entrada entrada : entradas) {
-            if (String.valueOf(entrada.getClienteDocumento()).equals(documentoOriginal)) {
-                // Actualizar valor de la entrada
-                double nuevoValor = Double.parseDouble(txtValor.getText().trim());
-                entradaCtrl.actualizar(entrada.getId(), documento, entrada.getFuncionId(), 
-                                     entrada.getAsientoId(), nuevoValor);
-                
-                // Actualizar factura con nueva fecha
-                List<Factura> facturas = facturaCtrl.listar();
-                for (Factura factura : facturas) {
-                    if (factura.getClienteDocumento() == documento) {
-                        String nuevosDatosEmpresa = "Cine XYZ - Actualizado: " + 
-                                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-                        facturaCtrl.actualizar(factura.getId(), documento, nuevoValor, nuevosDatosEmpresa);
-                        break;
-                    }
-                }
-                break;
-            }
-        }
-
-        JOptionPane.showMessageDialog(this, "Registro actualizado correctamente");
-        actualizarTodasLasListas();
-        listarConsultaRelacional();
-        
-    } catch (Exception ex) {
-        JOptionPane.showMessageDialog(this, "Error actualizando registro: " + ex.getMessage());
-    }
-}
-private void limpiarCamposConsulta(JTextField txtDoc, JTextField txtNombre, JTextField txtPelicula,
-                                  JTextField txtSala, JTextField txtAsiento, JTextField txtValor) {
-    // Eliminamos el parámetro de fecha
-    txtDoc.setText("");
-    txtNombre.setText("");
-    txtPelicula.setText("");
-    txtSala.setText("");
-    txtAsiento.setText("");
-    txtValor.setText("");
-}
-
-
-
-private void eliminarDesdeConsulta() {
-    try {
-        int fila = tblConsultaRelacional.getSelectedRow();
-        if (fila == -1) {
-            JOptionPane.showMessageDialog(this, "Seleccione un registro para eliminar");
-            return;
-        }
-
-        String documento = modelConsultaRelacional.getValueAt(fila, 0).toString();
-        int doc = Integer.parseInt(documento);
-
-        int confirm = JOptionPane.showConfirmDialog(this, 
-            "¿Está seguro de eliminar todas las entradas del cliente " + documento + "?",
-            "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
-
-        if (confirm == JOptionPane.YES_OPTION) {
-            // Eliminar entradas del cliente
-            List<Entrada> entradas = entradaCtrl.listar();
-            for (Entrada entrada : entradas) {
-                if (entrada.getClienteDocumento() == doc) {
-                    entradaCtrl.eliminar(entrada.getId());
-                }
+            // Validar campos obligatorios
+            if (txtDoc.getText().trim().isEmpty() || txtNombre.getText().trim().isEmpty() ||
+                txtPelicula.getText().trim().isEmpty() || txtValor.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Documento, Nombre, Película y Valor son obligatorios.");
+                return;
             }
 
-            // También puedes eliminar el cliente si lo deseas
-            // clienteCtrl.eliminar(doc);
+            // 1. Crear/actualizar cliente directamente
+            int documento;
+            try {
+                documento = Integer.parseInt(txtDoc.getText().trim());
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Documento debe ser numérico");
+                return;
+            }
+            
+            // Intentar crear el cliente directamente
+            // Si ya existe, la base de datos lanzará una excepción por clave duplicada
+            try {
+                clienteCtrl.insertar(documento, txtNombre.getText().trim(), "000-0000000");
+            } catch (Exception e) {
+                // Si falla por duplicado, actualizar el cliente existente
+                clienteCtrl.actualizar(documento, txtNombre.getText().trim(), "000-0000000");
+            }
 
-            JOptionPane.showMessageDialog(this, "Entradas del cliente eliminadas");
+            // 2. Buscar o crear película
+            String tituloPelicula = txtPelicula.getText().trim();
+            Pelicula peliculaExistente = buscarPeliculaPorTitulo(tituloPelicula);
+            int peliculaId;
+            
+            if (peliculaExistente == null) {
+                // Crear nueva película
+                peliculaCtrl.insertar(tituloPelicula, "Genero Default");
+                // Obtener el ID de la película recién creada
+                List<Pelicula> peliculas = peliculaCtrl.listar();
+                peliculaId = peliculas.get(peliculas.size() - 1).getId();
+                JOptionPane.showMessageDialog(this, "Película creada automáticamente");
+            } else {
+                peliculaId = peliculaExistente.getId();
+            }
+
+            // 3. Buscar o crear sala
+            String tipoSala = txtSala.getText().trim();
+            Sala salaExistente = buscarSalaPorTipo(tipoSala);
+            int salaId;
+            
+            if (salaExistente == null && !tipoSala.isEmpty()) {
+                // Crear nueva sala
+                SalaDAO salaDAO = new SalaDAO(con);
+                salaDAO.insertar(new Sala(0, tipoSala, 50)); // Capacidad default 50
+                List<Sala> salas = salaDAO.listar();
+                salaId = salas.get(salas.size() - 1).getId();
+                JOptionPane.showMessageDialog(this, "Sala creada automáticamente");
+            } else if (salaExistente != null) {
+                salaId = salaExistente.getId();
+            } else {
+                JOptionPane.showMessageDialog(this, "Se requiere una sala válida");
+                return;
+            }
+
+            // 4. Crear función si no existe (usando fecha/hora actual)
+            Funcion funcionExistente = buscarFuncion(peliculaId, salaId);
+            int funcionId;
+            
+            if (funcionExistente == null) {
+                // Crear nueva función con fecha/hora actual
+                funcionCtrl.insertar(peliculaId, salaId, LocalDateTime.now());
+                List<Funcion> funciones = funcionCtrl.listar();
+                funcionId = funciones.get(funciones.size() - 1).getId();
+                JOptionPane.showMessageDialog(this, "Función creada automáticamente");
+            } else {
+                funcionId = funcionExistente.getId();
+            }
+
+            // 5. Buscar o crear asiento
+            String numeroAsiento = txtAsiento.getText().trim();
+            Asiento asientoExistente = buscarAsiento(salaId, numeroAsiento);
+            int asientoId;
+            
+            if (asientoExistente == null && !numeroAsiento.isEmpty()) {
+                // Crear nuevo asiento
+                asientoDAO.insertar(new Asiento(0, salaId, numeroAsiento, true));
+                List<Asiento> asientos = asientoDAO.listar();
+                asientoId = asientos.get(asientos.size() - 1).getId();
+                JOptionPane.showMessageDialog(this, "Asiento creado automáticamente");
+            } else if (asientoExistente != null) {
+                asientoId = asientoExistente.getId();
+            } else {
+                JOptionPane.showMessageDialog(this, "Se requiere un asiento válido");
+                return;
+            }
+
+            // 6. Crear entrada
+            double valor = Double.parseDouble(txtValor.getText().trim());
+            int entradaId = entradaCtrl.crearEntrada(documento, funcionId, asientoId, valor);
+
+            // 7. Crear factura automáticamente con fecha actual
+            String datosEmpresa = "Cine XYZ - " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+            int facturaId = facturaCtrl.crearFactura(documento, valor, datosEmpresa);
+
+            JOptionPane.showMessageDialog(this, "Registro completo creado.\nEntrada ID: " + entradaId + "\nFactura ID: " + facturaId);
+            
+            // Actualizar todas las listas
             actualizarTodasLasListas();
             listarConsultaRelacional();
+            
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error agregando registro: " + ex.getMessage());
+            ex.printStackTrace();
         }
-        
-    } catch (Exception ex) {
-        JOptionPane.showMessageDialog(this, "Error eliminando registro: " + ex.getMessage());
     }
-}
 
-// Métodos auxiliares para búsqueda
-private Pelicula buscarPeliculaPorTitulo(String titulo) {
-    try {
-        List<Pelicula> peliculas = peliculaCtrl.listar();
-        for (Pelicula p : peliculas) {
-            if (p.getTitulo().equalsIgnoreCase(titulo)) {
-                return p;
+    // Método para actualizar un registro desde la consulta relacional
+    private void actualizarDesdeConsulta(JTextField txtDoc, JTextField txtNombre, JTextField txtPelicula,
+                                        JTextField txtSala, JTextField txtAsiento, JTextField txtValor) {
+        try {
+            int fila = tblConsultaRelacional.getSelectedRow();
+            if (fila == -1) {
+                JOptionPane.showMessageDialog(this, "Seleccione un registro para actualizar");
+                return;
             }
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-    return null;
-}
 
-private Sala buscarSalaPorTipo(String tipo) {
-    try {
-        SalaDAO salaDAO = new SalaDAO(con);
-        List<Sala> salas = salaDAO.listar();
-        for (Sala s : salas) {
-            if (s.getTipoSala().equalsIgnoreCase(tipo)) {
-                return s;
+            String documentoOriginal = modelConsultaRelacional.getValueAt(fila, 0).toString();
+            int documento = Integer.parseInt(txtDoc.getText().trim());
+
+            // Actualizar cliente
+            clienteCtrl.actualizar(documento, txtNombre.getText().trim(), "000-0000000");
+
+            // Buscar la entrada relacionada y actualizarla
+            List<Entrada> entradas = entradaCtrl.listar();
+            for (Entrada entrada : entradas) {
+                if (String.valueOf(entrada.getClienteDocumento()).equals(documentoOriginal)) {
+                    // Actualizar valor de la entrada
+                    double nuevoValor = Double.parseDouble(txtValor.getText().trim());
+                    entradaCtrl.actualizar(entrada.getId(), documento, entrada.getFuncionId(), 
+                                         entrada.getAsientoId(), nuevoValor);
+                    
+                    // Actualizar factura con nueva fecha
+                    List<Factura> facturas = facturaCtrl.listar();
+                    for (Factura factura : facturas) {
+                        if (factura.getClienteDocumento() == documento) {
+                            String nuevosDatosEmpresa = "Cine XYZ - Actualizado: " + 
+                                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+                            facturaCtrl.actualizar(factura.getId(), documento, nuevoValor, nuevosDatosEmpresa);
+                            break;
+                        }
+                    }
+                    break;
+                }
             }
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-    return null;
-}
 
-private Funcion buscarFuncion(int peliculaId, int salaId) {
-    try {
-        List<Funcion> funciones = funcionCtrl.listar();
-        for (Funcion f : funciones) {
-            if (f.getPeliculaId() == peliculaId && f.getSalaId() == salaId) {
-                return f;
+            JOptionPane.showMessageDialog(this, "Registro actualizado correctamente");
+            actualizarTodasLasListas();
+            listarConsultaRelacional();
+            
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error actualizando registro: " + ex.getMessage());
+        }
+    }
+
+    // Método para limpiar campos del formulario de consulta relacional
+    private void limpiarCamposConsulta(JTextField txtDoc, JTextField txtNombre, JTextField txtPelicula,
+                                      JTextField txtSala, JTextField txtAsiento, JTextField txtValor) {
+        txtDoc.setText("");
+        txtNombre.setText("");
+        txtPelicula.setText("");
+        txtSala.setText("");
+        txtAsiento.setText("");
+        txtValor.setText("");
+    }
+
+    // Método para eliminar un registro desde la consulta relacional
+    private void eliminarDesdeConsulta() {
+        try {
+            int fila = tblConsultaRelacional.getSelectedRow();
+            if (fila == -1) {
+                JOptionPane.showMessageDialog(this, "Seleccione un registro para eliminar");
+                return;
             }
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-    return null;
-}
 
-private Asiento buscarAsiento(int salaId, String numeroAsiento) {
-    try {
-        List<Asiento> asientos = asientoDAO.listar();
-        for (Asiento a : asientos) {
-            if (a.getSalaId() == salaId && a.getNumeroSilla().equals(numeroAsiento)) {
-                return a;
+            String documento = modelConsultaRelacional.getValueAt(fila, 0).toString();
+            int doc = Integer.parseInt(documento);
+
+            // Confirmar eliminación
+            int confirm = JOptionPane.showConfirmDialog(this, 
+                "¿Está seguro de eliminar todas las entradas del cliente " + documento + "?",
+                "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                // Eliminar entradas del cliente
+                List<Entrada> entradas = entradaCtrl.listar();
+                for (Entrada entrada : entradas) {
+                    if (entrada.getClienteDocumento() == doc) {
+                        entradaCtrl.eliminar(entrada.getId());
+                    }
+                }
+
+                // También puedes eliminar el cliente si lo deseas
+                // clienteCtrl.eliminar(doc);
+
+                JOptionPane.showMessageDialog(this, "Entradas del cliente eliminadas");
+                actualizarTodasLasListas();
+                listarConsultaRelacional();
             }
+            
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error eliminando registro: " + ex.getMessage());
         }
-    } catch (Exception e) {
-        e.printStackTrace();
     }
-    return null;
-}
 
-// Método para actualizar todas las listas
-private void actualizarTodasLasListas() {
-    listarClientes();
-    listarPeliculas();
-    listarSalas();
-    listarFunciones();
-    listarAsientos();
-    listarEntradas();
-    listarFacturas();
-}
+    // ---------- MÉTODOS AUXILIARES PARA BÚSQUEDA ----------
+
+    // Buscar película por título
+    private Pelicula buscarPeliculaPorTitulo(String titulo) {
+        try {
+            List<Pelicula> peliculas = peliculaCtrl.listar();
+            for (Pelicula p : peliculas) {
+                if (p.getTitulo().equalsIgnoreCase(titulo)) {
+                    return p;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // Buscar sala por tipo
+    private Sala buscarSalaPorTipo(String tipo) {
+        try {
+            SalaDAO salaDAO = new SalaDAO(con);
+            List<Sala> salas = salaDAO.listar();
+            for (Sala s : salas) {
+                if (s.getTipoSala().equalsIgnoreCase(tipo)) {
+                    return s;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // Buscar función por película y sala
+    private Funcion buscarFuncion(int peliculaId, int salaId) {
+        try {
+            List<Funcion> funciones = funcionCtrl.listar();
+            for (Funcion f : funciones) {
+                if (f.getPeliculaId() == peliculaId && f.getSalaId() == salaId) {
+                    return f;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // Buscar asiento por sala y número
+    private Asiento buscarAsiento(int salaId, String numeroAsiento) {
+        try {
+            List<Asiento> asientos = asientoDAO.listar();
+            for (Asiento a : asientos) {
+                if (a.getSalaId() == salaId && a.getNumeroSilla().equals(numeroAsiento)) {
+                    return a;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // Método para actualizar todas las listas de la interfaz
+    private void actualizarTodasLasListas() {
+        listarClientes();
+        listarPeliculas();
+        listarSalas();
+        listarFunciones();
+        listarAsientos();
+        listarEntradas();
+        listarFacturas();
+    }
+
+    // Método para ejecutar y mostrar la consulta relacional
     private void listarConsultaRelacional() {
         try {
             modelConsultaRelacional.setRowCount(0); // limpiar tabla
+            
+            // Consulta SQL que une múltiples tablas para obtener información completa
             String sql = "SELECT " +
                     "c.documento AS DocumentoCliente, " +
                     "c.nombre AS NombreCliente, " +
@@ -841,6 +877,7 @@ private void actualizarTodasLasListas() {
             var stmt = con.createStatement();
             var rs = stmt.executeQuery(sql);
 
+            // Llenar la tabla con los resultados de la consulta
             while (rs.next()) {
                 modelConsultaRelacional.addRow(new Object[] {
                         rs.getString("DocumentoCliente"),
@@ -862,7 +899,9 @@ private void actualizarTodasLasListas() {
         }
     }
 
-    // clientes
+    // ---------- MÉTODOS PARA CLIENTES ----------
+
+    // Actualizar cliente existente
     private void actualizarCliente() {
         try {
             int doc = Integer.parseInt(txtDoc.getText().trim());
@@ -876,23 +915,25 @@ private void actualizarTodasLasListas() {
 
             clienteCtrl.actualizar(doc, nombre, tel);
             JOptionPane.showMessageDialog(this, "Cliente actualizado.");
-            listarClientes();
+            listarClientes(); // Actualizar la tabla
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error actualizando cliente: " + ex.getMessage());
         }
     }
 
+    // Eliminar cliente
     private void eliminarCliente() {
         try {
             int doc = Integer.parseInt(txtDoc.getText().trim());
             clienteCtrl.eliminar(doc);
             JOptionPane.showMessageDialog(this, "Cliente eliminado.");
-            listarClientes();
+            listarClientes(); // Actualizar la tabla
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error eliminando cliente: " + ex.getMessage());
         }
     }
 
+    // Agregar nuevo cliente
     private void agregarCliente() {
         try {
             String docStr = txtDoc.getText().trim();
@@ -914,16 +955,18 @@ private void actualizarTodasLasListas() {
 
             clienteCtrl.insertar(doc, nombre, tel);
             JOptionPane.showMessageDialog(this, "Cliente agregado.");
-            listarClientes();
+            listarClientes(); // Actualizar la tabla
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error agregando cliente: " + ex.getMessage());
         }
     }
 
+    // Listar todos los clientes en la tabla
     private void listarClientes() {
         try {
             List<Cliente> list = clienteCtrl.listar();
-            modelClientes.setRowCount(0);
+            modelClientes.setRowCount(0); // Limpiar tabla
+            // Llenar tabla con datos de clientes
             for (Cliente c : list) {
                 modelClientes.addRow(new Object[] { c.getDocumento(), c.getNombre(), c.getTelefono() });
             }
@@ -932,6 +975,9 @@ private void actualizarTodasLasListas() {
         }
     }
 
+    // ---------- MÉTODOS PARA PELÍCULAS ----------
+
+    // Agregar nueva película
     private void agregarPelicula() {
         try {
             String titulo = txtTitulo.getText().trim();
@@ -944,13 +990,13 @@ private void actualizarTodasLasListas() {
 
             peliculaCtrl.insertar(titulo, genero);
             JOptionPane.showMessageDialog(this, "Película agregada.");
-            listarPeliculas();
+            listarPeliculas(); // Actualizar la tabla
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error agregando película: " + ex.getMessage());
         }
     }
 
-    // peliculas
+    // Actualizar película existente
     private void actualizarPelicula() {
         try {
             int id = (int) modelPeliculas.getValueAt(tblPeliculas.getSelectedRow(), 0);
@@ -964,27 +1010,30 @@ private void actualizarTodasLasListas() {
 
             peliculaCtrl.actualizar(id, titulo, genero);
             JOptionPane.showMessageDialog(this, "Película actualizada.");
-            listarPeliculas();
+            listarPeliculas(); // Actualizar la tabla
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error actualizando película: " + ex.getMessage());
         }
     }
 
+    // Eliminar película
     private void eliminarPelicula() {
         try {
             int id = (int) modelPeliculas.getValueAt(tblPeliculas.getSelectedRow(), 0);
             peliculaCtrl.eliminar(id);
             JOptionPane.showMessageDialog(this, "Película eliminada.");
-            listarPeliculas();
+            listarPeliculas(); // Actualizar la tabla
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error eliminando película: " + ex.getMessage());
         }
     }
 
+    // Listar todas las películas en la tabla
     private void listarPeliculas() {
         try {
             List<Pelicula> list = peliculaCtrl.listar();
-            modelPeliculas.setRowCount(0);
+            modelPeliculas.setRowCount(0); // Limpiar tabla
+            // Llenar tabla con datos de películas
             for (Pelicula p : list) {
                 modelPeliculas.addRow(new Object[] { p.getId(), p.getTitulo(), p.getGenero() });
             }
@@ -993,6 +1042,9 @@ private void actualizarTodasLasListas() {
         }
     }
 
+    // ---------- MÉTODOS PARA SALAS ----------
+
+    // Agregar nueva sala
     private void agregarSala() {
         try {
             String tipo = txtTipoSala.getText().trim();
@@ -1014,13 +1066,13 @@ private void actualizarTodasLasListas() {
             service.SalaDAO dao = new service.SalaDAO(con);
             dao.insertar(new Sala(0, tipo, cap));
             JOptionPane.showMessageDialog(this, "Sala agregada.");
-            listarSalas();
+            listarSalas(); // Actualizar la tabla
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error agregando sala: " + ex.getMessage());
         }
     }
 
-    // salas
+    // Actualizar sala existente
     private void actualizarSala() {
         try {
             int id = (int) modelSalas.getValueAt(tblSalas.getSelectedRow(), 0);
@@ -1030,29 +1082,32 @@ private void actualizarTodasLasListas() {
             service.SalaDAO dao = new service.SalaDAO(con);
             dao.actualizar(new Sala(id, tipo, cap));
             JOptionPane.showMessageDialog(this, "Sala actualizada.");
-            listarSalas();
+            listarSalas(); // Actualizar la tabla
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error actualizando sala: " + ex.getMessage());
         }
     }
 
+    // Eliminar sala
     private void eliminarSala() {
         try {
             int id = (int) modelSalas.getValueAt(tblSalas.getSelectedRow(), 0);
             service.SalaDAO dao = new service.SalaDAO(con);
             dao.eliminar(id);
             JOptionPane.showMessageDialog(this, "Sala eliminada.");
-            listarSalas();
+            listarSalas(); // Actualizar la tabla
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error eliminando sala: " + ex.getMessage());
         }
     }
 
+    // Listar todas las salas en la tabla
     private void listarSalas() {
         try {
             service.SalaDAO dao = new service.SalaDAO(con);
             java.util.List<Sala> list = dao.listar();
-            modelSalas.setRowCount(0);
+            modelSalas.setRowCount(0); // Limpiar tabla
+            // Llenar tabla con datos de salas
             for (Sala s : list)
                 modelSalas.addRow(new Object[] { s.getId(), s.getTipoSala(), s.getCapacidad() });
         } catch (Exception ex) {
@@ -1060,6 +1115,9 @@ private void actualizarTodasLasListas() {
         }
     }
 
+    // ---------- MÉTODOS PARA FUNCIONES ----------
+
+    // Agregar nueva función
     private void agregarFuncion() {
         try {
             String peliIdStr = txtPeliculaIdF.getText().trim();
@@ -1080,6 +1138,7 @@ private void actualizarTodasLasListas() {
                 return;
             }
 
+            // Parsear fecha y hora con el formato especificado
             DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             LocalDateTime fechaHora;
             try {
@@ -1091,13 +1150,13 @@ private void actualizarTodasLasListas() {
 
             funcionCtrl.insertar(peliId, salaId, fechaHora);
             JOptionPane.showMessageDialog(this, "Función agregada.");
-            listarFunciones();
+            listarFunciones(); // Actualizar la tabla
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error agregando función: " + ex.getMessage());
         }
     }
 
-    // funciones
+    // Actualizar función existente
     private void actualizarFuncion() {
         try {
             int id = (int) modelFunciones.getValueAt(tblFunciones.getSelectedRow(), 0);
@@ -1107,27 +1166,30 @@ private void actualizarTodasLasListas() {
                     DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
             funcionCtrl.actualizar(id, peliId, salaId, fechaHora);
             JOptionPane.showMessageDialog(this, "Función actualizada.");
-            listarFunciones();
+            listarFunciones(); // Actualizar la tabla
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error actualizando función: " + ex.getMessage());
         }
     }
 
+    // Eliminar función
     private void eliminarFuncion() {
         try {
             int id = (int) modelFunciones.getValueAt(tblFunciones.getSelectedRow(), 0);
             funcionCtrl.eliminar(id);
             JOptionPane.showMessageDialog(this, "Función eliminada.");
-            listarFunciones();
+            listarFunciones(); // Actualizar la tabla
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error eliminando función: " + ex.getMessage());
         }
     }
 
+    // Listar todas las funciones en la tabla
     private void listarFunciones() {
         try {
             List<Funcion> list = funcionCtrl.listar();
-            modelFunciones.setRowCount(0);
+            modelFunciones.setRowCount(0); // Limpiar tabla
+            // Llenar tabla con datos de funciones
             for (Funcion f : list)
                 modelFunciones.addRow(new Object[] { f.getId(), f.getPeliculaId(), f.getSalaId(), f.getFechaHora() });
         } catch (Exception ex) {
@@ -1135,7 +1197,9 @@ private void actualizarTodasLasListas() {
         }
     }
 
-    // asientos
+    // ---------- MÉTODOS PARA ASIENTOS ----------
+
+    // Actualizar asiento existente
     private void actualizarAsiento() {
         try {
             int id = (int) modelAsientos.getValueAt(tblAsientos.getSelectedRow(), 0);
@@ -1144,23 +1208,25 @@ private void actualizarTodasLasListas() {
 
             asientoDAO.actualizar(new Asiento(id, salaId, numero, true));
             JOptionPane.showMessageDialog(this, "Asiento actualizado.");
-            listarAsientos();
+            listarAsientos(); // Actualizar la tabla
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error actualizando asiento: " + ex.getMessage());
         }
     }
 
+    // Eliminar asiento
     private void eliminarAsiento() {
         try {
             int id = (int) modelAsientos.getValueAt(tblAsientos.getSelectedRow(), 0);
             asientoDAO.eliminar(id);
             JOptionPane.showMessageDialog(this, "Asiento eliminado.");
-            listarAsientos();
+            listarAsientos(); // Actualizar la tabla
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error eliminando asiento: " + ex.getMessage());
         }
     }
 
+    // Agregar nuevo asiento
     private void agregarAsiento() {
         try {
             String textoSala = txtSalaIdA.getText().trim();
@@ -1184,16 +1250,18 @@ private void actualizarTodasLasListas() {
 
             asientoDAO.insertar(new Asiento(0, salaId, num, true));
             JOptionPane.showMessageDialog(this, "Asiento agregado.");
-            listarAsientos();
+            listarAsientos(); // Actualizar la tabla
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error agregando asiento: " + ex.getMessage());
         }
     }
 
+    // Listar todos los asientos en la tabla
     private void listarAsientos() {
         try {
             List<Asiento> list = asientoDAO.listar();
-            modelAsientos.setRowCount(0);
+            modelAsientos.setRowCount(0); // Limpiar tabla
+            // Llenar tabla con datos de asientos
             for (Asiento a : list)
                 modelAsientos.addRow(new Object[] { a.getId(), a.getSalaId(), a.getNumeroSilla(), a.isDisponible() });
         } catch (Exception ex) {
@@ -1201,7 +1269,9 @@ private void actualizarTodasLasListas() {
         }
     }
 
-    // entradas
+    // ---------- MÉTODOS PARA ENTRADAS ----------
+
+    // Actualizar entrada existente
     private void actualizarEntrada() {
         try {
             int id = (int) modelEntradas.getValueAt(tblEntradas.getSelectedRow(), 0);
@@ -1212,23 +1282,25 @@ private void actualizarTodasLasListas() {
 
             entradaCtrl.actualizar(id, clienteDoc, funcionId, asientoId, valor);
             JOptionPane.showMessageDialog(this, "Entrada actualizada.");
-            listarEntradas();
+            listarEntradas(); // Actualizar la tabla
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error actualizando entrada: " + ex.getMessage());
         }
     }
 
+    // Eliminar entrada
     private void eliminarEntrada() {
         try {
             int id = (int) modelEntradas.getValueAt(tblEntradas.getSelectedRow(), 0);
             entradaCtrl.eliminar(id);
             JOptionPane.showMessageDialog(this, "Entrada eliminada.");
-            listarEntradas();
+            listarEntradas(); // Actualizar la tabla
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error eliminando entrada: " + ex.getMessage());
         }
     }
 
+    // Vender nueva entrada (crear entrada)
     private void venderEntrada() {
         try {
             String docStr = txtClienteEntrada.getText().trim();
@@ -1255,16 +1327,18 @@ private void actualizarTodasLasListas() {
 
             int id = entradaCtrl.crearEntrada(doc, funcionId, asientoId, valor);
             JOptionPane.showMessageDialog(this, "Entrada vendida ID: " + id);
-            listarEntradas();
+            listarEntradas(); // Actualizar la tabla
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error vendiendo entrada: " + ex.getMessage());
         }
     }
 
+    // Listar todas las entradas en la tabla
     private void listarEntradas() {
         try {
             java.util.List<Entrada> list = entradaCtrl.listar();
-            modelEntradas.setRowCount(0);
+            modelEntradas.setRowCount(0); // Limpiar tabla
+            // Llenar tabla con datos de entradas
             for (Entrada e : list)
                 modelEntradas.addRow(new Object[] { e.getId(), e.getClienteDocumento(), e.getFuncionId(),
                         e.getAsientoId(), e.getValor() });
@@ -1273,7 +1347,9 @@ private void actualizarTodasLasListas() {
         }
     }
 
-    // facturas
+    // ---------- MÉTODOS PARA FACTURAS ----------
+
+    // Actualizar factura existente
     private void actualizarFactura() {
         try {
             int id = (int) modelFacturas.getValueAt(tblFacturas.getSelectedRow(), 0);
@@ -1283,23 +1359,25 @@ private void actualizarTodasLasListas() {
 
             facturaCtrl.actualizar(id, clienteDoc, valorTotal, datosEmpresa);
             JOptionPane.showMessageDialog(this, "Factura actualizada.");
-            listarFacturas();
+            listarFacturas(); // Actualizar la tabla
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error actualizando factura: " + ex.getMessage());
         }
     }
 
+    // Eliminar factura
     private void eliminarFactura() {
         try {
             int id = (int) modelFacturas.getValueAt(tblFacturas.getSelectedRow(), 0);
             facturaCtrl.eliminar(id);
             JOptionPane.showMessageDialog(this, "Factura eliminada.");
-            listarFacturas();
+            listarFacturas(); // Actualizar la tabla
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error eliminando factura: " + ex.getMessage());
         }
     }
 
+    // Generar nueva factura
     private void generarFactura() {
         try {
             String docStr = txtClienteFactura.getText().trim();
@@ -1323,16 +1401,18 @@ private void actualizarTodasLasListas() {
 
             int facturaId = facturaCtrl.crearFactura(doc, valorTotal, datos);
             JOptionPane.showMessageDialog(this, "Factura creada ID: " + facturaId);
-            listarFacturas();
+            listarFacturas(); // Actualizar la tabla
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error creando factura: " + ex.getMessage());
         }
     }
 
+    // Listar todas las facturas en la tabla
     private void listarFacturas() {
         try {
             java.util.List<Factura> list = facturaCtrl.listar();
-            modelFacturas.setRowCount(0);
+            modelFacturas.setRowCount(0); // Limpiar tabla
+            // Llenar tabla con datos de facturas
             for (Factura f : list) {
                 modelFacturas.addRow(new Object[] {
                         f.getId(),
@@ -1346,40 +1426,42 @@ private void actualizarTodasLasListas() {
         }
     }
 
-    // limpiar campos
+    // ---------- MÉTODO PARA LIMPIAR CAMPOS ----------
+
+    // Limpiar todos los campos de texto de la interfaz
     private void limpiarCampos() {
-        // Clientes
+        // Limpiar campos de clientes
         txtDoc.setText("");
         txtNombre.setText("");
         txtTel.setText("");
 
-        // Películas
+        // Limpiar campos de películas
         txtTitulo.setText("");
         txtGenero.setText("");
 
-        // Salas
+        // Limpiar campos de salas
         txtTipoSala.setText("");
         txtCapacidad.setText("");
 
-        // Funciones
+        // Limpiar campos de funciones
         txtPeliculaIdF.setText("");
         txtSalaIdF.setText("");
         txtFechaHoraF.setText("");
 
-        // Asientos
+        // Limpiar campos de asientos
         txtSalaIdA.setText("");
         txtNumeroSillaA.setText("");
 
-        // Entradas
+        // Limpiar campos de entradas
         txtClienteEntrada.setText("");
         txtFuncionEntrada.setText("");
         txtAsientoEntrada.setText("");
         txtValorEntrada.setText("");
 
-        // Facturas
+        // Limpiar campos de facturas
         txtClienteFactura.setText("");
         txtValorFactura.setText("");
         txtDatosEmpresa.setText("");
     }
 
-}
+} // Fin de la clase CineFrame
