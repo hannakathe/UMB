@@ -76,7 +76,7 @@ public class CineFrame extends JFrame {
         this.entradaCtrl = new EntradaController(con);
         this.facturaCtrl = new FacturaController(con);
 
-        setTitle("Sistema de Cine - Interfaz Única");
+        setTitle("Cine App");
         setSize(1000, 650);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         initUI();
