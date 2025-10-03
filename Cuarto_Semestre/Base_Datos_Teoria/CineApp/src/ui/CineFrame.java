@@ -320,10 +320,10 @@ JScrollPane scrollConsulta = new JScrollPane(tblConsultaRelacional);
 
 // Panel de botones
 JPanel pConsultaBtns = new JPanel(new FlowLayout());
-JButton btnListConsulta = new JButton("Ejecutar Consulta");
-btnListConsulta.addActionListener(_ -> listarConsultaRelacional());
+//JButton btnListConsulta = new JButton("Ejecutar Consulta");
+//btnListConsulta.addActionListener(_ -> listarConsultaRelacional());
 
-pConsultaBtns.add(btnListConsulta);
+//pConsultaBtns.add(btnListConsulta);
 
 // Agregar componentes al panel principal
 pConsulta.add(pConsultaForm, BorderLayout.NORTH);
