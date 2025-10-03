@@ -30,4 +30,8 @@ public class ClienteController {
     public List<Cliente> listar() throws Exception {
         return dao.listar();
     }
+
+        public Cliente buscarPorDocumento(int documento) throws SQLException {
+        return dao.buscarPorDocumento(documento);
+    }
 }

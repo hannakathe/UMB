@@ -51,4 +51,21 @@ public class ClienteDAO {
         }
     }
 
+    // Agrega este método para buscar cliente por documento
+    public Cliente buscarPorDocumento(int documento) throws SQLException {
+        String sql = "SELECT * FROM clientes WHERE documento = ?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, documento);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Cliente(
+                        rs.getInt("documento"),
+                        rs.getString("nombre"),
+                        rs.getString("telefono")
+                    );
+                }
+                return null; // Retorna null si no encuentra el cliente
+            }
+        }
+    }
 }
