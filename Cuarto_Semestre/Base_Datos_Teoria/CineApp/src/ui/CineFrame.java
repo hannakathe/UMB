@@ -488,10 +488,56 @@ public class CineFrame extends JFrame {
             int asientosPorFila = 10;
             int totalFilas = (int) Math.ceil((double) asientos.size() / asientosPorFila);
 
-            // Panel principal con diseño organizado
+            // Panel principal con diseño organizado - ORDEN CORREGIDO
             JPanel panelPrincipal = new JPanel(new BorderLayout());
 
-            // SOLO UNA PANTALLA - Centrada
+            // 1. LEYENDA EN LA PARTE SUPERIOR (NORTH)
+            //JPanel panelLeyenda = new JPanel(new FlowLayout(FlowLayout.RIGHT)); // CAMBIO: Alineación a la derecha
+            //panelLeyenda.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0)); // AGREGAR: Espacio abajo
+                                                                                  // panelLeyenda.add(new
+                                                                                  // JLabel("Leyenda: "));
+
+            JButton btnLeyendaVerde = new JButton("Disponible");
+            if (iconoSillaDisponible != null) {
+                btnLeyendaVerde.setIcon(iconoSillaDisponible);
+                btnLeyendaVerde.setText("");
+            } else {
+                btnLeyendaVerde.setText("🟢");
+            }
+            btnLeyendaVerde.setBackground(null);
+            btnLeyendaVerde.setOpaque(false);
+            btnLeyendaVerde.setBorderPainted(false);
+            btnLeyendaVerde.setContentAreaFilled(false);
+
+            JButton btnLeyendaNegro = new JButton("Seleccionado");
+            if (iconoSillaSeleccionada != null) {
+                btnLeyendaNegro.setIcon(iconoSillaSeleccionada);
+                btnLeyendaNegro.setText("");
+            } else {
+                btnLeyendaNegro.setText("⚫");
+            }
+            btnLeyendaNegro.setBackground(null);
+            btnLeyendaNegro.setOpaque(false);
+            btnLeyendaNegro.setBorderPainted(false);
+            btnLeyendaNegro.setContentAreaFilled(false);
+
+            JButton btnLeyendaRojo = new JButton("Ocupado");
+            if (iconoSillaOcupada != null) {
+                btnLeyendaRojo.setIcon(iconoSillaOcupada);
+                btnLeyendaRojo.setText("");
+            } else {
+                btnLeyendaRojo.setText("🔴");
+            }
+            btnLeyendaRojo.setBackground(null);
+            btnLeyendaRojo.setOpaque(false);
+            btnLeyendaRojo.setBorderPainted(false);
+            btnLeyendaRojo.setContentAreaFilled(false);
+
+            //panelLeyenda.add(btnLeyendaVerde);
+            //panelLeyenda.add(btnLeyendaNegro);
+            //panelLeyenda.add(btnLeyendaRojo);
+
+            // 2. PANTALLA EN LA PARTE SUPERIOR (CENTRO ARRIBA)
             JPanel panelPantalla = new JPanel();
             panelPantalla.setBackground(Color.DARK_GRAY);
             panelPantalla.setPreferredSize(new Dimension(600, 25));
@@ -501,15 +547,23 @@ public class CineFrame extends JFrame {
             lblPantalla.setFont(new Font("Arial", Font.BOLD, 14));
             panelPantalla.add(lblPantalla);
 
-            // Panel para los asientos con GridLayout organizado
+            JPanel panelPantallaCentrada = new JPanel(new FlowLayout(FlowLayout.CENTER));
+            panelPantallaCentrada.setBorder(BorderFactory.createEmptyBorder(40, 0, 0, 0)); // AGREGAR: Espacio de 20px
+                                                                                            // abajo
+            panelPantallaCentrada.add(panelPantalla);
+
+            // 3. ASIENTOS EN EL CENTRO (ORDEN INVERTIDO - FILA A ABAJO, FILA J ARRIBA)
             JPanel panelAsientosGrid = new JPanel(new GridLayout(totalFilas, asientosPorFila + 3, 5, 5));
 
-            // Crear letras para las filas
-            char letraFila = 'A';
+            // Crear letras para las filas - EMPEZAR DESDE LA ÚLTIMA FILA (J) HACIA LA
+            // PRIMERA (A)
+            char letraFila = (char) ('A' + totalFilas - 1); // Empezar desde la última letra
 
-            for (int fila = 0; fila < totalFilas; fila++) {
+            // INVERTIR EL ORDEN DE LAS FILAS - fila 0 es la más lejana (J), fila N es la
+            // más cercana (A)
+            for (int fila = totalFilas - 1; fila >= 0; fila--) {
                 // Agregar letra de fila a la izquierda
-                JLabel lblFila = new JLabel(String.valueOf(letraFila++), JLabel.CENTER);
+                JLabel lblFila = new JLabel(String.valueOf(letraFila--), JLabel.CENTER);
                 lblFila.setFont(new Font("Arial", Font.BOLD, 12));
                 lblFila.setForeground(Color.BLUE);
                 panelAsientosGrid.add(lblFila);
@@ -608,58 +662,13 @@ public class CineFrame extends JFrame {
                 panelAsientosGrid.add(separador);
             }
 
-            // Centrar la pantalla
-            JPanel panelPantallaCentrada = new JPanel(new FlowLayout(FlowLayout.CENTER));
-            panelPantallaCentrada.add(panelPantalla);
+            // 4. ORGANIZACIÓN FINAL DEL LAYOUT
+            JPanel panelCentral = new JPanel(new BorderLayout());
+            panelCentral.add(panelPantallaCentrada, BorderLayout.SOUTH); // Pantalla arriba
+            panelCentral.add(panelAsientosGrid, BorderLayout.CENTER); // Asientos en el centro
 
-            panelPrincipal.add(panelPantallaCentrada, BorderLayout.NORTH);
-            panelPrincipal.add(panelAsientosGrid, BorderLayout.CENTER);
-
-            // Agregar leyenda
-            JPanel panelLeyenda = new JPanel(new FlowLayout());
-            panelLeyenda.add(new JLabel("Leyenda: "));
-
-            JButton btnLeyendaVerde = new JButton("Disponible");
-            if (iconoSillaDisponible != null) {
-                btnLeyendaVerde.setIcon(iconoSillaDisponible);
-                btnLeyendaVerde.setText("");
-            } else {
-                btnLeyendaVerde.setText("🟢");
-            }
-            btnLeyendaVerde.setBackground(null);
-            btnLeyendaVerde.setOpaque(false);
-            btnLeyendaVerde.setBorderPainted(false);
-            btnLeyendaVerde.setContentAreaFilled(false);
-
-            JButton btnLeyendaNegro = new JButton("Seleccionado");
-            if (iconoSillaSeleccionada != null) {
-                btnLeyendaNegro.setIcon(iconoSillaSeleccionada);
-                btnLeyendaNegro.setText("");
-            } else {
-                btnLeyendaNegro.setText("⚫");
-            }
-            btnLeyendaNegro.setBackground(null);
-            btnLeyendaNegro.setOpaque(false);
-            btnLeyendaNegro.setBorderPainted(false);
-            btnLeyendaNegro.setContentAreaFilled(false);
-
-            JButton btnLeyendaRojo = new JButton("Ocupado");
-            if (iconoSillaOcupada != null) {
-                btnLeyendaRojo.setIcon(iconoSillaOcupada);
-                btnLeyendaRojo.setText("");
-            } else {
-                btnLeyendaRojo.setText("🔴");
-            }
-            btnLeyendaRojo.setBackground(null);
-            btnLeyendaRojo.setOpaque(false);
-            btnLeyendaRojo.setBorderPainted(false);
-            btnLeyendaRojo.setContentAreaFilled(false);
-
-            panelLeyenda.add(btnLeyendaVerde);
-            panelLeyenda.add(btnLeyendaNegro);
-            panelLeyenda.add(btnLeyendaRojo);
-
-            panelPrincipal.add(panelLeyenda, BorderLayout.SOUTH);
+            //panelPrincipal.add(panelLeyenda, BorderLayout.NORTH); // Leyenda en la parte superior
+            panelPrincipal.add(panelCentral, BorderLayout.CENTER); // Pantalla + Asientos en el centro
 
             // Limpiar y agregar el nuevo contenido
             panelAsientos.removeAll();
@@ -735,90 +744,90 @@ public class CineFrame extends JFrame {
     // ---------- MÉTODOS DE NEGOCIO ----------
 
     private void venderEntradaYFactura() {
-    try {
-        // Validaciones
-        if (!validarDatosCliente() || !validarSeleccionFuncion() || !validarAsientosSeleccionados()) {
-            return;
-        }
-
-        // Obtener datos
-        int documento = Integer.parseInt(txtDocumentoCliente.getText().trim());
-        String nombre = txtNombreCliente.getText().trim();
-        String telefono = txtTelefonoCliente.getText().trim();
-
-        // Crear o actualizar cliente
-        Cliente clienteExistente = buscarClientePorDocumento(documento);
-        if (clienteExistente == null) {
-            clienteCtrl.insertar(documento, nombre, telefono);
-        } else {
-            clienteCtrl.actualizar(documento, nombre, telefono);
-        }
-
-        // Obtener información de la sala para el mensaje
-        Sala sala = buscarSalaPorId(funcionSeleccionada.getSalaId());
-        String tipoSala = sala != null ? sala.getTipoSala() : "Desconocida";
-
-        // Vender entradas para cada asiento seleccionado
-        List<Integer> entradasIds = new ArrayList<>();
-        double valorTotal = 0;
-
-        for (JCheckBox checkAsiento : asientosSeleccionados) {
-            if (checkAsiento.isSelected()) { // ✅ Verificar que esté seleccionado
-                int asientoId = Integer.parseInt(checkAsiento.getActionCommand());
-                int entradaId = entradaCtrl.crearEntrada(documento, funcionSeleccionada.getId(), asientoId,
-                        precioActual);
-                entradasIds.add(entradaId);
-                valorTotal += precioActual;
+        try {
+            // Validaciones
+            if (!validarDatosCliente() || !validarSeleccionFuncion() || !validarAsientosSeleccionados()) {
+                return;
             }
-        }
 
-        // Generar factura automáticamente con fecha actual
-        String datosEmpresa = "CINEMAX COLOMBIA - NIT: 800.123.456-1 - Tel: 601-1234567";
+            // Obtener datos
+            int documento = Integer.parseInt(txtDocumentoCliente.getText().trim());
+            String nombre = txtNombreCliente.getText().trim();
+            String telefono = txtTelefonoCliente.getText().trim();
 
-        // Usar fecha actual explícitamente para la factura
-        LocalDateTime fechaActual = LocalDateTime.now();
-        int facturaId = facturaCtrl.crearFactura(documento, valorTotal, datosEmpresa);
+            // Crear o actualizar cliente
+            Cliente clienteExistente = buscarClientePorDocumento(documento);
+            if (clienteExistente == null) {
+                clienteCtrl.insertar(documento, nombre, telefono);
+            } else {
+                clienteCtrl.actualizar(documento, nombre, telefono);
+            }
 
-        StringBuilder mensaje = new StringBuilder();
-        mensaje.append("¡Venta completada exitosamente!\n\n")
-                .append("Número de factura: ").append(facturaId).append("\n")
-                .append("Tipo de sala: ").append(tipoSala).append("\n")
-                .append("Precio por entrada: $").append(String.format("%.2f", precioActual)).append("\n")
-                .append("Entradas vendidas: ").append(entradasIds.size()).append("\n")
-                .append("Asientos: ");
+            // Obtener información de la sala para el mensaje
+            Sala sala = buscarSalaPorId(funcionSeleccionada.getSalaId());
+            String tipoSala = sala != null ? sala.getTipoSala() : "Desconocida";
 
-        for (int i = 0; i < asientosSeleccionados.size(); i++) {
-            JCheckBox checkAsiento = asientosSeleccionados.get(i);
-            if (checkAsiento.isSelected()) { // ✅ Solo los seleccionados
-                Asiento asiento = buscarAsientoPorId(Integer.parseInt(checkAsiento.getActionCommand()));
-                if (asiento != null) {
-                    mensaje.append(asiento.getNumeroSilla());
-                    if (i < asientosSeleccionados.size() - 1) {
-                        mensaje.append(", ");
+            // Vender entradas para cada asiento seleccionado
+            List<Integer> entradasIds = new ArrayList<>();
+            double valorTotal = 0;
+
+            for (JCheckBox checkAsiento : asientosSeleccionados) {
+                if (checkAsiento.isSelected()) { // ✅ Verificar que esté seleccionado
+                    int asientoId = Integer.parseInt(checkAsiento.getActionCommand());
+                    int entradaId = entradaCtrl.crearEntrada(documento, funcionSeleccionada.getId(), asientoId,
+                            precioActual);
+                    entradasIds.add(entradaId);
+                    valorTotal += precioActual;
+                }
+            }
+
+            // Generar factura automáticamente con fecha actual
+            String datosEmpresa = "CINEMAX COLOMBIA - NIT: 800.123.456-1 - Tel: 601-1234567";
+
+            // Usar fecha actual explícitamente para la factura
+            LocalDateTime fechaActual = LocalDateTime.now();
+            int facturaId = facturaCtrl.crearFactura(documento, valorTotal, datosEmpresa);
+
+            StringBuilder mensaje = new StringBuilder();
+            mensaje.append("¡Venta completada exitosamente!\n\n")
+                    .append("Número de factura: ").append(facturaId).append("\n")
+                    .append("Tipo de sala: ").append(tipoSala).append("\n")
+                    .append("Precio por entrada: $").append(String.format("%.2f", precioActual)).append("\n")
+                    .append("Entradas vendidas: ").append(entradasIds.size()).append("\n")
+                    .append("Asientos: ");
+
+            for (int i = 0; i < asientosSeleccionados.size(); i++) {
+                JCheckBox checkAsiento = asientosSeleccionados.get(i);
+                if (checkAsiento.isSelected()) { // ✅ Solo los seleccionados
+                    Asiento asiento = buscarAsientoPorId(Integer.parseInt(checkAsiento.getActionCommand()));
+                    if (asiento != null) {
+                        mensaje.append(asiento.getNumeroSilla());
+                        if (i < asientosSeleccionados.size() - 1) {
+                            mensaje.append(", ");
+                        }
                     }
                 }
             }
+
+            mensaje.append("\nTotal: $").append(String.format("%.2f", valorTotal))
+                    .append("\n\nFecha de la función: ")
+                    .append(funcionSeleccionada.getFechaHora().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")))
+                    .append("\nFecha de venta: ")
+                    .append(fechaActual.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+
+            JOptionPane.showMessageDialog(this, mensaje.toString());
+
+            // Actualizar interfaz
+            cargarAsientosDisponibles(funcionSeleccionada.getSalaId(), funcionSeleccionada.getId());
+            cargarEntradasVendidas();
+            cargarFacturas();
+            limpiarCamposCliente();
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error en la venta: " + ex.getMessage());
+            ex.printStackTrace();
         }
-
-        mensaje.append("\nTotal: $").append(String.format("%.2f", valorTotal))
-                .append("\n\nFecha de la función: ")
-                .append(funcionSeleccionada.getFechaHora().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")))
-                .append("\nFecha de venta: ")
-                .append(fechaActual.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
-
-        JOptionPane.showMessageDialog(this, mensaje.toString());
-
-        // Actualizar interfaz
-        cargarAsientosDisponibles(funcionSeleccionada.getSalaId(), funcionSeleccionada.getId());
-        cargarEntradasVendidas();
-        cargarFacturas();
-        limpiarCamposCliente();
-
-    } catch (Exception ex) {
-        JOptionPane.showMessageDialog(this, "Error en la venta: " + ex.getMessage());
-        ex.printStackTrace();
     }
-}
 
     private void imprimirTicket() {
         int fila = tblEntradasVendidas.getSelectedRow();
@@ -1122,67 +1131,74 @@ public class CineFrame extends JFrame {
     }
 
     private double calcularPrecio(int salaId) {
-    try {
-        // Obtener el precio directamente desde la base de datos
-        return obtenerPrecioDesdeBaseDeDatos(salaId);
-    } catch (Exception e) {
-        e.printStackTrace();
-        // Fallback a precios por tipo de sala
-        return obtenerPrecioPorTipoSala(salaId);
-    }
-}
-
-private double obtenerPrecioDesdeBaseDeDatos(int salaId) {
-    try {
-        // Usar el SalaDAO para obtener el precio base
-        Sala sala = buscarSalaPorId(salaId);
-        if (sala != null) {
-            // Si el SalaDAO tiene método para obtener precio, úsalo
-            // Por ahora, usaremos un mapeo directo basado en el ID
-            switch(salaId) {
-                case 1: return 12000.0;  // Sala 2D Estándar
-                case 2: return 25000.0;  // Sala 4D
-                case 3: return 18000.0;  // Sala 3D
-                case 4: return 22000.0;  // Sala VIP
-                case 5: return 28000.0;  // Sala Premium
-                case 6: return 30000.0;  // Sala IMAX
-                default: return 15000.0; // Precio por defecto
-            }
+        try {
+            // Obtener el precio directamente desde la base de datos
+            return obtenerPrecioDesdeBaseDeDatos(salaId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Fallback a precios por tipo de sala
+            return obtenerPrecioPorTipoSala(salaId);
         }
-    } catch (Exception e) {
-        e.printStackTrace();
     }
-    return 15000.0;
-}
 
-private double obtenerPrecioPorTipoSala(int salaId) {
-    try {
-        Sala sala = buscarSalaPorId(salaId);
-        if (sala != null) {
-            String tipoSala = sala.getTipoSala().toLowerCase();
-            
-            // Precios basados en el nombre/tipo de sala
-            if (tipoSala.contains("imax")) {
-                return 30000.0;
-            } else if (tipoSala.contains("premium")) {
-                return 28000.0;
-            } else if (tipoSala.contains("vip")) {
-                return 22000.0;
-            } else if (tipoSala.contains("4d")) {
-                return 25000.0;
-            } else if (tipoSala.contains("3d")) {
-                return 18000.0;
-            } else if (tipoSala.contains("estándar") || tipoSala.contains("standard")) {
-                return 12000.0;
-            } else {
-                return 15000.0; // Precio por defecto
+    private double obtenerPrecioDesdeBaseDeDatos(int salaId) {
+        try {
+            // Usar el SalaDAO para obtener el precio base
+            Sala sala = buscarSalaPorId(salaId);
+            if (sala != null) {
+                // Si el SalaDAO tiene método para obtener precio, úsalo
+                // Por ahora, usaremos un mapeo directo basado en el ID
+                switch (salaId) {
+                    case 1:
+                        return 12000.0; // Sala 2D Estándar
+                    case 2:
+                        return 25000.0; // Sala 4D
+                    case 3:
+                        return 18000.0; // Sala 3D
+                    case 4:
+                        return 22000.0; // Sala VIP
+                    case 5:
+                        return 28000.0; // Sala Premium
+                    case 6:
+                        return 30000.0; // Sala IMAX
+                    default:
+                        return 15000.0; // Precio por defecto
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        e.printStackTrace();
+        return 15000.0;
     }
-    return 15000.0;
-}
+
+    private double obtenerPrecioPorTipoSala(int salaId) {
+        try {
+            Sala sala = buscarSalaPorId(salaId);
+            if (sala != null) {
+                String tipoSala = sala.getTipoSala().toLowerCase();
+
+                // Precios basados en el nombre/tipo de sala
+                if (tipoSala.contains("imax")) {
+                    return 30000.0;
+                } else if (tipoSala.contains("premium")) {
+                    return 28000.0;
+                } else if (tipoSala.contains("vip")) {
+                    return 22000.0;
+                } else if (tipoSala.contains("4d")) {
+                    return 25000.0;
+                } else if (tipoSala.contains("3d")) {
+                    return 18000.0;
+                } else if (tipoSala.contains("estándar") || tipoSala.contains("standard")) {
+                    return 12000.0;
+                } else {
+                    return 15000.0; // Precio por defecto
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 15000.0;
+    }
 
     private void actualizarPrecioTotal() {
         double total = cantidadAsientosSeleccionados * precioActual;
@@ -1190,13 +1206,13 @@ private double obtenerPrecioPorTipoSala(int salaId) {
     }
 
     private void limpiarAsientos() {
-    panelAsientos.removeAll();
-    // Limpiar completamente la lista de asientos seleccionados
-    asientosSeleccionados.clear();
-    cantidadAsientosSeleccionados = 0;
-    panelAsientos.revalidate();
-    panelAsientos.repaint();
-}
+        panelAsientos.removeAll();
+        // Limpiar completamente la lista de asientos seleccionados
+        asientosSeleccionados.clear();
+        cantidadAsientosSeleccionados = 0;
+        panelAsientos.revalidate();
+        panelAsientos.repaint();
+    }
 
     private void limpiarCamposCliente() {
         txtDocumentoCliente.setText("");
