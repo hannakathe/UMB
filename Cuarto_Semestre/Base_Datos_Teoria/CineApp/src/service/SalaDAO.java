@@ -56,4 +56,18 @@ public class SalaDAO { // Clase DAO que maneja las operaciones CRUD sobre la tab
         }
     }
 
+    public double obtenerPrecioBase(int salaId) {
+        String sql = "SELECT precio_base FROM salas WHERE id = ?";
+        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setInt(1, salaId);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble("precio_base");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 15000.0; // Precio por defecto
+    }
+
 }
