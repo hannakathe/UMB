@@ -55,6 +55,45 @@ public class AsientoDAO {
         return list;
     }
 
+    // MÉTODO NUEVO: Listar asientos por sala
+    public List<Asiento> listarPorSala(int salaId) throws SQLException {
+        List<Asiento> list = new ArrayList<>();
+        String sql = "SELECT * FROM asientos WHERE sala_id = ?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, salaId);
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                list.add(new Asiento(
+                    rs.getInt("id"),
+                    rs.getInt("sala_id"),
+                    rs.getString("numero_silla"),
+                    rs.getBoolean("disponible")
+                ));
+            }
+        }
+        return list;
+    }
+
+    // MÉTODO NUEVO: Buscar asiento por ID
+    public Asiento buscarPorId(int id) throws SQLException {
+        String sql = "SELECT * FROM asientos WHERE id = ?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                return new Asiento(
+                    rs.getInt("id"),
+                    rs.getInt("sala_id"),
+                    rs.getString("numero_silla"),
+                    rs.getBoolean("disponible")
+                );
+            }
+        }
+        return null;
+    }
+
     // Método para actualizar un asiento existente en la base de datos
     public void actualizar(Asiento a) throws SQLException {
         // Consulta SQL de actualización
@@ -81,5 +120,4 @@ public class AsientoDAO {
             ps.executeUpdate();
         }
     }
-
 }

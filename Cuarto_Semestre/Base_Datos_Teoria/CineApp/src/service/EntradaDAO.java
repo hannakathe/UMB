@@ -95,5 +95,45 @@ public class EntradaDAO {
             ps.executeUpdate(); // Ejecuta la eliminación
         }
     }
+    // En la clase EntradaDAO, agregar estos métodos:
+
+public List<Entrada> listarPorFuncion(int funcionId) throws SQLException {
+    List<Entrada> list = new ArrayList<>();
+    String sql = "SELECT * FROM entradas WHERE funcion_id = ?";
+    try (PreparedStatement ps = con.prepareStatement(sql)) {
+        ps.setInt(1, funcionId);
+        ResultSet rs = ps.executeQuery();
+        
+        while (rs.next()) {
+            list.add(new Entrada(
+                rs.getInt("id"),
+                rs.getInt("cliente_documento"),
+                rs.getInt("funcion_id"),
+                rs.getInt("asiento_id"),
+                rs.getDouble("valor")
+            ));
+        }
+    }
+    return list;
+}
+
+public Entrada buscarPorId(int id) throws SQLException {
+    String sql = "SELECT * FROM entradas WHERE id = ?";
+    try (PreparedStatement ps = con.prepareStatement(sql)) {
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+        
+        if (rs.next()) {
+            return new Entrada(
+                rs.getInt("id"),
+                rs.getInt("cliente_documento"),
+                rs.getInt("funcion_id"),
+                rs.getInt("asiento_id"),
+                rs.getDouble("valor")
+            );
+        }
+    }
+    return null;
+}
 
 }

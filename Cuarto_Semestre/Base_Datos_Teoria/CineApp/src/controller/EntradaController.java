@@ -87,6 +87,16 @@ public class EntradaController {
         return dao.listar();
     }
 
+    // MÉTODO NUEVO: Listar entradas por función
+    public List<Entrada> listarPorFuncion(int funcionId) throws SQLException {
+        return dao.listarPorFuncion(funcionId);
+    }
+
+    // MÉTODO NUEVO: Buscar entrada por ID
+    public Entrada buscarPorId(int id) throws SQLException {
+        return dao.buscarPorId(id);
+    }
+
     /**
      * Actualiza una entrada existente en la base de datos.
      * @param id identificador de la entrada
