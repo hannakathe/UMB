@@ -279,6 +279,8 @@ public class CineFrame extends JFrame {
                 "ID", "Documento", "Cliente", "Película", "Sala", "Asiento", "Fecha", "Precio"
         }, 0);
         tblEntradasVendidas = new JTable(modelEntradasVendidas);
+        tblEntradasVendidas.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION); // AGREGAR ESTA LÍNEA
+
 
         // Panel de botones
         JPanel pBotonesEntradas = new JPanel(new FlowLayout());
@@ -346,17 +348,17 @@ public class CineFrame extends JFrame {
         JButton btnImprimirFactura = new JButton("Imprimir Factura");
         JButton btnActualizarFacturas = new JButton("Actualizar Lista");
         JButton btnEditarFactura = new JButton("Guardar Cambios");
-        JButton btnEliminarFactura = new JButton("Eliminar Factura");
+        //JButton btnEliminarFactura = new JButton("Eliminar Factura");
 
         btnImprimirFactura.addActionListener(_ -> imprimirFactura());
         btnActualizarFacturas.addActionListener(_ -> cargarFacturas());
         btnEditarFactura.addActionListener(_ -> editarFactura());
-        btnEliminarFactura.addActionListener(_ -> eliminarFactura());
+        //btnEliminarFactura.addActionListener(_ -> eliminarFactura());
 
         pBotonesFacturas.add(btnImprimirFactura);
         pBotonesFacturas.add(btnActualizarFacturas);
         pBotonesFacturas.add(btnEditarFactura);
-        pBotonesFacturas.add(btnEliminarFactura);
+        //pBotonesFacturas.add(btnEliminarFactura);
 
         pFacturas.add(pFormularioFacturas, BorderLayout.NORTH);
         pFacturas.add(new JScrollPane(tblFacturas), BorderLayout.CENTER);
@@ -402,21 +404,28 @@ public class CineFrame extends JFrame {
         });
 
         // Listener para selección en tabla de entradas
-        tblEntradasVendidas.getSelectionModel().addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting() && tblEntradasVendidas.getSelectedRow() != -1) {
-                int fila = tblEntradasVendidas.getSelectedRow();
-                txtEditIdEntrada.setText(modelEntradasVendidas.getValueAt(fila, 0).toString());
-                txtEditDocumentoEntrada.setText(modelEntradasVendidas.getValueAt(fila, 1).toString());
-                txtEditClienteEntrada.setText(modelEntradasVendidas.getValueAt(fila, 2).toString());
-                txtEditPeliculaEntrada.setText(modelEntradasVendidas.getValueAt(fila, 3).toString());
-                txtEditSalaEntrada.setText(modelEntradasVendidas.getValueAt(fila, 4).toString());
-                txtEditAsientoEntrada.setText(modelEntradasVendidas.getValueAt(fila, 5).toString());
-                txtEditFechaEntrada.setText(modelEntradasVendidas.getValueAt(fila, 6).toString());
-                // Remover el símbolo $ del precio
-                String precio = modelEntradasVendidas.getValueAt(fila, 7).toString().replace("$", "").replace(",", "");
-                txtEditPrecioEntrada.setText(precio);
-            }
-        });
+tblEntradasVendidas.getSelectionModel().addListSelectionListener(e -> {
+    if (!e.getValueIsAdjusting() && tblEntradasVendidas.getSelectedRow() != -1) {
+        int[] filas = tblEntradasVendidas.getSelectedRows();
+        if (filas.length == 1) {
+            // Solo una fila seleccionada - llenar formulario
+            int fila = filas[0];
+            txtEditIdEntrada.setText(modelEntradasVendidas.getValueAt(fila, 0).toString());
+            txtEditDocumentoEntrada.setText(modelEntradasVendidas.getValueAt(fila, 1).toString());
+            txtEditClienteEntrada.setText(modelEntradasVendidas.getValueAt(fila, 2).toString());
+            txtEditPeliculaEntrada.setText(modelEntradasVendidas.getValueAt(fila, 3).toString());
+            txtEditSalaEntrada.setText(modelEntradasVendidas.getValueAt(fila, 4).toString());
+            txtEditAsientoEntrada.setText(modelEntradasVendidas.getValueAt(fila, 5).toString());
+            txtEditFechaEntrada.setText(modelEntradasVendidas.getValueAt(fila, 6).toString());
+            String precio = modelEntradasVendidas.getValueAt(fila, 7).toString().replace("$", "").replace(",", "");
+            txtEditPrecioEntrada.setText(precio);
+        } else {
+            // Múltiples filas seleccionadas - limpiar formulario
+            limpiarCamposEdicionEntrada();
+            txtEditPrecioEntrada.setText(""); // Dejar precio vacío para edición múltiple
+        }
+    }
+});
 
         // Listener para selección en tabla de facturas
         tblFacturas.getSelectionModel().addListSelectionListener(e -> {
@@ -746,9 +755,15 @@ public class CineFrame extends JFrame {
     private void venderEntradaYFactura() {
         try {
             // Validaciones
-            if (!validarDatosCliente() || !validarSeleccionFuncion() || !validarAsientosSeleccionados()) {
-                return;
-            }
+            if (!validarDatosCliente()) {
+            return;
+        }
+        if (!validarSeleccionFuncion()) {
+            return;
+        }
+        if (!validarAsientosSeleccionados()) { // Esta validación debe ir después de las anteriores
+            return;
+        }
 
             // Obtener datos
             int documento = Integer.parseInt(txtDocumentoCliente.getText().trim());
@@ -940,97 +955,122 @@ public class CineFrame extends JFrame {
     }
 
     private void editarEntrada() {
-        if (txtEditIdEntrada.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Seleccione una entrada para editar");
-            return;
-        }
+    int[] filasSeleccionadas = tblEntradasVendidas.getSelectedRows();
+    if (filasSeleccionadas.length == 0) {
+        JOptionPane.showMessageDialog(this, "Seleccione al menos una entrada para editar");
+        return;
+    }
 
-        if (!autenticarAdministrador()) {
-            JOptionPane.showMessageDialog(this, "Contraseña incorrecta o cancelada");
-            return;
-        }
+    if (!autenticarAdministrador()) {
+        JOptionPane.showMessageDialog(this, "Contraseña incorrecta o cancelada");
+        return;
+    }
 
-        try {
-            int entradaId = Integer.parseInt(txtEditIdEntrada.getText());
-            // Usar parseDouble directamente y manejar el formato correcto
-            double nuevoValor = Double.parseDouble(txtEditPrecioEntrada.getText().replace(",", "."));
-
-            // Obtener la entrada actual para mantener los otros datos
+    try {
+        // Obtener el nuevo precio
+        double nuevoValor = Double.parseDouble(txtEditPrecioEntrada.getText().replace(",", "."));
+        
+        // Actualizar todas las entradas seleccionadas
+        for (int fila : filasSeleccionadas) {
+            int entradaId = (int) modelEntradasVendidas.getValueAt(fila, 0);
             Entrada entradaActual = buscarEntradaPorId(entradaId);
+            
             if (entradaActual != null) {
+                // Actualizar solo el precio, mantener los demás datos
                 entradaCtrl.actualizar(entradaId, entradaActual.getClienteDocumento(),
                         entradaActual.getFuncionId(), entradaActual.getAsientoId(), nuevoValor);
-                JOptionPane.showMessageDialog(this, "Entrada actualizada correctamente");
-                cargarEntradasVendidas();
-                limpiarCamposEdicionEntrada();
+                
+                // Actualizar también la factura asociada
+                actualizarFacturaPorEntrada(entradaActual.getClienteDocumento());
             }
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Error en formato de precio: Use punto decimal (ej: 15000.00)");
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error editando entrada: " + ex.getMessage());
         }
+        
+        JOptionPane.showMessageDialog(this, "Se actualizaron " + filasSeleccionadas.length + " entradas correctamente");
+        cargarEntradasVendidas();
+        cargarFacturas();
+        limpiarCamposEdicionEntrada();
+        
+    } catch (NumberFormatException ex) {
+        JOptionPane.showMessageDialog(this, "Error en formato de precio: Use punto decimal (ej: 15000.00)");
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(this, "Error editando entrada: " + ex.getMessage());
+        ex.printStackTrace();
     }
+}
 
     private void eliminarEntrada() {
-        if (txtEditIdEntrada.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Seleccione una entrada para eliminar");
-            return;
-        }
-
-        if (!autenticarAdministrador()) {
-            JOptionPane.showMessageDialog(this, "Contraseña incorrecta");
-            return;
-        }
-
-        try {
-            int entradaId = Integer.parseInt(txtEditIdEntrada.getText());
-            int confirm = JOptionPane.showConfirmDialog(this,
-                    "¿Está seguro de eliminar esta entrada?", "Confirmar eliminación",
-                    JOptionPane.YES_NO_OPTION);
-
-            if (confirm == JOptionPane.YES_OPTION) {
-                entradaCtrl.eliminar(entradaId);
-                JOptionPane.showMessageDialog(this, "Entrada eliminada correctamente");
-                cargarEntradasVendidas();
-                limpiarCamposEdicionEntrada();
-            }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error eliminando entrada: " + ex.getMessage());
-        }
+    int[] filasSeleccionadas = tblEntradasVendidas.getSelectedRows();
+    if (filasSeleccionadas.length == 0) {
+        JOptionPane.showMessageDialog(this, "Seleccione al menos una entrada para eliminar");
+        return;
     }
+
+    if (!autenticarAdministrador()) {
+        JOptionPane.showMessageDialog(this, "Contraseña incorrecta");
+        return;
+    }
+
+    try {
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "¿Está seguro de eliminar " + filasSeleccionadas.length + " entradas?", 
+                "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            // Eliminar en orden inverso para evitar problemas con índices
+            List<Integer> idsAEliminar = new ArrayList<>();
+            for (int fila : filasSeleccionadas) {
+                int entradaId = (int) modelEntradasVendidas.getValueAt(fila, 0);
+                idsAEliminar.add(entradaId);
+            }
+            
+            for (int entradaId : idsAEliminar) {
+                Entrada entrada = buscarEntradaPorId(entradaId);
+                if (entrada != null) {
+                    // Actualizar factura antes de eliminar
+                    actualizarFacturaPorEliminacion(entrada.getClienteDocumento(), entrada.getValor());
+                }
+                entradaCtrl.eliminar(entradaId);
+            }
+            
+            JOptionPane.showMessageDialog(this, "Se eliminaron " + filasSeleccionadas.length + " entradas correctamente");
+            cargarEntradasVendidas();
+            cargarFacturas();
+            limpiarCamposEdicionEntrada();
+        }
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(this, "Error eliminando entrada: " + ex.getMessage());
+    }
+}
 
     private void editarFactura() {
-        if (txtEditIdFactura.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Seleccione una factura para editar");
-            return;
-        }
-
-        if (!autenticarAdministrador()) {
-            JOptionPane.showMessageDialog(this, "Contraseña incorrecta o cancelada");
-            return;
-        }
-
-        try {
-            int facturaId = Integer.parseInt(txtEditIdFactura.getText());
-            // Usar parseDouble directamente y manejar el formato correcto
-            double nuevoValor = Double.parseDouble(txtEditValorFactura.getText().replace(",", "."));
-            String nuevaEmpresa = txtEditEmpresaFactura.getText();
-
-            // Obtener la factura actual para mantener los otros datos
-            Factura facturaActual = buscarFacturaPorId(facturaId);
-            if (facturaActual != null) {
-                facturaCtrl.actualizar(facturaId, facturaActual.getClienteDocumento(),
-                        nuevoValor, nuevaEmpresa);
-                JOptionPane.showMessageDialog(this, "Factura actualizada correctamente");
-                cargarFacturas();
-                limpiarCamposEdicionFactura();
-            }
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Error en formato de valor: Use punto decimal (ej: 15000.00)");
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error editando factura: " + ex.getMessage());
-        }
+    if (txtEditIdFactura.getText().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Seleccione una factura para editar");
+        return;
     }
+
+    if (!autenticarAdministrador()) {
+        JOptionPane.showMessageDialog(this, "Contraseña incorrecta o cancelada");
+        return;
+    }
+
+    try {
+        int facturaId = Integer.parseInt(txtEditIdFactura.getText());
+        String nuevaEmpresa = txtEditEmpresaFactura.getText();
+
+        // Obtener la factura actual
+        Factura facturaActual = buscarFacturaPorId(facturaId);
+        if (facturaActual != null) {
+            // Solo permitir cambiar los datos de empresa, no el valor total
+            facturaCtrl.actualizar(facturaId, facturaActual.getClienteDocumento(),
+                    facturaActual.getValorTotal(), nuevaEmpresa);
+            JOptionPane.showMessageDialog(this, "Factura actualizada correctamente");
+            cargarFacturas();
+            limpiarCamposEdicionFactura();
+        }
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(this, "Error editando factura: " + ex.getMessage());
+    }
+}
 
     private void eliminarFactura() {
         if (txtEditIdFactura.getText().isEmpty()) {
@@ -1109,12 +1149,63 @@ public class CineFrame extends JFrame {
     }
 
     private boolean validarAsientosSeleccionados() {
-        if (asientosSeleccionados.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar al menos un asiento");
-            return false;
+    // Verificar si hay al menos un asiento seleccionado
+    boolean algunAsientoSeleccionado = false;
+    
+    for (JCheckBox checkAsiento : asientosSeleccionados) {
+        if (checkAsiento.isSelected()) {
+            algunAsientoSeleccionado = true;
+            break;
         }
-        return true;
     }
+    
+    if (!algunAsientoSeleccionado) {
+        JOptionPane.showMessageDialog(this, "Debe seleccionar al menos un asiento");
+        return false;
+    }
+    return true;
+}
+
+private void actualizarFacturaPorEntrada(int clienteDocumento) {
+    try {
+        // Recalcular el valor total de todas las entradas del cliente
+        List<Entrada> entradasCliente = buscarEntradasPorCliente(clienteDocumento);
+        double nuevoTotal = entradasCliente.stream()
+                .mapToDouble(Entrada::getValor)
+                .sum();
+        
+        // Buscar la factura del cliente y actualizarla
+        List<Factura> facturas = facturaCtrl.listar();
+        for (Factura factura : facturas) {
+            if (factura.getClienteDocumento() == clienteDocumento) {
+                facturaCtrl.actualizar(factura.getId(), clienteDocumento, nuevoTotal, factura.getDatosEmpresa());
+                break;
+            }
+        }
+    } catch (Exception ex) {
+        System.out.println("Error actualizando factura: " + ex.getMessage());
+    }
+}
+
+private void actualizarFacturaPorEliminacion(int clienteDocumento, double valorEliminado) {
+    try {
+        List<Factura> facturas = facturaCtrl.listar();
+        for (Factura factura : facturas) {
+            if (factura.getClienteDocumento() == clienteDocumento) {
+                double nuevoTotal = factura.getValorTotal() - valorEliminado;
+                if (nuevoTotal <= 0) {
+                    // Si no quedan entradas, eliminar la factura
+                    facturaCtrl.eliminar(factura.getId());
+                } else {
+                    facturaCtrl.actualizar(factura.getId(), clienteDocumento, nuevoTotal, factura.getDatosEmpresa());
+                }
+                break;
+            }
+        }
+    } catch (Exception ex) {
+        System.out.println("Error actualizando factura por eliminación: " + ex.getMessage());
+    }
+}
 
     private boolean tieneAsientosDisponibles(int funcionId, int salaId) {
         try {
@@ -1206,13 +1297,15 @@ public class CineFrame extends JFrame {
     }
 
     private void limpiarAsientos() {
-        panelAsientos.removeAll();
-        // Limpiar completamente la lista de asientos seleccionados
+    panelAsientos.removeAll();
+    // Limpiar completamente la lista de asientos seleccionados
+    if (asientosSeleccionados != null) {
         asientosSeleccionados.clear();
-        cantidadAsientosSeleccionados = 0;
-        panelAsientos.revalidate();
-        panelAsientos.repaint();
     }
+    cantidadAsientosSeleccionados = 0;
+    panelAsientos.revalidate();
+    panelAsientos.repaint();
+}
 
     private void limpiarCamposCliente() {
         txtDocumentoCliente.setText("");
