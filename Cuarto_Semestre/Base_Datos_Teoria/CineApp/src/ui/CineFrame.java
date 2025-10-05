@@ -25,6 +25,7 @@ public class CineFrame extends JFrame {
     private SalaDAO salaDAO;
     private ImageIcon iconoSillaDisponible;
     private ImageIcon iconoSillaOcupada;
+    private ImageIcon iconoSillaSeleccionada;
 
     // Componentes de la interfaz de usuario
     private JTabbedPane tabs;
@@ -86,6 +87,7 @@ public class CineFrame extends JFrame {
             // Cargar iconos desde la carpeta images
             iconoSillaDisponible = new ImageIcon("Cuarto_Semestre/Base_Datos_Teoria/CineApp/src/images/silla_disponible.png");
             iconoSillaOcupada = new ImageIcon("Cuarto_Semestre/Base_Datos_Teoria/CineApp/src/images/silla_ocupada.png");
+            iconoSillaSeleccionada = new ImageIcon("Cuarto_Semestre/Base_Datos_Teoria/CineApp/src/images/silla_seleccion.png");
             
             // Redimensionar los iconos si es necesario
             if (iconoSillaDisponible != null) {
@@ -98,10 +100,16 @@ public class CineFrame extends JFrame {
                 Image newImg = img.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
                 iconoSillaOcupada = new ImageIcon(newImg);
             }
+            if (iconoSillaSeleccionada != null) {
+                Image img = iconoSillaSeleccionada.getImage();
+                Image newImg = img.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+                iconoSillaSeleccionada = new ImageIcon(newImg);
+            }
         } catch (Exception e) {
             System.out.println("No se pudieron cargar los iconos: " + e.getMessage());
             iconoSillaDisponible = null;
             iconoSillaOcupada = null;
+            iconoSillaSeleccionada = null;
         }
     }
 
@@ -552,11 +560,27 @@ public class CineFrame extends JFrame {
                         checkAsiento.addActionListener(e -> {
                             if (checkAsiento.isSelected()) {
                                 cantidadAsientosSeleccionados++;
-                                // Solo cambiar el borde cuando está seleccionado, sin fondo
+                                // Cambiar a icono de silla seleccionada
+                                if (iconoSillaSeleccionada != null) {
+                                    checkAsiento.setIcon(iconoSillaSeleccionada);
+                                    checkAsiento.setText("");
+                                } else {
+                                    checkAsiento.setText("⚫");
+                                    checkAsiento.setFont(new Font("Arial", Font.BOLD, 12));
+                                }
+                                // Solo borde azul cuando está seleccionado
                                 checkAsiento.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
                                 asientosSeleccionados.add(checkAsiento);
                             } else {
                                 cantidadAsientosSeleccionados--;
+                                // Volver a icono de silla disponible
+                                if (iconoSillaDisponible != null) {
+                                    checkAsiento.setIcon(iconoSillaDisponible);
+                                    checkAsiento.setText("");
+                                } else {
+                                    checkAsiento.setText("🟢");
+                                    checkAsiento.setFont(new Font("Arial", Font.BOLD, 12));
+                                }
                                 // Quitar el borde cuando se deselecciona
                                 checkAsiento.setBorder(null);
                                 asientosSeleccionados.remove(checkAsiento);
@@ -599,6 +623,19 @@ public class CineFrame extends JFrame {
             btnLeyendaVerde.setContentAreaFilled(false);
             btnLeyendaVerde.setEnabled(false);
             
+            JButton btnLeyendaNegro = new JButton("Seleccionado");
+            if (iconoSillaSeleccionada != null) {
+                btnLeyendaNegro.setIcon(iconoSillaSeleccionada);
+                btnLeyendaNegro.setText("");
+            } else {
+                btnLeyendaNegro.setText("⚫");
+            }
+            btnLeyendaNegro.setBackground(null);
+            btnLeyendaNegro.setOpaque(false);
+            btnLeyendaNegro.setBorderPainted(false);
+            btnLeyendaNegro.setContentAreaFilled(false);
+            btnLeyendaNegro.setEnabled(false);
+            
             JButton btnLeyendaRojo = new JButton("Ocupado");
             if (iconoSillaOcupada != null) {
                 btnLeyendaRojo.setIcon(iconoSillaOcupada);
@@ -613,6 +650,7 @@ public class CineFrame extends JFrame {
             btnLeyendaRojo.setEnabled(false);
             
             panelLeyenda.add(btnLeyendaVerde);
+            panelLeyenda.add(btnLeyendaNegro);
             panelLeyenda.add(btnLeyendaRojo);
             
             panelPrincipal.add(panelLeyenda, BorderLayout.SOUTH);
@@ -642,6 +680,7 @@ public class CineFrame extends JFrame {
                 Sala sala = buscarSalaPorId(funcion.getSalaId());
                 Asiento asiento = buscarAsientoPorId(entrada.getAsientoId());
                 
+                // Usar la fecha y hora de la función en lugar de la fecha de venta
                 modelEntradasVendidas.addRow(new Object[] {
                     entrada.getId(),
                     entrada.getClienteDocumento(),
@@ -669,6 +708,7 @@ public class CineFrame extends JFrame {
                 // Verificar si la fecha es nula antes de formatear
                 String fechaStr = "N/A";
                 if (factura.getFecha() != null) {
+                    // Usar la fecha y hora de cuando se vendió la entrada (fecha de la factura)
                     fechaStr = factura.getFecha().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
                 }
                 
@@ -722,7 +762,7 @@ public class CineFrame extends JFrame {
             // Generar factura automáticamente con fecha actual
             String datosEmpresa = "CINEMAX COLOMBIA - NIT: 800.123.456-1 - Tel: 601-1234567";
             
-            // Usar fecha actual explícitamente
+            // Usar fecha actual explícitamente para la factura
             LocalDateTime fechaActual = LocalDateTime.now();
             int facturaId = facturaCtrl.crearFactura(documento, valorTotal, datosEmpresa);
             
@@ -744,7 +784,8 @@ public class CineFrame extends JFrame {
             }
             
             mensaje.append("\nTotal: $").append(String.format("%.2f", valorTotal))
-                   .append("\nFecha: ").append(fechaActual.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+                   .append("\nFecha de la función: ").append(funcionSeleccionada.getFechaHora().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")))
+                   .append("\nFecha de venta: ").append(fechaActual.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
             
             JOptionPane.showMessageDialog(this, mensaje.toString());
             
@@ -817,7 +858,7 @@ public class CineFrame extends JFrame {
             StringBuilder facturaStr = new StringBuilder();
             facturaStr.append("=== FACTURA ===\n\n")
                       .append("Factura #: ").append(facturaId).append("\n")
-                      .append("Fecha: ").append(fechaFactura).append("\n")
+                      .append("Fecha de venta: ").append(fechaFactura).append("\n")
                       .append("Cliente: ").append(cliente.getNombre()).append("\n")
                       .append("Documento: ").append(cliente.getDocumento()).append("\n")
                       .append("Teléfono: ").append(cliente.getTelefono()).append("\n\n")
@@ -832,6 +873,7 @@ public class CineFrame extends JFrame {
                 facturaStr.append("- ").append(pelicula.getTitulo())
                           .append(" | Sala: ").append(sala.getTipoSala())
                           .append(" | Asiento: ").append(asiento.getNumeroSilla())
+                          .append(" | Función: ").append(funcion.getFechaHora().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")))
                           .append(" | $").append(String.format("%.2f", entrada.getValor())).append("\n");
             }
             
