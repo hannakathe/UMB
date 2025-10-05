@@ -3,14 +3,14 @@ CREATE DATABASE IF NOT EXISTS cine;
 USE cine;
 
 -- Clientes
-CREATE TABLE IF NOT EXISTS clientes (
+CREATE TABLE IF NOT EXISTS clientes(
     documento INT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     telefono VARCHAR(50)
 );
 
 -- Peliculas
-CREATE TABLE IF NOT EXISTS peliculas (
+CREATE TABLE IF NOT EXISTS peliculas(
     id INT AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(150) NOT NULL,
     genero VARCHAR(50) NOT NULL,
@@ -18,14 +18,14 @@ CREATE TABLE IF NOT EXISTS peliculas (
 );
 
 -- Salas
-CREATE TABLE IF NOT EXISTS salas (
+CREATE TABLE IF NOT EXISTS salas(
     id INT AUTO_INCREMENT PRIMARY KEY,
     tipo_sala VARCHAR(50) NOT NULL,
     capacidad INT NOT NULL
 );
 
 -- Funciones
-CREATE TABLE IF NOT EXISTS funciones (
+CREATE TABLE IF NOT EXISTS funciones(
     id INT AUTO_INCREMENT PRIMARY KEY,
     pelicula_id INT NOT NULL,
     sala_id INT NOT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS funciones (
 );
 
 -- Asientos
-CREATE TABLE IF NOT EXISTS asientos (
+CREATE TABLE IF NOT EXISTS asientos(
     id INT AUTO_INCREMENT PRIMARY KEY,
     sala_id INT NOT NULL,
     numero_silla VARCHAR(10) NOT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS asientos (
 );
 
 -- Entradas
-CREATE TABLE IF NOT EXISTS entradas (
+CREATE TABLE IF NOT EXISTS entradas(
     id INT AUTO_INCREMENT PRIMARY KEY,
     cliente_documento INT NOT NULL,
     funcion_id INT NOT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS entradas (
 );
 
 -- Facturas
-CREATE TABLE IF NOT EXISTS facturas (
+CREATE TABLE IF NOT EXISTS facturas(
     id INT AUTO_INCREMENT PRIMARY KEY,
     cliente_documento INT NOT NULL,
     fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS facturas (
 );
 
 -- Detalle factura
-CREATE TABLE IF NOT EXISTS detalle_factura (
+CREATE TABLE IF NOT EXISTS detalle_factura(
     id INT AUTO_INCREMENT PRIMARY KEY,
     factura_id INT NOT NULL,
     entrada_id INT NOT NULL,
