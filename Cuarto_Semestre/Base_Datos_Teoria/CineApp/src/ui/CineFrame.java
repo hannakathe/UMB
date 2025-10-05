@@ -22,6 +22,8 @@ public class CineFrame extends JFrame {
     private EntradaController entradaCtrl;
     private FacturaController facturaCtrl;
     private SalaDAO salaDAO;
+    private ImageIcon iconoSillaDisponible;
+    private ImageIcon iconoSillaOcupada;
 
     // Componentes de la interfaz de usuario
     private JTabbedPane tabs;
@@ -41,15 +43,18 @@ public class CineFrame extends JFrame {
     private DefaultTableModel modelEntradasVendidas;
     private JTable tblFacturas;
     private DefaultTableModel modelFacturas;
+    
+    // ---------- COMPONENTES PARA EDICIÓN ----------
+    private JTextField txtEditIdEntrada, txtEditDocumentoEntrada, txtEditClienteEntrada, 
+                      txtEditPeliculaEntrada, txtEditSalaEntrada, txtEditAsientoEntrada, 
+                      txtEditFechaEntrada, txtEditPrecioEntrada;
+    private JTextField txtEditIdFactura, txtEditDocumentoFactura, txtEditClienteFactura,
+                      txtEditValorFactura, txtEditFechaFactura, txtEditEmpresaFactura;
 
     // Variables para selección actual
     private Pelicula peliculaSeleccionada;
     private Funcion funcionSeleccionada;
     private double precioActual;
-
-    // Iconos para asientos
-    private ImageIcon iconoSillaDisponible;
-    private ImageIcon iconoSillaOcupada;
 
     // Constructor principal
     public CineFrame(Connection con) {
@@ -62,28 +67,39 @@ public class CineFrame extends JFrame {
         this.facturaCtrl = new FacturaController(con);
         this.salaDAO = new SalaDAO(con);
 
-        // Cargar iconos (usaremos emojis como alternativa si no hay imágenes)
         cargarIconos();
 
         // Configurar propiedades básicas de la ventana
         setTitle("Sistema de Cine - Venta de Entradas");
-        setSize(1200, 800);
+        setSize(1400, 900);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         initUI(); // Inicializar la interfaz de usuario
     }
 
     private void cargarIconos() {
-        try {
-            // Intentar cargar iconos desde archivos (puedes reemplazar con tus propias imágenes)
-            iconoSillaDisponible = new ImageIcon("silla_disponible.png");
-            iconoSillaOcupada = new ImageIcon("silla_ocupada.png");
-        } catch (Exception e) {
-            // Si no hay imágenes, usar texto con emojis
-            iconoSillaDisponible = null;
-            iconoSillaOcupada = null;
+    try {
+        // Cargar iconos desde la carpeta images
+        iconoSillaDisponible = new ImageIcon("Cuarto_Semestre/Base_Datos_Teoria/CineApp/src/images/silla_disponible.png");
+        iconoSillaOcupada = new ImageIcon("Cuarto_Semestre/Base_Datos_Teoria/CineApp/src/images/silla_ocupada.png");
+        
+        // Redimensionar los iconos si es necesario
+        if (iconoSillaDisponible != null) {
+            Image img = iconoSillaDisponible.getImage();
+            Image newImg = img.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+            iconoSillaDisponible = new ImageIcon(newImg);
         }
+        if (iconoSillaOcupada != null) {
+            Image img = iconoSillaOcupada.getImage();
+            Image newImg = img.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+            iconoSillaOcupada = new ImageIcon(newImg);
+        }
+    } catch (Exception e) {
+        System.out.println("No se pudieron cargar los iconos: " + e.getMessage());
+        iconoSillaDisponible = null;
+        iconoSillaOcupada = null;
     }
+}
 
     // Método para inicializar todos los componentes de la interfaz de usuario
     private void initUI() {
@@ -115,97 +131,131 @@ public class CineFrame extends JFrame {
     }
 
     private JPanel crearPanelPrincipal() {
-        JPanel pPrincipal = new JPanel(new BorderLayout(10, 10));
-        pPrincipal.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+    JPanel pPrincipal = new JPanel(new BorderLayout(10, 10));
+    pPrincipal.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Panel superior: Selección de película y función
-        JPanel pSeleccion = new JPanel(new GridLayout(2, 2, 10, 10));
-        pSeleccion.setBorder(BorderFactory.createTitledBorder("Selección de Función"));
+    // Panel superior: Selección de película y función
+    JPanel pSeleccion = new JPanel(new GridLayout(2, 2, 10, 10));
+    pSeleccion.setBorder(BorderFactory.createTitledBorder("Selección de Función"));
 
-        pSeleccion.add(new JLabel("Película:"));
-        comboPeliculas = new JComboBox<>();
-        comboPeliculas.addItem("-- Seleccione una película --");
-        pSeleccion.add(comboPeliculas);
+    pSeleccion.add(new JLabel("Película:"));
+    comboPeliculas = new JComboBox<>();
+    comboPeliculas.addItem("-- Seleccione una película --");
+    pSeleccion.add(comboPeliculas);
 
-        pSeleccion.add(new JLabel("Función:"));
-        comboFunciones = new JComboBox<>();
-        comboFunciones.addItem("-- Seleccione una función --");
-        pSeleccion.add(comboFunciones);
+    pSeleccion.add(new JLabel("Función:"));
+    comboFunciones = new JComboBox<>();
+    comboFunciones.addItem("-- Seleccione una función --");
+    pSeleccion.add(comboFunciones);
 
-        // Panel de información de precios
-        JPanel pInfo = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        lblPrecioFuncion = new JLabel("Precio: $0.00");
-        lblPrecioFuncion.setFont(new Font("Arial", Font.BOLD, 16));
-        lblPrecioFuncion.setForeground(Color.BLUE);
-        pInfo.add(lblPrecioFuncion);
+    // Panel de información de precios
+    JPanel pInfo = new JPanel(new FlowLayout(FlowLayout.CENTER));
+    lblPrecioFuncion = new JLabel("Precio: $0.00");
+    lblPrecioFuncion.setFont(new Font("Arial", Font.BOLD, 16));
+    lblPrecioFuncion.setForeground(Color.BLUE);
+    pInfo.add(lblPrecioFuncion);
 
-        // Panel central: Asientos
-        JPanel pAsientosContainer = new JPanel(new BorderLayout());
-        pAsientosContainer.setBorder(BorderFactory.createTitledBorder("Selección de Asientos"));
-        
-        panelAsientos = new JPanel();
-        panelAsientos.setLayout(new GridLayout(0, 8, 5, 5));
-        grupoAsientos = new ButtonGroup();
-        
-        JScrollPane scrollAsientos = new JScrollPane(panelAsientos);
-        scrollAsientos.setPreferredSize(new Dimension(800, 400));
-        pAsientosContainer.add(scrollAsientos, BorderLayout.CENTER);
+    // Panel central: Asientos - SOLO UNA PANTALLA
+    JPanel pAsientosContainer = new JPanel(new BorderLayout());
+    pAsientosContainer.setBorder(BorderFactory.createTitledBorder("Selección de Asientos"));
+    
+    panelAsientos = new JPanel();
+    panelAsientos.setLayout(new BorderLayout()); // Cambiar a BorderLayout
+    grupoAsientos = new ButtonGroup();
+    
+    JScrollPane scrollAsientos = new JScrollPane(panelAsientos);
+    scrollAsientos.setPreferredSize(new Dimension(800, 400));
+    
+    pAsientosContainer.add(scrollAsientos, BorderLayout.CENTER); // Solo el scroll con asientos
 
-        // Panel inferior: Datos del cliente y botones
-        JPanel pCliente = new JPanel(new GridLayout(3, 2, 10, 10));
-        pCliente.setBorder(BorderFactory.createTitledBorder("Datos del Cliente"));
+    // Panel inferior: Datos del cliente y botones
+    JPanel pCliente = new JPanel(new GridLayout(3, 2, 10, 10));
+    pCliente.setBorder(BorderFactory.createTitledBorder("Datos del Cliente"));
 
-        txtDocumentoCliente = new JTextField();
-        txtNombreCliente = new JTextField();
-        txtTelefonoCliente = new JTextField();
+    txtDocumentoCliente = new JTextField();
+    txtNombreCliente = new JTextField();
+    txtTelefonoCliente = new JTextField();
 
-        pCliente.add(new JLabel("Documento:"));
-        pCliente.add(txtDocumentoCliente);
-        pCliente.add(new JLabel("Nombre:"));
-        pCliente.add(txtNombreCliente);
-        pCliente.add(new JLabel("Teléfono:"));
-        pCliente.add(txtTelefonoCliente);
+    pCliente.add(new JLabel("Documento:"));
+    pCliente.add(txtDocumentoCliente);
+    pCliente.add(new JLabel("Nombre:"));
+    pCliente.add(txtNombreCliente);
+    pCliente.add(new JLabel("Teléfono:"));
+    pCliente.add(txtTelefonoCliente);
 
-        // Panel de botones
-        JPanel pBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
-        JButton btnVenderEntrada = new JButton("Vender Entrada y Factura");
-        JButton btnLimpiar = new JButton("Limpiar");
+    // Panel de botones
+    JPanel pBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+    JButton btnVenderEntrada = new JButton("Vender Entrada y Factura");
+    JButton btnLimpiar = new JButton("Limpiar");
 
-        btnVenderEntrada.addActionListener(_ -> venderEntradaYFactura());
-        btnLimpiar.addActionListener(_ -> limpiarCampos());
+    btnVenderEntrada.addActionListener(_ -> venderEntradaYFactura());
+    btnLimpiar.addActionListener(_ -> limpiarCampos());
 
-        pBotones.add(btnVenderEntrada);
-        pBotones.add(btnLimpiar);
+    pBotones.add(btnVenderEntrada);
+    pBotones.add(btnLimpiar);
 
-        // Organizar panels en la pestaña principal
-        JPanel pNorth = new JPanel(new BorderLayout());
-        pNorth.add(pSeleccion, BorderLayout.NORTH);
-        pNorth.add(pInfo, BorderLayout.CENTER);
+    // Organizar panels en la pestaña principal
+    JPanel pNorth = new JPanel(new BorderLayout());
+    pNorth.add(pSeleccion, BorderLayout.NORTH);
+    pNorth.add(pInfo, BorderLayout.CENTER);
 
-        pPrincipal.add(pNorth, BorderLayout.NORTH);
-        pPrincipal.add(pAsientosContainer, BorderLayout.CENTER);
-        
-        JPanel pSouth = new JPanel(new BorderLayout());
-        pSouth.add(pCliente, BorderLayout.NORTH);
-        pSouth.add(pBotones, BorderLayout.SOUTH);
-        pPrincipal.add(pSouth, BorderLayout.SOUTH);
+    pPrincipal.add(pNorth, BorderLayout.NORTH);
+    pPrincipal.add(pAsientosContainer, BorderLayout.CENTER);
+    
+    JPanel pSouth = new JPanel(new BorderLayout());
+    pSouth.add(pCliente, BorderLayout.NORTH);
+    pSouth.add(pBotones, BorderLayout.SOUTH);
+    pPrincipal.add(pSouth, BorderLayout.SOUTH);
 
-        return pPrincipal;
-    }
+    return pPrincipal;
+}
 
     private JPanel crearPanelEntradas() {
-        JPanel pEntradas = new JPanel(new BorderLayout());
+        JPanel pEntradas = new JPanel(new BorderLayout(10, 10));
         pEntradas.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
+        // Panel superior: Formulario de edición
+        JPanel pFormularioEntradas = new JPanel(new GridLayout(2, 8, 5, 5));
+        pFormularioEntradas.setBorder(BorderFactory.createTitledBorder("Editar Entrada"));
+        
+        // Crear campos de texto para edición
+        txtEditIdEntrada = new JTextField(); txtEditIdEntrada.setEditable(false);
+        txtEditDocumentoEntrada = new JTextField();
+        txtEditClienteEntrada = new JTextField();
+        txtEditPeliculaEntrada = new JTextField();
+        txtEditSalaEntrada = new JTextField();
+        txtEditAsientoEntrada = new JTextField();
+        txtEditFechaEntrada = new JTextField(); txtEditFechaEntrada.setEditable(false);
+        txtEditPrecioEntrada = new JTextField();
+        
+        pFormularioEntradas.add(new JLabel("ID:"));
+        pFormularioEntradas.add(txtEditIdEntrada);
+        pFormularioEntradas.add(new JLabel("Documento:"));
+        pFormularioEntradas.add(txtEditDocumentoEntrada);
+        pFormularioEntradas.add(new JLabel("Cliente:"));
+        pFormularioEntradas.add(txtEditClienteEntrada);
+        pFormularioEntradas.add(new JLabel("Película:"));
+        pFormularioEntradas.add(txtEditPeliculaEntrada);
+        pFormularioEntradas.add(new JLabel("Sala:"));
+        pFormularioEntradas.add(txtEditSalaEntrada);
+        pFormularioEntradas.add(new JLabel("Asiento:"));
+        pFormularioEntradas.add(txtEditAsientoEntrada);
+        pFormularioEntradas.add(new JLabel("Fecha:"));
+        pFormularioEntradas.add(txtEditFechaEntrada);
+        pFormularioEntradas.add(new JLabel("Precio:"));
+        pFormularioEntradas.add(txtEditPrecioEntrada);
+
+        // Tabla de entradas
         modelEntradasVendidas = new DefaultTableModel(new Object[] {
             "ID", "Documento", "Cliente", "Película", "Sala", "Asiento", "Fecha", "Precio"
         }, 0);
         tblEntradasVendidas = new JTable(modelEntradasVendidas);
         
+        // Panel de botones
         JPanel pBotonesEntradas = new JPanel(new FlowLayout());
         JButton btnImprimirTicket = new JButton("Imprimir Ticket");
         JButton btnActualizarEntradas = new JButton("Actualizar Lista");
-        JButton btnEditarEntrada = new JButton("Editar Entrada");
+        JButton btnEditarEntrada = new JButton("Guardar Cambios");
         JButton btnEliminarEntrada = new JButton("Eliminar Entrada");
         
         btnImprimirTicket.addActionListener(_ -> imprimirTicket());
@@ -218,6 +268,7 @@ public class CineFrame extends JFrame {
         pBotonesEntradas.add(btnEditarEntrada);
         pBotonesEntradas.add(btnEliminarEntrada);
 
+        pEntradas.add(pFormularioEntradas, BorderLayout.NORTH);
         pEntradas.add(new JScrollPane(tblEntradasVendidas), BorderLayout.CENTER);
         pEntradas.add(pBotonesEntradas, BorderLayout.SOUTH);
 
@@ -225,18 +276,45 @@ public class CineFrame extends JFrame {
     }
 
     private JPanel crearPanelFacturas() {
-        JPanel pFacturas = new JPanel(new BorderLayout());
+        JPanel pFacturas = new JPanel(new BorderLayout(10, 10));
         pFacturas.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
+        // Panel superior: Formulario de edición
+        JPanel pFormularioFacturas = new JPanel(new GridLayout(2, 6, 5, 5));
+        pFormularioFacturas.setBorder(BorderFactory.createTitledBorder("Editar Factura"));
+        
+        // Crear campos de texto para edición
+        txtEditIdFactura = new JTextField(); txtEditIdFactura.setEditable(false);
+        txtEditDocumentoFactura = new JTextField();
+        txtEditClienteFactura = new JTextField();
+        txtEditValorFactura = new JTextField();
+        txtEditFechaFactura = new JTextField(); txtEditFechaFactura.setEditable(false);
+        txtEditEmpresaFactura = new JTextField();
+        
+        pFormularioFacturas.add(new JLabel("ID:"));
+        pFormularioFacturas.add(txtEditIdFactura);
+        pFormularioFacturas.add(new JLabel("Documento:"));
+        pFormularioFacturas.add(txtEditDocumentoFactura);
+        pFormularioFacturas.add(new JLabel("Cliente:"));
+        pFormularioFacturas.add(txtEditClienteFactura);
+        pFormularioFacturas.add(new JLabel("Valor Total:"));
+        pFormularioFacturas.add(txtEditValorFactura);
+        pFormularioFacturas.add(new JLabel("Fecha:"));
+        pFormularioFacturas.add(txtEditFechaFactura);
+        pFormularioFacturas.add(new JLabel("Empresa:"));
+        pFormularioFacturas.add(txtEditEmpresaFactura);
+
+        // Tabla de facturas
         modelFacturas = new DefaultTableModel(new Object[] {
             "ID", "Documento", "Cliente", "Valor Total", "Fecha", "Empresa"
         }, 0);
         tblFacturas = new JTable(modelFacturas);
         
+        // Panel de botones
         JPanel pBotonesFacturas = new JPanel(new FlowLayout());
         JButton btnImprimirFactura = new JButton("Imprimir Factura");
         JButton btnActualizarFacturas = new JButton("Actualizar Lista");
-        JButton btnEditarFactura = new JButton("Editar Factura");
+        JButton btnEditarFactura = new JButton("Guardar Cambios");
         JButton btnEliminarFactura = new JButton("Eliminar Factura");
         
         btnImprimirFactura.addActionListener(_ -> imprimirFactura());
@@ -249,6 +327,7 @@ public class CineFrame extends JFrame {
         pBotonesFacturas.add(btnEditarFactura);
         pBotonesFacturas.add(btnEliminarFactura);
 
+        pFacturas.add(pFormularioFacturas, BorderLayout.NORTH);
         pFacturas.add(new JScrollPane(tblFacturas), BorderLayout.CENTER);
         pFacturas.add(pBotonesFacturas, BorderLayout.SOUTH);
 
@@ -286,6 +365,38 @@ public class CineFrame extends JFrame {
                 funcionSeleccionada = null;
                 lblPrecioFuncion.setText("Precio: $0.00");
                 limpiarAsientos();
+            }
+        });
+
+        // Listener para selección en tabla de entradas
+        tblEntradasVendidas.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting() && tblEntradasVendidas.getSelectedRow() != -1) {
+                int fila = tblEntradasVendidas.getSelectedRow();
+                txtEditIdEntrada.setText(modelEntradasVendidas.getValueAt(fila, 0).toString());
+                txtEditDocumentoEntrada.setText(modelEntradasVendidas.getValueAt(fila, 1).toString());
+                txtEditClienteEntrada.setText(modelEntradasVendidas.getValueAt(fila, 2).toString());
+                txtEditPeliculaEntrada.setText(modelEntradasVendidas.getValueAt(fila, 3).toString());
+                txtEditSalaEntrada.setText(modelEntradasVendidas.getValueAt(fila, 4).toString());
+                txtEditAsientoEntrada.setText(modelEntradasVendidas.getValueAt(fila, 5).toString());
+                txtEditFechaEntrada.setText(modelEntradasVendidas.getValueAt(fila, 6).toString());
+                // Remover el símbolo $ del precio
+                String precio = modelEntradasVendidas.getValueAt(fila, 7).toString().replace("$", "");
+                txtEditPrecioEntrada.setText(precio);
+            }
+        });
+
+        // Listener para selección en tabla de facturas
+        tblFacturas.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting() && tblFacturas.getSelectedRow() != -1) {
+                int fila = tblFacturas.getSelectedRow();
+                txtEditIdFactura.setText(modelFacturas.getValueAt(fila, 0).toString());
+                txtEditDocumentoFactura.setText(modelFacturas.getValueAt(fila, 1).toString());
+                txtEditClienteFactura.setText(modelFacturas.getValueAt(fila, 2).toString());
+                // Remover el símbolo $ del valor
+                String valor = modelFacturas.getValueAt(fila, 3).toString().replace("$", "");
+                txtEditValorFactura.setText(valor);
+                txtEditFechaFactura.setText(modelFacturas.getValueAt(fila, 4).toString());
+                txtEditEmpresaFactura.setText(modelFacturas.getValueAt(fila, 5).toString());
             }
         });
     }
@@ -331,57 +442,175 @@ public class CineFrame extends JFrame {
         }
     }
 
+    
+    
+
     private void cargarAsientosDisponibles(int salaId, int funcionId) {
-        panelAsientos.removeAll();
-        grupoAsientos = new ButtonGroup();
+    panelAsientos.removeAll();
+    grupoAsientos = new ButtonGroup();
+    
+    try {
+        List<Asiento> asientos = asientoDAO.listarPorSala(salaId);
+        List<Entrada> entradasVendidas = entradaCtrl.listarPorFuncion(funcionId);
         
-        try {
-            List<Asiento> asientos = asientoDAO.listarPorSala(salaId);
-            List<Entrada> entradasVendidas = entradaCtrl.listarPorFuncion(funcionId);
+        // Configuración de la sala
+        int asientosPorFila = 10;
+        int totalFilas = (int) Math.ceil((double) asientos.size() / asientosPorFila);
+        
+        // Panel principal con diseño organizado
+        JPanel panelPrincipal = new JPanel(new BorderLayout());
+        
+        // SOLO UNA PANTALLA - Centrada
+        JPanel panelPantalla = new JPanel();
+        panelPantalla.setBackground(Color.DARK_GRAY);
+        panelPantalla.setPreferredSize(new Dimension(600, 25)); // Más pequeña
+        panelPantalla.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 2));
+        JLabel lblPantalla = new JLabel("P A N T A L L A", JLabel.CENTER);
+        lblPantalla.setForeground(Color.WHITE);
+        lblPantalla.setFont(new Font("Arial", Font.BOLD, 14));
+        panelPantalla.add(lblPantalla);
+        
+        // Panel para los asientos con GridLayout organizado
+        JPanel panelAsientosGrid = new JPanel(new GridLayout(totalFilas, asientosPorFila + 3, 5, 5));
+        
+        // Crear letras para las filas
+        char letraFila = 'A';
+        
+        for (int fila = 0; fila < totalFilas; fila++) {
+            // Agregar letra de fila a la izquierda
+            JLabel lblFila = new JLabel(String.valueOf(letraFila++), JLabel.CENTER);
+            lblFila.setFont(new Font("Arial", Font.BOLD, 12));
+            lblFila.setForeground(Color.BLUE);
+            panelAsientosGrid.add(lblFila);
             
-            for (Asiento asiento : asientos) {
-                JPanel panelAsiento = new JPanel(new BorderLayout());
-                panelAsiento.setPreferredSize(new Dimension(80, 80));
-                panelAsiento.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+            for (int columna = 0; columna < asientosPorFila; columna++) {
+                int indexAsiento = fila * asientosPorFila + columna;
+                if (indexAsiento >= asientos.size()) {
+                    // Espacio vacío si no hay más asientos
+                    panelAsientosGrid.add(new JLabel());
+                    continue;
+                }
                 
-                // Verificar si el asiento está ocupado
+                Asiento asiento = asientos.get(indexAsiento);
                 boolean ocupado = entradasVendidas.stream()
                     .anyMatch(e -> e.getAsientoId() == asiento.getId());
                 
-                if (ocupado) {
-                    // Asiento ocupado - mostrar como botón deshabilitado con icono
-                    JButton btnOcupado = new JButton("💺 " + asiento.getNumeroSilla());
-                    if (iconoSillaOcupada != null) {
-                        btnOcupado.setIcon(iconoSillaOcupada);
-                        btnOcupado.setText(asiento.getNumeroSilla());
-                    }
-                    btnOcupado.setBackground(Color.RED);
-                    btnOcupado.setForeground(Color.WHITE);
-                    btnOcupado.setEnabled(false);
-                    btnOcupado.setToolTipText("Asiento ocupado");
-                    panelAsiento.add(btnOcupado, BorderLayout.CENTER);
-                } else {
-                    // Asiento disponible - mostrar como radio button con icono
-                    JRadioButton radioAsiento = new JRadioButton("💺 " + asiento.getNumeroSilla());
-                    if (iconoSillaDisponible != null) {
-                        radioAsiento.setIcon(iconoSillaDisponible);
-                        radioAsiento.setText(asiento.getNumeroSilla());
-                    }
-                    radioAsiento.setBackground(Color.GREEN);
-                    radioAsiento.setActionCommand(String.valueOf(asiento.getId()));
-                    grupoAsientos.add(radioAsiento);
-                    panelAsiento.add(radioAsiento, BorderLayout.CENTER);
+                // Crear pasillo central después de la columna 4
+                if (columna == 4) {
+                    JLabel pasillo = new JLabel("│", JLabel.CENTER);
+                    pasillo.setForeground(Color.GRAY);
+                    pasillo.setFont(new Font("Arial", Font.BOLD, 16));
+                    panelAsientosGrid.add(pasillo);
                 }
                 
-                panelAsientos.add(panelAsiento);
+                if (ocupado) {
+                    // Asiento ocupado con icono
+                    JButton btnOcupado = new JButton();
+                    if (iconoSillaOcupada != null) {
+                        btnOcupado.setIcon(iconoSillaOcupada);
+                    } else {
+                        btnOcupado.setText("🔴");
+                        btnOcupado.setFont(new Font("Arial", Font.BOLD, 12));
+                    }
+                    btnOcupado.setBackground(new Color(220, 0, 0));
+                    btnOcupado.setForeground(Color.WHITE);
+                    btnOcupado.setEnabled(false);
+                    btnOcupado.setToolTipText("Asiento " + asiento.getNumeroSilla() + " - OCUPADO");
+                    btnOcupado.setPreferredSize(new Dimension(35, 35));
+                    panelAsientosGrid.add(btnOcupado);
+                } else {
+                    // Asiento disponible con icono
+                    JRadioButton radioAsiento = new JRadioButton();
+                    if (iconoSillaDisponible != null) {
+                        radioAsiento.setIcon(iconoSillaDisponible);
+                    } else {
+                        radioAsiento.setText("🟢");
+                        radioAsiento.setFont(new Font("Arial", Font.BOLD, 12));
+                    }
+                    radioAsiento.setBackground(new Color(200, 255, 200));
+                    radioAsiento.setActionCommand(String.valueOf(asiento.getId()));
+                    radioAsiento.setToolTipText("Asiento " + asiento.getNumeroSilla() + " - DISPONIBLE");
+                    radioAsiento.setPreferredSize(new Dimension(35, 35));
+                    
+                    // Efecto de selección mejorado
+                    radioAsiento.addActionListener(e -> {
+                        if (radioAsiento.isSelected()) {
+                            radioAsiento.setBackground(new Color(100, 200, 100));
+                            radioAsiento.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
+                        } else {
+                            radioAsiento.setBackground(new Color(200, 255, 200));
+                            radioAsiento.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+                        }
+                    });
+                    
+                    radioAsiento.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+                    grupoAsientos.add(radioAsiento);
+                    panelAsientosGrid.add(radioAsiento);
+                }
             }
             
-            panelAsientos.revalidate();
-            panelAsientos.repaint();
-            
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error cargando asientos: " + ex.getMessage());
+            // Agregar separador al final de cada fila
+            JLabel separador = new JLabel("│", JLabel.CENTER);
+            separador.setForeground(Color.GRAY);
+            separador.setFont(new Font("Arial", Font.BOLD, 16));
+            panelAsientosGrid.add(separador);
         }
+        
+        // Centrar la pantalla
+        JPanel panelPantallaCentrada = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        panelPantallaCentrada.add(panelPantalla);
+        
+        panelPrincipal.add(panelPantallaCentrada, BorderLayout.NORTH);
+        panelPrincipal.add(panelAsientosGrid, BorderLayout.CENTER);
+        
+        // Agregar leyenda
+        JPanel panelLeyenda = new JPanel(new FlowLayout());
+        panelLeyenda.add(new JLabel("Leyenda: "));
+        
+        JButton btnLeyendaVerde = new JButton("Disponible");
+        if (iconoSillaDisponible != null) {
+            btnLeyendaVerde.setIcon(iconoSillaDisponible);
+        } else {
+            btnLeyendaVerde.setText("🟢");
+        }
+        btnLeyendaVerde.setBackground(new Color(200, 255, 200));
+        btnLeyendaVerde.setEnabled(false);
+        
+        JButton btnLeyendaRojo = new JButton("Ocupado");
+        if (iconoSillaOcupada != null) {
+            btnLeyendaRojo.setIcon(iconoSillaOcupada);
+        } else {
+            btnLeyendaRojo.setText("🔴");
+        }
+        btnLeyendaRojo.setBackground(new Color(220, 0, 0));
+        btnLeyendaRojo.setForeground(Color.WHITE);
+        btnLeyendaRojo.setEnabled(false);
+        
+        panelLeyenda.add(btnLeyendaVerde);
+        panelLeyenda.add(btnLeyendaRojo);
+        
+        panelPrincipal.add(panelLeyenda, BorderLayout.SOUTH);
+        
+        // Limpiar y agregar el nuevo contenido
+        panelAsientos.removeAll();
+        panelAsientos.setLayout(new BorderLayout());
+        panelAsientos.add(panelPrincipal, BorderLayout.CENTER);
+        panelAsientos.revalidate();
+        panelAsientos.repaint();
+        
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(this, "Error cargando asientos: " + ex.getMessage());
+        ex.printStackTrace();
+    }
+}
+
+
+
+    private JPanel createEmptySpace() {
+        JPanel empty = new JPanel();
+        empty.setBackground(Color.LIGHT_GRAY);
+        empty.setPreferredSize(new Dimension(20, 50));
+        return empty;
     }
 
     private void cargarEntradasVendidas() {
@@ -443,50 +672,55 @@ public class CineFrame extends JFrame {
     // ---------- MÉTODOS DE NEGOCIO ----------
 
     private void venderEntradaYFactura() {
-        try {
-            // Validaciones
-            if (!validarDatosCliente() || !validarSeleccionFuncion() || !validarAsientoSeleccionado()) {
-                return;
-            }
-            
-            // Obtener datos
-            int documento = Integer.parseInt(txtDocumentoCliente.getText().trim());
-            String nombre = txtNombreCliente.getText().trim();
-            String telefono = txtTelefonoCliente.getText().trim();
-            int asientoId = Integer.parseInt(grupoAsientos.getSelection().getActionCommand());
-            
-            // Crear o actualizar cliente
-            Cliente clienteExistente = buscarClientePorDocumento(documento);
-            if (clienteExistente == null) {
-                clienteCtrl.insertar(documento, nombre, telefono);
-            } else {
-                clienteCtrl.actualizar(documento, nombre, telefono);
-            }
-            
-            // Vender entrada
-            int entradaId = entradaCtrl.crearEntrada(documento, funcionSeleccionada.getId(), asientoId, precioActual);
-            
-            // Generar factura automáticamente con fecha actual
-            String datosEmpresa = "CINEMAX COLOMBIA - NIT: 800.123.456-1 - Tel: 601-1234567";
-            int facturaId = facturaCtrl.crearFactura(documento, precioActual, datosEmpresa);
-            
-            JOptionPane.showMessageDialog(this, 
-                "¡Venta completada exitosamente!\n" +
-                "Número de entrada: " + entradaId + "\n" +
-                "Número de factura: " + facturaId + "\n" +
-                "Asiento: " + buscarAsientoPorId(asientoId).getNumeroSilla() + "\n" +
-                "Total: $" + String.format("%.2f", precioActual));
-            
-            // Actualizar interfaz
-            cargarAsientosDisponibles(funcionSeleccionada.getSalaId(), funcionSeleccionada.getId());
-            cargarEntradasVendidas();
-            cargarFacturas();
-            limpiarCamposCliente();
-            
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error en la venta: " + ex.getMessage());
+    try {
+        // Validaciones
+        if (!validarDatosCliente() || !validarSeleccionFuncion() || !validarAsientoSeleccionado()) {
+            return;
         }
+        
+        // Obtener datos
+        int documento = Integer.parseInt(txtDocumentoCliente.getText().trim());
+        String nombre = txtNombreCliente.getText().trim();
+        String telefono = txtTelefonoCliente.getText().trim();
+        int asientoId = Integer.parseInt(grupoAsientos.getSelection().getActionCommand());
+        
+        // Crear o actualizar cliente
+        Cliente clienteExistente = buscarClientePorDocumento(documento);
+        if (clienteExistente == null) {
+            clienteCtrl.insertar(documento, nombre, telefono);
+        } else {
+            clienteCtrl.actualizar(documento, nombre, telefono);
+        }
+        
+        // Vender entrada
+        int entradaId = entradaCtrl.crearEntrada(documento, funcionSeleccionada.getId(), asientoId, precioActual);
+        
+        // Generar factura automáticamente con fecha actual
+        String datosEmpresa = "CINEMAX COLOMBIA - NIT: 800.123.456-1 - Tel: 601-1234567";
+        
+        // Usar fecha actual explícitamente
+        LocalDateTime fechaActual = LocalDateTime.now();
+        int facturaId = facturaCtrl.crearFactura(documento, precioActual, datosEmpresa);
+        
+        JOptionPane.showMessageDialog(this, 
+            "¡Venta completada exitosamente!\n" +
+            "Número de entrada: " + entradaId + "\n" +
+            "Número de factura: " + facturaId + "\n" +
+            "Asiento: " + buscarAsientoPorId(asientoId).getNumeroSilla() + "\n" +
+            "Total: $" + String.format("%.2f", precioActual) + "\n" +
+            "Fecha: " + fechaActual.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+        
+        // Actualizar interfaz
+        cargarAsientosDisponibles(funcionSeleccionada.getSalaId(), funcionSeleccionada.getId());
+        cargarEntradasVendidas();
+        cargarFacturas();
+        limpiarCamposCliente();
+        
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(this, "Error en la venta: " + ex.getMessage());
+        ex.printStackTrace();
     }
+}
 
     private void imprimirTicket() {
         int fila = tblEntradasVendidas.getSelectedRow();
@@ -574,41 +808,45 @@ public class CineFrame extends JFrame {
     // ---------- MÉTODOS CRUD CON AUTENTICACIÓN ----------
 
     private boolean autenticarAdministrador() {
-        String password = JOptionPane.showInputDialog(this, "Ingrese la contraseña de administrador:");
-        return "ADMIN202#".equals(password);
+        JPasswordField passwordField = new JPasswordField();
+        Object[] message = {
+            "Ingrese la contraseña de administrador:",
+            passwordField
+        };
+
+        int option = JOptionPane.showConfirmDialog(this, message, "Autenticación", 
+            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        
+        if (option == JOptionPane.OK_OPTION) {
+            String password = new String(passwordField.getPassword());
+            return "ADMIN202#".equals(password);
+        }
+        return false;
     }
 
     private void editarEntrada() {
-        int fila = tblEntradasVendidas.getSelectedRow();
-        if (fila == -1) {
+        if (txtEditIdEntrada.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Seleccione una entrada para editar");
             return;
         }
 
         if (!autenticarAdministrador()) {
-            JOptionPane.showMessageDialog(this, "Contraseña incorrecta");
+            JOptionPane.showMessageDialog(this, "Contraseña incorrecta o cancelada");
             return;
         }
 
         try {
-            int entradaId = (int) modelEntradasVendidas.getValueAt(fila, 0);
-            Entrada entrada = buscarEntradaPorId(entradaId);
+            int entradaId = Integer.parseInt(txtEditIdEntrada.getText());
+            double nuevoValor = Double.parseDouble(txtEditPrecioEntrada.getText());
             
-            // Diálogo para editar
-            JTextField txtValor = new JTextField(String.valueOf(entrada.getValor()));
-            Object[] message = {
-                "Nuevo valor:", txtValor
-            };
-
-            int option = JOptionPane.showConfirmDialog(this, message, "Editar Entrada", 
-                JOptionPane.OK_CANCEL_OPTION);
-            
-            if (option == JOptionPane.OK_OPTION) {
-                double nuevoValor = Double.parseDouble(txtValor.getText());
-                entradaCtrl.actualizar(entradaId, entrada.getClienteDocumento(), 
-                    entrada.getFuncionId(), entrada.getAsientoId(), nuevoValor);
+            // Obtener la entrada actual para mantener los otros datos
+            Entrada entradaActual = buscarEntradaPorId(entradaId);
+            if (entradaActual != null) {
+                entradaCtrl.actualizar(entradaId, entradaActual.getClienteDocumento(), 
+                    entradaActual.getFuncionId(), entradaActual.getAsientoId(), nuevoValor);
                 JOptionPane.showMessageDialog(this, "Entrada actualizada correctamente");
                 cargarEntradasVendidas();
+                limpiarCamposEdicionEntrada();
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error editando entrada: " + ex.getMessage());
@@ -616,8 +854,7 @@ public class CineFrame extends JFrame {
     }
 
     private void eliminarEntrada() {
-        int fila = tblEntradasVendidas.getSelectedRow();
-        if (fila == -1) {
+        if (txtEditIdEntrada.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Seleccione una entrada para eliminar");
             return;
         }
@@ -628,7 +865,7 @@ public class CineFrame extends JFrame {
         }
 
         try {
-            int entradaId = (int) modelEntradasVendidas.getValueAt(fila, 0);
+            int entradaId = Integer.parseInt(txtEditIdEntrada.getText());
             int confirm = JOptionPane.showConfirmDialog(this, 
                 "¿Está seguro de eliminar esta entrada?", "Confirmar eliminación", 
                 JOptionPane.YES_NO_OPTION);
@@ -637,6 +874,7 @@ public class CineFrame extends JFrame {
                 entradaCtrl.eliminar(entradaId);
                 JOptionPane.showMessageDialog(this, "Entrada eliminada correctamente");
                 cargarEntradasVendidas();
+                limpiarCamposEdicionEntrada();
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error eliminando entrada: " + ex.getMessage());
@@ -644,39 +882,29 @@ public class CineFrame extends JFrame {
     }
 
     private void editarFactura() {
-        int fila = tblFacturas.getSelectedRow();
-        if (fila == -1) {
+        if (txtEditIdFactura.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Seleccione una factura para editar");
             return;
         }
 
         if (!autenticarAdministrador()) {
-            JOptionPane.showMessageDialog(this, "Contraseña incorrecta");
+            JOptionPane.showMessageDialog(this, "Contraseña incorrecta o cancelada");
             return;
         }
 
         try {
-            int facturaId = (int) modelFacturas.getValueAt(fila, 0);
-            Factura factura = buscarFacturaPorId(facturaId);
+            int facturaId = Integer.parseInt(txtEditIdFactura.getText());
+            double nuevoValor = Double.parseDouble(txtEditValorFactura.getText());
+            String nuevaEmpresa = txtEditEmpresaFactura.getText();
             
-            // Diálogo para editar
-            JTextField txtValor = new JTextField(String.valueOf(factura.getValorTotal()));
-            JTextField txtEmpresa = new JTextField(factura.getDatosEmpresa());
-            
-            Object[] message = {
-                "Nuevo valor total:", txtValor,
-                "Datos empresa:", txtEmpresa
-            };
-
-            int option = JOptionPane.showConfirmDialog(this, message, "Editar Factura", 
-                JOptionPane.OK_CANCEL_OPTION);
-            
-            if (option == JOptionPane.OK_OPTION) {
-                double nuevoValor = Double.parseDouble(txtValor.getText());
-                facturaCtrl.actualizar(facturaId, factura.getClienteDocumento(), 
-                    nuevoValor, txtEmpresa.getText());
+            // Obtener la factura actual para mantener los otros datos
+            Factura facturaActual = buscarFacturaPorId(facturaId);
+            if (facturaActual != null) {
+                facturaCtrl.actualizar(facturaId, facturaActual.getClienteDocumento(), 
+                    nuevoValor, nuevaEmpresa);
                 JOptionPane.showMessageDialog(this, "Factura actualizada correctamente");
                 cargarFacturas();
+                limpiarCamposEdicionFactura();
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error editando factura: " + ex.getMessage());
@@ -684,8 +912,7 @@ public class CineFrame extends JFrame {
     }
 
     private void eliminarFactura() {
-        int fila = tblFacturas.getSelectedRow();
-        if (fila == -1) {
+        if (txtEditIdFactura.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Seleccione una factura para eliminar");
             return;
         }
@@ -696,7 +923,7 @@ public class CineFrame extends JFrame {
         }
 
         try {
-            int facturaId = (int) modelFacturas.getValueAt(fila, 0);
+            int facturaId = Integer.parseInt(txtEditIdFactura.getText());
             int confirm = JOptionPane.showConfirmDialog(this, 
                 "¿Está seguro de eliminar esta factura?", "Confirmar eliminación", 
                 JOptionPane.YES_NO_OPTION);
@@ -705,10 +932,31 @@ public class CineFrame extends JFrame {
                 facturaCtrl.eliminar(facturaId);
                 JOptionPane.showMessageDialog(this, "Factura eliminada correctamente");
                 cargarFacturas();
+                limpiarCamposEdicionFactura();
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error eliminando factura: " + ex.getMessage());
         }
+    }
+
+    private void limpiarCamposEdicionEntrada() {
+        txtEditIdEntrada.setText("");
+        txtEditDocumentoEntrada.setText("");
+        txtEditClienteEntrada.setText("");
+        txtEditPeliculaEntrada.setText("");
+        txtEditSalaEntrada.setText("");
+        txtEditAsientoEntrada.setText("");
+        txtEditFechaEntrada.setText("");
+        txtEditPrecioEntrada.setText("");
+    }
+
+    private void limpiarCamposEdicionFactura() {
+        txtEditIdFactura.setText("");
+        txtEditDocumentoFactura.setText("");
+        txtEditClienteFactura.setText("");
+        txtEditValorFactura.setText("");
+        txtEditFechaFactura.setText("");
+        txtEditEmpresaFactura.setText("");
     }
 
     // ---------- MÉTODOS AUXILIARES ----------
