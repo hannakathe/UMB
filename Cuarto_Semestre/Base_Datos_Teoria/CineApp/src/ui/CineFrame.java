@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.*;
 
 import controller.*;
 import model.*;
@@ -36,7 +37,8 @@ public class CineFrame extends JFrame {
     private JTextField txtNombreCliente;
     private JTextField txtTelefonoCliente;
     private JLabel lblPrecioFuncion;
-    private ButtonGroup grupoAsientos;
+    private JLabel lblPrecioTotal;
+    private List<JCheckBox> asientosSeleccionados;
     
     // ---------- COMPONENTES PARA HISTORIAL ----------
     private JTable tblEntradasVendidas;
@@ -55,6 +57,7 @@ public class CineFrame extends JFrame {
     private Pelicula peliculaSeleccionada;
     private Funcion funcionSeleccionada;
     private double precioActual;
+    private int cantidadAsientosSeleccionados;
 
     // Constructor principal
     public CineFrame(Connection con) {
@@ -66,6 +69,7 @@ public class CineFrame extends JFrame {
         this.entradaCtrl = new EntradaController(con);
         this.facturaCtrl = new FacturaController(con);
         this.salaDAO = new SalaDAO(con);
+        this.asientosSeleccionados = new ArrayList<>();
 
         cargarIconos();
 
@@ -78,28 +82,28 @@ public class CineFrame extends JFrame {
     }
 
     private void cargarIconos() {
-    try {
-        // Cargar iconos desde la carpeta images
-        iconoSillaDisponible = new ImageIcon("Cuarto_Semestre/Base_Datos_Teoria/CineApp/src/images/silla_disponible.png");
-        iconoSillaOcupada = new ImageIcon("Cuarto_Semestre/Base_Datos_Teoria/CineApp/src/images/silla_ocupada.png");
-        
-        // Redimensionar los iconos si es necesario
-        if (iconoSillaDisponible != null) {
-            Image img = iconoSillaDisponible.getImage();
-            Image newImg = img.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-            iconoSillaDisponible = new ImageIcon(newImg);
+        try {
+            // Cargar iconos desde la carpeta images
+            iconoSillaDisponible = new ImageIcon("Cuarto_Semestre/Base_Datos_Teoria/CineApp/src/images/silla_disponible.png");
+            iconoSillaOcupada = new ImageIcon("Cuarto_Semestre/Base_Datos_Teoria/CineApp/src/images/silla_ocupada.png");
+            
+            // Redimensionar los iconos si es necesario
+            if (iconoSillaDisponible != null) {
+                Image img = iconoSillaDisponible.getImage();
+                Image newImg = img.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+                iconoSillaDisponible = new ImageIcon(newImg);
+            }
+            if (iconoSillaOcupada != null) {
+                Image img = iconoSillaOcupada.getImage();
+                Image newImg = img.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+                iconoSillaOcupada = new ImageIcon(newImg);
+            }
+        } catch (Exception e) {
+            System.out.println("No se pudieron cargar los iconos: " + e.getMessage());
+            iconoSillaDisponible = null;
+            iconoSillaOcupada = null;
         }
-        if (iconoSillaOcupada != null) {
-            Image img = iconoSillaOcupada.getImage();
-            Image newImg = img.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-            iconoSillaOcupada = new ImageIcon(newImg);
-        }
-    } catch (Exception e) {
-        System.out.println("No se pudieron cargar los iconos: " + e.getMessage());
-        iconoSillaDisponible = null;
-        iconoSillaOcupada = null;
     }
-}
 
     // Método para inicializar todos los componentes de la interfaz de usuario
     private void initUI() {
@@ -131,84 +135,89 @@ public class CineFrame extends JFrame {
     }
 
     private JPanel crearPanelPrincipal() {
-    JPanel pPrincipal = new JPanel(new BorderLayout(10, 10));
-    pPrincipal.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        JPanel pPrincipal = new JPanel(new BorderLayout(10, 10));
+        pPrincipal.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-    // Panel superior: Selección de película y función
-    JPanel pSeleccion = new JPanel(new GridLayout(2, 2, 10, 10));
-    pSeleccion.setBorder(BorderFactory.createTitledBorder("Selección de Función"));
+        // Panel superior: Selección de película y función
+        JPanel pSeleccion = new JPanel(new GridLayout(2, 2, 10, 10));
+        pSeleccion.setBorder(BorderFactory.createTitledBorder("Selección de Función"));
 
-    pSeleccion.add(new JLabel("Película:"));
-    comboPeliculas = new JComboBox<>();
-    comboPeliculas.addItem("-- Seleccione una película --");
-    pSeleccion.add(comboPeliculas);
+        pSeleccion.add(new JLabel("Película:"));
+        comboPeliculas = new JComboBox<>();
+        comboPeliculas.addItem("-- Seleccione una película --");
+        pSeleccion.add(comboPeliculas);
 
-    pSeleccion.add(new JLabel("Función:"));
-    comboFunciones = new JComboBox<>();
-    comboFunciones.addItem("-- Seleccione una función --");
-    pSeleccion.add(comboFunciones);
+        pSeleccion.add(new JLabel("Función:"));
+        comboFunciones = new JComboBox<>();
+        comboFunciones.addItem("-- Seleccione una función --");
+        pSeleccion.add(comboFunciones);
 
-    // Panel de información de precios
-    JPanel pInfo = new JPanel(new FlowLayout(FlowLayout.CENTER));
-    lblPrecioFuncion = new JLabel("Precio: $0.00");
-    lblPrecioFuncion.setFont(new Font("Arial", Font.BOLD, 16));
-    lblPrecioFuncion.setForeground(Color.BLUE);
-    pInfo.add(lblPrecioFuncion);
+        // Panel de información de precios
+        JPanel pInfo = new JPanel(new GridLayout(2, 1, 5, 5));
+        lblPrecioFuncion = new JLabel("Precio por entrada: $0.00");
+        lblPrecioFuncion.setFont(new Font("Arial", Font.BOLD, 14));
+        lblPrecioFuncion.setForeground(Color.BLUE);
+        
+        lblPrecioTotal = new JLabel("Total: $0.00");
+        lblPrecioTotal.setFont(new Font("Arial", Font.BOLD, 16));
+        lblPrecioTotal.setForeground(Color.RED);
+        
+        pInfo.add(lblPrecioFuncion);
+        pInfo.add(lblPrecioTotal);
 
-    // Panel central: Asientos - SOLO UNA PANTALLA
-    JPanel pAsientosContainer = new JPanel(new BorderLayout());
-    pAsientosContainer.setBorder(BorderFactory.createTitledBorder("Selección de Asientos"));
-    
-    panelAsientos = new JPanel();
-    panelAsientos.setLayout(new BorderLayout()); // Cambiar a BorderLayout
-    grupoAsientos = new ButtonGroup();
-    
-    JScrollPane scrollAsientos = new JScrollPane(panelAsientos);
-    scrollAsientos.setPreferredSize(new Dimension(800, 400));
-    
-    pAsientosContainer.add(scrollAsientos, BorderLayout.CENTER); // Solo el scroll con asientos
+        // Panel central: Asientos - SOLO UNA PANTALLA
+        JPanel pAsientosContainer = new JPanel(new BorderLayout());
+        pAsientosContainer.setBorder(BorderFactory.createTitledBorder("Selección de Asientos"));
+        
+        panelAsientos = new JPanel();
+        panelAsientos.setLayout(new BorderLayout());
+        
+        JScrollPane scrollAsientos = new JScrollPane(panelAsientos);
+        scrollAsientos.setPreferredSize(new Dimension(800, 400));
+        
+        pAsientosContainer.add(scrollAsientos, BorderLayout.CENTER);
 
-    // Panel inferior: Datos del cliente y botones
-    JPanel pCliente = new JPanel(new GridLayout(3, 2, 10, 10));
-    pCliente.setBorder(BorderFactory.createTitledBorder("Datos del Cliente"));
+        // Panel inferior: Datos del cliente y botones
+        JPanel pCliente = new JPanel(new GridLayout(3, 2, 10, 10));
+        pCliente.setBorder(BorderFactory.createTitledBorder("Datos del Cliente"));
 
-    txtDocumentoCliente = new JTextField();
-    txtNombreCliente = new JTextField();
-    txtTelefonoCliente = new JTextField();
+        txtDocumentoCliente = new JTextField();
+        txtNombreCliente = new JTextField();
+        txtTelefonoCliente = new JTextField();
 
-    pCliente.add(new JLabel("Documento:"));
-    pCliente.add(txtDocumentoCliente);
-    pCliente.add(new JLabel("Nombre:"));
-    pCliente.add(txtNombreCliente);
-    pCliente.add(new JLabel("Teléfono:"));
-    pCliente.add(txtTelefonoCliente);
+        pCliente.add(new JLabel("Documento:"));
+        pCliente.add(txtDocumentoCliente);
+        pCliente.add(new JLabel("Nombre:"));
+        pCliente.add(txtNombreCliente);
+        pCliente.add(new JLabel("Teléfono:"));
+        pCliente.add(txtTelefonoCliente);
 
-    // Panel de botones
-    JPanel pBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
-    JButton btnVenderEntrada = new JButton("Vender Entrada y Factura");
-    JButton btnLimpiar = new JButton("Limpiar");
+        // Panel de botones
+        JPanel pBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        JButton btnVenderEntrada = new JButton("Vender Entrada y Factura");
+        JButton btnLimpiar = new JButton("Limpiar");
 
-    btnVenderEntrada.addActionListener(_ -> venderEntradaYFactura());
-    btnLimpiar.addActionListener(_ -> limpiarCampos());
+        btnVenderEntrada.addActionListener(_ -> venderEntradaYFactura());
+        btnLimpiar.addActionListener(_ -> limpiarCampos());
 
-    pBotones.add(btnVenderEntrada);
-    pBotones.add(btnLimpiar);
+        pBotones.add(btnVenderEntrada);
+        pBotones.add(btnLimpiar);
 
-    // Organizar panels en la pestaña principal
-    JPanel pNorth = new JPanel(new BorderLayout());
-    pNorth.add(pSeleccion, BorderLayout.NORTH);
-    pNorth.add(pInfo, BorderLayout.CENTER);
+        // Organizar panels en la pestaña principal
+        JPanel pNorth = new JPanel(new BorderLayout());
+        pNorth.add(pSeleccion, BorderLayout.NORTH);
+        pNorth.add(pInfo, BorderLayout.CENTER);
 
-    pPrincipal.add(pNorth, BorderLayout.NORTH);
-    pPrincipal.add(pAsientosContainer, BorderLayout.CENTER);
-    
-    JPanel pSouth = new JPanel(new BorderLayout());
-    pSouth.add(pCliente, BorderLayout.NORTH);
-    pSouth.add(pBotones, BorderLayout.SOUTH);
-    pPrincipal.add(pSouth, BorderLayout.SOUTH);
+        pPrincipal.add(pNorth, BorderLayout.NORTH);
+        pPrincipal.add(pAsientosContainer, BorderLayout.CENTER);
+        
+        JPanel pSouth = new JPanel(new BorderLayout());
+        pSouth.add(pCliente, BorderLayout.NORTH);
+        pSouth.add(pBotones, BorderLayout.SOUTH);
+        pPrincipal.add(pSouth, BorderLayout.SOUTH);
 
-    return pPrincipal;
-}
+        return pPrincipal;
+    }
 
     private JPanel crearPanelEntradas() {
         JPanel pEntradas = new JPanel(new BorderLayout(10, 10));
@@ -358,12 +367,14 @@ public class CineFrame extends JFrame {
                 funcionSeleccionada = buscarFuncionPorId(funcionId);
                 if (funcionSeleccionada != null) {
                     precioActual = calcularPrecio(funcionSeleccionada.getSalaId());
-                    lblPrecioFuncion.setText(String.format("Precio: $%.2f", precioActual));
+                    lblPrecioFuncion.setText(String.format("Precio por entrada: $%.2f", precioActual));
+                    actualizarPrecioTotal();
                     cargarAsientosDisponibles(funcionSeleccionada.getSalaId(), funcionId);
                 }
             } else {
                 funcionSeleccionada = null;
-                lblPrecioFuncion.setText("Precio: $0.00");
+                lblPrecioFuncion.setText("Precio por entrada: $0.00");
+                lblPrecioTotal.setText("Total: $0.00");
                 limpiarAsientos();
             }
         });
@@ -380,7 +391,7 @@ public class CineFrame extends JFrame {
                 txtEditAsientoEntrada.setText(modelEntradasVendidas.getValueAt(fila, 5).toString());
                 txtEditFechaEntrada.setText(modelEntradasVendidas.getValueAt(fila, 6).toString());
                 // Remover el símbolo $ del precio
-                String precio = modelEntradasVendidas.getValueAt(fila, 7).toString().replace("$", "");
+                String precio = modelEntradasVendidas.getValueAt(fila, 7).toString().replace("$", "").replace(",", "");
                 txtEditPrecioEntrada.setText(precio);
             }
         });
@@ -393,7 +404,7 @@ public class CineFrame extends JFrame {
                 txtEditDocumentoFactura.setText(modelFacturas.getValueAt(fila, 1).toString());
                 txtEditClienteFactura.setText(modelFacturas.getValueAt(fila, 2).toString());
                 // Remover el símbolo $ del valor
-                String valor = modelFacturas.getValueAt(fila, 3).toString().replace("$", "");
+                String valor = modelFacturas.getValueAt(fila, 3).toString().replace("$", "").replace(",", "");
                 txtEditValorFactura.setText(valor);
                 txtEditFechaFactura.setText(modelFacturas.getValueAt(fila, 4).toString());
                 txtEditEmpresaFactura.setText(modelFacturas.getValueAt(fila, 5).toString());
@@ -442,175 +453,181 @@ public class CineFrame extends JFrame {
         }
     }
 
-    
-    
-
     private void cargarAsientosDisponibles(int salaId, int funcionId) {
-    panelAsientos.removeAll();
-    grupoAsientos = new ButtonGroup();
-    
-    try {
-        List<Asiento> asientos = asientoDAO.listarPorSala(salaId);
-        List<Entrada> entradasVendidas = entradaCtrl.listarPorFuncion(funcionId);
+        panelAsientos.removeAll();
+        asientosSeleccionados.clear();
+        cantidadAsientosSeleccionados = 0;
         
-        // Configuración de la sala
-        int asientosPorFila = 10;
-        int totalFilas = (int) Math.ceil((double) asientos.size() / asientosPorFila);
-        
-        // Panel principal con diseño organizado
-        JPanel panelPrincipal = new JPanel(new BorderLayout());
-        
-        // SOLO UNA PANTALLA - Centrada
-        JPanel panelPantalla = new JPanel();
-        panelPantalla.setBackground(Color.DARK_GRAY);
-        panelPantalla.setPreferredSize(new Dimension(600, 25)); // Más pequeña
-        panelPantalla.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 2));
-        JLabel lblPantalla = new JLabel("P A N T A L L A", JLabel.CENTER);
-        lblPantalla.setForeground(Color.WHITE);
-        lblPantalla.setFont(new Font("Arial", Font.BOLD, 14));
-        panelPantalla.add(lblPantalla);
-        
-        // Panel para los asientos con GridLayout organizado
-        JPanel panelAsientosGrid = new JPanel(new GridLayout(totalFilas, asientosPorFila + 3, 5, 5));
-        
-        // Crear letras para las filas
-        char letraFila = 'A';
-        
-        for (int fila = 0; fila < totalFilas; fila++) {
-            // Agregar letra de fila a la izquierda
-            JLabel lblFila = new JLabel(String.valueOf(letraFila++), JLabel.CENTER);
-            lblFila.setFont(new Font("Arial", Font.BOLD, 12));
-            lblFila.setForeground(Color.BLUE);
-            panelAsientosGrid.add(lblFila);
+        try {
+            List<Asiento> asientos = asientoDAO.listarPorSala(salaId);
+            List<Entrada> entradasVendidas = entradaCtrl.listarPorFuncion(funcionId);
             
-            for (int columna = 0; columna < asientosPorFila; columna++) {
-                int indexAsiento = fila * asientosPorFila + columna;
-                if (indexAsiento >= asientos.size()) {
-                    // Espacio vacío si no hay más asientos
-                    panelAsientosGrid.add(new JLabel());
-                    continue;
-                }
+            // Configuración de la sala
+            int asientosPorFila = 10;
+            int totalFilas = (int) Math.ceil((double) asientos.size() / asientosPorFila);
+            
+            // Panel principal con diseño organizado
+            JPanel panelPrincipal = new JPanel(new BorderLayout());
+            
+            // SOLO UNA PANTALLA - Centrada
+            JPanel panelPantalla = new JPanel();
+            panelPantalla.setBackground(Color.DARK_GRAY);
+            panelPantalla.setPreferredSize(new Dimension(600, 25));
+            panelPantalla.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 2));
+            JLabel lblPantalla = new JLabel("P A N T A L L A", JLabel.CENTER);
+            lblPantalla.setForeground(Color.WHITE);
+            lblPantalla.setFont(new Font("Arial", Font.BOLD, 14));
+            panelPantalla.add(lblPantalla);
+            
+            // Panel para los asientos con GridLayout organizado
+            JPanel panelAsientosGrid = new JPanel(new GridLayout(totalFilas, asientosPorFila + 3, 5, 5));
+            
+            // Crear letras para las filas
+            char letraFila = 'A';
+            
+            for (int fila = 0; fila < totalFilas; fila++) {
+                // Agregar letra de fila a la izquierda
+                JLabel lblFila = new JLabel(String.valueOf(letraFila++), JLabel.CENTER);
+                lblFila.setFont(new Font("Arial", Font.BOLD, 12));
+                lblFila.setForeground(Color.BLUE);
+                panelAsientosGrid.add(lblFila);
                 
-                Asiento asiento = asientos.get(indexAsiento);
-                boolean ocupado = entradasVendidas.stream()
-                    .anyMatch(e -> e.getAsientoId() == asiento.getId());
-                
-                // Crear pasillo central después de la columna 4
-                if (columna == 4) {
-                    JLabel pasillo = new JLabel("│", JLabel.CENTER);
-                    pasillo.setForeground(Color.GRAY);
-                    pasillo.setFont(new Font("Arial", Font.BOLD, 16));
-                    panelAsientosGrid.add(pasillo);
-                }
-                
-                if (ocupado) {
-                    // Asiento ocupado con icono
-                    JButton btnOcupado = new JButton();
-                    if (iconoSillaOcupada != null) {
-                        btnOcupado.setIcon(iconoSillaOcupada);
-                    } else {
-                        btnOcupado.setText("🔴");
-                        btnOcupado.setFont(new Font("Arial", Font.BOLD, 12));
+                for (int columna = 0; columna < asientosPorFila; columna++) {
+                    int indexAsiento = fila * asientosPorFila + columna;
+                    if (indexAsiento >= asientos.size()) {
+                        // Espacio vacío si no hay más asientos
+                        panelAsientosGrid.add(new JLabel());
+                        continue;
                     }
-                    btnOcupado.setBackground(new Color(220, 0, 0));
-                    btnOcupado.setForeground(Color.WHITE);
-                    btnOcupado.setEnabled(false);
-                    btnOcupado.setToolTipText("Asiento " + asiento.getNumeroSilla() + " - OCUPADO");
-                    btnOcupado.setPreferredSize(new Dimension(35, 35));
-                    panelAsientosGrid.add(btnOcupado);
-                } else {
-                    // Asiento disponible con icono
-                    JRadioButton radioAsiento = new JRadioButton();
-                    if (iconoSillaDisponible != null) {
-                        radioAsiento.setIcon(iconoSillaDisponible);
-                    } else {
-                        radioAsiento.setText("🟢");
-                        radioAsiento.setFont(new Font("Arial", Font.BOLD, 12));
-                    }
-                    radioAsiento.setBackground(new Color(200, 255, 200));
-                    radioAsiento.setActionCommand(String.valueOf(asiento.getId()));
-                    radioAsiento.setToolTipText("Asiento " + asiento.getNumeroSilla() + " - DISPONIBLE");
-                    radioAsiento.setPreferredSize(new Dimension(35, 35));
                     
-                    // Efecto de selección mejorado
-                    radioAsiento.addActionListener(e -> {
-                        if (radioAsiento.isSelected()) {
-                            radioAsiento.setBackground(new Color(100, 200, 100));
-                            radioAsiento.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
+                    Asiento asiento = asientos.get(indexAsiento);
+                    boolean ocupado = entradasVendidas.stream()
+                        .anyMatch(e -> e.getAsientoId() == asiento.getId());
+                    
+                    // Crear pasillo central después de la columna 4
+                    if (columna == 4) {
+                        JLabel pasillo = new JLabel("│", JLabel.CENTER);
+                        pasillo.setForeground(Color.GRAY);
+                        pasillo.setFont(new Font("Arial", Font.BOLD, 16));
+                        panelAsientosGrid.add(pasillo);
+                    }
+                    
+                    if (ocupado) {
+                        // Asiento ocupado con icono - SIN FONDO DE COLOR
+                        JButton btnOcupado = new JButton();
+                        if (iconoSillaOcupada != null) {
+                            btnOcupado.setIcon(iconoSillaOcupada);
+                            btnOcupado.setText(""); // Asegurar que no tenga texto
                         } else {
-                            radioAsiento.setBackground(new Color(200, 255, 200));
-                            radioAsiento.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+                            btnOcupado.setText("🔴");
+                            btnOcupado.setFont(new Font("Arial", Font.BOLD, 12));
                         }
-                    });
-                    
-                    radioAsiento.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
-                    grupoAsientos.add(radioAsiento);
-                    panelAsientosGrid.add(radioAsiento);
+                        btnOcupado.setBackground(null); // Sin color de fondo
+                        btnOcupado.setOpaque(false); // Hacer transparente
+                        btnOcupado.setBorderPainted(false); // Sin borde
+                        btnOcupado.setContentAreaFilled(false); // Sin área de contenido rellena
+                        btnOcupado.setEnabled(false);
+                        btnOcupado.setToolTipText("Asiento " + asiento.getNumeroSilla() + " - OCUPADO");
+                        btnOcupado.setPreferredSize(new Dimension(35, 35));
+                        panelAsientosGrid.add(btnOcupado);
+                    } else {
+                        // Asiento disponible con icono - SIN FONDO DE COLOR
+                        JCheckBox checkAsiento = new JCheckBox();
+                        if (iconoSillaDisponible != null) {
+                            checkAsiento.setIcon(iconoSillaDisponible);
+                            checkAsiento.setText(""); // Asegurar que no tenga texto
+                        } else {
+                            checkAsiento.setText("🟢");
+                            checkAsiento.setFont(new Font("Arial", Font.BOLD, 12));
+                        }
+                        checkAsiento.setBackground(null); // Sin color de fondo
+                        checkAsiento.setOpaque(false); // Hacer transparente
+                        checkAsiento.setBorderPainted(false); // Sin borde
+                        checkAsiento.setContentAreaFilled(false); // Sin área de contenido rellena
+                        checkAsiento.setActionCommand(String.valueOf(asiento.getId()));
+                        checkAsiento.setToolTipText("Asiento " + asiento.getNumeroSilla() + " - DISPONIBLE");
+                        checkAsiento.setPreferredSize(new Dimension(35, 35));
+                        
+                        // Listener para actualizar precio total cuando se selecciona/deselecciona
+                        checkAsiento.addActionListener(e -> {
+                            if (checkAsiento.isSelected()) {
+                                cantidadAsientosSeleccionados++;
+                                // Solo cambiar el borde cuando está seleccionado, sin fondo
+                                checkAsiento.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
+                                asientosSeleccionados.add(checkAsiento);
+                            } else {
+                                cantidadAsientosSeleccionados--;
+                                // Quitar el borde cuando se deselecciona
+                                checkAsiento.setBorder(null);
+                                asientosSeleccionados.remove(checkAsiento);
+                            }
+                            actualizarPrecioTotal();
+                        });
+                        
+                        panelAsientosGrid.add(checkAsiento);
+                    }
                 }
+                
+                // Agregar separador al final de cada fila
+                JLabel separador = new JLabel("│", JLabel.CENTER);
+                separador.setForeground(Color.GRAY);
+                separador.setFont(new Font("Arial", Font.BOLD, 16));
+                panelAsientosGrid.add(separador);
             }
             
-            // Agregar separador al final de cada fila
-            JLabel separador = new JLabel("│", JLabel.CENTER);
-            separador.setForeground(Color.GRAY);
-            separador.setFont(new Font("Arial", Font.BOLD, 16));
-            panelAsientosGrid.add(separador);
+            // Centrar la pantalla
+            JPanel panelPantallaCentrada = new JPanel(new FlowLayout(FlowLayout.CENTER));
+            panelPantallaCentrada.add(panelPantalla);
+            
+            panelPrincipal.add(panelPantallaCentrada, BorderLayout.NORTH);
+            panelPrincipal.add(panelAsientosGrid, BorderLayout.CENTER);
+            
+            // Agregar leyenda
+            JPanel panelLeyenda = new JPanel(new FlowLayout());
+            panelLeyenda.add(new JLabel("Leyenda: "));
+            
+            JButton btnLeyendaVerde = new JButton("Disponible");
+            if (iconoSillaDisponible != null) {
+                btnLeyendaVerde.setIcon(iconoSillaDisponible);
+                btnLeyendaVerde.setText("");
+            } else {
+                btnLeyendaVerde.setText("🟢");
+            }
+            btnLeyendaVerde.setBackground(null);
+            btnLeyendaVerde.setOpaque(false);
+            btnLeyendaVerde.setBorderPainted(false);
+            btnLeyendaVerde.setContentAreaFilled(false);
+            btnLeyendaVerde.setEnabled(false);
+            
+            JButton btnLeyendaRojo = new JButton("Ocupado");
+            if (iconoSillaOcupada != null) {
+                btnLeyendaRojo.setIcon(iconoSillaOcupada);
+                btnLeyendaRojo.setText("");
+            } else {
+                btnLeyendaRojo.setText("🔴");
+            }
+            btnLeyendaRojo.setBackground(null);
+            btnLeyendaRojo.setOpaque(false);
+            btnLeyendaRojo.setBorderPainted(false);
+            btnLeyendaRojo.setContentAreaFilled(false);
+            btnLeyendaRojo.setEnabled(false);
+            
+            panelLeyenda.add(btnLeyendaVerde);
+            panelLeyenda.add(btnLeyendaRojo);
+            
+            panelPrincipal.add(panelLeyenda, BorderLayout.SOUTH);
+            
+            // Limpiar y agregar el nuevo contenido
+            panelAsientos.removeAll();
+            panelAsientos.setLayout(new BorderLayout());
+            panelAsientos.add(panelPrincipal, BorderLayout.CENTER);
+            panelAsientos.revalidate();
+            panelAsientos.repaint();
+            
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error cargando asientos: " + ex.getMessage());
+            ex.printStackTrace();
         }
-        
-        // Centrar la pantalla
-        JPanel panelPantallaCentrada = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        panelPantallaCentrada.add(panelPantalla);
-        
-        panelPrincipal.add(panelPantallaCentrada, BorderLayout.NORTH);
-        panelPrincipal.add(panelAsientosGrid, BorderLayout.CENTER);
-        
-        // Agregar leyenda
-        JPanel panelLeyenda = new JPanel(new FlowLayout());
-        panelLeyenda.add(new JLabel("Leyenda: "));
-        
-        JButton btnLeyendaVerde = new JButton("Disponible");
-        if (iconoSillaDisponible != null) {
-            btnLeyendaVerde.setIcon(iconoSillaDisponible);
-        } else {
-            btnLeyendaVerde.setText("🟢");
-        }
-        btnLeyendaVerde.setBackground(new Color(200, 255, 200));
-        btnLeyendaVerde.setEnabled(false);
-        
-        JButton btnLeyendaRojo = new JButton("Ocupado");
-        if (iconoSillaOcupada != null) {
-            btnLeyendaRojo.setIcon(iconoSillaOcupada);
-        } else {
-            btnLeyendaRojo.setText("🔴");
-        }
-        btnLeyendaRojo.setBackground(new Color(220, 0, 0));
-        btnLeyendaRojo.setForeground(Color.WHITE);
-        btnLeyendaRojo.setEnabled(false);
-        
-        panelLeyenda.add(btnLeyendaVerde);
-        panelLeyenda.add(btnLeyendaRojo);
-        
-        panelPrincipal.add(panelLeyenda, BorderLayout.SOUTH);
-        
-        // Limpiar y agregar el nuevo contenido
-        panelAsientos.removeAll();
-        panelAsientos.setLayout(new BorderLayout());
-        panelAsientos.add(panelPrincipal, BorderLayout.CENTER);
-        panelAsientos.revalidate();
-        panelAsientos.repaint();
-        
-    } catch (Exception ex) {
-        JOptionPane.showMessageDialog(this, "Error cargando asientos: " + ex.getMessage());
-        ex.printStackTrace();
-    }
-}
-
-
-
-    private JPanel createEmptySpace() {
-        JPanel empty = new JPanel();
-        empty.setBackground(Color.LIGHT_GRAY);
-        empty.setPreferredSize(new Dimension(20, 50));
-        return empty;
     }
 
     private void cargarEntradasVendidas() {
@@ -672,55 +689,76 @@ public class CineFrame extends JFrame {
     // ---------- MÉTODOS DE NEGOCIO ----------
 
     private void venderEntradaYFactura() {
-    try {
-        // Validaciones
-        if (!validarDatosCliente() || !validarSeleccionFuncion() || !validarAsientoSeleccionado()) {
-            return;
+        try {
+            // Validaciones
+            if (!validarDatosCliente() || !validarSeleccionFuncion() || !validarAsientosSeleccionados()) {
+                return;
+            }
+            
+            // Obtener datos
+            int documento = Integer.parseInt(txtDocumentoCliente.getText().trim());
+            String nombre = txtNombreCliente.getText().trim();
+            String telefono = txtTelefonoCliente.getText().trim();
+            
+            // Crear o actualizar cliente
+            Cliente clienteExistente = buscarClientePorDocumento(documento);
+            if (clienteExistente == null) {
+                clienteCtrl.insertar(documento, nombre, telefono);
+            } else {
+                clienteCtrl.actualizar(documento, nombre, telefono);
+            }
+            
+            // Vender entradas para cada asiento seleccionado
+            List<Integer> entradasIds = new ArrayList<>();
+            double valorTotal = 0;
+            
+            for (JCheckBox checkAsiento : asientosSeleccionados) {
+                int asientoId = Integer.parseInt(checkAsiento.getActionCommand());
+                int entradaId = entradaCtrl.crearEntrada(documento, funcionSeleccionada.getId(), asientoId, precioActual);
+                entradasIds.add(entradaId);
+                valorTotal += precioActual;
+            }
+            
+            // Generar factura automáticamente con fecha actual
+            String datosEmpresa = "CINEMAX COLOMBIA - NIT: 800.123.456-1 - Tel: 601-1234567";
+            
+            // Usar fecha actual explícitamente
+            LocalDateTime fechaActual = LocalDateTime.now();
+            int facturaId = facturaCtrl.crearFactura(documento, valorTotal, datosEmpresa);
+            
+            StringBuilder mensaje = new StringBuilder();
+            mensaje.append("¡Venta completada exitosamente!\n")
+                   .append("Número de factura: ").append(facturaId).append("\n")
+                   .append("Entradas vendidas: ").append(entradasIds.size()).append("\n")
+                   .append("Asientos: ");
+            
+            for (int i = 0; i < asientosSeleccionados.size(); i++) {
+                JCheckBox checkAsiento = asientosSeleccionados.get(i);
+                Asiento asiento = buscarAsientoPorId(Integer.parseInt(checkAsiento.getActionCommand()));
+                if (asiento != null) {
+                    mensaje.append(asiento.getNumeroSilla());
+                    if (i < asientosSeleccionados.size() - 1) {
+                        mensaje.append(", ");
+                    }
+                }
+            }
+            
+            mensaje.append("\nTotal: $").append(String.format("%.2f", valorTotal))
+                   .append("\nFecha: ").append(fechaActual.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+            
+            JOptionPane.showMessageDialog(this, mensaje.toString());
+            
+            // Actualizar interfaz
+            cargarAsientosDisponibles(funcionSeleccionada.getSalaId(), funcionSeleccionada.getId());
+            cargarEntradasVendidas();
+            cargarFacturas();
+            limpiarCamposCliente();
+            
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error en la venta: " + ex.getMessage());
+            ex.printStackTrace();
         }
-        
-        // Obtener datos
-        int documento = Integer.parseInt(txtDocumentoCliente.getText().trim());
-        String nombre = txtNombreCliente.getText().trim();
-        String telefono = txtTelefonoCliente.getText().trim();
-        int asientoId = Integer.parseInt(grupoAsientos.getSelection().getActionCommand());
-        
-        // Crear o actualizar cliente
-        Cliente clienteExistente = buscarClientePorDocumento(documento);
-        if (clienteExistente == null) {
-            clienteCtrl.insertar(documento, nombre, telefono);
-        } else {
-            clienteCtrl.actualizar(documento, nombre, telefono);
-        }
-        
-        // Vender entrada
-        int entradaId = entradaCtrl.crearEntrada(documento, funcionSeleccionada.getId(), asientoId, precioActual);
-        
-        // Generar factura automáticamente con fecha actual
-        String datosEmpresa = "CINEMAX COLOMBIA - NIT: 800.123.456-1 - Tel: 601-1234567";
-        
-        // Usar fecha actual explícitamente
-        LocalDateTime fechaActual = LocalDateTime.now();
-        int facturaId = facturaCtrl.crearFactura(documento, precioActual, datosEmpresa);
-        
-        JOptionPane.showMessageDialog(this, 
-            "¡Venta completada exitosamente!\n" +
-            "Número de entrada: " + entradaId + "\n" +
-            "Número de factura: " + facturaId + "\n" +
-            "Asiento: " + buscarAsientoPorId(asientoId).getNumeroSilla() + "\n" +
-            "Total: $" + String.format("%.2f", precioActual) + "\n" +
-            "Fecha: " + fechaActual.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
-        
-        // Actualizar interfaz
-        cargarAsientosDisponibles(funcionSeleccionada.getSalaId(), funcionSeleccionada.getId());
-        cargarEntradasVendidas();
-        cargarFacturas();
-        limpiarCamposCliente();
-        
-    } catch (Exception ex) {
-        JOptionPane.showMessageDialog(this, "Error en la venta: " + ex.getMessage());
-        ex.printStackTrace();
     }
-}
 
     private void imprimirTicket() {
         int fila = tblEntradasVendidas.getSelectedRow();
@@ -767,38 +805,43 @@ public class CineFrame extends JFrame {
             Factura factura = buscarFacturaPorId(facturaId);
             Cliente cliente = buscarClientePorDocumento(factura.getClienteDocumento());
             
-            // Buscar la entrada asociada a esta factura
-            Entrada entrada = buscarEntradaPorClienteYFecha(factura.getClienteDocumento(), factura.getFecha());
-            Funcion funcion = entrada != null ? buscarFuncionPorId(entrada.getFuncionId()) : null;
-            Pelicula pelicula = funcion != null ? buscarPeliculaPorId(funcion.getPeliculaId()) : null;
-            Sala sala = funcion != null ? buscarSalaPorId(funcion.getSalaId()) : null;
-            Asiento asiento = entrada != null ? buscarAsientoPorId(entrada.getAsientoId()) : null;
-
+            // Buscar las entradas asociadas a esta factura por documento del cliente
+            List<Entrada> entradas = buscarEntradasPorCliente(factura.getClienteDocumento());
+            
             // Manejar fecha nula
             String fechaFactura = "N/A";
             if (factura.getFecha() != null) {
                 fechaFactura = factura.getFecha().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
             }
             
-            String facturaStr = "=== FACTURA ===\n\n" +
-                              "Factura #: " + facturaId + "\n" +
-                              "Fecha: " + fechaFactura + "\n" +
-                              "Cliente: " + cliente.getNombre() + "\n" +
-                              "Documento: " + cliente.getDocumento() + "\n" +
-                              "Teléfono: " + cliente.getTelefono() + "\n\n" +
-                              "DETALLES:\n" +
-                              "Película: " + (pelicula != null ? pelicula.getTitulo() : "N/A") + "\n" +
-                              "Sala: " + (sala != null ? sala.getTipoSala() : "N/A") + "\n" +
-                              "Asiento: " + (asiento != null ? asiento.getNumeroSilla() : "N/A") + "\n" +
-                              "Función: " + (funcion != null ? 
-                                  funcion.getFechaHora().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) : "N/A") + "\n\n" +
-                              "SUBTOTAL: $" + String.format("%.2f", factura.getValorTotal()) + "\n" +
-                              "IVA (19%): $" + String.format("%.2f", factura.getValorTotal() * 0.19) + "\n" +
-                              "TOTAL: $" + String.format("%.2f", factura.getValorTotal() * 1.19) + "\n\n" +
-                              factura.getDatosEmpresa() + "\n" +
-                              "¡Gracias por su compra!";
+            StringBuilder facturaStr = new StringBuilder();
+            facturaStr.append("=== FACTURA ===\n\n")
+                      .append("Factura #: ").append(facturaId).append("\n")
+                      .append("Fecha: ").append(fechaFactura).append("\n")
+                      .append("Cliente: ").append(cliente.getNombre()).append("\n")
+                      .append("Documento: ").append(cliente.getDocumento()).append("\n")
+                      .append("Teléfono: ").append(cliente.getTelefono()).append("\n\n")
+                      .append("DETALLES:\n");
             
-            JOptionPane.showMessageDialog(this, facturaStr, "Factura", JOptionPane.INFORMATION_MESSAGE);
+            for (Entrada entrada : entradas) {
+                Funcion funcion = buscarFuncionPorId(entrada.getFuncionId());
+                Pelicula pelicula = buscarPeliculaPorId(funcion.getPeliculaId());
+                Sala sala = buscarSalaPorId(funcion.getSalaId());
+                Asiento asiento = buscarAsientoPorId(entrada.getAsientoId());
+                
+                facturaStr.append("- ").append(pelicula.getTitulo())
+                          .append(" | Sala: ").append(sala.getTipoSala())
+                          .append(" | Asiento: ").append(asiento.getNumeroSilla())
+                          .append(" | $").append(String.format("%.2f", entrada.getValor())).append("\n");
+            }
+            
+            facturaStr.append("\nSUBTOTAL: $").append(String.format("%.2f", factura.getValorTotal()))
+                      .append("\nIVA (19%): $").append(String.format("%.2f", factura.getValorTotal() * 0.19))
+                      .append("\nTOTAL: $").append(String.format("%.2f", factura.getValorTotal() * 1.19))
+                      .append("\n\n").append(factura.getDatosEmpresa())
+                      .append("\n¡Gracias por su compra!");
+            
+            JOptionPane.showMessageDialog(this, facturaStr.toString(), "Factura", JOptionPane.INFORMATION_MESSAGE);
             
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error imprimiendo factura: " + ex.getMessage());
@@ -837,7 +880,8 @@ public class CineFrame extends JFrame {
 
         try {
             int entradaId = Integer.parseInt(txtEditIdEntrada.getText());
-            double nuevoValor = Double.parseDouble(txtEditPrecioEntrada.getText());
+            // Usar parseDouble directamente y manejar el formato correcto
+            double nuevoValor = Double.parseDouble(txtEditPrecioEntrada.getText().replace(",", "."));
             
             // Obtener la entrada actual para mantener los otros datos
             Entrada entradaActual = buscarEntradaPorId(entradaId);
@@ -848,6 +892,8 @@ public class CineFrame extends JFrame {
                 cargarEntradasVendidas();
                 limpiarCamposEdicionEntrada();
             }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Error en formato de precio: Use punto decimal (ej: 15000.00)");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error editando entrada: " + ex.getMessage());
         }
@@ -894,7 +940,8 @@ public class CineFrame extends JFrame {
 
         try {
             int facturaId = Integer.parseInt(txtEditIdFactura.getText());
-            double nuevoValor = Double.parseDouble(txtEditValorFactura.getText());
+            // Usar parseDouble directamente y manejar el formato correcto
+            double nuevoValor = Double.parseDouble(txtEditValorFactura.getText().replace(",", "."));
             String nuevaEmpresa = txtEditEmpresaFactura.getText();
             
             // Obtener la factura actual para mantener los otros datos
@@ -906,6 +953,8 @@ public class CineFrame extends JFrame {
                 cargarFacturas();
                 limpiarCamposEdicionFactura();
             }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Error en formato de valor: Use punto decimal (ej: 15000.00)");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error editando factura: " + ex.getMessage());
         }
@@ -987,9 +1036,9 @@ public class CineFrame extends JFrame {
         return true;
     }
 
-    private boolean validarAsientoSeleccionado() {
-        if (grupoAsientos.getSelection() == null) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar un asiento");
+    private boolean validarAsientosSeleccionados() {
+        if (asientosSeleccionados.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar al menos un asiento");
             return false;
         }
         return true;
@@ -1013,7 +1062,7 @@ public class CineFrame extends JFrame {
         try {
             Sala sala = buscarSalaPorId(salaId);
             if (sala != null) {
-                // Precios base según tipo de sala
+                // Precios diferentes según tipo de sala
                 switch (sala.getTipoSala().toLowerCase()) {
                     case "premium": return 25000.0;
                     case "vip": return 20000.0;
@@ -1027,9 +1076,15 @@ public class CineFrame extends JFrame {
         return 15000.0; // Precio por defecto
     }
 
+    private void actualizarPrecioTotal() {
+        double total = cantidadAsientosSeleccionados * precioActual;
+        lblPrecioTotal.setText(String.format("Total: $%.2f", total));
+    }
+
     private void limpiarAsientos() {
         panelAsientos.removeAll();
-        grupoAsientos = new ButtonGroup();
+        asientosSeleccionados.clear();
+        cantidadAsientosSeleccionados = 0;
         panelAsientos.revalidate();
         panelAsientos.repaint();
     }
@@ -1045,7 +1100,8 @@ public class CineFrame extends JFrame {
         comboFunciones.setSelectedIndex(0);
         limpiarAsientos();
         limpiarCamposCliente();
-        lblPrecioFuncion.setText("Precio: $0.00");
+        lblPrecioFuncion.setText("Precio por entrada: $0.00");
+        lblPrecioTotal.setText("Total: $0.00");
         peliculaSeleccionada = null;
         funcionSeleccionada = null;
     }
@@ -1115,15 +1171,14 @@ public class CineFrame extends JFrame {
         }
     }
 
-    private Entrada buscarEntradaPorClienteYFecha(int documento, LocalDateTime fecha) {
+    private List<Entrada> buscarEntradasPorCliente(int documento) {
         try {
             List<Entrada> entradas = entradaCtrl.listar();
             return entradas.stream()
                 .filter(e -> e.getClienteDocumento() == documento)
-                .findFirst()
-                .orElse(null);
+                .collect(java.util.stream.Collectors.toList());
         } catch (Exception e) {
-            return null;
+            return new ArrayList<>();
         }
     }
 }
