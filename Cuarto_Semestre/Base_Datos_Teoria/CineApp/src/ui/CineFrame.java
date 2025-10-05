@@ -3,8 +3,6 @@ package ui;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-//import java.awt.event.ActionListener;
-//import java.awt.event.ActionEvent;
 import java.sql.Connection;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -16,9 +14,6 @@ import service.*;
 
 // Clase principal que representa la ventana de la aplicación de cine
 public class CineFrame extends JFrame {
-    // Conexión a la base de datos
-    private Connection con;
-    
     // Controladores para cada entidad del sistema
     private ClienteController clienteCtrl;
     private PeliculaController peliculaCtrl;
@@ -52,9 +47,12 @@ public class CineFrame extends JFrame {
     private Funcion funcionSeleccionada;
     private double precioActual;
 
+    // Iconos para asientos
+    private ImageIcon iconoSillaDisponible;
+    private ImageIcon iconoSillaOcupada;
+
     // Constructor principal
     public CineFrame(Connection con) {
-        this.con = con;
         // Inicializar todos los controladores con la conexión a la base de datos
         this.clienteCtrl = new ClienteController(con);
         this.peliculaCtrl = new PeliculaController(con);
@@ -64,6 +62,9 @@ public class CineFrame extends JFrame {
         this.facturaCtrl = new FacturaController(con);
         this.salaDAO = new SalaDAO(con);
 
+        // Cargar iconos (usaremos emojis como alternativa si no hay imágenes)
+        cargarIconos();
+
         // Configurar propiedades básicas de la ventana
         setTitle("Sistema de Cine - Venta de Entradas");
         setSize(1200, 800);
@@ -72,11 +73,48 @@ public class CineFrame extends JFrame {
         initUI(); // Inicializar la interfaz de usuario
     }
 
+    private void cargarIconos() {
+        try {
+            // Intentar cargar iconos desde archivos (puedes reemplazar con tus propias imágenes)
+            iconoSillaDisponible = new ImageIcon("silla_disponible.png");
+            iconoSillaOcupada = new ImageIcon("silla_ocupada.png");
+        } catch (Exception e) {
+            // Si no hay imágenes, usar texto con emojis
+            iconoSillaDisponible = null;
+            iconoSillaOcupada = null;
+        }
+    }
+
     // Método para inicializar todos los componentes de la interfaz de usuario
     private void initUI() {
         tabs = new JTabbedPane();
 
         // ---------- PESTAÑA PRINCIPAL: VENTA DE ENTRADAS ----------
+        JPanel pPrincipal = crearPanelPrincipal();
+
+        // ---------- PESTAÑA ENTRADAS VENDIDAS ----------
+        JPanel pEntradas = crearPanelEntradas();
+
+        // ---------- PESTAÑA FACTURAS ----------
+        JPanel pFacturas = crearPanelFacturas();
+
+        // ---------- AGREGAR PESTAÑAS ----------
+        tabs.addTab("Venta de Entradas", pPrincipal);
+        tabs.addTab("Entradas Vendidas", pEntradas);
+        tabs.addTab("Facturas", pFacturas);
+
+        add(tabs, BorderLayout.CENTER);
+
+        // ---------- CONFIGURAR LISTENERS ----------
+        configurarListeners();
+        
+        // ---------- CARGAR DATOS INICIALES ----------
+        cargarPeliculas();
+        cargarEntradasVendidas();
+        cargarFacturas();
+    }
+
+    private JPanel crearPanelPrincipal() {
         JPanel pPrincipal = new JPanel(new BorderLayout(10, 10));
         pPrincipal.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -130,16 +168,13 @@ public class CineFrame extends JFrame {
 
         // Panel de botones
         JPanel pBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
-        JButton btnVenderEntrada = new JButton("Vender Entrada");
-        JButton btnGenerarFactura = new JButton("Generar Factura");
+        JButton btnVenderEntrada = new JButton("Vender Entrada y Factura");
         JButton btnLimpiar = new JButton("Limpiar");
 
-        btnVenderEntrada.addActionListener(_ -> venderEntrada());
-        btnGenerarFactura.addActionListener(_ -> generarFactura());
+        btnVenderEntrada.addActionListener(_ -> venderEntradaYFactura());
         btnLimpiar.addActionListener(_ -> limpiarCampos());
 
         pBotones.add(btnVenderEntrada);
-        pBotones.add(btnGenerarFactura);
         pBotones.add(btnLimpiar);
 
         // Organizar panels en la pestaña principal
@@ -155,7 +190,10 @@ public class CineFrame extends JFrame {
         pSouth.add(pBotones, BorderLayout.SOUTH);
         pPrincipal.add(pSouth, BorderLayout.SOUTH);
 
-        // ---------- PESTAÑA ENTRADAS VENDIDAS ----------
+        return pPrincipal;
+    }
+
+    private JPanel crearPanelEntradas() {
         JPanel pEntradas = new JPanel(new BorderLayout());
         pEntradas.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -167,17 +205,26 @@ public class CineFrame extends JFrame {
         JPanel pBotonesEntradas = new JPanel(new FlowLayout());
         JButton btnImprimirTicket = new JButton("Imprimir Ticket");
         JButton btnActualizarEntradas = new JButton("Actualizar Lista");
+        JButton btnEditarEntrada = new JButton("Editar Entrada");
+        JButton btnEliminarEntrada = new JButton("Eliminar Entrada");
         
         btnImprimirTicket.addActionListener(_ -> imprimirTicket());
         btnActualizarEntradas.addActionListener(_ -> cargarEntradasVendidas());
+        btnEditarEntrada.addActionListener(_ -> editarEntrada());
+        btnEliminarEntrada.addActionListener(_ -> eliminarEntrada());
         
         pBotonesEntradas.add(btnImprimirTicket);
         pBotonesEntradas.add(btnActualizarEntradas);
+        pBotonesEntradas.add(btnEditarEntrada);
+        pBotonesEntradas.add(btnEliminarEntrada);
 
         pEntradas.add(new JScrollPane(tblEntradasVendidas), BorderLayout.CENTER);
         pEntradas.add(pBotonesEntradas, BorderLayout.SOUTH);
 
-        // ---------- PESTAÑA FACTURAS ----------
+        return pEntradas;
+    }
+
+    private JPanel crearPanelFacturas() {
         JPanel pFacturas = new JPanel(new BorderLayout());
         pFacturas.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -189,30 +236,23 @@ public class CineFrame extends JFrame {
         JPanel pBotonesFacturas = new JPanel(new FlowLayout());
         JButton btnImprimirFactura = new JButton("Imprimir Factura");
         JButton btnActualizarFacturas = new JButton("Actualizar Lista");
+        JButton btnEditarFactura = new JButton("Editar Factura");
+        JButton btnEliminarFactura = new JButton("Eliminar Factura");
         
         btnImprimirFactura.addActionListener(_ -> imprimirFactura());
         btnActualizarFacturas.addActionListener(_ -> cargarFacturas());
+        btnEditarFactura.addActionListener(_ -> editarFactura());
+        btnEliminarFactura.addActionListener(_ -> eliminarFactura());
 
         pBotonesFacturas.add(btnImprimirFactura);
         pBotonesFacturas.add(btnActualizarFacturas);
+        pBotonesFacturas.add(btnEditarFactura);
+        pBotonesFacturas.add(btnEliminarFactura);
 
         pFacturas.add(new JScrollPane(tblFacturas), BorderLayout.CENTER);
         pFacturas.add(pBotonesFacturas, BorderLayout.SOUTH);
 
-        // ---------- AGREGAR PESTAÑAS ----------
-        tabs.addTab("Venta de Entradas", pPrincipal);
-        tabs.addTab("Entradas Vendidas", pEntradas);
-        tabs.addTab("Facturas", pFacturas);
-
-        add(tabs, BorderLayout.CENTER);
-
-        // ---------- CONFIGURAR LISTENERS ----------
-        configurarListeners();
-        
-        // ---------- CARGAR DATOS INICIALES ----------
-        cargarPeliculas();
-        cargarEntradasVendidas();
-        cargarFacturas();
+        return pFacturas;
     }
 
     private void configurarListeners() {
@@ -301,23 +341,32 @@ public class CineFrame extends JFrame {
             
             for (Asiento asiento : asientos) {
                 JPanel panelAsiento = new JPanel(new BorderLayout());
-                panelAsiento.setPreferredSize(new Dimension(60, 60));
+                panelAsiento.setPreferredSize(new Dimension(80, 80));
+                panelAsiento.setBorder(BorderFactory.createLineBorder(Color.GRAY));
                 
                 // Verificar si el asiento está ocupado
                 boolean ocupado = entradasVendidas.stream()
                     .anyMatch(e -> e.getAsientoId() == asiento.getId());
                 
                 if (ocupado) {
-                    // Asiento ocupado - mostrar como botón deshabilitado
-                    JButton btnOcupado = new JButton(asiento.getNumeroSilla());
+                    // Asiento ocupado - mostrar como botón deshabilitado con icono
+                    JButton btnOcupado = new JButton("💺 " + asiento.getNumeroSilla());
+                    if (iconoSillaOcupada != null) {
+                        btnOcupado.setIcon(iconoSillaOcupada);
+                        btnOcupado.setText(asiento.getNumeroSilla());
+                    }
                     btnOcupado.setBackground(Color.RED);
                     btnOcupado.setForeground(Color.WHITE);
                     btnOcupado.setEnabled(false);
                     btnOcupado.setToolTipText("Asiento ocupado");
                     panelAsiento.add(btnOcupado, BorderLayout.CENTER);
                 } else {
-                    // Asiento disponible - mostrar como radio button
-                    JRadioButton radioAsiento = new JRadioButton(asiento.getNumeroSilla());
+                    // Asiento disponible - mostrar como radio button con icono
+                    JRadioButton radioAsiento = new JRadioButton("💺 " + asiento.getNumeroSilla());
+                    if (iconoSillaDisponible != null) {
+                        radioAsiento.setIcon(iconoSillaDisponible);
+                        radioAsiento.setText(asiento.getNumeroSilla());
+                    }
                     radioAsiento.setBackground(Color.GREEN);
                     radioAsiento.setActionCommand(String.valueOf(asiento.getId()));
                     grupoAsientos.add(radioAsiento);
@@ -364,36 +413,36 @@ public class CineFrame extends JFrame {
     }
 
     private void cargarFacturas() {
-    try {
-        modelFacturas.setRowCount(0);
-        
-        List<Factura> facturas = facturaCtrl.listar();
-        for (Factura factura : facturas) {
-            Cliente cliente = buscarClientePorDocumento(factura.getClienteDocumento());
+        try {
+            modelFacturas.setRowCount(0);
             
-            // SOLUCIÓN: Verificar si la fecha es nula antes de formatear
-            String fechaStr = "N/A";
-            if (factura.getFecha() != null) {
-                fechaStr = factura.getFecha().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+            List<Factura> facturas = facturaCtrl.listar();
+            for (Factura factura : facturas) {
+                Cliente cliente = buscarClientePorDocumento(factura.getClienteDocumento());
+                
+                // Verificar si la fecha es nula antes de formatear
+                String fechaStr = "N/A";
+                if (factura.getFecha() != null) {
+                    fechaStr = factura.getFecha().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+                }
+                
+                modelFacturas.addRow(new Object[] {
+                    factura.getId(),
+                    factura.getClienteDocumento(),
+                    cliente != null ? cliente.getNombre() : "N/A",
+                    String.format("$%.2f", factura.getValorTotal()),
+                    fechaStr,
+                    factura.getDatosEmpresa()
+                });
             }
-            
-            modelFacturas.addRow(new Object[] {
-                factura.getId(),
-                factura.getClienteDocumento(),
-                cliente != null ? cliente.getNombre() : "N/A",
-                String.format("$%.2f", factura.getValorTotal()),
-                fechaStr,  // Usar la fecha formateada o "N/A"
-                factura.getDatosEmpresa()
-            });
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error cargando facturas: " + ex.getMessage());
         }
-    } catch (Exception ex) {
-        JOptionPane.showMessageDialog(this, "Error cargando facturas: " + ex.getMessage());
     }
-}
 
     // ---------- MÉTODOS DE NEGOCIO ----------
 
-    private void venderEntrada() {
+    private void venderEntradaYFactura() {
         try {
             // Validaciones
             if (!validarDatosCliente() || !validarSeleccionFuncion() || !validarAsientoSeleccionado()) {
@@ -417,53 +466,16 @@ public class CineFrame extends JFrame {
             // Vender entrada
             int entradaId = entradaCtrl.crearEntrada(documento, funcionSeleccionada.getId(), asientoId, precioActual);
             
-            JOptionPane.showMessageDialog(this, 
-                "¡Entrada vendida exitosamente!\n" +
-                "Número de entrada: " + entradaId + "\n" +
-                "Asiento: " + buscarAsientoPorId(asientoId).getNumeroSilla());
-            
-            // Actualizar interfaz
-            cargarAsientosDisponibles(funcionSeleccionada.getSalaId(), funcionSeleccionada.getId());
-            cargarEntradasVendidas();
-            limpiarCamposCliente();
-            
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error vendiendo entrada: " + ex.getMessage());
-        }
-    }
-
-    private void generarFactura() {
-        try {
-            // Validaciones
-            if (!validarDatosCliente() || !validarSeleccionFuncion() || !validarAsientoSeleccionado()) {
-                return;
-            }
-            
-            // Obtener datos
-            int documento = Integer.parseInt(txtDocumentoCliente.getText().trim());
-            String nombre = txtNombreCliente.getText().trim();
-            String telefono = txtTelefonoCliente.getText().trim();
-            int asientoId = Integer.parseInt(grupoAsientos.getSelection().getActionCommand());
-            
-            // Crear o actualizar cliente
-            Cliente clienteExistente = buscarClientePorDocumento(documento);
-            if (clienteExistente == null) {
-                clienteCtrl.insertar(documento, nombre, telefono);
-            } else {
-                clienteCtrl.actualizar(documento, nombre, telefono);
-            }
-            
-            // Vender entrada
-            int entradaId = entradaCtrl.crearEntrada(documento, funcionSeleccionada.getId(), asientoId, precioActual);
-            
-            // Generar factura
-            String datosEmpresa = "CINE XYZ - NIT: 123456789-1 - Tel: 555-0123";
+            // Generar factura automáticamente con fecha actual
+            String datosEmpresa = "CINEMAX COLOMBIA - NIT: 800.123.456-1 - Tel: 601-1234567";
             int facturaId = facturaCtrl.crearFactura(documento, precioActual, datosEmpresa);
             
             JOptionPane.showMessageDialog(this, 
-                "¡Factura generada exitosamente!\n" +
+                "¡Venta completada exitosamente!\n" +
+                "Número de entrada: " + entradaId + "\n" +
                 "Número de factura: " + facturaId + "\n" +
-                "Número de entrada: " + entradaId);
+                "Asiento: " + buscarAsientoPorId(asientoId).getNumeroSilla() + "\n" +
+                "Total: $" + String.format("%.2f", precioActual));
             
             // Actualizar interfaz
             cargarAsientosDisponibles(funcionSeleccionada.getSalaId(), funcionSeleccionada.getId());
@@ -472,7 +484,7 @@ public class CineFrame extends JFrame {
             limpiarCamposCliente();
             
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error generando factura: " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, "Error en la venta: " + ex.getMessage());
         }
     }
 
@@ -527,10 +539,16 @@ public class CineFrame extends JFrame {
             Pelicula pelicula = funcion != null ? buscarPeliculaPorId(funcion.getPeliculaId()) : null;
             Sala sala = funcion != null ? buscarSalaPorId(funcion.getSalaId()) : null;
             Asiento asiento = entrada != null ? buscarAsientoPorId(entrada.getAsientoId()) : null;
+
+            // Manejar fecha nula
+            String fechaFactura = "N/A";
+            if (factura.getFecha() != null) {
+                fechaFactura = factura.getFecha().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+            }
             
             String facturaStr = "=== FACTURA ===\n\n" +
                               "Factura #: " + facturaId + "\n" +
-                              "Fecha: " + factura.getFecha().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) + "\n" +
+                              "Fecha: " + fechaFactura + "\n" +
                               "Cliente: " + cliente.getNombre() + "\n" +
                               "Documento: " + cliente.getDocumento() + "\n" +
                               "Teléfono: " + cliente.getTelefono() + "\n\n" +
@@ -550,6 +568,146 @@ public class CineFrame extends JFrame {
             
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error imprimiendo factura: " + ex.getMessage());
+        }
+    }
+
+    // ---------- MÉTODOS CRUD CON AUTENTICACIÓN ----------
+
+    private boolean autenticarAdministrador() {
+        String password = JOptionPane.showInputDialog(this, "Ingrese la contraseña de administrador:");
+        return "ADMIN202#".equals(password);
+    }
+
+    private void editarEntrada() {
+        int fila = tblEntradasVendidas.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione una entrada para editar");
+            return;
+        }
+
+        if (!autenticarAdministrador()) {
+            JOptionPane.showMessageDialog(this, "Contraseña incorrecta");
+            return;
+        }
+
+        try {
+            int entradaId = (int) modelEntradasVendidas.getValueAt(fila, 0);
+            Entrada entrada = buscarEntradaPorId(entradaId);
+            
+            // Diálogo para editar
+            JTextField txtValor = new JTextField(String.valueOf(entrada.getValor()));
+            Object[] message = {
+                "Nuevo valor:", txtValor
+            };
+
+            int option = JOptionPane.showConfirmDialog(this, message, "Editar Entrada", 
+                JOptionPane.OK_CANCEL_OPTION);
+            
+            if (option == JOptionPane.OK_OPTION) {
+                double nuevoValor = Double.parseDouble(txtValor.getText());
+                entradaCtrl.actualizar(entradaId, entrada.getClienteDocumento(), 
+                    entrada.getFuncionId(), entrada.getAsientoId(), nuevoValor);
+                JOptionPane.showMessageDialog(this, "Entrada actualizada correctamente");
+                cargarEntradasVendidas();
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error editando entrada: " + ex.getMessage());
+        }
+    }
+
+    private void eliminarEntrada() {
+        int fila = tblEntradasVendidas.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione una entrada para eliminar");
+            return;
+        }
+
+        if (!autenticarAdministrador()) {
+            JOptionPane.showMessageDialog(this, "Contraseña incorrecta");
+            return;
+        }
+
+        try {
+            int entradaId = (int) modelEntradasVendidas.getValueAt(fila, 0);
+            int confirm = JOptionPane.showConfirmDialog(this, 
+                "¿Está seguro de eliminar esta entrada?", "Confirmar eliminación", 
+                JOptionPane.YES_NO_OPTION);
+            
+            if (confirm == JOptionPane.YES_OPTION) {
+                entradaCtrl.eliminar(entradaId);
+                JOptionPane.showMessageDialog(this, "Entrada eliminada correctamente");
+                cargarEntradasVendidas();
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error eliminando entrada: " + ex.getMessage());
+        }
+    }
+
+    private void editarFactura() {
+        int fila = tblFacturas.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione una factura para editar");
+            return;
+        }
+
+        if (!autenticarAdministrador()) {
+            JOptionPane.showMessageDialog(this, "Contraseña incorrecta");
+            return;
+        }
+
+        try {
+            int facturaId = (int) modelFacturas.getValueAt(fila, 0);
+            Factura factura = buscarFacturaPorId(facturaId);
+            
+            // Diálogo para editar
+            JTextField txtValor = new JTextField(String.valueOf(factura.getValorTotal()));
+            JTextField txtEmpresa = new JTextField(factura.getDatosEmpresa());
+            
+            Object[] message = {
+                "Nuevo valor total:", txtValor,
+                "Datos empresa:", txtEmpresa
+            };
+
+            int option = JOptionPane.showConfirmDialog(this, message, "Editar Factura", 
+                JOptionPane.OK_CANCEL_OPTION);
+            
+            if (option == JOptionPane.OK_OPTION) {
+                double nuevoValor = Double.parseDouble(txtValor.getText());
+                facturaCtrl.actualizar(facturaId, factura.getClienteDocumento(), 
+                    nuevoValor, txtEmpresa.getText());
+                JOptionPane.showMessageDialog(this, "Factura actualizada correctamente");
+                cargarFacturas();
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error editando factura: " + ex.getMessage());
+        }
+    }
+
+    private void eliminarFactura() {
+        int fila = tblFacturas.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione una factura para eliminar");
+            return;
+        }
+
+        if (!autenticarAdministrador()) {
+            JOptionPane.showMessageDialog(this, "Contraseña incorrecta");
+            return;
+        }
+
+        try {
+            int facturaId = (int) modelFacturas.getValueAt(fila, 0);
+            int confirm = JOptionPane.showConfirmDialog(this, 
+                "¿Está seguro de eliminar esta factura?", "Confirmar eliminación", 
+                JOptionPane.YES_NO_OPTION);
+            
+            if (confirm == JOptionPane.YES_OPTION) {
+                facturaCtrl.eliminar(facturaId);
+                JOptionPane.showMessageDialog(this, "Factura eliminada correctamente");
+                cargarFacturas();
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error eliminando factura: " + ex.getMessage());
         }
     }
 
