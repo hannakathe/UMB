@@ -79,6 +79,14 @@ public class CineFrame extends JFrame {
         setSize(1400, 900);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        try {
+            ImageIcon icono = new ImageIcon("Cuarto_Semestre/Base_Datos_Teoria/CineApp/src/images/icon.png");
+            if (icono.getImage() != null) {
+                setIconImage(icono.getImage());
+            }
+        } catch (Exception e) {
+            System.out.println("No se pudo cargar el icono de la ventana: " + e.getMessage());
+        }
         initUI(); // Inicializar la interfaz de usuario
     }
 
@@ -540,66 +548,56 @@ public class CineFrame extends JFrame {
                         btnOcupado.setOpaque(false); // Hacer transparente
                         btnOcupado.setBorderPainted(false); // Sin borde
                         btnOcupado.setContentAreaFilled(false); // Sin área de contenido rellena
-                        btnOcupado.setEnabled(false);
                         btnOcupado.setToolTipText("Asiento " + asiento.getNumeroSilla() + " - OCUPADO");
                         btnOcupado.setPreferredSize(new Dimension(35, 35));
                         btnOcupado.setHorizontalAlignment(SwingConstants.CENTER); // CENTRAR
                         btnOcupado.setVerticalAlignment(SwingConstants.CENTER); // CENTRAR
                         panelAsientosGrid.add(btnOcupado);
-                    }  else {
-    // Asiento disponible con icono - CENTRADO
-    JCheckBox checkAsiento = new JCheckBox();
-    if (iconoSillaDisponible != null) {
-        checkAsiento.setIcon(iconoSillaDisponible);
-        checkAsiento.setText(""); // Asegurar que no tenga texto
-    } else {
-        checkAsiento.setText("🟢");
-        checkAsiento.setFont(new Font("Arial", Font.BOLD, 12));
-    }
-    checkAsiento.setBackground(null); // Sin color de fondo
-    checkAsiento.setOpaque(false); // Hacer transparente
-    checkAsiento.setBorderPainted(false); // Sin borde
-    checkAsiento.setContentAreaFilled(false); // Sin área de contenido rellena
-    checkAsiento.setActionCommand(String.valueOf(asiento.getId()));
-    checkAsiento.setToolTipText("Asiento " + asiento.getNumeroSilla() + " - DISPONIBLE");
-    checkAsiento.setPreferredSize(new Dimension(35, 35));
-    checkAsiento.setHorizontalAlignment(SwingConstants.CENTER); // CENTRAR
-    checkAsiento.setVerticalAlignment(SwingConstants.CENTER); // CENTRAR
-    
-    // Listener para actualizar precio total cuando se selecciona/deselecciona
-    checkAsiento.addActionListener(e -> {
-        if (checkAsiento.isSelected()) {
-            cantidadAsientosSeleccionados++;
-            // Cambiar a icono de silla seleccionada
-            if (iconoSillaSeleccionada != null) {
-                checkAsiento.setIcon(iconoSillaSeleccionada);
-                checkAsiento.setText("");
-            } else {
-                checkAsiento.setText("⚫");
-                checkAsiento.setFont(new Font("Arial", Font.BOLD, 12));
-            }
-            // Solo borde azul cuando está seleccionado
-            checkAsiento.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
-            asientosSeleccionados.add(checkAsiento);
-        } else {
-            cantidadAsientosSeleccionados--;
-            // Volver a icono de silla disponible
-            if (iconoSillaDisponible != null) {
-                checkAsiento.setIcon(iconoSillaDisponible);
-                checkAsiento.setText("");
-            } else {
-                checkAsiento.setText("🟢");
-                checkAsiento.setFont(new Font("Arial", Font.BOLD, 12));
-            }
-            // Quitar el borde cuando se deselecciona
-            checkAsiento.setBorder(null);
-            asientosSeleccionados.remove(checkAsiento);
-        }
-        actualizarPrecioTotal();
-    });
-    
-    panelAsientosGrid.add(checkAsiento);
-}
+                    } else {
+                        // Asiento disponible con icono - CENTRADO
+                        JCheckBox checkAsiento = new JCheckBox();
+                        if (iconoSillaDisponible != null) {
+                            checkAsiento.setIcon(iconoSillaDisponible);
+                            checkAsiento.setText(""); // Asegurar que no tenga texto
+                        } else {
+                            checkAsiento.setText("🟢");
+                            checkAsiento.setFont(new Font("Arial", Font.BOLD, 12));
+                        }
+
+                        checkAsiento.setActionCommand(String.valueOf(asiento.getId()));
+                        checkAsiento.setToolTipText("Asiento " + asiento.getNumeroSilla() + " - DISPONIBLE");
+                        checkAsiento.setPreferredSize(new Dimension(35, 35));
+                        checkAsiento.setHorizontalAlignment(SwingConstants.CENTER); // CENTRAR
+                        checkAsiento.setVerticalAlignment(SwingConstants.CENTER); // CENTRAR
+
+                        // Listener para actualizar precio total cuando se selecciona/deselecciona
+                        checkAsiento.addActionListener(_ -> {
+                            if (checkAsiento.isSelected()) {
+                                cantidadAsientosSeleccionados++;
+                                // Cambiar a icono de silla seleccionada
+                                if (iconoSillaSeleccionada != null) {
+                                    checkAsiento.setIcon(iconoSillaSeleccionada);
+                                    checkAsiento.setText("");
+                                } else {
+                                    checkAsiento.setText("⚫");
+                                    checkAsiento.setFont(new Font("Arial", Font.BOLD, 12));
+                                }
+                            } else {
+                                cantidadAsientosSeleccionados--;
+                                // Volver a icono de silla disponible
+                                if (iconoSillaDisponible != null) {
+                                    checkAsiento.setIcon(iconoSillaDisponible);
+                                    checkAsiento.setText("");
+                                } else {
+                                    checkAsiento.setText("🟢");
+                                    checkAsiento.setFont(new Font("Arial", Font.BOLD, 12));
+                                }
+                            }
+                            actualizarPrecioTotal();
+                        });
+
+                        panelAsientosGrid.add(checkAsiento);
+                    }
                 }
 
                 // Agregar separador al final de cada fila
@@ -631,7 +629,6 @@ public class CineFrame extends JFrame {
             btnLeyendaVerde.setOpaque(false);
             btnLeyendaVerde.setBorderPainted(false);
             btnLeyendaVerde.setContentAreaFilled(false);
-            btnLeyendaVerde.setEnabled(false);
 
             JButton btnLeyendaNegro = new JButton("Seleccionado");
             if (iconoSillaSeleccionada != null) {
@@ -644,7 +641,6 @@ public class CineFrame extends JFrame {
             btnLeyendaNegro.setOpaque(false);
             btnLeyendaNegro.setBorderPainted(false);
             btnLeyendaNegro.setContentAreaFilled(false);
-            btnLeyendaNegro.setEnabled(false);
 
             JButton btnLeyendaRojo = new JButton("Ocupado");
             if (iconoSillaOcupada != null) {
@@ -657,7 +653,6 @@ public class CineFrame extends JFrame {
             btnLeyendaRojo.setOpaque(false);
             btnLeyendaRojo.setBorderPainted(false);
             btnLeyendaRojo.setContentAreaFilled(false);
-            btnLeyendaRojo.setEnabled(false);
 
             panelLeyenda.add(btnLeyendaVerde);
             panelLeyenda.add(btnLeyendaNegro);
