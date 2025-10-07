@@ -69,4 +69,13 @@ public class FuncionController {
     public void eliminar(int id) throws SQLException {
         dao.eliminar(id);
     }
+
+    // MÉTODOS NUEVOS PARA LA GESTIÓN DE FUNCIONES
+    public void crearFuncion(int peliculaId, int salaId, LocalDateTime fechaHora) throws Exception {
+        insertar(peliculaId, salaId, fechaHora);
+    }
+
+    public boolean tieneEntradasVendidas(int funcionId) throws SQLException {
+        return dao.tieneEntradasVendidas(funcionId);
+    }
 }

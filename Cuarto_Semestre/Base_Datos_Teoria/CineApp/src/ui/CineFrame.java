@@ -54,6 +54,19 @@ public class CineFrame extends JFrame {
     private JTextField txtEditIdFactura, txtEditDocumentoFactura, txtEditClienteFactura,
             txtEditValorFactura, txtEditFechaFactura, txtEditEmpresaFactura;
 
+            // ---------- COMPONENTES PARA GESTIÓN DE FUNCIONES ----------
+private JTable tblFunciones;
+private DefaultTableModel modelFunciones;
+private JComboBox<String> comboPeliculasFunciones;
+private JComboBox<String> comboSalasFunciones;
+private JSpinner spinnerFecha;
+private JSpinner spinnerHora;
+private JTextField txtEditIdFuncion;
+private JTextField txtEditPeliculaFuncion;
+private JTextField txtEditSalaFuncion;
+private JTextField txtEditFechaFuncion;
+private JTextField txtEditHoraFuncion;
+
     // Variables para selección actual
     private Pelicula peliculaSeleccionada;
     private Funcion funcionSeleccionada;
@@ -135,11 +148,15 @@ public class CineFrame extends JFrame {
 
         // ---------- PESTAÑA FACTURAS ----------
         JPanel pFacturas = crearPanelFacturas();
+        // ---------- PESTAÑA GESTIÓN DE FUNCIONES ----------
+    JPanel pFunciones = crearPanelFunciones();
 
         // ---------- AGREGAR PESTAÑAS ----------
         tabs.addTab("Venta de Entradas", pPrincipal);
         tabs.addTab("Entradas Vendidas", pEntradas);
         tabs.addTab("Facturas", pFacturas);
+        tabs.addTab("Gestión de Funciones", pFunciones); // AGREGAR ESTA LÍNEA
+
 
         add(tabs, BorderLayout.CENTER);
 
@@ -150,8 +167,115 @@ public class CineFrame extends JFrame {
         cargarPeliculas();
         cargarEntradasVendidas();
         cargarFacturas();
+        // ---------- CARGAR DATOS INICIALES ----------
+    cargarPeliculas();
+    cargarEntradasVendidas();
+    cargarFacturas();
+    cargarDatosFunciones(); // AGREGAR ESTA LÍNEA
+    cargarFunciones(); // AGREGAR ESTA LÍNEA
     }
-
+    private JPanel crearPanelFunciones() {
+        JPanel pFunciones = new JPanel(new BorderLayout(10, 10));
+        pFunciones.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+    
+        // Panel superior: Formulario para nueva función
+        JPanel pNuevaFuncion = new JPanel(new GridLayout(2, 6, 5, 5));
+        pNuevaFuncion.setBorder(BorderFactory.createTitledBorder("Nueva Función"));
+    
+        // Componentes para nueva función
+        comboPeliculasFunciones = new JComboBox<>();
+        comboSalasFunciones = new JComboBox<>();
+        
+        // Configurar fecha (próximos 30 días)
+        SpinnerDateModel dateModel = new SpinnerDateModel();
+        spinnerFecha = new JSpinner(dateModel);
+        spinnerFecha.setEditor(new JSpinner.DateEditor(spinnerFecha, "dd/MM/yyyy"));
+        
+        // Configurar hora (de 8:00 a 23:00)
+        SpinnerDateModel timeModel = new SpinnerDateModel();
+        spinnerHora = new JSpinner(timeModel);
+        spinnerHora.setEditor(new JSpinner.DateEditor(spinnerHora, "HH:mm"));
+        
+        pNuevaFuncion.add(new JLabel("Película:"));
+        pNuevaFuncion.add(comboPeliculasFunciones);
+        pNuevaFuncion.add(new JLabel("Sala:"));
+        pNuevaFuncion.add(comboSalasFunciones);
+        pNuevaFuncion.add(new JLabel("Fecha:"));
+        pNuevaFuncion.add(spinnerFecha);
+        pNuevaFuncion.add(new JLabel("Hora:"));
+        pNuevaFuncion.add(spinnerHora);
+    
+        // Botón para agregar función
+        JButton btnAgregarFuncion = new JButton("Agregar Función");
+        btnAgregarFuncion.addActionListener(_ -> agregarFuncion());
+        pNuevaFuncion.add(new JLabel());
+        pNuevaFuncion.add(btnAgregarFuncion);
+    
+        // Panel medio: Formulario de edición
+        JPanel pEditarFuncion = new JPanel(new GridLayout(2, 6, 5, 5));
+        pEditarFuncion.setBorder(BorderFactory.createTitledBorder("Editar Función"));
+    
+        txtEditIdFuncion = new JTextField();
+        txtEditIdFuncion.setEditable(false);
+        txtEditPeliculaFuncion = new JTextField();
+        txtEditSalaFuncion = new JTextField();
+        txtEditFechaFuncion = new JTextField();
+        txtEditHoraFuncion = new JTextField();
+    
+        pEditarFuncion.add(new JLabel("ID:"));
+        pEditarFuncion.add(txtEditIdFuncion);
+        pEditarFuncion.add(new JLabel("Película:"));
+        pEditarFuncion.add(txtEditPeliculaFuncion);
+        pEditarFuncion.add(new JLabel("Sala:"));
+        pEditarFuncion.add(txtEditSalaFuncion);
+        pEditarFuncion.add(new JLabel("Fecha (dd/MM/yyyy):"));
+        pEditarFuncion.add(txtEditFechaFuncion);
+        pEditarFuncion.add(new JLabel("Hora (HH:mm):"));
+        pEditarFuncion.add(txtEditHoraFuncion);
+    
+        // Tabla de funciones
+        modelFunciones = new DefaultTableModel(new Object[] {
+            "ID", "Película", "Género", "Sala", "Fecha", "Hora", "Asientos Disp."
+        }, 0);
+        tblFunciones = new JTable(modelFunciones);
+    
+        // Listener para selección en tabla de funciones
+        tblFunciones.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting() && tblFunciones.getSelectedRow() != -1) {
+                int fila = tblFunciones.getSelectedRow();
+                txtEditIdFuncion.setText(modelFunciones.getValueAt(fila, 0).toString());
+                txtEditPeliculaFuncion.setText(modelFunciones.getValueAt(fila, 1).toString());
+                txtEditSalaFuncion.setText(modelFunciones.getValueAt(fila, 3).toString());
+                txtEditFechaFuncion.setText(modelFunciones.getValueAt(fila, 4).toString());
+                txtEditHoraFuncion.setText(modelFunciones.getValueAt(fila, 5).toString());
+            }
+        });
+    
+        // Panel de botones
+        JPanel pBotonesFunciones = new JPanel(new FlowLayout());
+        JButton btnActualizarFunciones = new JButton("Actualizar Lista");
+        JButton btnEditarFuncion = new JButton("Guardar Cambios");
+        JButton btnEliminarFuncion = new JButton("Eliminar Función");
+    
+        btnActualizarFunciones.addActionListener(_ -> cargarFunciones());
+        btnEditarFuncion.addActionListener(_ -> editarFuncion());
+        btnEliminarFuncion.addActionListener(_ -> eliminarFuncion());
+    
+        pBotonesFunciones.add(btnActualizarFunciones);
+        pBotonesFunciones.add(btnEditarFuncion);
+        pBotonesFunciones.add(btnEliminarFuncion);
+    
+        // Organizar panels
+        JPanel pFormularios = new JPanel(new GridLayout(2, 1, 5, 10));
+        pFormularios.add(pNuevaFuncion);
+        pFormularios.add(pEditarFuncion);
+    
+        pFunciones.add(pFormularios, BorderLayout.NORTH);
+        pFunciones.add(new JScrollPane(tblFunciones), BorderLayout.CENTER);
+        pFunciones.add(pBotonesFunciones, BorderLayout.SOUTH);
+    
+        return pFunciones;
+    }
     private JPanel crearPanelPrincipal() {
         JPanel pPrincipal = new JPanel(new BorderLayout(10, 10));
         pPrincipal.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -444,7 +568,226 @@ tblEntradasVendidas.getSelectionModel().addListSelectionListener(e -> {
     }
 
     // ---------- MÉTODOS PARA CARGAR DATOS ----------
-
+    private void cargarFunciones() {
+        try {
+            modelFunciones.setRowCount(0);
+            
+            List<Funcion> funciones = funcionCtrl.listar();
+            for (Funcion funcion : funciones) {
+                Pelicula pelicula = buscarPeliculaPorId(funcion.getPeliculaId());
+                Sala sala = buscarSalaPorId(funcion.getSalaId());
+                
+                // Calcular asientos disponibles
+                int asientosDisponibles = calcularAsientosDisponibles(funcion.getId(), funcion.getSalaId());
+                
+                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+                
+                modelFunciones.addRow(new Object[] {
+                    funcion.getId(),
+                    pelicula != null ? pelicula.getTitulo() : "N/A",
+                    pelicula != null ? pelicula.getGenero() : "N/A",
+                    sala != null ? sala.getTipoSala() : "N/A",
+                    funcion.getFechaHora().format(dateFormatter),
+                    funcion.getFechaHora().format(timeFormatter),
+                    asientosDisponibles + "/" + (sala != null ? sala.getCapacidad() : "N/A")
+                });
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error cargando funciones: " + ex.getMessage());
+        }
+    }
+    
+    private void cargarDatosFunciones() {
+        try {
+            // Cargar películas en combo
+            comboPeliculasFunciones.removeAllItems();
+            List<Pelicula> peliculas = peliculaCtrl.listar();
+            for (Pelicula p : peliculas) {
+                comboPeliculasFunciones.addItem(p.getId() + " - " + p.getTitulo());
+            }
+            
+            // Cargar salas en combo
+            comboSalasFunciones.removeAllItems();
+            List<Sala> salas = salaDAO.listar();
+            for (Sala s : salas) {
+                comboSalasFunciones.addItem(s.getId() + " - " + s.getTipoSala() + " (Cap: " + s.getCapacidad() + ")");
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error cargando datos para funciones: " + ex.getMessage());
+        }
+    }
+    
+    private void agregarFuncion() {
+        try {
+            if (comboPeliculasFunciones.getSelectedIndex() == -1 || comboSalasFunciones.getSelectedIndex() == -1) {
+                JOptionPane.showMessageDialog(this, "Debe seleccionar una película y una sala");
+                return;
+            }
+            
+            // Obtener IDs seleccionados
+            String peliculaStr = (String) comboPeliculasFunciones.getSelectedItem();
+            String salaStr = (String) comboSalasFunciones.getSelectedItem();
+            
+            int peliculaId = Integer.parseInt(peliculaStr.split(" - ")[0]);
+            int salaId = Integer.parseInt(salaStr.split(" - ")[0]);
+            
+            // Obtener fecha y hora
+            Date fecha = (Date) spinnerFecha.getValue();
+            Date hora = (Date) spinnerHora.getValue();
+            
+            // Combinar fecha y hora
+            Calendar calFecha = Calendar.getInstance();
+            calFecha.setTime(fecha);
+            
+            Calendar calHora = Calendar.getInstance();
+            calHora.setTime(hora);
+            
+            Calendar combined = Calendar.getInstance();
+            combined.set(calFecha.get(Calendar.YEAR), calFecha.get(Calendar.MONTH), calFecha.get(Calendar.DAY_OF_MONTH),
+                        calHora.get(Calendar.HOUR_OF_DAY), calHora.get(Calendar.MINUTE), 0);
+            
+            LocalDateTime fechaHora = LocalDateTime.ofInstant(combined.toInstant(), combined.getTimeZone().toZoneId());
+            
+            // Verificar si la sala está disponible en esa fecha y hora
+            if (!salaDisponible(salaId, fechaHora)) {
+                JOptionPane.showMessageDialog(this, "La sala no está disponible en esa fecha y hora");
+                return;
+            }
+            
+            // Crear la función
+            funcionCtrl.crearFuncion(peliculaId, salaId, fechaHora);
+            
+            JOptionPane.showMessageDialog(this, "Función creada exitosamente");
+            cargarFunciones();
+            cargarPeliculas(); // Actualizar combo en pestaña principal
+            
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error creando función: " + ex.getMessage());
+        }
+    }
+    
+    private void editarFuncion() {
+        try {
+            if (txtEditIdFuncion.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Seleccione una función para editar");
+                return;
+            }
+            
+            if (!autenticarAdministrador()) {
+                JOptionPane.showMessageDialog(this, "Contraseña incorrecta o cancelada");
+                return;
+            }
+            
+            int funcionId = Integer.parseInt(txtEditIdFuncion.getText());
+            String fechaStr = txtEditFechaFuncion.getText().trim();
+            String horaStr = txtEditHoraFuncion.getText().trim();
+            
+            // Parsear fecha y hora
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+            LocalDateTime fechaHora = LocalDateTime.parse(fechaStr + " " + horaStr, formatter);
+            
+            // Obtener la función actual para mantener película y sala
+            Funcion funcionActual = buscarFuncionPorId(funcionId);
+            if (funcionActual != null) {
+                // Verificar disponibilidad de la sala (excluyendo la función actual)
+                if (!salaDisponible(funcionActual.getSalaId(), fechaHora, funcionId)) {
+                    JOptionPane.showMessageDialog(this, "La sala no está disponible en esa fecha y hora");
+                    return;
+                }
+                
+                funcionCtrl.actualizar(funcionId, funcionActual.getPeliculaId(), funcionActual.getSalaId(), fechaHora);
+                JOptionPane.showMessageDialog(this, "Función actualizada correctamente");
+                cargarFunciones();
+                limpiarCamposEdicionFuncion();
+            }
+            
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error editando función: " + ex.getMessage());
+        }
+    }
+    
+    private void eliminarFuncion() {
+        try {
+            if (txtEditIdFuncion.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Seleccione una función para eliminar");
+                return;
+            }
+            
+            if (!autenticarAdministrador()) {
+                JOptionPane.showMessageDialog(this, "Contraseña incorrecta");
+                return;
+            }
+            
+            int funcionId = Integer.parseInt(txtEditIdFuncion.getText());
+            
+            // Verificar si hay entradas vendidas
+            if (funcionCtrl.tieneEntradasVendidas(funcionId)) {
+                JOptionPane.showMessageDialog(this, "No se puede eliminar la función porque ya hay entradas vendidas");
+                return;
+            }
+            
+            int confirm = JOptionPane.showConfirmDialog(this,
+                    "¿Está seguro de eliminar esta función?", "Confirmar eliminación",
+                    JOptionPane.YES_NO_OPTION);
+            
+            if (confirm == JOptionPane.YES_OPTION) {
+                funcionCtrl.eliminar(funcionId);
+                JOptionPane.showMessageDialog(this, "Función eliminada correctamente");
+                cargarFunciones();
+                cargarPeliculas(); // Actualizar combo en pestaña principal
+                limpiarCamposEdicionFuncion();
+            }
+            
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error eliminando función: " + ex.getMessage());
+        }
+    }
+    
+    private boolean salaDisponible(int salaId, LocalDateTime fechaHora) {
+        return salaDisponible(salaId, fechaHora, -1);
+    }
+    
+    private boolean salaDisponible(int salaId, LocalDateTime fechaHora, int funcionIdExcluir) {
+        try {
+            List<Funcion> funciones = funcionCtrl.listar();
+            for (Funcion f : funciones) {
+                if (f.getSalaId() == salaId && f.getId() != funcionIdExcluir) {
+                    // Verificar si hay superposición de horarios (misma sala dentro de 3 horas)
+                    if (f.getFechaHora().isBefore(fechaHora.plusHours(3)) && 
+                        f.getFechaHora().plusHours(3).isAfter(fechaHora)) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    
+    private void limpiarCamposEdicionFuncion() {
+        txtEditIdFuncion.setText("");
+        txtEditPeliculaFuncion.setText("");
+        txtEditSalaFuncion.setText("");
+        txtEditFechaFuncion.setText("");
+        txtEditHoraFuncion.setText("");
+    }
+    
+    private int calcularAsientosDisponibles(int funcionId, int salaId) {
+        try {
+            List<Asiento> asientos = asientoDAO.listarPorSala(salaId);
+            List<Entrada> entradasVendidas = entradaCtrl.listarPorFuncion(funcionId);
+            
+            Sala sala = buscarSalaPorId(salaId);
+            int capacidad = sala != null ? sala.getCapacidad() : 0;
+            
+            return capacidad - entradasVendidas.size();
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+    
     private void cargarPeliculas() {
         try {
             comboPeliculas.removeAllItems();
@@ -1327,31 +1670,31 @@ private void actualizarFacturaPorEliminacion(int clienteDocumento, double valorE
     // ---------- MÉTODOS DE BÚSQUEDA ----------
 
     private Pelicula buscarPeliculaPorId(int id) {
-        try {
-            List<Pelicula> peliculas = peliculaCtrl.listar();
-            return peliculas.stream().filter(p -> p.getId() == id).findFirst().orElse(null);
-        } catch (Exception e) {
-            return null;
-        }
+    try {
+        List<Pelicula> peliculas = peliculaCtrl.listar();
+        return peliculas.stream().filter(p -> p.getId() == id).findFirst().orElse(null);
+    } catch (Exception e) {
+        return null;
     }
+}
 
-    private Funcion buscarFuncionPorId(int id) {
-        try {
-            List<Funcion> funciones = funcionCtrl.listar();
-            return funciones.stream().filter(f -> f.getId() == id).findFirst().orElse(null);
-        } catch (Exception e) {
-            return null;
-        }
+private Funcion buscarFuncionPorId(int id) {
+    try {
+        List<Funcion> funciones = funcionCtrl.listar();
+        return funciones.stream().filter(f -> f.getId() == id).findFirst().orElse(null);
+    } catch (Exception e) {
+        return null;
     }
+}
 
-    private Sala buscarSalaPorId(int id) {
-        try {
-            List<Sala> salas = salaDAO.listar();
-            return salas.stream().filter(s -> s.getId() == id).findFirst().orElse(null);
-        } catch (Exception e) {
-            return null;
-        }
+private Sala buscarSalaPorId(int id) {
+    try {
+        List<Sala> salas = salaDAO.listar();
+        return salas.stream().filter(s -> s.getId() == id).findFirst().orElse(null);
+    } catch (Exception e) {
+        return null;
     }
+}
 
     private Asiento buscarAsientoPorId(int id) {
         try {

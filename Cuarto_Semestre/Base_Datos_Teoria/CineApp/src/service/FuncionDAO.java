@@ -62,5 +62,17 @@ public class FuncionDAO { // Clase DAO (Data Access Object) para manejar operaci
             ps.executeUpdate(); // Ejecuta la eliminación
         }
     }
+    // En FuncionDAO.java - Agregar este método
+public boolean tieneEntradasVendidas(int funcionId) throws SQLException {
+    String sql = "SELECT COUNT(*) FROM entradas WHERE funcion_id = ?";
+    try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+        pstmt.setInt(1, funcionId);
+        ResultSet rs = pstmt.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1) > 0;
+        }
+    }
+    return false;
+}
 
 }
