@@ -68,8 +68,7 @@ public class FacturaDAO {
     // Método para actualizar una factura existente
     public void actualizar(Factura f) throws SQLException {
         // Consulta SQL de actualización
-        // ⚠️ OJO: el campo está escrito como "cliente_doc", pero en el INSERT usas "cliente_documento".
-        // Esto puede causar error si en la BD realmente es "cliente_documento".
+
         String sql = "UPDATE facturas SET cliente_doc=?, valor_total=?, datos_empresa=? WHERE id=?";
         
         // Prepara la sentencia
