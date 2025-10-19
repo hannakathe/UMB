@@ -76,18 +76,51 @@ async function listarClientes(){
     tr.innerHTML = `
       <td>${c.nroID}</td>
       <td>${c.nombres}</td>
-      <td>${c.correo||''}</td>
-      <td>${c.celular||''}</td>
-      <td>${c.nombre_pais||''}</td>
-      <td>${c.nombre_ciudad||''}</td>
+      <td>${c.correo || ''}</td>
+      <td>${c.celular || ''}</td>
+      <td>${c.nombre_pais || ''}</td>
+      <td>${c.nombre_ciudad || ''}</td>
       <td>
         <button onclick="editar('${c.nroID}')">Editar</button>
         <button onclick="borrar('${c.nroID}')">Eliminar</button>
       </td>
     `;
+
+    // 🟢 Nuevo: al hacer clic en la fila, carga los datos en el formulario
+    tr.addEventListener('click', () => {
+      llenarFormulario(c);
+    });
+
     tablaBody.appendChild(tr);
   });
 }
+
+// 🔵 Nueva función para llenar el formulario
+function llenarFormulario(c) {
+  document.getElementById('tipoID').value = c.tipoID || 'CC';
+  document.getElementById('nroID').value = c.nroID;
+  document.getElementById('nombres').value = c.nombres;
+  document.getElementById('correo').value = c.correo || '';
+  document.getElementById('direccion').value = c.direccion || '';
+  document.getElementById('celular').value = c.celular || '';
+
+  if(c.cod_pais){
+    paisSelect.value = c.cod_pais;
+    const ev = new Event('change');
+    paisSelect.dispatchEvent(ev);
+    setTimeout(() => {
+      ciudadSelect.value = c.cod_ciudad || '';
+    }, 300);
+  }
+
+  // Cambiar modo a edición automáticamente
+  editando = true;
+  editarNroID = c.nroID;
+  document.getElementById('nroID').disabled = true;
+  btnGuardar.style.display = 'none';
+  btnActualizar.style.display = 'inline-block';
+}
+
 
 function formToObject(){
   return {
