@@ -1,0 +1,36 @@
+# === Archivos y carpetas del entorno virtual de Python ===
+venv/
+.env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# === Archivos de base de datos locales ===
+*.db
+database/Usuarios_UMB.db
+
+# === Configuración de VSCode ===
+.vscode/
+
+# === Archivos temporales o de sistema ===
+.DS_Store
+Thumbs.db
+
+# === Archivos de compilación de Java ===
+bin/
+*.class
+
+# === Archivos de log ===
+*.log
+
+# === Archivos de entorno o configuración privada ===
+*.env
+config.json
+
+# === Archivos de dependencias descargadas (por seguridad) ===
+lib/
+
+# === Node.js (por si usas npm para el frontend) ===
+node_modules/
+package-lock.json

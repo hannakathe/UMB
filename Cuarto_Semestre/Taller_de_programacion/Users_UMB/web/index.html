@@ -1,28 +1,53 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8" />
   <title>Usuarios UMB - CRUD</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
 <body>
-  <h1>Gestión de Clientes</h1>
+  <h1>Gestión de Clientes - Usuarios_UMB</h1>
 
-  <form id="clienteForm">
-    <input type="text" id="nombres" placeholder="Nombre completo" required>
-    <input type="email" id="correo" placeholder="Correo" required>
-    <input type="text" id="direccion" placeholder="Dirección" required>
-    <input type="text" id="celular" placeholder="Celular" required>
-    <button type="submit">Agregar Cliente</button>
-  </form>
+  <div class="container">
+    <div class="left">
+      <form id="clienteForm">
+        <h2>Cliente</h2>
+        <label>Tipo ID <input id="tipoID" value="CC"></label>
+        <label>Nro ID <input id="nroID" required></label>
+        <label>Nombre <input id="nombres" required></label>
+        <label>Correo <input id="correo" type="email"></label>
+        <label>Dirección <input id="direccion"></label>
+        <label>Celular <input id="celular"></label>
+        <label>País
+          <select id="paisSelect"></select>
+        </label>
+        <label>Ciudad
+          <select id="ciudadSelect"></select>
+        </label>
+        <div class="buttons">
+          <button id="guardar">Guardar</button>
+          <button id="actualizar" type="button" style="display:none">Actualizar</button>
+          <button id="cancelar" type="button">Cancelar</button>
+        </div>
+      </form>
 
-  <table id="tablaClientes">
-    <thead>
-      <tr><th>Nombre</th><th>Correo</th><th>Celular</th><th>Acciones</th></tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+      <h2>Clientes</h2>
+      <table id="tablaClientes">
+        <thead><tr><th>NroID</th><th>Nombre</th><th>Correo</th><th>Celular</th><th>País</th><th>Ciudad</th><th>Acciones</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
 
+    <div class="right">
+      <h2>Mapa de País</h2>
+      <div id="map"></div>
+      <p>Selecciona un país para centrar el mapa (si el país no tiene coordenadas exactas usa un punto por defecto).</p>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
