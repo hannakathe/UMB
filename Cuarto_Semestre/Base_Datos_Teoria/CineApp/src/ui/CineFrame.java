@@ -93,7 +93,7 @@ private JTextField txtEditHoraFuncion;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         try {
-            ImageIcon icono = new ImageIcon("Cuarto_Semestre/Base_Datos_Teoria/CineApp/src/images/icon.png");
+            ImageIcon icono = new ImageIcon("src/images/icon.png");
             if (icono.getImage() != null) {
                 setIconImage(icono.getImage());
             }
@@ -107,10 +107,10 @@ private JTextField txtEditHoraFuncion;
         try {
             // Cargar iconos desde la carpeta images
             iconoSillaDisponible = new ImageIcon(
-                    "Cuarto_Semestre/Base_Datos_Teoria/CineApp/src/images/silla_disponible.png");
-            iconoSillaOcupada = new ImageIcon("Cuarto_Semestre/Base_Datos_Teoria/CineApp/src/images/silla_ocupada.png");
+                    "src/images/silla_disponible.png");
+            iconoSillaOcupada = new ImageIcon("src/images/silla_ocupada.png");
             iconoSillaSeleccionada = new ImageIcon(
-                    "Cuarto_Semestre/Base_Datos_Teoria/CineApp/src/images/silla_seleccionada.png");
+                    "src/images/silla_seleccionada.png");
 
             // Redimensionar los iconos si es necesario
             if (iconoSillaDisponible != null) {
