@@ -152,6 +152,22 @@ class Player {
         if (this.canShoot) {
             this.canShoot = false;
             
+            // ⭐ Audio completamente aislado - NO PUEDE bloquear
+            try {
+                if (window.game && window.game.audioSystem) {
+                    // Ejecutar en microtask separada
+                    Promise.resolve().then(() => {
+                        try {
+                            window.game.audioSystem.playSound('playerShoot');
+                        } catch (e) {
+                            // Silenciar completamente cualquier error
+                        }
+                    });
+                }
+            } catch (e) {
+                // Silenciar completamente cualquier error
+            }
+            
             // Reiniciar cooldown
             setTimeout(() => {
                 this.canShoot = true;
@@ -173,6 +189,17 @@ class Player {
     takeDamage() {
         if (!this.invincible) {
             this.lives--;
+            
+            // ⭐ Audio aislado - NO PUEDE bloquear
+            try {
+                if (window.game && window.game.audioSystem && this.lives > 0) {
+                    Promise.resolve().then(() => {
+                        try {
+                            window.game.audioSystem.playSound('playerHit', 0.8);
+                        } catch (e) { /* Silenciar */ }
+                    });
+                }
+            } catch (e) { /* Silenciar */ }
             
             if (this.lives > 0) {
                 // Activar invencibilidad temporal

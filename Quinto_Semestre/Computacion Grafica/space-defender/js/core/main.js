@@ -19,8 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    // Crear juego
+    // Crear juego y hacerlo global
     const game = new Game(canvas);
+    window.game = game; // ⭐ Hacer accesible globalmente
     console.log('✅ Juego creado');
 
     let lastTime = 0;

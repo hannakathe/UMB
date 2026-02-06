@@ -183,6 +183,17 @@ class Enemy {
      */
     shoot() {
         if (Math.random() < this.shootChance) {
+            // ⭐ Audio completamente aislado - NO PUEDE bloquear
+            try {
+                if (window.game && window.game.audioSystem) {
+                    Promise.resolve().then(() => {
+                        try {
+                            window.game.audioSystem.playSound('enemyShoot', 0.3);
+                        } catch (e) { /* Silenciar */ }
+                    });
+                }
+            } catch (e) { /* Silenciar */ }
+            
             return new Bullet(this.x, this.y + this.height / 2, false);
         }
         return null;

@@ -22,7 +22,7 @@
 
             <div class="intro-start">
                 <div class="press-enter">
-                    <span class="key-icon">ENTER </span>
+                    <span class="key-icon">ENTER</span>
                     <span>PARA COMENZAR</span>
                 </div>
             </div>
@@ -67,7 +67,7 @@
                     <span class="key">←</span>
                     <span class="key">→</span>
                 </div>
-                <span class="control-desc">o</span>
+                <span class="control-desc">Mover Nave</span>
             </div>
             <div class="control-item">
                 <div class="keys-group">
@@ -111,6 +111,27 @@
                 <span class="label">HIGH SCORE</span>
                 <span id="highScoreDisplay" class="value">0</span>
             </div>
+            
+            <!-- ⭐ CONTROLES DE VOLUMEN -->
+            <div class="volume-controls">
+                <h3>🔊 VOLUMEN</h3>
+                <div class="volume-item">
+                    <label for="volumeMaster">Master:</label>
+                    <input type="range" id="volumeMaster" min="0" max="100" value="70">
+                    <span id="volumeMasterValue">70%</span>
+                </div>
+                <div class="volume-item">
+                    <label for="volumeSFX">Efectos:</label>
+                    <input type="range" id="volumeSFX" min="0" max="100" value="80">
+                    <span id="volumeSFXValue">80%</span>
+                </div>
+                <div class="volume-item">
+                    <label for="volumeMusic">Música:</label>
+                    <input type="range" id="volumeMusic" min="0" max="100" value="50">
+                    <span id="volumeMusicValue">50%</span>
+                </div>
+                <button id="muteButton" class="mute-button">🔇 Mute</button>
+            </div>
         </div>
     </div>
 
@@ -120,6 +141,7 @@
     <script src="js/entities/player.js"></script>
     <script src="js/entities/enemy.js"></script>
     <script src="js/systems/collision.js"></script>
+    <script src="js/systems/audio.js"></script>
     <script src="js/core/game.js"></script>
     <script src="js/core/main.js"></script>
 </body>

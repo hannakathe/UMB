@@ -37,6 +37,7 @@ class Game {
         
         // Sistemas
         this.collisionSystem = new CollisionSystem();
+        this.audioSystem = new AudioSystem();  // ⭐ Sistema de audio
         
         // Puntuación
         this.score = 0;
@@ -134,8 +135,69 @@ class Game {
      * Configura controles
      */
     setupControls() {
+        // Controles de teclado
         document.addEventListener('keydown', (e) => this.handleKeyDown(e));
         document.addEventListener('keyup', (e) => this.handleKeyUp(e));
+        
+        // ⭐ Controles de volumen
+        this.setupVolumeControls();
+    }
+    
+    /**
+     * Configura los controles de volumen de la UI
+     */
+    setupVolumeControls() {
+        const volumeMaster = document.getElementById('volumeMaster');
+        const volumeSFX = document.getElementById('volumeSFX');
+        const volumeMusic = document.getElementById('volumeMusic');
+        const muteButton = document.getElementById('muteButton');
+        
+        // Valores de display
+        const volumeMasterValue = document.getElementById('volumeMasterValue');
+        const volumeSFXValue = document.getElementById('volumeSFXValue');
+        const volumeMusicValue = document.getElementById('volumeMusicValue');
+        
+        // Master volume
+        if (volumeMaster) {
+            volumeMaster.addEventListener('input', (e) => {
+                const value = e.target.value / 100;
+                this.audioSystem.setMasterVolume(value);
+                if (volumeMasterValue) {
+                    volumeMasterValue.textContent = e.target.value + '%';
+                }
+            });
+        }
+        
+        // SFX volume
+        if (volumeSFX) {
+            volumeSFX.addEventListener('input', (e) => {
+                const value = e.target.value / 100;
+                this.audioSystem.setSFXVolume(value);
+                if (volumeSFXValue) {
+                    volumeSFXValue.textContent = e.target.value + '%';
+                }
+            });
+        }
+        
+        // Music volume
+        if (volumeMusic) {
+            volumeMusic.addEventListener('input', (e) => {
+                const value = e.target.value / 100;
+                this.audioSystem.setMusicVolume(value);
+                if (volumeMusicValue) {
+                    volumeMusicValue.textContent = e.target.value + '%';
+                }
+            });
+        }
+        
+        // Mute button
+        if (muteButton) {
+            muteButton.addEventListener('click', () => {
+                const isMuted = this.audioSystem.toggleMute();
+                muteButton.textContent = isMuted ? '🔊 Unmute' : '🔇 Mute';
+                muteButton.classList.toggle('muted', isMuted);
+            });
+        }
     }
 
     /**
@@ -214,6 +276,15 @@ class Game {
             this.ui.gameContainer.style.display = 'flex';
         }
         
+        // ⭐ Audio aislado - NO PUEDE bloquear
+        try {
+            Promise.resolve().then(() => {
+                try {
+                    this.audioSystem.playMusic();
+                } catch (e) { /* Silenciar */ }
+            });
+        } catch (e) { /* Silenciar */ }
+        
         this.start();
     }
 
@@ -251,6 +322,17 @@ class Game {
         if (this.enemySpawner) {
             this.enemySpawner.setSpawning(true);
         }
+        
+        // ⭐ Audio aislado - NO PUEDE bloquear
+        try {
+            Promise.resolve().then(() => {
+                try {
+                    this.audioSystem.pauseMusic();
+                    this.audioSystem.playSound('pause');
+                } catch (e) { /* Silenciar */ }
+            });
+        } catch (e) { /* Silenciar */ }
+        
         const msg = CONFIG.MESSAGES.PAUSED;
         this.showMessage(msg.TITLE, msg.TEXT);
     }
@@ -263,6 +345,17 @@ class Game {
         if (this.enemySpawner) {
             this.enemySpawner.setSpawning(false);
         }
+        
+        // ⭐ Audio aislado - NO PUEDE bloquear
+        try {
+            Promise.resolve().then(() => {
+                try {
+                    this.audioSystem.resumeMusic();
+                    this.audioSystem.playSound('click');
+                } catch (e) { /* Silenciar */ }
+            });
+        } catch (e) { /* Silenciar */ }
+        
         this.hideMessage();
     }
 
@@ -270,6 +363,19 @@ class Game {
      * Reinicia el juego
      */
     restart() {
+        // Ocultar mensaje de game over
+        this.hideMessage();
+        
+        // ⭐ Audio aislado - NO PUEDE bloquear
+        try {
+            Promise.resolve().then(() => {
+                try {
+                    this.audioSystem.playMusic();
+                } catch (e) { /* Silenciar */ }
+            });
+        } catch (e) { /* Silenciar */ }
+        
+        // Iniciar nuevo juego
         this.start();
     }
 
@@ -282,6 +388,16 @@ class Game {
         if (this.enemySpawner) {
             this.enemySpawner.setSpawning(true);
         }
+        
+        // ⭐ Audio aislado - NO PUEDE bloquear
+        try {
+            Promise.resolve().then(() => {
+                try {
+                    this.audioSystem.stopMusic();
+                    this.audioSystem.playSound('gameOver');
+                } catch (e) { /* Silenciar */ }
+            });
+        } catch (e) { /* Silenciar */ }
         
         if (this.score > this.highScore) {
             this.highScore = this.score;
@@ -302,6 +418,15 @@ class Game {
     nextLevel() {
         this.level++;
         this.enemiesKilledThisLevel = 0;
+        
+        // ⭐ Audio aislado - NO PUEDE bloquear
+        try {
+            Promise.resolve().then(() => {
+                try {
+                    this.audioSystem.playSound('levelUp');
+                } catch (e) { /* Silenciar */ }
+            });
+        } catch (e) { /* Silenciar */ }
         
         if (this.enemySpawner) {
             this.enemySpawner.resetForLevel(this.level);
@@ -467,10 +592,13 @@ class Game {
      * Muestra mensaje
      */
     showMessage(title, text) {
-        if (this.ui.messagePanel) {
+        if (this.ui.messagePanel && this.ui.messageTitle && this.ui.messageText) {
             this.ui.messageTitle.textContent = title;
             this.ui.messageText.innerHTML = text;
             this.ui.messagePanel.classList.add('active');
+            console.log('📢 Mensaje mostrado:', title);
+        } else {
+            console.warn('⚠️ No se pudo mostrar mensaje - elementos UI no encontrados');
         }
     }
 

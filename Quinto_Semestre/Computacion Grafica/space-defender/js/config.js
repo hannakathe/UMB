@@ -39,8 +39,8 @@ const CONFIG = {
     ENEMY: {
         WIDTH: 35,
         HEIGHT: 30,
-        // Expansión de hitbox para colisiones más generosas
-        HITBOX_EXPANSION: 12,        // Píxeles extra en cada lado
+        // ⭐ NUEVO: Expansión de hitbox para colisiones más generosas
+        HITBOX_EXPANSION: 8,        // Píxeles extra en cada lado
         
         // Sistema de Spawn
         SPAWN: {
@@ -188,7 +188,7 @@ const CONFIG = {
 
     // Efectos Visuales
     VISUAL: {
-        STAR_COUNT: 150,
+        STAR_COUNT: 100,
         SHADOW_BLUR: 15,
         PARTICLE_COUNT: 12,
         PARTICLE_LIFE: 30
@@ -201,7 +201,30 @@ const CONFIG = {
 
     // Audio
     AUDIO: {
-        ENABLED: false
+        ENABLED: true,
+        VOLUME: {
+            MASTER: 0.7,   // 0.0 a 1.0 | Volumen general del juego
+            SFX: 0.8,      // 0.0 a 1.0 | Efectos de sonido (disparos, explosiones)
+            MUSIC: 0.5     // 0.0 a 1.0 | Música de fondo
+        },
+        // Nota: También puedes ajustar el volumen en tiempo real usando
+        // los controles en el panel derecho del juego
+        
+        // Rutas de efectos de sonido
+        SOUNDS: {
+            playerShoot: 'assets/sounds/sfx/player-shoot.mp3',
+            enemyShoot: 'assets/sounds/sfx/enemy-shoot.mp3',
+            explosion: 'assets/sounds/sfx/explosion.mp3',
+            playerHit: 'assets/sounds/sfx/player-hit.mp3',
+            gameOver: 'assets/sounds/sfx/game-over.mp3',
+            levelUp: 'assets/sounds/sfx/level-up.mp3',
+            uiClick: 'assets/sounds/sfx/ui-click.mp3',
+            gameStart: 'assets/sounds/sfx/game-start.mp3'
+        },
+        // Música de fondo
+        MUSIC: {
+            gameplay: 'assets/sounds/music/gameplay.mp3'
+        }
     },
 
     // Almacenamiento
@@ -228,7 +251,7 @@ const CONFIG = {
         }
     },
 
-    // Modo Debug
+    // Debug
     DEBUG: {
         ENABLED: false,
         SHOW_HITBOXES: false,       

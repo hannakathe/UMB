@@ -82,6 +82,17 @@ class CollisionSystem {
                     enemy.destroy();
                     points += enemy.points;
 
+                    // ⭐ Audio aislado - NO PUEDE bloquear
+                    try {
+                        if (window.game && window.game.audioSystem) {
+                            Promise.resolve().then(() => {
+                                try {
+                                    window.game.audioSystem.playSound('explosion', 0.5 + (enemy.type * 0.1));
+                                } catch (e) { /* Silenciar */ }
+                            });
+                        }
+                    } catch (e) { /* Silenciar */ }
+
                     // Crear efecto de explosión
                     this.createExplosion(enemy.x, enemy.y, enemy.color);
                 }
