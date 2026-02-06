@@ -1,14 +1,14 @@
 /* ===================================
-   CORE/MAIN.JS - Punto de Entrada
+   CORE/MAIN.JS - Punto de Entrada v3.0
    ===================================
-   Inicializa el juego y ejecuta el game loop principal.
+   Con soporte para pantalla de intro.
 */
 
 /**
  * Inicialización cuando el DOM está listo
  */
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🚀 Iniciando Space Defender...');
+    console.log('🚀 Iniciando Space Defender v3.0...');
     
     // Obtener el canvas
     const canvas = document.getElementById('gameCanvas');
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Verificar que CONFIG esté disponible
     if (typeof CONFIG === 'undefined') {
-        console.error('❌ Error: CONFIG no está definido. Verifica que config.js se cargue primero.');
+        console.error('❌ Error: CONFIG no está definido');
         return;
     }
 
@@ -28,33 +28,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const game = new Game(canvas);
     console.log('✅ Juego creado correctamente');
 
-    // Mostrar mensaje inicial
-    const startMsg = CONFIG.MESSAGES.START;
-    game.showMessage(startMsg.TITLE, startMsg.TEXT);
-
-    // Variable para tracking de tiempo (deltaTime)
+    // Variable para tracking de tiempo
     let lastTime = 0;
 
     /**
      * Game Loop Principal
-     * Se ejecuta ~60 veces por segundo usando requestAnimationFrame
-     * 
-     * @param {number} currentTime - Timestamp actual en milisegundos
+     * @param {number} currentTime - Timestamp actual
      */
     function gameLoop(currentTime) {
-        // Calcular deltaTime (tiempo entre frames)
-        // Nota: En esta implementación simple no lo usamos,
-        // pero está disponible para futuras mejoras
         const deltaTime = currentTime - lastTime;
         lastTime = currentTime;
 
-        // Actualizar lógica del juego
+        // Actualizar lógica
         game.update();
         
-        // Renderizar todo en el canvas
+        // Renderizar
         game.draw();
         
-        // Solicitar el siguiente frame
+        // Solicitar siguiente frame
         requestAnimationFrame(gameLoop);
     }
 
@@ -62,124 +53,88 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('🎮 Iniciando game loop...');
     requestAnimationFrame(gameLoop);
 
-    // Log de información útil
+    // Logs informativos
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.log('📊 CONTROLES DEL JUEGO');
+    console.log('🎮 SPACE DEFENDER v3.0');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.log('  Mover nave:    ← → o A/D');
-    console.log('  Disparar:      ESPACIO');
-    console.log('  Pausar:        P');
-    console.log('  Comenzar:      ENTER');
-    console.log('  Reiniciar:     R (tras Game Over)');
+    console.log('');
+    console.log('✨ NOVEDADES DE LA VERSIÓN 3.0:');
+    console.log('  • Pantalla de intro con historia');
+    console.log('  • Controles gráficos laterales');
+    console.log('  • 5 patrones de movimiento enemigo');
+    console.log('  • Dificultad progresiva según nivel');
+    console.log('  • Corrección de bug de movimiento');
+    console.log('');
+    console.log('📊 CONTROLES:');
+    console.log('  • Mover: ← → o A/D');
+    console.log('  • Disparar: ESPACIO');
+    console.log('  • Pausar: P');
+    console.log('  • Comenzar: ENTER');
+    console.log('');
+    console.log('🎯 PATRONES DE MOVIMIENTO:');
+    console.log('  • Nivel 1: Clásico (Space Invaders)');
+    console.log('  • Nivel 2: Ondulatorio');
+    console.log('  • Nivel 3: Zigzag');
+    console.log('  • Nivel 4: Circular');
+    console.log('  • Nivel 5+: Errático');
+    console.log('');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.log('🎯 OBJETIVO');
-    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.log('  Elimina todas las oleadas de invasores');
-    console.log('  Protege la Tierra y consigue el high score');
-    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.log(`❤️  Vidas iniciales: ${CONFIG.PLAYER.INITIAL_LIVES}`);
     console.log(`⭐ High Score actual: ${game.highScore}`);
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     
     if (CONFIG.DEBUG.ENABLED) {
         console.log('🐛 MODO DEBUG ACTIVADO');
-        console.log(`  Show Hitboxes: ${CONFIG.DEBUG.SHOW_HITBOXES}`);
-        console.log(`  Show FPS: ${CONFIG.DEBUG.SHOW_FPS}`);
-        console.log(`  God Mode: ${CONFIG.DEBUG.GOD_MODE}`);
+        console.log(`  • Hitboxes: ${CONFIG.DEBUG.SHOW_HITBOXES}`);
+        console.log(`  • FPS: ${CONFIG.DEBUG.SHOW_FPS}`);
+        console.log(`  • God Mode: ${CONFIG.DEBUG.GOD_MODE}`);
         console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     }
     
-    console.log('✨ ¡Buena suerte, comandante!');
+    console.log('');
+    console.log('✨ ¡Presiona ENTER en la pantalla de intro para comenzar!');
     console.log('');
 });
 
 /* ===================================
-   DOCUMENTACIÓN TÉCNICA
+   DOCUMENTACIÓN v3.0
    ===================================
 
-   ARQUITECTURA DEL JUEGO:
+   CORRECCIONES DE BUGS:
    
-   1. CONFIG (config.js)
-      └─ Constantes globales y configuración
+   1. Bug de movimiento enemigo CORREGIDO:
+      - Problema: Al destruir un enemigo, todos caían
+      - Causa: Cálculo de límites incluía posición final con offsets
+      - Solución: Separar posición base (baseX/baseY) de posición visual
+      - Los límites ahora usan solo baseX/baseY
+      - Los offsets de patrones solo afectan la visualización
    
-   2. ENTIDADES (entities/)
-      ├─ Bullet: Proyectiles del jugador y enemigos
-      ├─ Player: Nave del jugador con input y estado
-      └─ Enemy: Enemigos individuales y EnemyManager
+   NUEVAS CARACTERÍSTICAS:
    
-   3. SISTEMAS (systems/)
-      └─ CollisionSystem: Detección AABB y partículas
+   1. Pantalla de Intro:
+      - Historia del juego
+      - Diseño cinematográfico
+      - Transición suave al juego
    
-   4. CORE (core/)
-      ├─ Game: Lógica principal, estados y UI
-      └─ Main: Game loop y punto de entrada
-
-   FLUJO DEL GAME LOOP:
+   2. Controles Gráficos:
+      - Teclas visuales estilo imagen de referencia
+      - Info de enemigos con puntos
+      - High score visible
    
-   1. requestAnimationFrame() llama a gameLoop()
-   2. game.update() actualiza lógica:
-      - Movimiento del jugador
-      - Disparos
-      - Enemigos
-      - Colisiones
-      - Estados del juego
-   3. game.draw() renderiza:
-      - Fondo (estrellas)
-      - Entidades (jugador, enemigos, balas)
-      - Partículas
-      - Debug info
-   4. Se solicita el siguiente frame
+   3. Patrones de Movimiento:
+      - 5 patrones diferentes
+      - Progresión automática por nivel
+      - Combinación de offsets independientes
    
-   ESTADOS DEL JUEGO:
+   ARQUITECTURA DE PATRONES:
    
-   MENU → PLAYING → PAUSED
-     ↓       ↓         ↓
-     ↓    LEVEL_COMPLETE
-     ↓       ↓
-     ↓    GAME_OVER → MENU
-     
-   MATEMÁTICAS USADAS:
+   Cada enemigo tiene:
+   - baseX, baseY: Posición en el grid (nunca cambia)
+   - x, y: Posición visual (base + offsets)
+   - Offsets individuales: wave, zigzag, circular, erratic
    
-   - Vectores 2D: Posición (x,y) y velocidad
-   - AABB: Detección de colisiones rectangulares
-   - Trigonometría: Partículas (ángulos y círculo unitario)
-   
-   OPTIMIZACIONES:
-   
-   - Pool implícito de balas (filter en vez de splice)
-   - Partículas con vida limitada
-   - Solo se actualizan objetos activos
-   - requestAnimationFrame para sincronización con monitor
-   
-   MEJORAS FUTURAS:
-   
-   - Delta time para movimiento independiente de FPS
-   - Sprite batching para mejor rendimiento
-   - Audio Web API para sonidos
-   - WebGL para efectos avanzados
-   - Touch controls para móviles
-   - Networking para multijugador
-   
-   ===================================
-   CRÉDITOS Y AGRADECIMIENTOS:
-   ===================================
-   
-   Desarrollado con asistencia de:
-   - Claude (Anthropic) - IA para generación de código
-   
-   Inspirado en:
-   - Space Invaders (1978) - Taito
-   - Galaga (1981) - Namco
-   
-   Tecnologías:
-   - HTML5 Canvas API
-   - JavaScript ES6+
-   - CSS3
-   
-   Referencias:
-   - MDN Web Docs
-   - W3Schools
-   - Game Programming Patterns
+   El manager mueve solo la posición base.
+   Los patrones agregan offsets visuales.
+   Las colisiones y límites usan posición visual.
    
    ===================================
 */

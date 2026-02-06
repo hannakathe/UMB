@@ -1,7 +1,7 @@
 /* ===================================
-   CORE/GAME.JS - Lógica Principal
+   CORE/GAME.JS - Lógica Principal v3.0
    ===================================
-   Gestión de estados, elementos del juego y UI.
+   Con soporte para intro y patrones de movimiento.
 */
 
 class Game {
@@ -13,12 +13,11 @@ class Game {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
         
-        // Dimensiones
         this.width = CONFIG.CANVAS.WIDTH;
         this.height = CONFIG.CANVAS.HEIGHT;
         
-        // Estado actual
-        this.currentState = CONFIG.STATES.MENU;
+        // Estado inicial: INTRO
+        this.currentState = CONFIG.STATES.INTRO;
         
         // Entidades del juego
         this.player = null;
@@ -36,20 +35,28 @@ class Game {
         // Efectos visuales
         this.stars = this.createStars();
         
-        // Referencias a elementos HTML del DOM
+        // Referencias a elementos HTML
         this.ui = {
             score: document.getElementById('score'),
             level: document.getElementById('level'),
             lives: document.getElementById('lives'),
             messagePanel: document.getElementById('messagePanel'),
             messageTitle: document.getElementById('messageTitle'),
-            messageText: document.getElementById('messageText')
+            messageText: document.getElementById('messageText'),
+            highScoreDisplay: document.getElementById('highScoreDisplay'),
+            introScreen: document.getElementById('introScreen'),
+            gameContainer: document.getElementById('gameContainer')
         };
+        
+        // Actualizar high score display
+        if (this.ui.highScoreDisplay) {
+            this.ui.highScoreDisplay.textContent = this.highScore;
+        }
         
         // Configurar controles
         this.setupControls();
         
-        // FPS counter (si debug)
+        // FPS counter
         this.fps = 0;
         this.frameCount = 0;
         this.lastFpsUpdate = Date.now();
@@ -68,6 +75,15 @@ class Game {
      * @param {KeyboardEvent} e - Evento de teclado
      */
     handleKeyDown(e) {
+        // Intro screen: ENTER para empezar
+        if (this.currentState === CONFIG.STATES.INTRO) {
+            if (e.key === 'Enter') {
+                this.exitIntro();
+                e.preventDefault();
+            }
+            return;
+        }
+
         // Controles del jugador (solo en estado PLAYING)
         if (this.player && this.currentState === CONFIG.STATES.PLAYING) {
             if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
@@ -100,13 +116,6 @@ class Game {
             }
             e.preventDefault();
         }
-
-        if (e.key === 'Enter') {
-            if (this.currentState === CONFIG.STATES.MENU) {
-                this.start();
-            }
-            e.preventDefault();
-        }
     }
 
     /**
@@ -125,6 +134,27 @@ class Game {
         if (e.key === ' ') {
             this.player.keys.shoot = false;
         }
+    }
+
+    /**
+     * Sale de la pantalla de intro
+     */
+    exitIntro() {
+        // Ocultar intro
+        if (this.ui.introScreen) {
+            this.ui.introScreen.classList.remove('active');
+            setTimeout(() => {
+                this.ui.introScreen.style.display = 'none';
+            }, 300);
+        }
+        
+        // Mostrar juego
+        if (this.ui.gameContainer) {
+            this.ui.gameContainer.style.display = 'flex';
+        }
+        
+        // Iniciar juego automáticamente
+        this.start();
     }
 
     /**
@@ -184,6 +214,11 @@ class Game {
         if (this.score > this.highScore) {
             this.highScore = this.score;
             this.saveHighScore(this.highScore);
+            
+            // Actualizar display
+            if (this.ui.highScoreDisplay) {
+                this.ui.highScoreDisplay.textContent = this.highScore;
+            }
         }
         
         const msg = CONFIG.MESSAGES.GAME_OVER;
@@ -206,14 +241,22 @@ class Game {
         // Limpiar balas
         this.bullets = [];
         
+        // Obtener nombre del nuevo patrón
+        const patternName = this.enemyManager.getCurrentPatternName();
+        
         // Mostrar mensaje temporal
         const msg = CONFIG.MESSAGES.LEVEL_COMPLETE;
-        this.showMessage(msg.TITLE(this.level), msg.TEXT);
+        this.showMessage(
+            msg.TITLE(this.level),
+            msg.TEXT(patternName)
+        );
         
         setTimeout(() => {
-            this.currentState = CONFIG.STATES.PLAYING;
-            this.hideMessage();
-        }, 2000);
+            if (this.currentState === CONFIG.STATES.LEVEL_COMPLETE) {
+                this.currentState = CONFIG.STATES.PLAYING;
+                this.hideMessage();
+            }
+        }, 2500);
     }
 
     /**
@@ -335,7 +378,7 @@ class Game {
 
     /**
      * Crea estrellas para el fondo
-     * @returns {Array} Array de estrellas
+     * @returns {Array}
      */
     createStars() {
         const stars = [];
@@ -361,10 +404,8 @@ class Game {
         this.stars.forEach(star => {
             this.ctx.fillRect(star.x, star.y, star.size, star.size);
             
-            // Mover estrella hacia abajo (efecto parallax)
             star.y += star.speed;
             
-            // Reiniciar si sale de pantalla
             if (star.y > this.height) {
                 star.y = 0;
                 star.x = Math.random() * this.width;
@@ -410,8 +451,8 @@ class Game {
     }
 
     /**
-     * Guarda el high score en localStorage
-     * @param {number} score - Puntuación a guardar
+     * Guarda el high score
+     * @param {number} score
      */
     saveHighScore(score) {
         try {
@@ -422,8 +463,8 @@ class Game {
     }
 
     /**
-     * Carga el high score de localStorage
-     * @returns {number} High score guardado o 0
+     * Carga el high score
+     * @returns {number}
      */
     loadHighScore() {
         try {
@@ -466,7 +507,8 @@ class Game {
             `Estado: ${this.currentState}`,
             `Balas: ${this.bullets.length}`,
             `Partículas: ${this.collisionSystem.getParticleCount()}`,
-            `Enemigos: ${this.enemyManager ? this.enemyManager.getActiveCount() : 0}`
+            `Enemigos: ${this.enemyManager ? this.enemyManager.getActiveCount() : 0}`,
+            `Patrón: ${this.enemyManager ? this.enemyManager.currentPattern.name : 'N/A'}`
         ];
 
         this.ctx.fillStyle = '#ffff00';
@@ -479,7 +521,7 @@ class Game {
 
     /**
      * Obtiene el estado actual del juego
-     * @returns {string} Estado actual
+     * @returns {string}
      */
     getState() {
         return this.currentState;

@@ -7,8 +7,29 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <!-- Contenedor principal del juego -->
-    <div class="game-container">
+    <!-- PANTALLA DE INTRO -->
+    <div id="introScreen" class="intro-screen active">
+        <div class="intro-content">
+            <h1 class="intro-title">SPACE DEFENDER</h1>
+            <p class="intro-subtitle">Defiende la Tierra de la Invasión Alienígena</p>
+            
+            <div class="intro-story">
+                <p>El año es 2156. Oleadas de invasores alienígenas han llegado a nuestro sistema solar.</p>
+                <p>Como el último piloto de combate, tu misión es clara:</p>
+                <p class="intro-mission">ELIMINA TODAS LAS AMENAZAS Y PROTEGE LA HUMANIDAD</p>
+            </div>
+
+            <div class="intro-start">
+                <div class="press-enter">
+                    <span class="key-icon">ENTER</span>
+                    <span>PARA COMENZAR</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTENEDOR DEL JUEGO -->
+    <div class="game-container" id="gameContainer" style="display: none;">
         <!-- Título del juego -->
         <h1 class="game-title">🚀 SPACE DEFENDER 🚀</h1>
         
@@ -31,36 +52,66 @@
         <!-- Canvas donde se dibuja el juego -->
         <canvas id="gameCanvas" width="800" height="600"></canvas>
 
-        <!-- Panel de mensajes (inicio, pausa, game over) -->
+        <!-- Panel de mensajes (pausa, game over) -->
         <div id="messagePanel" class="message-panel">
             <h2 id="messageTitle">SPACE DEFENDER</h2>
-            <p id="messageText">
-                ← → o A/D: Mover nave<br>
-                ESPACIO: Disparar<br>
-                P: Pausar<br><br>
-                Presiona ENTER para comenzar
-            </p>
+            <p id="messageText"></p>
         </div>
 
-        <!-- Controles e información -->
-        <div class="controls-info">
-            <p><strong>Controles:</strong> Flechas/A-D = Mover | Espacio = Disparar | P = Pausa | R = Reiniciar</p>
+        <!-- CONTROLES GRÁFICOS - Lateral Izquierdo -->
+        <div class="controls-sidebar left">
+            <h3>CONTROLES</h3>
+            <div class="control-item">
+                <div class="keys-group">
+                    <span class="key">←</span>
+                    <span class="key">→</span>
+                </div>
+                <span class="control-desc">Mover Nave</span>
+            </div>
+            <div class="control-item">
+                <div class="keys-group">
+                    <span class="key wide">SPACE</span>
+                </div>
+                <span class="control-desc">Disparar</span>
+            </div>
+            <div class="control-item">
+                <div class="keys-group">
+                    <span class="key">P</span>
+                </div>
+                <span class="control-desc">Pausar</span>
+            </div>
+        </div>
+
+        <!-- INFO - Lateral Derecho -->
+        <div class="controls-sidebar right">
+            <h3>ENEMIGOS</h3>
+            <div class="enemy-info">
+                <div class="enemy-box type1">
+                    <div class="enemy-icon">👾</div>
+                    <span class="enemy-points">10 pts</span>
+                </div>
+                <div class="enemy-box type2">
+                    <div class="enemy-icon">👾</div>
+                    <span class="enemy-points">20 pts</span>
+                </div>
+                <div class="enemy-box type3">
+                    <div class="enemy-icon">👾</div>
+                    <span class="enemy-points">30 pts</span>
+                </div>
+            </div>
+            <div class="high-score-box">
+                <span class="label">HIGH SCORE</span>
+                <span id="highScoreDisplay" class="value">0</span>
+            </div>
         </div>
     </div>
 
     <!-- Scripts del juego - ORDEN IMPORTANTE -->
-    <!-- 1. Configuración -->
     <script src="js/config.js"></script>
-    
-    <!-- 2. Entidades -->
     <script src="js/entities/bullet.js"></script>
     <script src="js/entities/player.js"></script>
     <script src="js/entities/enemy.js"></script>
-    
-    <!-- 3. Sistemas -->
     <script src="js/systems/collision.js"></script>
-    
-    <!-- 4. Core (lógica principal) -->
     <script src="js/core/game.js"></script>
     <script src="js/core/main.js"></script>
 </body>

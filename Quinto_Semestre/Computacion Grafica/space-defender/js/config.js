@@ -1,7 +1,7 @@
 /* ===================================
-   CONFIG.JS - Constantes del Juego
+   CONFIG.JS - Constantes del Juego v3.0
    ===================================
-   Configuración centralizada para fácil balance y ajustes.
+   Configuración centralizada con patrones de movimiento.
 */
 
 const CONFIG = {
@@ -17,51 +17,130 @@ const CONFIG = {
         HEIGHT: 30,
         SPEED: 5,
         INITIAL_LIVES: 3,
-        SHOOT_COOLDOWN: 250,        // milisegundos entre disparos
-        INVINCIBLE_TIME: 2000,      // milisegundos de invencibilidad tras daño
-        START_X: 400,               // posición inicial X (centro)
-        START_Y: 540,               // posición inicial Y (cerca del fondo)
-        COLOR: '#00d4ff'            // color azul brillante
+        SHOOT_COOLDOWN: 250,
+        INVINCIBLE_TIME: 2000,
+        START_X: 400,
+        START_Y: 540,
+        COLOR: '#00d4ff'
     },
 
     // Configuración de Balas
     BULLET: {
         WIDTH: 4,
         HEIGHT: 15,
-        PLAYER_SPEED: -7,           // velocidad hacia arriba (negativa)
-        ENEMY_SPEED: 4,             // velocidad hacia abajo (positiva)
-        PLAYER_COLOR: '#ffffff',    // blanco
-        ENEMY_COLOR: '#ff0000'      // rojo
+        PLAYER_SPEED: -7,
+        ENEMY_SPEED: 4,
+        PLAYER_COLOR: '#ffffff',
+        ENEMY_COLOR: '#ff0000'
     },
 
     // Configuración de Enemigos
     ENEMY: {
         WIDTH: 35,
         HEIGHT: 30,
-        BASE_SPEED: 1,              // velocidad base horizontal
-        SPEED_INCREMENT: 0.2,       // incremento por nivel
-        DROP_DISTANCE: 20,          // píxeles que bajan al tocar borde
+        BASE_SPEED: 1,
+        SPEED_INCREMENT: 0.15,  // Reducido para mejor control
+        DROP_DISTANCE: 20,
         
-        // Grid inicial de enemigos
+        // Grid inicial
         GRID: {
-            ROWS: 3,                // filas iniciales
-            COLS: 8,                // columnas
-            SPACING_X: 70,          // espacio horizontal
-            SPACING_Y: 60,          // espacio vertical
-            START_X: 150,           // posición inicial X
-            START_Y: 80,            // posición inicial Y
-            ROWS_PER_LEVEL: 0.5     // filas adicionales cada 2 niveles
+            ROWS: 3,
+            COLS: 8,
+            SPACING_X: 70,
+            SPACING_Y: 60,
+            START_X: 150,
+            START_Y: 80,
+            ROWS_PER_LEVEL: 0.5
         },
 
-        // Tipos de enemigos (fila determina tipo)
+        // Tipos de enemigos
         TYPES: {
-            1: { POINTS: 10, COLOR: '#00ff41', SHOOT_CHANCE: 0.0005 },  // Verde
-            2: { POINTS: 20, COLOR: '#ffff00', SHOOT_CHANCE: 0.001 },   // Amarillo
-            3: { POINTS: 30, COLOR: '#ff0000', SHOOT_CHANCE: 0.0015 }   // Rojo
+            1: { POINTS: 10, COLOR: '#00ff41', SHOOT_CHANCE: 0.0003 },
+            2: { POINTS: 20, COLOR: '#ffff00', SHOOT_CHANCE: 0.0006 },
+            3: { POINTS: 30, COLOR: '#ff0000', SHOOT_CHANCE: 0.001 }
+        },
+
+        // ⭐ NUEVO: Patrones de movimiento
+        MOVEMENT_PATTERNS: {
+            // Nivel 1: Movimiento clásico (horizontal + descenso)
+            CLASSIC: {
+                name: 'classic',
+                description: 'Patrón clásico Space Invaders',
+                minLevel: 1,
+                update: function(enemy, manager, time) {
+                    // Lógica manejada por el manager
+                }
+            },
+            
+            // Nivel 2+: Movimiento con olas
+            WAVE: {
+                name: 'wave',
+                description: 'Movimiento ondulatorio',
+                minLevel: 2,
+                amplitude: 15,
+                frequency: 0.05,
+                update: function(enemy, manager, time) {
+                    const wave = Math.sin(time * this.frequency + enemy.gridCol * 0.3) * this.amplitude;
+                    enemy.waveOffset = wave;
+                }
+            },
+            
+            // Nivel 3+: Movimiento en zigzag
+            ZIGZAG: {
+                name: 'zigzag',
+                description: 'Movimiento en zigzag',
+                minLevel: 3,
+                zigzagSpeed: 2,
+                update: function(enemy, manager, time) {
+                    const zigzag = Math.sin(time * 0.1 + enemy.gridRow * 0.5) * this.zigzagSpeed;
+                    enemy.zigzagOffset = zigzag;
+                }
+            },
+            
+            // Nivel 4+: Movimiento circular
+            CIRCULAR: {
+                name: 'circular',
+                description: 'Órbitas circulares',
+                minLevel: 4,
+                radius: 10,
+                speed: 0.03,
+                update: function(enemy, manager, time) {
+                    const angle = time * this.speed + enemy.gridIndex * 0.5;
+                    enemy.circularOffsetX = Math.cos(angle) * this.radius;
+                    enemy.circularOffsetY = Math.sin(angle) * this.radius;
+                }
+            },
+            
+            // Nivel 5+: Movimiento errático
+            ERRATIC: {
+                name: 'erratic',
+                description: 'Movimiento impredecible',
+                minLevel: 5,
+                changeInterval: 60,  // Cambiar cada 60 frames
+                maxOffset: 20,
+                update: function(enemy, manager, time) {
+                    if (!enemy.erraticTarget) {
+                        enemy.erraticTarget = { x: 0, y: 0 };
+                        enemy.erraticTimer = 0;
+                    }
+                    
+                    enemy.erraticTimer++;
+                    if (enemy.erraticTimer >= this.changeInterval) {
+                        enemy.erraticTarget.x = (Math.random() - 0.5) * this.maxOffset;
+                        enemy.erraticTarget.y = (Math.random() - 0.5) * this.maxOffset;
+                        enemy.erraticTimer = 0;
+                    }
+                    
+                    // Interpolar suavemente hacia el objetivo
+                    if (!enemy.erraticOffset) enemy.erraticOffset = { x: 0, y: 0 };
+                    enemy.erraticOffset.x += (enemy.erraticTarget.x - enemy.erraticOffset.x) * 0.1;
+                    enemy.erraticOffset.y += (enemy.erraticTarget.y - enemy.erraticOffset.y) * 0.1;
+                }
+            }
         },
 
         // Animación
-        ANIMATION_SPEED: 30         // frames entre cambios de sprite
+        ANIMATION_SPEED: 30
     },
 
     // Sistema de Puntuación
@@ -73,6 +152,7 @@ const CONFIG = {
 
     // Estados del Juego
     STATES: {
+        INTRO: 'intro',
         MENU: 'menu',
         PLAYING: 'playing',
         PAUSED: 'paused',
@@ -82,18 +162,18 @@ const CONFIG = {
 
     // Efectos Visuales
     VISUAL: {
-        STAR_COUNT: 100,            // número de estrellas de fondo
-        SHADOW_BLUR: 15,            // blur de las sombras
-        PARTICLE_COUNT: 12,         // partículas por explosión
-        PARTICLE_LIFE: 30           // frames de vida de partícula
+        STAR_COUNT: 100,
+        SHADOW_BLUR: 15,
+        PARTICLE_COUNT: 12,
+        PARTICLE_LIFE: 30
     },
 
     // Física y Colisiones
     PHYSICS: {
-        INVASION_LINE: 500          // línea Y donde los enemigos invaden
+        INVASION_LINE: 500
     },
 
-    // Audio (para futuras implementaciones)
+    // Audio
     AUDIO: {
         ENABLED: false,
         VOLUME: {
@@ -112,10 +192,7 @@ const CONFIG = {
     MESSAGES: {
         START: {
             TITLE: 'SPACE DEFENDER',
-            TEXT: `← → o A/D: Mover nave<br>
-                   ESPACIO: Disparar<br>
-                   P: Pausar<br><br>
-                   Presiona ENTER para comenzar`
+            TEXT: `Presiona ENTER para comenzar`
         },
         PAUSED: {
             TITLE: 'PAUSA',
@@ -130,16 +207,16 @@ const CONFIG = {
         },
         LEVEL_COMPLETE: {
             TITLE: (level) => `¡NIVEL ${level}!`,
-            TEXT: 'Prepárate...'
+            TEXT: (patternName) => `Nuevo patrón: ${patternName}<br>Prepárate...`
         }
     },
 
     // Debug y Desarrollo
     DEBUG: {
-        ENABLED: false,             // mostrar información de debug
-        SHOW_HITBOXES: false,       // mostrar cajas de colisión
-        SHOW_FPS: false,            // mostrar FPS
-        GOD_MODE: false             // invencibilidad permanente
+        ENABLED: false,
+        SHOW_HITBOXES: false,
+        SHOW_FPS: false,
+        GOD_MODE: false
     }
 };
 
