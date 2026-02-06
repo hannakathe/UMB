@@ -10,7 +10,7 @@ class CollisionSystem {
     }
 
     /**
-     * Detecta colisión AABB entre dos rectángulos
+     * Detecta colisión AABB mejorada entre dos rectángulos
      * @param {Object} rect1 - Primer rectángulo {x, y, width, height}
      * @param {Object} rect2 - Segundo rectángulo {x, y, width, height}
      * @returns {boolean} True si hay colisión
@@ -20,6 +20,40 @@ class CollisionSystem {
                rect1.x + rect1.width > rect2.x &&
                rect1.y < rect2.y + rect2.height &&
                rect1.y + rect1.height > rect2.y;
+    }
+
+    /**
+     * Detecta colisión continua (previene tunneling)
+     * Verifica si una bala atravesó un rectángulo entre este frame y el anterior
+     * @param {Object} bullet - Bala con posición actual y anterior
+     * @param {Object} rect - Rectángulo objetivo
+     * @returns {boolean} True si hubo colisión
+     */
+    static checkContinuousCollision(bullet, rect) {
+        // Colisión AABB normal
+        const bulletBounds = bullet.getBounds();
+        if (this.checkAABB(bulletBounds, rect)) {
+            return true;
+        }
+        
+        // Verificar si la bala "saltó sobre" el objetivo
+        // (útil para balas muy rápidas)
+        if (bullet.lastY !== undefined) {
+            const minY = Math.min(bullet.y, bullet.lastY);
+            const maxY = Math.max(bullet.y, bullet.lastY);
+            
+            // Verificar si el rectángulo está entre las dos posiciones Y
+            const rectInPath = rect.y < maxY && rect.y + rect.height > minY;
+            
+            // Verificar alineación X
+            const xAligned = bullet.x > rect.x && bullet.x < rect.x + rect.width;
+            
+            if (rectInPath && xAligned) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 
     /**
@@ -38,7 +72,11 @@ class CollisionSystem {
             enemies.forEach(enemy => {
                 if (!enemy.active) return;
 
-                if (CollisionSystem.checkAABB(bullet.getBounds(), enemy.getBounds())) {
+                // ⭐ Usar detección continua para balas rápidas
+                const enemyBounds = enemy.getBounds();
+                const collision = CollisionSystem.checkContinuousCollision(bullet, enemyBounds);
+                
+                if (collision) {
                     // Colisión detectada
                     bullet.destroy();
                     enemy.destroy();

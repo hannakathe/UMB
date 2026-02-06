@@ -1,13 +1,15 @@
 /* ===================================
-   CONFIG.JS - v4.0 - Sistema de Spawn Individual
+   CONFIG.JS - v5.0
    ===================================
+   Con patrones de movimiento individuales + Responsive
 */
 
 const CONFIG = {
-    // Dimensiones del Canvas
+    // Dimensiones Base del Canvas (se escala automáticamente)
     CANVAS: {
-        WIDTH: 800,
-        HEIGHT: 600
+        BASE_WIDTH: 800,
+        BASE_HEIGHT: 600,
+        ASPECT_RATIO: 800 / 600  // 4:3
     },
 
     // Configuración del Jugador
@@ -15,11 +17,11 @@ const CONFIG = {
         WIDTH: 40,
         HEIGHT: 30,
         SPEED: 6,
-        INITIAL_LIVES: 3,
+        INITIAL_LIVES: 4,
         SHOOT_COOLDOWN: 200,
         INVINCIBLE_TIME: 2000,
-        START_X: 400,
-        START_Y: 540,
+        START_X_PERCENT: 0.5,  // 50% del ancho
+        START_Y_PERCENT: 0.9,  // 90% del alto
         COLOR: '#00d4ff'
     },
 
@@ -27,61 +29,142 @@ const CONFIG = {
     BULLET: {
         WIDTH: 4,
         HEIGHT: 15,
-        PLAYER_SPEED: -8,
-        ENEMY_SPEED: 5,
+        PLAYER_SPEED: -6,          // ⭐ Reducido de -8 a -6 (menos tunneling)
+        ENEMY_SPEED: 4,             // ⭐ Reducido de 5 a 4
         PLAYER_COLOR: '#ffffff',
         ENEMY_COLOR: '#ff0000'
     },
 
-    // ⭐ NUEVO: Configuración de Enemigos Individuales
+    // Configuración de Enemigos
     ENEMY: {
         WIDTH: 35,
         HEIGHT: 30,
+        // ⭐ NUEVO: Expansión de hitbox para colisiones más generosas
+        HITBOX_EXPANSION: 8,        // Píxeles extra en cada lado
         
         // Sistema de Spawn
         SPAWN: {
-            INITIAL_DELAY: 3000,        // ms antes del primer spawn
-            BASE_INTERVAL: 1500,         // ms entre spawns (nivel 1)
-            INTERVAL_DECREASE: 100,      // reducir por nivel
-            MIN_INTERVAL: 400,           // intervalo mínimo
-            MAX_ACTIVE: 10,              // máximo enemigos en pantalla
-            SPAWN_Y: -40,                // posición Y inicial (fuera de pantalla)
-            MARGIN_X: 50                 // margen de los bordes
+            INITIAL_DELAY: 1000,
+            BASE_INTERVAL: 2000,
+            INTERVAL_DECREASE: 100,
+            MIN_INTERVAL: 400,
+            MAX_ACTIVE: 10,
+            SPAWN_Y: -40,
+            MARGIN_X_PERCENT: 0.06  // 6% del ancho como margen
         },
 
-        // Tipos de enemigos con velocidades DIFERENTES
+        // Tipos de enemigos
         TYPES: {
             1: { 
                 POINTS: 10, 
-                COLOR: '#00ff41',           // Verde
-                SPEED: 0.5,                 // ⭐ LENTO
-                SHOOT_CHANCE: 0.0002,
-                SPAWN_WEIGHT: 5,            // Más probable
+                COLOR: '#00ff41',
+                SPEED: 0.2,
+                SHOOT_CHANCE: 0.002,  // Aumentado
+                SPAWN_WEIGHT: 5,
                 NAME: 'Verde'
             },
             2: { 
                 POINTS: 20, 
-                COLOR: '#ffff00',           // Amarillo
-                SPEED: 1.5,                 // ⭐ MEDIO
-                SHOOT_CHANCE: 0.0004,
-                SPAWN_WEIGHT: 3,            // Mediano
+                COLOR: '#ffff00',
+                SPEED: 0.8,
+                SHOOT_CHANCE: 0.004,  // Aumentado
+                SPAWN_WEIGHT: 3,
                 NAME: 'Amarillo'
             },
             3: { 
                 POINTS: 30, 
-                COLOR: '#ff0000',           // Rojo
-                SPEED: 2.0,                 // ⭐ RÁPIDO
-                SHOOT_CHANCE: 0.0006,
-                SPAWN_WEIGHT: 2,            // Menos probable
+                COLOR: '#ff0000',
+                SPEED: 1.2,
+                SHOOT_CHANCE: 0.007,  // Aumentado
+                SPAWN_WEIGHT: 2,
                 NAME: 'Rojo'
             }
         },
 
-        // Movimiento horizontal aleatorio (opcional)
-        HORIZONTAL_MOVEMENT: {
-            ENABLED: true,
-            MAX_SPEED: 1.5,
-            CHANGE_CHANCE: 0.02         // probabilidad de cambiar dirección
+        // ⭐ PATRONES DE MOVIMIENTO INDIVIDUALES
+        MOVEMENT_PATTERNS: {
+            // Nivel 1: Solo vertical (clásico)
+            CLASSIC: {
+                name: 'classic',
+                description: 'Descenso Directo',
+                minLevel: 1,
+                apply: function(enemy, time) {
+                    // Solo movimiento vertical (ya manejado en update)
+                    return { offsetX: 0, offsetY: 0 };
+                }
+            },
+            
+            // Nivel 2: Movimiento ondulatorio
+            WAVE: {
+                name: 'wave',
+                description: 'Ondas Sinusoidales',
+                minLevel: 2,
+                amplitude: 30,
+                frequency: 0.04,
+                apply: function(enemy, time) {
+                    const wave = Math.sin(time * this.frequency + enemy.spawnTime * 0.3) * this.amplitude;
+                    return { offsetX: wave, offsetY: 0 };
+                }
+            },
+            
+            // Nivel 3: Zigzag
+            ZIGZAG: {
+                name: 'zigzag',
+                description: 'Movimiento en Zigzag',
+                minLevel: 3,
+                amplitude: 2.5,
+                frequency: 0.08,
+                apply: function(enemy, time) {
+                    const zigzag = Math.sin(time * this.frequency + enemy.id) * this.amplitude;
+                    return { offsetX: zigzag, offsetY: 0 };
+                }
+            },
+            
+            // Nivel 4: Circular/Espiral
+            CIRCULAR: {
+                name: 'circular',
+                description: 'Órbitas Circulares',
+                minLevel: 4,
+                radius: 15,
+                speed: 0.05,
+                apply: function(enemy, time) {
+                    const angle = time * this.speed + enemy.id;
+                    const offsetX = Math.cos(angle) * this.radius;
+                    const offsetY = Math.sin(angle) * this.radius * 0.3; // Aplastado
+                    return { offsetX, offsetY };
+                }
+            },
+            
+            // Nivel 5+: Errático
+            ERRATIC: {
+                name: 'erratic',
+                description: 'Movimiento Caótico',
+                minLevel: 5,
+                changeInterval: 60,
+                maxOffset: 25,
+                apply: function(enemy, time) {
+                    if (!enemy.erraticTarget) {
+                        enemy.erraticTarget = { x: 0, y: 0 };
+                        enemy.erraticTimer = 0;
+                    }
+                    
+                    enemy.erraticTimer++;
+                    if (enemy.erraticTimer >= this.changeInterval) {
+                        enemy.erraticTarget.x = (Math.random() - 0.5) * this.maxOffset * 2;
+                        enemy.erraticTarget.y = (Math.random() - 0.5) * this.maxOffset;
+                        enemy.erraticTimer = 0;
+                    }
+                    
+                    if (!enemy.erraticCurrent) enemy.erraticCurrent = { x: 0, y: 0 };
+                    enemy.erraticCurrent.x += (enemy.erraticTarget.x - enemy.erraticCurrent.x) * 0.1;
+                    enemy.erraticCurrent.y += (enemy.erraticTarget.y - enemy.erraticCurrent.y) * 0.1;
+                    
+                    return { 
+                        offsetX: enemy.erraticCurrent.x, 
+                        offsetY: enemy.erraticCurrent.y 
+                    };
+                }
+            }
         },
 
         // Animación
@@ -92,8 +175,7 @@ const CONFIG = {
     SCORING: {
         ENEMY_TYPE_1: 10,
         ENEMY_TYPE_2: 20,
-        ENEMY_TYPE_3: 30,
-        COMBO_MULTIPLIER: 1.5       // bonus por combos
+        ENEMY_TYPE_3: 30
     },
 
     // Estados del Juego
@@ -106,37 +188,32 @@ const CONFIG = {
 
     // Efectos Visuales
     VISUAL: {
-        STAR_COUNT: 100,
+        STAR_COUNT: 150,
         SHADOW_BLUR: 15,
         PARTICLE_COUNT: 12,
         PARTICLE_LIFE: 30
     },
 
-    // Física y Colisiones
+    // Física
     PHYSICS: {
-        ENEMY_DESPAWN_Y: 620        // Y donde se eliminan enemigos
+        ENEMY_DESPAWN_Y_PERCENT: 1.03  // 103% del alto
     },
 
     // Audio
     AUDIO: {
-        ENABLED: false,
-        VOLUME: {
-            MASTER: 0.7,
-            SFX: 0.8,
-            MUSIC: 0.5
-        }
+        ENABLED: false
     },
 
-    // Almacenamiento Local
+    // Almacenamiento
     STORAGE: {
         HIGH_SCORE_KEY: 'spaceDefenderHighScore'
     },
 
-    // Mensajes del Juego
+    // Mensajes
     MESSAGES: {
         START: {
             TITLE: 'SPACE DEFENDER',
-            TEXT: `Presiona ENTER para comenzar`
+            TEXT: 'Presiona ENTER para comenzar'
         },
         PAUSED: {
             TITLE: 'PAUSA',
@@ -151,13 +228,13 @@ const CONFIG = {
         }
     },
 
-    // Debug y Desarrollo
+    // Debug
     DEBUG: {
         ENABLED: false,
-        SHOW_HITBOXES: false,
+        SHOW_HITBOXES: false,       // ⭐ Cambia a true para ver las hitboxes mejoradas
         SHOW_FPS: false,
         GOD_MODE: false,
-        SHOW_SPAWN_INFO: false
+        SHOW_PATTERN_INFO: false
     }
 };
 

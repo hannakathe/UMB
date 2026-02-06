@@ -1,7 +1,7 @@
 /* ===================================
-   CORE/GAME.JS - v4.0
+   CORE/GAME.JS - v5.0 RESPONSIVE
    ===================================
-   Sistema de spawn continuo con enemigos individuales.
+   Sistema responsive con patrones de movimiento.
 */
 
 class Game {
@@ -13,13 +13,24 @@ class Game {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
         
-        this.width = CONFIG.CANVAS.WIDTH;
-        this.height = CONFIG.CANVAS.HEIGHT;
+        // Dimensiones base (lógicas)
+        this.baseWidth = CONFIG.CANVAS.BASE_WIDTH;
+        this.baseHeight = CONFIG.CANVAS.BASE_HEIGHT;
         
-        // Estado inicial: INTRO
+        // Dimensiones actuales (físicas del canvas)
+        this.width = this.baseWidth;
+        this.height = this.baseHeight;
+        
+        // Factor de escala para responsive
+        this.scale = 1;
+        
+        // Configurar canvas responsive
+        this.setupResponsiveCanvas();
+        
+        // Estado inicial
         this.currentState = CONFIG.STATES.INTRO;
         
-        // Entidades del juego
+        // Entidades
         this.player = null;
         this.enemySpawner = null;
         this.bullets = [];
@@ -27,18 +38,18 @@ class Game {
         // Sistemas
         this.collisionSystem = new CollisionSystem();
         
-        // Puntuación y progresión
+        // Puntuación
         this.score = 0;
         this.level = 1;
         this.enemiesKilled = 0;
         this.enemiesKilledThisLevel = 0;
-        this.enemiesForNextLevel = 10; // Matar 10 para subir nivel
+        this.enemiesForNextLevel = 10;
         this.highScore = this.loadHighScore();
         
-        // Efectos visuales
+        // Efectos
         this.stars = this.createStars();
         
-        // Referencias a elementos HTML
+        // UI Referencias
         this.ui = {
             score: document.getElementById('score'),
             level: document.getElementById('level'),
@@ -51,23 +62,76 @@ class Game {
             gameContainer: document.getElementById('gameContainer')
         };
         
-        // Actualizar high score display
         if (this.ui.highScoreDisplay) {
             this.ui.highScoreDisplay.textContent = this.highScore;
         }
         
-        // Configurar controles
+        // Controles
         this.setupControls();
         
-        // FPS y delta time
+        // FPS
         this.fps = 0;
         this.frameCount = 0;
         this.lastFpsUpdate = Date.now();
         this.lastFrameTime = Date.now();
+        
+        // Listener para resize
+        window.addEventListener('resize', () => this.handleResize());
     }
 
     /**
-     * Configura los event listeners
+     * Configura el canvas para ser responsive
+     */
+    setupResponsiveCanvas() {
+        this.resizeCanvas();
+    }
+
+    /**
+     * Redimensiona el canvas manteniendo aspect ratio
+     */
+    resizeCanvas() {
+        const container = this.canvas.parentElement;
+        const containerWidth = container.clientWidth - 80; // Margen
+        const containerHeight = window.innerHeight - 200; // Espacio para UI
+        
+        // Calcular escala manteniendo aspect ratio
+        const scaleX = containerWidth / this.baseWidth;
+        const scaleY = containerHeight / this.baseHeight;
+        this.scale = Math.min(scaleX, scaleY, 1); // Máximo 1x
+        
+        // Aplicar nuevas dimensiones
+        this.width = this.baseWidth * this.scale;
+        this.height = this.baseHeight * this.scale;
+        
+        // Configurar canvas físico
+        this.canvas.width = this.baseWidth;
+        this.canvas.height = this.baseHeight;
+        
+        // El CSS maneja el escalado visual
+        this.canvas.style.width = this.width + 'px';
+        this.canvas.style.height = this.height + 'px';
+        
+        // Actualizar enemySpawner si existe
+        if (this.enemySpawner) {
+            this.enemySpawner.updateCanvasSize(this.baseWidth, this.baseHeight);
+        }
+        
+        // Actualizar jugador si existe
+        if (this.player) {
+            this.player.x = this.baseWidth * CONFIG.PLAYER.START_X_PERCENT;
+            this.player.y = this.baseHeight * CONFIG.PLAYER.START_Y_PERCENT;
+        }
+    }
+
+    /**
+     * Maneja el evento resize
+     */
+    handleResize() {
+        this.resizeCanvas();
+    }
+
+    /**
+     * Configura controles
      */
     setupControls() {
         document.addEventListener('keydown', (e) => this.handleKeyDown(e));
@@ -76,10 +140,8 @@ class Game {
 
     /**
      * Maneja teclas presionadas
-     * @param {KeyboardEvent} e
      */
     handleKeyDown(e) {
-        // Intro screen
         if (this.currentState === CONFIG.STATES.INTRO) {
             if (e.key === 'Enter') {
                 this.exitIntro();
@@ -88,7 +150,6 @@ class Game {
             return;
         }
 
-        // Controles del jugador
         if (this.player && this.currentState === CONFIG.STATES.PLAYING) {
             if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
                 this.player.keys.left = true;
@@ -104,7 +165,6 @@ class Game {
             }
         }
 
-        // Controles de estado
         if (e.key === 'p' || e.key === 'P') {
             if (this.currentState === CONFIG.STATES.PLAYING) {
                 this.pause();
@@ -124,7 +184,6 @@ class Game {
 
     /**
      * Maneja teclas liberadas
-     * @param {KeyboardEvent} e
      */
     handleKeyUp(e) {
         if (!this.player) return;
@@ -141,7 +200,7 @@ class Game {
     }
 
     /**
-     * Sale de la pantalla de intro
+     * Sale de intro
      */
     exitIntro() {
         if (this.ui.introScreen) {
@@ -159,7 +218,7 @@ class Game {
     }
 
     /**
-     * Inicia una nueva partida
+     * Inicia el juego
      */
     start() {
         this.currentState = CONFIG.STATES.PLAYING;
@@ -168,21 +227,20 @@ class Game {
         this.enemiesKilled = 0;
         this.enemiesKilledThisLevel = 0;
         
-        // Crear entidades
-        this.player = new Player(CONFIG.PLAYER.START_X, CONFIG.PLAYER.START_Y);
-        this.enemySpawner = new EnemySpawner(this.level);
+        // Crear entidades con dimensiones base
+        const playerX = this.baseWidth * CONFIG.PLAYER.START_X_PERCENT;
+        const playerY = this.baseHeight * CONFIG.PLAYER.START_Y_PERCENT;
+        this.player = new Player(playerX, playerY);
         
-        // Limpiar arrays
+        this.enemySpawner = new EnemySpawner(this.level, this.baseWidth, this.baseHeight);
+        
         this.bullets = [];
         this.collisionSystem.clearParticles();
         
-        // Ocultar mensaje
         this.hideMessage();
-        
-        // Actualizar UI
         this.updateUI();
         
-        console.log('🎮 ¡Juego iniciado!');
+        console.log('🎮 Juego iniciado - Canvas:', this.baseWidth, 'x', this.baseHeight);
     }
 
     /**
@@ -191,7 +249,7 @@ class Game {
     pause() {
         this.currentState = CONFIG.STATES.PAUSED;
         if (this.enemySpawner) {
-            this.enemySpawner.setSpawning(true); // Pausar spawn
+            this.enemySpawner.setSpawning(true);
         }
         const msg = CONFIG.MESSAGES.PAUSED;
         this.showMessage(msg.TITLE, msg.TEXT);
@@ -203,7 +261,7 @@ class Game {
     resume() {
         this.currentState = CONFIG.STATES.PLAYING;
         if (this.enemySpawner) {
-            this.enemySpawner.setSpawning(false); // Reanudar spawn
+            this.enemySpawner.setSpawning(false);
         }
         this.hideMessage();
     }
@@ -216,17 +274,15 @@ class Game {
     }
 
     /**
-     * Termina el juego
+     * Game over
      */
     gameOver() {
         this.currentState = CONFIG.STATES.GAME_OVER;
         
-        // Pausar spawn
         if (this.enemySpawner) {
             this.enemySpawner.setSpawning(true);
         }
         
-        // Guardar high score
         if (this.score > this.highScore) {
             this.highScore = this.score;
             this.saveHighScore(this.highScore);
@@ -237,48 +293,37 @@ class Game {
         }
         
         const msg = CONFIG.MESSAGES.GAME_OVER;
-        this.showMessage(
-            msg.TITLE,
-            msg.TEXT(this.score, this.highScore)
-        );
-        
-        console.log(`💀 Game Over - Puntuación: ${this.score}`);
+        this.showMessage(msg.TITLE, msg.TEXT(this.score, this.highScore));
     }
 
     /**
-     * Avanza al siguiente nivel
+     * Siguiente nivel
      */
     nextLevel() {
         this.level++;
         this.enemiesKilledThisLevel = 0;
         
-        // Aumentar dificultad
         if (this.enemySpawner) {
             this.enemySpawner.resetForLevel(this.level);
         }
         
-        // Mensaje breve (no pausar juego)
-        console.log(`⭐ ¡Nivel ${this.level}!`);
-        
-        // Mostrar nivel en HUD (ya se actualiza automáticamente)
+        console.log(`⭐ Nivel ${this.level} - Patrón: ${this.enemySpawner.getCurrentPatternName()}`);
     }
 
     /**
-     * Actualiza la lógica del juego
+     * Actualiza la lógica
      */
     update() {
-        // Solo actualizar si está jugando
         if (this.currentState !== CONFIG.STATES.PLAYING) return;
 
-        // Calcular delta time
         const currentTime = Date.now();
         const deltaTime = currentTime - this.lastFrameTime;
         this.lastFrameTime = currentTime;
 
         // Actualizar jugador
-        this.player.update();
+        this.player.update(this.baseWidth);
 
-        // Manejar disparo
+        // Disparos
         if (this.player.keys.shoot) {
             const bullet = this.player.shoot();
             if (bullet) {
@@ -286,19 +331,19 @@ class Game {
             }
         }
 
-        // Actualizar enemigos y obtener disparos
+        // Enemigos
         if (this.enemySpawner) {
             const enemyBullets = this.enemySpawner.update(deltaTime);
             this.bullets.push(...enemyBullets);
         }
 
-        // Actualizar balas
+        // Balas
         this.bullets = this.bullets.filter(bullet => {
             bullet.update();
             return bullet.active;
         });
 
-        // Detectar colisiones
+        // Colisiones
         const pointsEarned = this.collisionSystem.checkBulletEnemyCollisions(
             this.bullets,
             this.enemySpawner ? this.enemySpawner.getActiveEnemies() : []
@@ -306,68 +351,52 @@ class Game {
         
         if (pointsEarned > 0) {
             this.score += pointsEarned;
-            const enemiesDestroyed = Math.floor(pointsEarned / 10); // Aproximado
+            const enemiesDestroyed = Math.floor(pointsEarned / 10);
             this.enemiesKilled += enemiesDestroyed;
             this.enemiesKilledThisLevel += enemiesDestroyed;
             
-            // Verificar si sube de nivel
             if (this.enemiesKilledThisLevel >= this.enemiesForNextLevel) {
                 this.nextLevel();
             }
         }
 
-        // Colisiones balas enemigas vs jugador
-        this.collisionSystem.checkEnemyBulletPlayerCollisions(
-            this.bullets,
-            this.player
-        );
-
-        // Colisión directa enemigos vs jugador
+        this.collisionSystem.checkEnemyBulletPlayerCollisions(this.bullets, this.player);
         this.collisionSystem.checkEnemyPlayerCollision(
             this.enemySpawner ? this.enemySpawner.getActiveEnemies() : [],
             this.player
         );
 
-        // Verificar game over
         this.checkGameConditions();
-
-        // Actualizar UI
         this.updateUI();
 
-        // FPS
         if (CONFIG.DEBUG.SHOW_FPS) {
             this.updateFPS();
         }
     }
 
     /**
-     * Verifica condiciones de derrota
+     * Verifica condiciones de juego
      */
     checkGameConditions() {
-        // Sin vidas
         if (!this.player.isAlive()) {
             this.gameOver();
             return;
         }
 
-        // Enemigos llegaron al fondo
         if (this.enemySpawner && this.enemySpawner.hasReachedBottom()) {
             this.gameOver();
         }
     }
 
     /**
-     * Dibuja todo en el canvas
+     * Dibuja todo
      */
     draw() {
-        // Limpiar
         this.ctx.fillStyle = '#000000';
-        this.ctx.fillRect(0, 0, this.width, this.height);
+        this.ctx.fillRect(0, 0, this.baseWidth, this.baseHeight);
 
-        // Fondo
         this.drawStars();
 
-        // Entidades
         if (this.player) {
             this.player.draw(this.ctx);
         }
@@ -376,13 +405,9 @@ class Game {
             this.enemySpawner.draw(this.ctx);
         }
 
-        // Balas
         this.bullets.forEach(bullet => bullet.draw(this.ctx));
-
-        // Partículas
         this.collisionSystem.updateAndDrawParticles(this.ctx);
 
-        // Debug
         if (CONFIG.DEBUG.ENABLED) {
             this.drawDebugInfo();
         }
@@ -394,14 +419,13 @@ class Game {
 
     /**
      * Crea estrellas
-     * @returns {Array}
      */
     createStars() {
         const stars = [];
         for (let i = 0; i < CONFIG.VISUAL.STAR_COUNT; i++) {
             stars.push({
-                x: Math.random() * this.width,
-                y: Math.random() * this.height,
+                x: Math.random() * this.baseWidth,
+                y: Math.random() * this.baseHeight,
                 size: Math.random() * 2,
                 speed: Math.random() * 0.5 + 0.1
             });
@@ -417,9 +441,9 @@ class Game {
         this.stars.forEach(star => {
             this.ctx.fillRect(star.x, star.y, star.size, star.size);
             star.y += star.speed;
-            if (star.y > this.height) {
+            if (star.y > this.baseHeight) {
                 star.y = 0;
-                star.x = Math.random() * this.width;
+                star.x = Math.random() * this.baseWidth;
             }
         });
     }
@@ -441,8 +465,6 @@ class Game {
 
     /**
      * Muestra mensaje
-     * @param {string} title
-     * @param {string} text
      */
     showMessage(title, text) {
         if (this.ui.messagePanel) {
@@ -463,19 +485,17 @@ class Game {
 
     /**
      * Guarda high score
-     * @param {number} score
      */
     saveHighScore(score) {
         try {
             localStorage.setItem(CONFIG.STORAGE.HIGH_SCORE_KEY, score.toString());
         } catch (e) {
-            console.warn('No se pudo guardar el high score');
+            console.warn('Error guardando high score');
         }
     }
 
     /**
      * Carga high score
-     * @returns {number}
      */
     loadHighScore() {
         try {
@@ -509,14 +529,15 @@ class Game {
     }
 
     /**
-     * Dibuja info de debug
+     * Dibuja debug
      */
     drawDebugInfo() {
         const lines = [
+            `Canvas: ${this.baseWidth}x${this.baseHeight} (${this.scale.toFixed(2)}x)`,
             `Estado: ${this.currentState}`,
             `Balas: ${this.bullets.length}`,
             `Kills: ${this.enemiesKilledThisLevel}/${this.enemiesForNextLevel}`,
-            `Total: ${this.enemiesKilled}`
+            `Patrón: ${this.enemySpawner ? this.enemySpawner.currentPattern.name : 'N/A'}`
         ];
 
         this.ctx.fillStyle = '#ffff00';
@@ -527,8 +548,7 @@ class Game {
     }
 
     /**
-     * Obtiene estado actual
-     * @returns {string}
+     * Obtiene estado
      */
     getState() {
         return this.currentState;

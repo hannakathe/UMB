@@ -14,6 +14,7 @@ class Bullet {
     constructor(x, y, isPlayerBullet = true) {
         this.x = x;
         this.y = y;
+        this.lastY = y;  // ⭐ Para detección continua
         this.isPlayerBullet = isPlayerBullet;
         
         // Obtener configuración desde CONFIG
@@ -37,6 +38,9 @@ class Bullet {
      * Actualiza la posición de la bala
      */
     update() {
+        // Guardar posición anterior para detección continua
+        this.lastY = this.y;
+        
         // Mover verticalmente
         this.y += this.speed;
 

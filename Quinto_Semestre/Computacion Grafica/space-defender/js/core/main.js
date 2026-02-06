@@ -1,11 +1,11 @@
 /* ===================================
-   CORE/MAIN.JS - v4.0
+   CORE/MAIN.JS - v5.0 RESPONSIVE
    ===================================
-   Sistema de spawn continuo individual.
+   Spawn individual + Patrones de movimiento + Responsive.
 */
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🚀 Iniciando Space Defender v4.0...');
+    console.log('🚀 Iniciando Space Defender v5.0...');
     
     const canvas = document.getElementById('gameCanvas');
     
@@ -27,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /**
      * Game Loop
-     * @param {number} currentTime
      */
     function gameLoop(currentTime) {
         const deltaTime = currentTime - lastTime;
@@ -42,78 +41,128 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('🎮 Iniciando game loop...');
     requestAnimationFrame(gameLoop);
 
-    // Logs
+    // Logs informativos
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.log('🎮 SPACE DEFENDER v4.0');
+    console.log('🎮 SPACE DEFENDER v5.0 - RESPONSIVE EDITION');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     console.log('');
-    console.log('✨ NUEVA MECÁNICA DE SPAWN INDIVIDUAL:');
-    console.log('  • Enemigos aparecen uno por uno');
-    console.log('  • Cada uno baja a su propia velocidad');
-    console.log('  • Verdes (lentos) → Amarillos (medios) → Rojos (rápidos)');
-    console.log('  • Spawn progresivo y continuo');
-    console.log('  • NO se mueven en bloque');
+    console.log('✨ NUEVAS CARACTERÍSTICAS:');
+    console.log('  • ✅ Canvas totalmente responsive');
+    console.log('  • ✅ Spawn individual de enemigos');
+    console.log('  • ✅ 5 Patrones de movimiento por nivel');
+    console.log('  • ✅ Enemigos disparan más');
+    console.log('  • ✅ Funciona en móviles y tablets');
+    console.log('');
+    console.log('🌀 PATRONES POR NIVEL:');
+    console.log('  • Nivel 1: Descenso Directo (clásico)');
+    console.log('  • Nivel 2: Ondas Sinusoidales');
+    console.log('  • Nivel 3: Movimiento en Zigzag');
+    console.log('  • Nivel 4: Órbitas Circulares');
+    console.log('  • Nivel 5+: Movimiento Caótico');
+    console.log('');
+    console.log('📱 RESPONSIVE:');
+    console.log('  • Desktop: 800x600px');
+    console.log('  • Tablet: Escala automática');
+    console.log('  • Móvil: Optimizado para pantalla');
     console.log('');
     console.log('📊 VELOCIDADES POR COLOR:');
-    console.log(`  • 🟢 Verde:    ${CONFIG.ENEMY.TYPES[1].SPEED} px/frame`);
-    console.log(`  • 🟡 Amarillo: ${CONFIG.ENEMY.TYPES[2].SPEED} px/frame`);
-    console.log(`  • 🔴 Rojo:     ${CONFIG.ENEMY.TYPES[3].SPEED} px/frame`);
-    console.log('');
-    console.log('🎯 PROGRESIÓN:');
-    console.log('  • Mata 10 enemigos para subir de nivel');
-    console.log('  • Cada nivel: spawn más rápido');
-    console.log('  • Máximo 15 enemigos en pantalla');
+    console.log(`  • 🟢 Verde:    ${CONFIG.ENEMY.TYPES[1].SPEED} px/frame + patrón`);
+    console.log(`  • 🟡 Amarillo: ${CONFIG.ENEMY.TYPES[2].SPEED} px/frame + patrón`);
+    console.log(`  • 🔴 Rojo:     ${CONFIG.ENEMY.TYPES[3].SPEED} px/frame + patrón`);
     console.log('');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     console.log(`⭐ High Score actual: ${game.highScore}`);
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    
+    if (CONFIG.DEBUG.ENABLED) {
+        console.log('🐛 MODO DEBUG ACTIVADO');
+        console.log(`  • Hitboxes: ${CONFIG.DEBUG.SHOW_HITBOXES}`);
+        console.log(`  • FPS: ${CONFIG.DEBUG.SHOW_FPS}`);
+        console.log(`  • Pattern Info: ${CONFIG.DEBUG.SHOW_PATTERN_INFO}`);
+        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    }
+    
     console.log('');
     console.log('✨ ¡Presiona ENTER para comenzar!');
     console.log('');
 });
 
 /* ===================================
-   DOCUMENTACIÓN v4.0
+   DOCUMENTACIÓN v5.0
    ===================================
 
-   CAMBIOS PRINCIPALES:
+   VERSIÓN 5.0 - LA VERSIÓN DEFINITIVA
    
-   1. Sistema de Spawn Individual:
-      - Los enemigos NO se mueven en bloque
-      - Cada enemigo tiene su propia velocidad vertical
-      - Aparición progresiva (uno por uno)
-      - Spawn continuo durante toda la partida
+   CARACTERÍSTICAS PRINCIPALES:
    
-   2. Velocidades por Tipo:
-      - Verde (tipo 1):  1.5 px/frame (LENTO)
-      - Amarillo (tipo 2): 2.5 px/frame (MEDIO)
-      - Rojo (tipo 3):    4.0 px/frame (RÁPIDO)
+   1. SISTEMA DE SPAWN INDIVIDUAL (v4.0):
+      - Enemigos aparecen uno por uno
+      - Cada tipo con velocidad propia
+      - Spawn continuo durante partida
+      - Máximo 15 enemigos en pantalla
    
-   3. Sistema de Progresión:
-      - Ya no hay "niveles completos"
-      - Subes de nivel matando X enemigos
-      - Cada nivel: spawn más frecuente
-      - Dificultad continua y escalable
+   2. PATRONES DE MOVIMIENTO (v3.0):
+      ⭐ NUEVO: Aplicados a enemigos individuales
+      
+      Nivel 1 - CLÁSICO:
+      - Solo descenso vertical
+      - Sin offsets horizontales
+      
+      Nivel 2 - ONDAS:
+      - Movimiento sinusoidal horizontal
+      - Amplitude: 30px
+      - Frequency: 0.04
+      
+      Nivel 3 - ZIGZAG:
+      - Oscilación más rápida
+      - Amplitude: 2.5px
+      - Frequency: 0.08
+      
+      Nivel 4 - CIRCULAR:
+      - Órbitas elípticas
+      - Radius: 15px
+      - Speed: 0.05
+      
+      Nivel 5+ - ERRÁTICO:
+      - Cambios aleatorios cada 60 frames
+      - Offset máximo: 25px
+      - Movimiento impredecible
    
-   4. Movimiento Horizontal Opcional:
-      - Los enemigos pueden tener movimiento horizontal aleatorio
-      - Se configuran CONFIG.ENEMY.HORIZONTAL_MOVEMENT
-      - Cambian dirección aleatoriamente
-      - Rebotan en los bordes
+   3. DISEÑO RESPONSIVE:
+      - Canvas escala automáticamente
+      - Mantiene aspect ratio 4:3
+      - Funciona en móviles/tablets/desktop
+      - UI adaptable
+      - Controles laterales ocultos en móvil
    
    ARQUITECTURA:
    
-   EnemySpawner:
-   - Genera enemigos con intervalo de tiempo
-   - Control de máximo en pantalla
-   - Pesos de probabilidad por tipo
-   - Posición X aleatoria en spawn
-   
    Enemy:
-   - Posición (x, y) independiente
-   - Velocidad vertical propia
-   - Sin coordinación con otros
-   - Se auto-destruye al salir
+   - baseX, baseY: Posición de descenso
+   - patternOffsetX, patternOffsetY: Offset del patrón
+   - x, y: Posición final (base + offset)
+   
+   EnemySpawner:
+   - Genera enemigos con patrón actual
+   - Patrón cambia según nivel
+   - Aplica patrón en cada update
+   
+   Game:
+   - setupResponsiveCanvas(): Configura escalado
+   - resizeCanvas(): Ajusta dimensiones
+   - handleResize(): Listener de window.resize
+   
+   RESPONSIVE:
+   
+   CSS:
+   - clamp() para tamaños de fuente
+   - Media queries para breakpoints
+   - Canvas con max-width y aspect-ratio
+   
+   JavaScript:
+   - Dimensiones base (lógicas): 800x600
+   - Dimensiones físicas: Escaladas
+   - Factor de escala calculado automáticamente
    
    ===================================
 */

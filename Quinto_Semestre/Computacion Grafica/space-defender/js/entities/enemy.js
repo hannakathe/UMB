@@ -1,22 +1,31 @@
 /* ===================================
-   ENTITIES/ENEMY.JS - v4.0
+   ENTITIES/ENEMY.JS - v5.0
    ===================================
-   Enemigos individuales que bajan a diferentes velocidades.
+   Enemigos individuales CON patrones de movimiento.
 */
 
 class Enemy {
     /**
      * Constructor del enemigo individual
      * @param {number} x - Posición X inicial
-     * @param {number} y - Posición Y inicial (típicamente fuera de pantalla)
+     * @param {number} y - Posición Y inicial
      * @param {number} type - Tipo de enemigo (1, 2, o 3)
+     * @param {Object} pattern - Patrón de movimiento actual
+     * @param {number} canvasWidth - Ancho del canvas
      */
-    constructor(x, y, type = 1) {
+    constructor(x, y, type, pattern, canvasWidth) {
+        // Posición base
+        this.baseX = x;
+        this.baseY = y;
+        
+        // Posición actual (base + offset del patrón)
         this.x = x;
         this.y = y;
-        this.type = Math.min(Math.max(type, 1), 3); // Entre 1 y 3
         
-        // Obtener configuración del tipo
+        this.type = Math.min(Math.max(type, 1), 3);
+        this.canvasWidth = canvasWidth;
+        
+        // Configuración del tipo
         this.width = CONFIG.ENEMY.WIDTH;
         this.height = CONFIG.ENEMY.HEIGHT;
         
@@ -24,15 +33,11 @@ class Enemy {
         this.points = typeConfig.POINTS;
         this.color = typeConfig.COLOR;
         this.shootChance = typeConfig.SHOOT_CHANCE;
-        this.speed = typeConfig.SPEED; // ⭐ Velocidad individual según tipo
+        this.speed = typeConfig.SPEED;
         this.name = typeConfig.NAME;
         
-        // Movimiento horizontal aleatorio (opcional)
-        if (CONFIG.ENEMY.HORIZONTAL_MOVEMENT.ENABLED) {
-            this.horizontalSpeed = (Math.random() - 0.5) * CONFIG.ENEMY.HORIZONTAL_MOVEMENT.MAX_SPEED;
-        } else {
-            this.horizontalSpeed = 0;
-        }
+        // Patrón de movimiento
+        this.pattern = pattern;
         
         // Estado
         this.active = true;
@@ -42,39 +47,50 @@ class Enemy {
         this.animationCounter = 0;
         this.animationSpeed = CONFIG.ENEMY.ANIMATION_SPEED;
         
-        // ID único para tracking
+        // ID único y tiempo de spawn para patrones
         this.id = Date.now() + Math.random();
+        this.spawnTime = Date.now();
+        this.timeAlive = 0;
+        
+        // Offsets de patrón
+        this.patternOffsetX = 0;
+        this.patternOffsetY = 0;
     }
 
     /**
-     * Actualiza el estado del enemigo (cada uno se mueve independiente)
+     * Actualiza el estado del enemigo
+     * @param {number} time - Tiempo global del juego
+     * @param {number} canvasHeight - Alto del canvas
      */
-    update() {
-        // ⭐ Movimiento vertical - cada enemigo a SU propia velocidad
-        this.y += this.speed;
+    update(time, canvasHeight) {
+        this.timeAlive++;
         
-        // Movimiento horizontal aleatorio (opcional)
-        if (CONFIG.ENEMY.HORIZONTAL_MOVEMENT.ENABLED) {
-            this.x += this.horizontalSpeed;
-            
-            // Cambiar dirección aleatoriamente
-            if (Math.random() < CONFIG.ENEMY.HORIZONTAL_MOVEMENT.CHANGE_CHANCE) {
-                this.horizontalSpeed = (Math.random() - 0.5) * CONFIG.ENEMY.HORIZONTAL_MOVEMENT.MAX_SPEED;
-            }
-            
-            // Rebotar en los bordes
-            if (this.x < this.width / 2) {
-                this.x = this.width / 2;
-                this.horizontalSpeed = Math.abs(this.horizontalSpeed);
-            }
-            if (this.x > CONFIG.CANVAS.WIDTH - this.width / 2) {
-                this.x = CONFIG.CANVAS.WIDTH - this.width / 2;
-                this.horizontalSpeed = -Math.abs(this.horizontalSpeed);
-            }
+        // Aplicar patrón de movimiento si existe
+        if (this.pattern && this.pattern.apply) {
+            const offset = this.pattern.apply(this, time);
+            this.patternOffsetX = offset.offsetX || 0;
+            this.patternOffsetY = offset.offsetY || 0;
         }
         
-        // Desactivar si sale de la pantalla (abajo)
-        if (this.y > CONFIG.PHYSICS.ENEMY_DESPAWN_Y) {
+        // Movimiento vertical base (descenso)
+        this.baseY += this.speed;
+        
+        // Calcular posición final
+        this.x = this.baseX + this.patternOffsetX;
+        this.y = this.baseY + this.patternOffsetY;
+        
+        // Mantener dentro de límites horizontales
+        const margin = CONFIG.ENEMY.WIDTH / 2;
+        if (this.x < margin) {
+            this.x = margin;
+        }
+        if (this.x > this.canvasWidth - margin) {
+            this.x = this.canvasWidth - margin;
+        }
+        
+        // Desactivar si sale por abajo
+        const despawnY = canvasHeight * CONFIG.PHYSICS.ENEMY_DESPAWN_Y_PERCENT;
+        if (this.baseY > despawnY) {
             this.active = false;
         }
         
@@ -122,15 +138,42 @@ class Enemy {
 
         ctx.shadowBlur = 0;
 
+        // Debug: mostrar hitbox
         if (CONFIG.DEBUG.SHOW_HITBOXES) {
             const bounds = this.getBounds();
             ctx.strokeStyle = this.color;
+            ctx.lineWidth = 2;
             ctx.strokeRect(bounds.x, bounds.y, bounds.width, bounds.height);
             
-            // Mostrar velocidad
+            // Mostrar hitbox real del sprite (sin expansión)
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([2, 2]);
+            ctx.strokeRect(
+                this.x - this.width / 2,
+                this.y - this.height / 2,
+                this.width,
+                this.height
+            );
+            ctx.setLineDash([]);
+            
+            // Mostrar posición base
+            ctx.fillStyle = '#00ff00';
+            ctx.fillRect(this.baseX - 2, this.baseY - 2, 4, 4);
+            
+            // Mostrar centro
+            ctx.fillStyle = '#ff00ff';
+            ctx.fillRect(this.x - 2, this.y - 2, 4, 4);
+        }
+        
+        if (CONFIG.DEBUG.SHOW_PATTERN_INFO) {
             ctx.fillStyle = '#ffffff';
             ctx.font = '10px monospace';
-            ctx.fillText(`${this.speed.toFixed(1)}`, this.x - 10, this.y - 20);
+            ctx.fillText(
+                `${this.pattern ? this.pattern.name : 'none'}`, 
+                this.x - 20, 
+                this.y - 25
+            );
         }
     }
 
@@ -146,24 +189,26 @@ class Enemy {
     }
 
     /**
-     * Obtiene el rectángulo de colisión
+     * Obtiene el rectángulo de colisión (con expansión para mejor jugabilidad)
      * @returns {Object}
      */
     getBounds() {
+        const expansion = CONFIG.ENEMY.HITBOX_EXPANSION || 0;
         return {
-            x: this.x - this.width / 2,
-            y: this.y - this.height / 2,
-            width: this.width,
-            height: this.height
+            x: this.x - (this.width / 2) - expansion,
+            y: this.y - (this.height / 2) - expansion,
+            width: this.width + (expansion * 2),
+            height: this.height + (expansion * 2)
         };
     }
 
     /**
      * Verifica si llegó al fondo (peligro)
+     * @param {number} canvasHeight
      * @returns {boolean}
      */
-    hasReachedBottom() {
-        return this.y + this.height / 2 >= CONFIG.CANVAS.HEIGHT - 50;
+    hasReachedBottom(canvasHeight) {
+        return this.y + this.height / 2 >= canvasHeight - 50;
     }
 
     /**
@@ -175,19 +220,23 @@ class Enemy {
 }
 
 /* ===================================
-   ENEMY SPAWNER v4.0
+   ENEMY SPAWNER v5.0
    ===================================
-   Genera enemigos individuales de forma progresiva.
+   Con patrones de movimiento por nivel.
 */
 
 class EnemySpawner {
     /**
      * Constructor del spawner
      * @param {number} level - Nivel actual
+     * @param {number} canvasWidth - Ancho del canvas
+     * @param {number} canvasHeight - Alto del canvas
      */
-    constructor(level = 1) {
+    constructor(level, canvasWidth, canvasHeight) {
         this.enemies = [];
         this.level = level;
+        this.canvasWidth = canvasWidth;
+        this.canvasHeight = canvasHeight;
         
         // Sistema de spawn
         this.spawnInterval = Math.max(
@@ -197,80 +246,97 @@ class EnemySpawner {
         this.timeSinceLastSpawn = 0;
         this.isSpawning = false;
         
+        // Tiempo global (para patrones)
+        this.time = 0;
+        
+        // Patrón actual según nivel
+        this.currentPattern = this.getPatternForLevel(level);
+        
         // Estadísticas
         this.totalSpawned = 0;
-        this.enemiesKilled = 0;
         
-        // Iniciar spawn después de un delay
+        // Iniciar spawn
         setTimeout(() => {
             this.isSpawning = true;
         }, CONFIG.ENEMY.SPAWN.INITIAL_DELAY);
         
-        console.log(`🎮 Nivel ${level} - Spawn cada ${this.spawnInterval}ms`);
+        console.log(`🎮 Nivel ${level} - Patrón: ${this.currentPattern.description}`);
     }
 
     /**
-     * Selecciona un tipo de enemigo aleatorio basado en pesos
-     * @returns {number} Tipo de enemigo (1, 2, o 3)
+     * Obtiene el patrón apropiado para el nivel
+     * @param {number} level
+     * @returns {Object}
+     */
+    getPatternForLevel(level) {
+        const patterns = CONFIG.ENEMY.MOVEMENT_PATTERNS;
+        
+        if (level >= 5) return patterns.ERRATIC;
+        if (level >= 4) return patterns.CIRCULAR;
+        if (level >= 3) return patterns.ZIGZAG;
+        if (level >= 2) return patterns.WAVE;
+        return patterns.CLASSIC;
+    }
+
+    /**
+     * Selecciona tipo aleatorio
+     * @returns {number}
      */
     selectRandomType() {
         const types = CONFIG.ENEMY.TYPES;
         const weights = [];
         
-        // Construir array de pesos
         for (let type in types) {
             for (let i = 0; i < types[type].SPAWN_WEIGHT; i++) {
                 weights.push(parseInt(type));
             }
         }
         
-        // Seleccionar aleatoriamente
         return weights[Math.floor(Math.random() * weights.length)];
     }
 
     /**
-     * Genera una posición X aleatoria para spawn
-     * @returns {number} Posición X
+     * Obtiene posición X aleatoria
+     * @returns {number}
      */
     getRandomSpawnX() {
-        const margin = CONFIG.ENEMY.SPAWN.MARGIN_X;
-        return margin + Math.random() * (CONFIG.CANVAS.WIDTH - 2 * margin);
+        const marginPercent = CONFIG.ENEMY.SPAWN.MARGIN_X_PERCENT;
+        const margin = this.canvasWidth * marginPercent;
+        return margin + Math.random() * (this.canvasWidth - 2 * margin);
     }
 
     /**
      * Intenta generar un nuevo enemigo
      */
     trySpawn() {
-        // Verificar si podemos spawnear
         const activeCount = this.enemies.filter(e => e.active).length;
         
         if (activeCount >= CONFIG.ENEMY.SPAWN.MAX_ACTIVE) {
-            return; // Demasiados enemigos en pantalla
+            return;
         }
         
-        // Crear nuevo enemigo
         const type = this.selectRandomType();
         const x = this.getRandomSpawnX();
         const y = CONFIG.ENEMY.SPAWN.SPAWN_Y;
         
-        const enemy = new Enemy(x, y, type);
+        // Crear enemigo con patrón actual
+        const enemy = new Enemy(x, y, type, this.currentPattern, this.canvasWidth);
         this.enemies.push(enemy);
         this.totalSpawned++;
-        
-        if (CONFIG.DEBUG.SHOW_SPAWN_INFO) {
-            console.log(`👾 Spawn #${this.totalSpawned}: ${enemy.name} en (${x.toFixed(0)}, ${y})`);
-        }
     }
 
     /**
-     * Actualiza todos los enemigos y el sistema de spawn
-     * @param {number} deltaTime - Tiempo desde último frame (ms)
-     * @returns {Array<Bullet>} Balas disparadas
+     * Actualiza todos los enemigos
+     * @param {number} deltaTime - ms desde último frame
+     * @returns {Array<Bullet>}
      */
     update(deltaTime = 16) {
         const bullets = [];
         
-        // Sistema de spawn automático
+        // Incrementar tiempo global
+        this.time++;
+        
+        // Sistema de spawn
         if (this.isSpawning) {
             this.timeSinceLastSpawn += deltaTime;
             
@@ -280,18 +346,17 @@ class EnemySpawner {
             }
         }
         
-        // Actualizar cada enemigo individualmente
+        // Actualizar cada enemigo
         this.enemies.forEach(enemy => {
             if (enemy.active) {
-                enemy.update();
+                enemy.update(this.time, this.canvasHeight);
                 
-                // Intentar disparar
                 const bullet = enemy.shoot();
                 if (bullet) bullets.push(bullet);
             }
         });
         
-        // Limpiar enemigos inactivos (optimización)
+        // Limpiar enemigos inactivos
         if (this.enemies.length > 100) {
             this.enemies = this.enemies.filter(e => e.active);
         }
@@ -300,7 +365,7 @@ class EnemySpawner {
     }
 
     /**
-     * Dibuja todos los enemigos activos
+     * Dibuja todos los enemigos
      * @param {CanvasRenderingContext2D} ctx
      */
     draw(ctx) {
@@ -314,31 +379,38 @@ class EnemySpawner {
             ctx.fillStyle = '#ffffff';
             ctx.font = '12px monospace';
             ctx.fillText(
-                `Enemigos: ${this.getActiveCount()}/${CONFIG.ENEMY.SPAWN.MAX_ACTIVE} | Spawned: ${this.totalSpawned}`,
+                `Enemigos: ${this.getActiveCount()} | Patrón: ${this.currentPattern.name}`,
                 10,
-                CONFIG.CANVAS.HEIGHT - 10
+                this.canvasHeight - 10
             );
-            
-            if (CONFIG.DEBUG.SHOW_SPAWN_INFO) {
-                ctx.fillText(
-                    `Next spawn: ${((this.spawnInterval - this.timeSinceLastSpawn) / 1000).toFixed(1)}s`,
-                    10,
-                    CONFIG.CANVAS.HEIGHT - 25
-                );
-            }
         }
     }
 
     /**
-     * Obtiene solo los enemigos activos
-     * @returns {Array<Enemy>}
+     * Actualiza dimensiones del canvas (responsive)
+     * @param {number} width
+     * @param {number} height
      */
-    getActiveEnemies() {
-        return this.enemies.filter(enemy => enemy.active);
+    updateCanvasSize(width, height) {
+        this.canvasWidth = width;
+        this.canvasHeight = height;
+        
+        // Actualizar enemigos existentes
+        this.enemies.forEach(enemy => {
+            enemy.canvasWidth = width;
+        });
     }
 
     /**
-     * Obtiene el conteo de enemigos activos
+     * Obtiene enemigos activos
+     * @returns {Array<Enemy>}
+     */
+    getActiveEnemies() {
+        return this.enemies.filter(e => e.active);
+    }
+
+    /**
+     * Obtiene conteo de enemigos activos
      * @returns {number}
      */
     getActiveCount() {
@@ -346,12 +418,12 @@ class EnemySpawner {
     }
 
     /**
-     * Verifica si algún enemigo llegó al fondo (game over)
+     * Verifica si alguno llegó al fondo
      * @returns {boolean}
      */
     hasReachedBottom() {
-        return this.enemies.some(enemy => 
-            enemy.active && enemy.hasReachedBottom()
+        return this.enemies.some(e => 
+            e.active && e.hasReachedBottom(this.canvasHeight)
         );
     }
 
@@ -364,7 +436,15 @@ class EnemySpawner {
     }
 
     /**
-     * Reinicia el spawner para un nuevo nivel
+     * Obtiene nombre del patrón actual
+     * @returns {string}
+     */
+    getCurrentPatternName() {
+        return this.currentPattern.description;
+    }
+
+    /**
+     * Reinicia para nuevo nivel
      * @param {number} level
      */
     resetForLevel(level) {
@@ -376,16 +456,19 @@ class EnemySpawner {
         );
         this.timeSinceLastSpawn = 0;
         this.totalSpawned = 0;
-        this.enemiesKilled = 0;
+        this.time = 0;
         this.isSpawning = false;
+        
+        // Actualizar patrón
+        this.currentPattern = this.getPatternForLevel(level);
         
         setTimeout(() => {
             this.isSpawning = true;
         }, CONFIG.ENEMY.SPAWN.INITIAL_DELAY);
         
-        console.log(`🎮 Nivel ${level} - Spawn cada ${this.spawnInterval}ms`);
+        console.log(`🎮 Nivel ${level} - Patrón: ${this.currentPattern.description}`);
     }
 }
 
-// Alias para compatibilidad con código existente
+// Alias
 class EnemyManager extends EnemySpawner {}
