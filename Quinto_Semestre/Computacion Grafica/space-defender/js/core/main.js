@@ -1,140 +1,119 @@
 /* ===================================
-   CORE/MAIN.JS - Punto de Entrada v3.0
+   CORE/MAIN.JS - v4.0
    ===================================
-   Con soporte para pantalla de intro.
+   Sistema de spawn continuo individual.
 */
 
-/**
- * Inicialización cuando el DOM está listo
- */
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🚀 Iniciando Space Defender v3.0...');
+    console.log('🚀 Iniciando Space Defender v4.0...');
     
-    // Obtener el canvas
     const canvas = document.getElementById('gameCanvas');
     
     if (!canvas) {
-        console.error('❌ Error: No se encontró el elemento canvas');
+        console.error('❌ Error: No se encontró el canvas');
         return;
     }
 
-    // Verificar que CONFIG esté disponible
     if (typeof CONFIG === 'undefined') {
         console.error('❌ Error: CONFIG no está definido');
         return;
     }
 
-    // Crear instancia del juego
+    // Crear juego
     const game = new Game(canvas);
-    console.log('✅ Juego creado correctamente');
+    console.log('✅ Juego creado');
 
-    // Variable para tracking de tiempo
     let lastTime = 0;
 
     /**
-     * Game Loop Principal
-     * @param {number} currentTime - Timestamp actual
+     * Game Loop
+     * @param {number} currentTime
      */
     function gameLoop(currentTime) {
         const deltaTime = currentTime - lastTime;
         lastTime = currentTime;
 
-        // Actualizar lógica
         game.update();
-        
-        // Renderizar
         game.draw();
         
-        // Solicitar siguiente frame
         requestAnimationFrame(gameLoop);
     }
 
-    // Iniciar el game loop
     console.log('🎮 Iniciando game loop...');
     requestAnimationFrame(gameLoop);
 
-    // Logs informativos
+    // Logs
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.log('🎮 SPACE DEFENDER v3.0');
+    console.log('🎮 SPACE DEFENDER v4.0');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     console.log('');
-    console.log('✨ NOVEDADES DE LA VERSIÓN 3.0:');
-    console.log('  • Pantalla de intro con historia');
-    console.log('  • Controles gráficos laterales');
-    console.log('  • 5 patrones de movimiento enemigo');
-    console.log('  • Dificultad progresiva según nivel');
-    console.log('  • Corrección de bug de movimiento');
+    console.log('✨ NUEVA MECÁNICA DE SPAWN INDIVIDUAL:');
+    console.log('  • Enemigos aparecen uno por uno');
+    console.log('  • Cada uno baja a su propia velocidad');
+    console.log('  • Verdes (lentos) → Amarillos (medios) → Rojos (rápidos)');
+    console.log('  • Spawn progresivo y continuo');
+    console.log('  • NO se mueven en bloque');
     console.log('');
-    console.log('📊 CONTROLES:');
-    console.log('  • Mover: ← → o A/D');
-    console.log('  • Disparar: ESPACIO');
-    console.log('  • Pausar: P');
-    console.log('  • Comenzar: ENTER');
+    console.log('📊 VELOCIDADES POR COLOR:');
+    console.log(`  • 🟢 Verde:    ${CONFIG.ENEMY.TYPES[1].SPEED} px/frame`);
+    console.log(`  • 🟡 Amarillo: ${CONFIG.ENEMY.TYPES[2].SPEED} px/frame`);
+    console.log(`  • 🔴 Rojo:     ${CONFIG.ENEMY.TYPES[3].SPEED} px/frame`);
     console.log('');
-    console.log('🎯 PATRONES DE MOVIMIENTO:');
-    console.log('  • Nivel 1: Clásico (Space Invaders)');
-    console.log('  • Nivel 2: Ondulatorio');
-    console.log('  • Nivel 3: Zigzag');
-    console.log('  • Nivel 4: Circular');
-    console.log('  • Nivel 5+: Errático');
+    console.log('🎯 PROGRESIÓN:');
+    console.log('  • Mata 10 enemigos para subir de nivel');
+    console.log('  • Cada nivel: spawn más rápido');
+    console.log('  • Máximo 15 enemigos en pantalla');
     console.log('');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     console.log(`⭐ High Score actual: ${game.highScore}`);
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    
-    if (CONFIG.DEBUG.ENABLED) {
-        console.log('🐛 MODO DEBUG ACTIVADO');
-        console.log(`  • Hitboxes: ${CONFIG.DEBUG.SHOW_HITBOXES}`);
-        console.log(`  • FPS: ${CONFIG.DEBUG.SHOW_FPS}`);
-        console.log(`  • God Mode: ${CONFIG.DEBUG.GOD_MODE}`);
-        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    }
-    
     console.log('');
-    console.log('✨ ¡Presiona ENTER en la pantalla de intro para comenzar!');
+    console.log('✨ ¡Presiona ENTER para comenzar!');
     console.log('');
 });
 
 /* ===================================
-   DOCUMENTACIÓN v3.0
+   DOCUMENTACIÓN v4.0
    ===================================
 
-   CORRECCIONES DE BUGS:
+   CAMBIOS PRINCIPALES:
    
-   1. Bug de movimiento enemigo CORREGIDO:
-      - Problema: Al destruir un enemigo, todos caían
-      - Causa: Cálculo de límites incluía posición final con offsets
-      - Solución: Separar posición base (baseX/baseY) de posición visual
-      - Los límites ahora usan solo baseX/baseY
-      - Los offsets de patrones solo afectan la visualización
+   1. Sistema de Spawn Individual:
+      - Los enemigos NO se mueven en bloque
+      - Cada enemigo tiene su propia velocidad vertical
+      - Aparición progresiva (uno por uno)
+      - Spawn continuo durante toda la partida
    
-   NUEVAS CARACTERÍSTICAS:
+   2. Velocidades por Tipo:
+      - Verde (tipo 1):  1.5 px/frame (LENTO)
+      - Amarillo (tipo 2): 2.5 px/frame (MEDIO)
+      - Rojo (tipo 3):    4.0 px/frame (RÁPIDO)
    
-   1. Pantalla de Intro:
-      - Historia del juego
-      - Diseño cinematográfico
-      - Transición suave al juego
+   3. Sistema de Progresión:
+      - Ya no hay "niveles completos"
+      - Subes de nivel matando X enemigos
+      - Cada nivel: spawn más frecuente
+      - Dificultad continua y escalable
    
-   2. Controles Gráficos:
-      - Teclas visuales estilo imagen de referencia
-      - Info de enemigos con puntos
-      - High score visible
+   4. Movimiento Horizontal Opcional:
+      - Los enemigos pueden tener movimiento horizontal aleatorio
+      - Se configuran CONFIG.ENEMY.HORIZONTAL_MOVEMENT
+      - Cambian dirección aleatoriamente
+      - Rebotan en los bordes
    
-   3. Patrones de Movimiento:
-      - 5 patrones diferentes
-      - Progresión automática por nivel
-      - Combinación de offsets independientes
+   ARQUITECTURA:
    
-   ARQUITECTURA DE PATRONES:
+   EnemySpawner:
+   - Genera enemigos con intervalo de tiempo
+   - Control de máximo en pantalla
+   - Pesos de probabilidad por tipo
+   - Posición X aleatoria en spawn
    
-   Cada enemigo tiene:
-   - baseX, baseY: Posición en el grid (nunca cambia)
-   - x, y: Posición visual (base + offsets)
-   - Offsets individuales: wave, zigzag, circular, erratic
-   
-   El manager mueve solo la posición base.
-   Los patrones agregan offsets visuales.
-   Las colisiones y límites usan posición visual.
+   Enemy:
+   - Posición (x, y) independiente
+   - Velocidad vertical propia
+   - Sin coordinación con otros
+   - Se auto-destruye al salir
    
    ===================================
 */

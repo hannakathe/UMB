@@ -1,13 +1,13 @@
 /* ===================================
-   CORE/GAME.JS - Lógica Principal v3.0
+   CORE/GAME.JS - v4.0
    ===================================
-   Con soporte para intro y patrones de movimiento.
+   Sistema de spawn continuo con enemigos individuales.
 */
 
 class Game {
     /**
      * Constructor del juego
-     * @param {HTMLCanvasElement} canvas - Elemento canvas
+     * @param {HTMLCanvasElement} canvas
      */
     constructor(canvas) {
         this.canvas = canvas;
@@ -21,7 +21,7 @@ class Game {
         
         // Entidades del juego
         this.player = null;
-        this.enemyManager = null;
+        this.enemySpawner = null;
         this.bullets = [];
         
         // Sistemas
@@ -30,6 +30,9 @@ class Game {
         // Puntuación y progresión
         this.score = 0;
         this.level = 1;
+        this.enemiesKilled = 0;
+        this.enemiesKilledThisLevel = 0;
+        this.enemiesForNextLevel = 10; // Matar 10 para subir nivel
         this.highScore = this.loadHighScore();
         
         // Efectos visuales
@@ -56,14 +59,15 @@ class Game {
         // Configurar controles
         this.setupControls();
         
-        // FPS counter
+        // FPS y delta time
         this.fps = 0;
         this.frameCount = 0;
         this.lastFpsUpdate = Date.now();
+        this.lastFrameTime = Date.now();
     }
 
     /**
-     * Configura los event listeners del teclado
+     * Configura los event listeners
      */
     setupControls() {
         document.addEventListener('keydown', (e) => this.handleKeyDown(e));
@@ -72,10 +76,10 @@ class Game {
 
     /**
      * Maneja teclas presionadas
-     * @param {KeyboardEvent} e - Evento de teclado
+     * @param {KeyboardEvent} e
      */
     handleKeyDown(e) {
-        // Intro screen: ENTER para empezar
+        // Intro screen
         if (this.currentState === CONFIG.STATES.INTRO) {
             if (e.key === 'Enter') {
                 this.exitIntro();
@@ -84,7 +88,7 @@ class Game {
             return;
         }
 
-        // Controles del jugador (solo en estado PLAYING)
+        // Controles del jugador
         if (this.player && this.currentState === CONFIG.STATES.PLAYING) {
             if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
                 this.player.keys.left = true;
@@ -100,7 +104,7 @@ class Game {
             }
         }
 
-        // Controles de estado del juego
+        // Controles de estado
         if (e.key === 'p' || e.key === 'P') {
             if (this.currentState === CONFIG.STATES.PLAYING) {
                 this.pause();
@@ -120,7 +124,7 @@ class Game {
 
     /**
      * Maneja teclas liberadas
-     * @param {KeyboardEvent} e - Evento de teclado
+     * @param {KeyboardEvent} e
      */
     handleKeyUp(e) {
         if (!this.player) return;
@@ -140,7 +144,6 @@ class Game {
      * Sale de la pantalla de intro
      */
     exitIntro() {
-        // Ocultar intro
         if (this.ui.introScreen) {
             this.ui.introScreen.classList.remove('active');
             setTimeout(() => {
@@ -148,12 +151,10 @@ class Game {
             }, 300);
         }
         
-        // Mostrar juego
         if (this.ui.gameContainer) {
             this.ui.gameContainer.style.display = 'flex';
         }
         
-        // Iniciar juego automáticamente
         this.start();
     }
 
@@ -164,10 +165,12 @@ class Game {
         this.currentState = CONFIG.STATES.PLAYING;
         this.score = 0;
         this.level = 1;
+        this.enemiesKilled = 0;
+        this.enemiesKilledThisLevel = 0;
         
         // Crear entidades
         this.player = new Player(CONFIG.PLAYER.START_X, CONFIG.PLAYER.START_Y);
-        this.enemyManager = new EnemyManager(this.level);
+        this.enemySpawner = new EnemySpawner(this.level);
         
         // Limpiar arrays
         this.bullets = [];
@@ -178,6 +181,8 @@ class Game {
         
         // Actualizar UI
         this.updateUI();
+        
+        console.log('🎮 ¡Juego iniciado!');
     }
 
     /**
@@ -185,6 +190,9 @@ class Game {
      */
     pause() {
         this.currentState = CONFIG.STATES.PAUSED;
+        if (this.enemySpawner) {
+            this.enemySpawner.setSpawning(true); // Pausar spawn
+        }
         const msg = CONFIG.MESSAGES.PAUSED;
         this.showMessage(msg.TITLE, msg.TEXT);
     }
@@ -194,6 +202,9 @@ class Game {
      */
     resume() {
         this.currentState = CONFIG.STATES.PLAYING;
+        if (this.enemySpawner) {
+            this.enemySpawner.setSpawning(false); // Reanudar spawn
+        }
         this.hideMessage();
     }
 
@@ -205,17 +216,21 @@ class Game {
     }
 
     /**
-     * Termina el juego (Game Over)
+     * Termina el juego
      */
     gameOver() {
         this.currentState = CONFIG.STATES.GAME_OVER;
+        
+        // Pausar spawn
+        if (this.enemySpawner) {
+            this.enemySpawner.setSpawning(true);
+        }
         
         // Guardar high score
         if (this.score > this.highScore) {
             this.highScore = this.score;
             this.saveHighScore(this.highScore);
             
-            // Actualizar display
             if (this.ui.highScoreDisplay) {
                 this.ui.highScoreDisplay.textContent = this.highScore;
             }
@@ -226,6 +241,8 @@ class Game {
             msg.TITLE,
             msg.TEXT(this.score, this.highScore)
         );
+        
+        console.log(`💀 Game Over - Puntuación: ${this.score}`);
     }
 
     /**
@@ -233,43 +250,35 @@ class Game {
      */
     nextLevel() {
         this.level++;
-        this.currentState = CONFIG.STATES.LEVEL_COMPLETE;
+        this.enemiesKilledThisLevel = 0;
         
-        // Reiniciar enemigos con nuevo nivel
-        this.enemyManager.resetForLevel(this.level);
+        // Aumentar dificultad
+        if (this.enemySpawner) {
+            this.enemySpawner.resetForLevel(this.level);
+        }
         
-        // Limpiar balas
-        this.bullets = [];
+        // Mensaje breve (no pausar juego)
+        console.log(`⭐ ¡Nivel ${this.level}!`);
         
-        // Obtener nombre del nuevo patrón
-        const patternName = this.enemyManager.getCurrentPatternName();
-        
-        // Mostrar mensaje temporal
-        const msg = CONFIG.MESSAGES.LEVEL_COMPLETE;
-        this.showMessage(
-            msg.TITLE(this.level),
-            msg.TEXT(patternName)
-        );
-        
-        setTimeout(() => {
-            if (this.currentState === CONFIG.STATES.LEVEL_COMPLETE) {
-                this.currentState = CONFIG.STATES.PLAYING;
-                this.hideMessage();
-            }
-        }, 2500);
+        // Mostrar nivel en HUD (ya se actualiza automáticamente)
     }
 
     /**
-     * Actualiza la lógica del juego (llamado cada frame)
+     * Actualiza la lógica del juego
      */
     update() {
-        // Solo actualizar si el juego está activo
+        // Solo actualizar si está jugando
         if (this.currentState !== CONFIG.STATES.PLAYING) return;
+
+        // Calcular delta time
+        const currentTime = Date.now();
+        const deltaTime = currentTime - this.lastFrameTime;
+        this.lastFrameTime = currentTime;
 
         // Actualizar jugador
         this.player.update();
 
-        // Manejar disparo del jugador
+        // Manejar disparo
         if (this.player.keys.shoot) {
             const bullet = this.player.shoot();
             if (bullet) {
@@ -277,22 +286,35 @@ class Game {
             }
         }
 
-        // Actualizar enemigos y obtener sus disparos
-        const enemyBullets = this.enemyManager.update();
-        this.bullets.push(...enemyBullets);
+        // Actualizar enemigos y obtener disparos
+        if (this.enemySpawner) {
+            const enemyBullets = this.enemySpawner.update(deltaTime);
+            this.bullets.push(...enemyBullets);
+        }
 
-        // Actualizar todas las balas
+        // Actualizar balas
         this.bullets = this.bullets.filter(bullet => {
             bullet.update();
             return bullet.active;
         });
 
-        // Detectar colisiones y actualizar puntuación
+        // Detectar colisiones
         const pointsEarned = this.collisionSystem.checkBulletEnemyCollisions(
             this.bullets,
-            this.enemyManager.getActiveEnemies()
+            this.enemySpawner ? this.enemySpawner.getActiveEnemies() : []
         );
-        this.score += pointsEarned;
+        
+        if (pointsEarned > 0) {
+            this.score += pointsEarned;
+            const enemiesDestroyed = Math.floor(pointsEarned / 10); // Aproximado
+            this.enemiesKilled += enemiesDestroyed;
+            this.enemiesKilledThisLevel += enemiesDestroyed;
+            
+            // Verificar si sube de nivel
+            if (this.enemiesKilledThisLevel >= this.enemiesForNextLevel) {
+                this.nextLevel();
+            }
+        }
 
         // Colisiones balas enemigas vs jugador
         this.collisionSystem.checkEnemyBulletPlayerCollisions(
@@ -302,71 +324,65 @@ class Game {
 
         // Colisión directa enemigos vs jugador
         this.collisionSystem.checkEnemyPlayerCollision(
-            this.enemyManager.getActiveEnemies(),
+            this.enemySpawner ? this.enemySpawner.getActiveEnemies() : [],
             this.player
         );
 
-        // Verificar condiciones de fin de juego
+        // Verificar game over
         this.checkGameConditions();
 
         // Actualizar UI
         this.updateUI();
 
-        // Actualizar FPS counter
+        // FPS
         if (CONFIG.DEBUG.SHOW_FPS) {
             this.updateFPS();
         }
     }
 
     /**
-     * Verifica condiciones de victoria/derrota
+     * Verifica condiciones de derrota
      */
     checkGameConditions() {
-        // Derrota: sin vidas
+        // Sin vidas
         if (!this.player.isAlive()) {
             this.gameOver();
             return;
         }
 
-        // Derrota: invasión
-        if (this.enemyManager.hasInvaded()) {
+        // Enemigos llegaron al fondo
+        if (this.enemySpawner && this.enemySpawner.hasReachedBottom()) {
             this.gameOver();
-            return;
-        }
-
-        // Victoria: todos los enemigos eliminados
-        if (this.enemyManager.allDestroyed()) {
-            this.nextLevel();
         }
     }
 
     /**
-     * Dibuja todos los elementos en el canvas
+     * Dibuja todo en el canvas
      */
     draw() {
-        // Limpiar canvas
+        // Limpiar
         this.ctx.fillStyle = '#000000';
         this.ctx.fillRect(0, 0, this.width, this.height);
 
-        // Dibujar estrellas de fondo
+        // Fondo
         this.drawStars();
 
-        // Dibujar entidades si existen
+        // Entidades
         if (this.player) {
             this.player.draw(this.ctx);
         }
 
-        if (this.enemyManager) {
-            this.enemyManager.draw(this.ctx);
+        if (this.enemySpawner) {
+            this.enemySpawner.draw(this.ctx);
         }
 
-        // Dibujar balas
+        // Balas
         this.bullets.forEach(bullet => bullet.draw(this.ctx));
 
-        // Dibujar partículas
+        // Partículas
         this.collisionSystem.updateAndDrawParticles(this.ctx);
 
-        // Debug info
+        // Debug
         if (CONFIG.DEBUG.ENABLED) {
             this.drawDebugInfo();
         }
@@ -377,14 +393,12 @@ class Game {
     }
 
     /**
-     * Crea estrellas para el fondo
+     * Crea estrellas
      * @returns {Array}
      */
     createStars() {
         const stars = [];
-        const count = CONFIG.VISUAL.STAR_COUNT;
-
-        for (let i = 0; i < count; i++) {
+        for (let i = 0; i < CONFIG.VISUAL.STAR_COUNT; i++) {
             stars.push({
                 x: Math.random() * this.width,
                 y: Math.random() * this.height,
@@ -396,16 +410,13 @@ class Game {
     }
 
     /**
-     * Dibuja y anima las estrellas del fondo
+     * Dibuja estrellas
      */
     drawStars() {
         this.ctx.fillStyle = '#ffffff';
-        
         this.stars.forEach(star => {
             this.ctx.fillRect(star.x, star.y, star.size, star.size);
-            
             star.y += star.speed;
-            
             if (star.y > this.height) {
                 star.y = 0;
                 star.x = Math.random() * this.width;
@@ -414,7 +425,7 @@ class Game {
     }
 
     /**
-     * Actualiza la interfaz de usuario (HUD)
+     * Actualiza UI
      */
     updateUI() {
         if (this.ui.score) {
@@ -429,9 +440,9 @@ class Game {
     }
 
     /**
-     * Muestra un mensaje en pantalla
-     * @param {string} title - Título
-     * @param {string} text - Texto (puede incluir HTML)
+     * Muestra mensaje
+     * @param {string} title
+     * @param {string} text
      */
     showMessage(title, text) {
         if (this.ui.messagePanel) {
@@ -442,7 +453,7 @@ class Game {
     }
 
     /**
-     * Oculta el mensaje
+     * Oculta mensaje
      */
     hideMessage() {
         if (this.ui.messagePanel) {
@@ -451,19 +462,19 @@ class Game {
     }
 
     /**
-     * Guarda el high score
+     * Guarda high score
      * @param {number} score
      */
     saveHighScore(score) {
         try {
             localStorage.setItem(CONFIG.STORAGE.HIGH_SCORE_KEY, score.toString());
         } catch (e) {
-            console.warn('No se pudo guardar el high score:', e);
+            console.warn('No se pudo guardar el high score');
         }
     }
 
     /**
-     * Carga el high score
+     * Carga high score
      * @returns {number}
      */
     loadHighScore() {
@@ -471,18 +482,16 @@ class Game {
             const saved = localStorage.getItem(CONFIG.STORAGE.HIGH_SCORE_KEY);
             return saved ? parseInt(saved) : 0;
         } catch (e) {
-            console.warn('No se pudo cargar el high score:', e);
             return 0;
         }
     }
 
     /**
-     * Actualiza el contador de FPS
+     * Actualiza FPS
      */
     updateFPS() {
         this.frameCount++;
         const now = Date.now();
-        
         if (now - this.lastFpsUpdate >= 1000) {
             this.fps = this.frameCount;
             this.frameCount = 0;
@@ -491,7 +500,7 @@ class Game {
     }
 
     /**
-     * Dibuja el contador de FPS
+     * Dibuja FPS
      */
     drawFPS() {
         this.ctx.fillStyle = '#00ff00';
@@ -500,27 +509,25 @@ class Game {
     }
 
     /**
-     * Dibuja información de debug
+     * Dibuja info de debug
      */
     drawDebugInfo() {
         const lines = [
             `Estado: ${this.currentState}`,
             `Balas: ${this.bullets.length}`,
-            `Partículas: ${this.collisionSystem.getParticleCount()}`,
-            `Enemigos: ${this.enemyManager ? this.enemyManager.getActiveCount() : 0}`,
-            `Patrón: ${this.enemyManager ? this.enemyManager.currentPattern.name : 'N/A'}`
+            `Kills: ${this.enemiesKilledThisLevel}/${this.enemiesForNextLevel}`,
+            `Total: ${this.enemiesKilled}`
         ];
 
         this.ctx.fillStyle = '#ffff00';
         this.ctx.font = '12px monospace';
-        
         lines.forEach((line, i) => {
             this.ctx.fillText(line, 10, 40 + i * 15);
         });
     }
 
     /**
-     * Obtiene el estado actual del juego
+     * Obtiene estado actual
      * @returns {string}
      */
     getState() {

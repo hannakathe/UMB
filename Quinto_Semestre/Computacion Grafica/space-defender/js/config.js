@@ -1,7 +1,6 @@
 /* ===================================
-   CONFIG.JS - Constantes del Juego v3.0
+   CONFIG.JS - v4.0 - Sistema de Spawn Individual
    ===================================
-   Configuración centralizada con patrones de movimiento.
 */
 
 const CONFIG = {
@@ -15,9 +14,9 @@ const CONFIG = {
     PLAYER: {
         WIDTH: 40,
         HEIGHT: 30,
-        SPEED: 5,
+        SPEED: 6,
         INITIAL_LIVES: 3,
-        SHOOT_COOLDOWN: 250,
+        SHOOT_COOLDOWN: 200,
         INVINCIBLE_TIME: 2000,
         START_X: 400,
         START_Y: 540,
@@ -28,115 +27,61 @@ const CONFIG = {
     BULLET: {
         WIDTH: 4,
         HEIGHT: 15,
-        PLAYER_SPEED: -7,
-        ENEMY_SPEED: 4,
+        PLAYER_SPEED: -8,
+        ENEMY_SPEED: 5,
         PLAYER_COLOR: '#ffffff',
         ENEMY_COLOR: '#ff0000'
     },
 
-    // Configuración de Enemigos
+    // ⭐ NUEVO: Configuración de Enemigos Individuales
     ENEMY: {
         WIDTH: 35,
         HEIGHT: 30,
-        BASE_SPEED: 1,
-        SPEED_INCREMENT: 0.15,  // Reducido para mejor control
-        DROP_DISTANCE: 20,
         
-        // Grid inicial
-        GRID: {
-            ROWS: 3,
-            COLS: 8,
-            SPACING_X: 70,
-            SPACING_Y: 60,
-            START_X: 150,
-            START_Y: 80,
-            ROWS_PER_LEVEL: 0.5
+        // Sistema de Spawn
+        SPAWN: {
+            INITIAL_DELAY: 3000,        // ms antes del primer spawn
+            BASE_INTERVAL: 1500,         // ms entre spawns (nivel 1)
+            INTERVAL_DECREASE: 100,      // reducir por nivel
+            MIN_INTERVAL: 400,           // intervalo mínimo
+            MAX_ACTIVE: 10,              // máximo enemigos en pantalla
+            SPAWN_Y: -40,                // posición Y inicial (fuera de pantalla)
+            MARGIN_X: 50                 // margen de los bordes
         },
 
-        // Tipos de enemigos
+        // Tipos de enemigos con velocidades DIFERENTES
         TYPES: {
-            1: { POINTS: 10, COLOR: '#00ff41', SHOOT_CHANCE: 0.0003 },
-            2: { POINTS: 20, COLOR: '#ffff00', SHOOT_CHANCE: 0.0006 },
-            3: { POINTS: 30, COLOR: '#ff0000', SHOOT_CHANCE: 0.001 }
+            1: { 
+                POINTS: 10, 
+                COLOR: '#00ff41',           // Verde
+                SPEED: 0.5,                 // ⭐ LENTO
+                SHOOT_CHANCE: 0.0002,
+                SPAWN_WEIGHT: 5,            // Más probable
+                NAME: 'Verde'
+            },
+            2: { 
+                POINTS: 20, 
+                COLOR: '#ffff00',           // Amarillo
+                SPEED: 1.5,                 // ⭐ MEDIO
+                SHOOT_CHANCE: 0.0004,
+                SPAWN_WEIGHT: 3,            // Mediano
+                NAME: 'Amarillo'
+            },
+            3: { 
+                POINTS: 30, 
+                COLOR: '#ff0000',           // Rojo
+                SPEED: 2.0,                 // ⭐ RÁPIDO
+                SHOOT_CHANCE: 0.0006,
+                SPAWN_WEIGHT: 2,            // Menos probable
+                NAME: 'Rojo'
+            }
         },
 
-        // ⭐ NUEVO: Patrones de movimiento
-        MOVEMENT_PATTERNS: {
-            // Nivel 1: Movimiento clásico (horizontal + descenso)
-            CLASSIC: {
-                name: 'classic',
-                description: 'Patrón clásico Space Invaders',
-                minLevel: 1,
-                update: function(enemy, manager, time) {
-                    // Lógica manejada por el manager
-                }
-            },
-            
-            // Nivel 2+: Movimiento con olas
-            WAVE: {
-                name: 'wave',
-                description: 'Movimiento ondulatorio',
-                minLevel: 2,
-                amplitude: 15,
-                frequency: 0.05,
-                update: function(enemy, manager, time) {
-                    const wave = Math.sin(time * this.frequency + enemy.gridCol * 0.3) * this.amplitude;
-                    enemy.waveOffset = wave;
-                }
-            },
-            
-            // Nivel 3+: Movimiento en zigzag
-            ZIGZAG: {
-                name: 'zigzag',
-                description: 'Movimiento en zigzag',
-                minLevel: 3,
-                zigzagSpeed: 2,
-                update: function(enemy, manager, time) {
-                    const zigzag = Math.sin(time * 0.1 + enemy.gridRow * 0.5) * this.zigzagSpeed;
-                    enemy.zigzagOffset = zigzag;
-                }
-            },
-            
-            // Nivel 4+: Movimiento circular
-            CIRCULAR: {
-                name: 'circular',
-                description: 'Órbitas circulares',
-                minLevel: 4,
-                radius: 10,
-                speed: 0.03,
-                update: function(enemy, manager, time) {
-                    const angle = time * this.speed + enemy.gridIndex * 0.5;
-                    enemy.circularOffsetX = Math.cos(angle) * this.radius;
-                    enemy.circularOffsetY = Math.sin(angle) * this.radius;
-                }
-            },
-            
-            // Nivel 5+: Movimiento errático
-            ERRATIC: {
-                name: 'erratic',
-                description: 'Movimiento impredecible',
-                minLevel: 5,
-                changeInterval: 60,  // Cambiar cada 60 frames
-                maxOffset: 20,
-                update: function(enemy, manager, time) {
-                    if (!enemy.erraticTarget) {
-                        enemy.erraticTarget = { x: 0, y: 0 };
-                        enemy.erraticTimer = 0;
-                    }
-                    
-                    enemy.erraticTimer++;
-                    if (enemy.erraticTimer >= this.changeInterval) {
-                        enemy.erraticTarget.x = (Math.random() - 0.5) * this.maxOffset;
-                        enemy.erraticTarget.y = (Math.random() - 0.5) * this.maxOffset;
-                        enemy.erraticTimer = 0;
-                    }
-                    
-                    // Interpolar suavemente hacia el objetivo
-                    if (!enemy.erraticOffset) enemy.erraticOffset = { x: 0, y: 0 };
-                    enemy.erraticOffset.x += (enemy.erraticTarget.x - enemy.erraticOffset.x) * 0.1;
-                    enemy.erraticOffset.y += (enemy.erraticTarget.y - enemy.erraticOffset.y) * 0.1;
-                }
-            }
+        // Movimiento horizontal aleatorio (opcional)
+        HORIZONTAL_MOVEMENT: {
+            ENABLED: true,
+            MAX_SPEED: 1.5,
+            CHANGE_CHANCE: 0.02         // probabilidad de cambiar dirección
         },
 
         // Animación
@@ -147,17 +92,16 @@ const CONFIG = {
     SCORING: {
         ENEMY_TYPE_1: 10,
         ENEMY_TYPE_2: 20,
-        ENEMY_TYPE_3: 30
+        ENEMY_TYPE_3: 30,
+        COMBO_MULTIPLIER: 1.5       // bonus por combos
     },
 
     // Estados del Juego
     STATES: {
         INTRO: 'intro',
-        MENU: 'menu',
         PLAYING: 'playing',
         PAUSED: 'paused',
-        GAME_OVER: 'gameOver',
-        LEVEL_COMPLETE: 'levelComplete'
+        GAME_OVER: 'gameOver'
     },
 
     // Efectos Visuales
@@ -170,7 +114,7 @@ const CONFIG = {
 
     // Física y Colisiones
     PHYSICS: {
-        INVASION_LINE: 500
+        ENEMY_DESPAWN_Y: 620        // Y donde se eliminan enemigos
     },
 
     // Audio
@@ -204,10 +148,6 @@ const CONFIG = {
                 `Puntuación Final: ${score}<br>
                  High Score: ${highScore}<br><br>
                  Presiona R para reiniciar`
-        },
-        LEVEL_COMPLETE: {
-            TITLE: (level) => `¡NIVEL ${level}!`,
-            TEXT: (patternName) => `Nuevo patrón: ${patternName}<br>Prepárate...`
         }
     },
 
@@ -216,15 +156,15 @@ const CONFIG = {
         ENABLED: false,
         SHOW_HITBOXES: false,
         SHOW_FPS: false,
-        GOD_MODE: false
+        GOD_MODE: false,
+        SHOW_SPAWN_INFO: false
     }
 };
 
-// Hacer CONFIG global y de solo lectura
+// Hacer CONFIG global
 if (typeof window !== 'undefined') {
     window.CONFIG = Object.freeze(CONFIG);
 }
-
 /* ===================================
    NOTAS DE USO:
    ===================================
