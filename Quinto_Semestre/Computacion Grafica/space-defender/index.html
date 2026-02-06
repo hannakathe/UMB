@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Defender - Juego 2D</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Contenedor principal del juego -->
+    <div class="game-container">
+        <!-- Título del juego -->
+        <h1 class="game-title">🚀 SPACE DEFENDER 🚀</h1>
+        
+        <!-- HUD - Heads Up Display -->
+        <div class="hud">
+            <div class="hud-left">
+                <span class="label">PUNTOS:</span>
+                <span id="score" class="value">0</span>
+            </div>
+            <div class="hud-center">
+                <span class="label">NIVEL:</span>
+                <span id="level" class="value">1</span>
+            </div>
+            <div class="hud-right">
+                <span class="label">VIDAS:</span>
+                <span id="lives" class="value">❤️❤️❤️</span>
+            </div>
+        </div>
+
+        <!-- Canvas donde se dibuja el juego -->
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+        <!-- Panel de mensajes (inicio, pausa, game over) -->
+        <div id="messagePanel" class="message-panel">
+            <h2 id="messageTitle">SPACE DEFENDER</h2>
+            <p id="messageText">
+                ← → o A/D: Mover nave<br>
+                ESPACIO: Disparar<br>
+                P: Pausar<br><br>
+                Presiona ENTER para comenzar
+            </p>
+        </div>
+
+        <!-- Controles e información -->
+        <div class="controls-info">
+            <p><strong>Controles:</strong> Flechas/A-D = Mover | Espacio = Disparar | P = Pausa | R = Reiniciar</p>
+        </div>
+    </div>
+
+    <!-- Scripts del juego - ORDEN IMPORTANTE -->
+    <!-- 1. Configuración -->
+    <script src="js/config.js"></script>
+    
+    <!-- 2. Entidades -->
+    <script src="js/entities/bullet.js"></script>
+    <script src="js/entities/player.js"></script>
+    <script src="js/entities/enemy.js"></script>
+    
+    <!-- 3. Sistemas -->
+    <script src="js/systems/collision.js"></script>
+    
+    <!-- 4. Core (lógica principal) -->
+    <script src="js/core/game.js"></script>
+    <script src="js/core/main.js"></script>
+</body>
+</html>

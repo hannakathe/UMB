@@ -1,0 +1,383 @@
+/* =========================================
+   SPACE DEFENDER - ESTILOS PRINCIPALES
+   Computación Gráfica 2025
+   ========================================= */
+
+/* === VARIABLES CSS === */
+:root {
+    --color-primary: #00d4ff;
+    --color-secondary: #ff00ff;
+    --color-accent: #ffff00;
+    --color-danger: #ff0055;
+    --color-success: #00ff88;
+    --color-dark: #0a0e27;
+    --color-darker: #050714;
+    --font-main: 'Courier New', monospace;
+    --shadow-glow: 0 0 20px rgba(0, 212, 255, 0.5);
+}
+
+/* === RESET Y CONFIGURACIÓN BASE === */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-main);
+    background: var(--color-darker);
+    color: white;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Fondo animado con estrellas */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(2px 2px at 20% 30%, white, transparent),
+        radial-gradient(2px 2px at 60% 70%, white, transparent),
+        radial-gradient(1px 1px at 50% 50%, white, transparent),
+        radial-gradient(1px 1px at 80% 10%, white, transparent),
+        radial-gradient(2px 2px at 90% 60%, white, transparent),
+        radial-gradient(1px 1px at 33% 80%, white, transparent),
+        radial-gradient(2px 2px at 70% 40%, white, transparent);
+    background-size: 200% 200%;
+    animation: stars 60s linear infinite;
+    opacity: 0.5;
+    z-index: 0;
+}
+
+@keyframes stars {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 100% 100%; }
+}
+
+/* === PANTALLAS === */
+.screen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    transition: opacity 0.5s ease;
+}
+
+.screen.hidden {
+    display: none;
+    opacity: 0;
+}
+
+.container {
+    text-align: center;
+    background: rgba(10, 14, 39, 0.85);
+    padding: 50px;
+    border-radius: 20px;
+    border: 2px solid var(--color-primary);
+    box-shadow: var(--shadow-glow);
+    backdrop-filter: blur(10px);
+    max-width: 600px;
+}
+
+/* === TÍTULOS === */
+.title {
+    font-size: 4em;
+    font-weight: bold;
+    color: var(--color-primary);
+    text-shadow: 
+        0 0 10px var(--color-primary),
+        0 0 20px var(--color-primary),
+        0 0 30px var(--color-primary);
+    margin-bottom: 20px;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.title.game-over {
+    color: var(--color-danger);
+    text-shadow: 
+        0 0 10px var(--color-danger),
+        0 0 20px var(--color-danger),
+        0 0 30px var(--color-danger);
+}
+
+.subtitle {
+    font-size: 1.3em;
+    color: var(--color-accent);
+    margin-bottom: 30px;
+    text-shadow: 0 0 5px var(--color-accent);
+}
+
+/* === INFORMACIÓN DE CONTROLES === */
+.controls-info {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 20px;
+    border-radius: 10px;
+    margin: 30px 0;
+    border: 1px solid var(--color-primary);
+}
+
+.controls-info h3 {
+    color: var(--color-primary);
+    margin-bottom: 15px;
+    font-size: 1.2em;
+}
+
+.controls-info p {
+    margin: 8px 0;
+    font-size: 1.1em;
+    color: #fff;
+}
+
+/* === BOTONES === */
+.btn {
+    font-family: var(--font-main);
+    font-size: 1.3em;
+    padding: 15px 40px;
+    margin: 10px;
+    border: 3px solid;
+    border-radius: 10px;
+    background: transparent;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    font-weight: bold;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn-start {
+    border-color: var(--color-success);
+    color: var(--color-success);
+    box-shadow: 0 0 15px var(--color-success);
+}
+
+.btn-start:hover {
+    background: var(--color-success);
+    color: var(--color-dark);
+    box-shadow: 0 0 25px var(--color-success);
+    transform: translateY(-3px);
+}
+
+.btn-restart {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    box-shadow: 0 0 15px var(--color-primary);
+}
+
+.btn-restart:hover {
+    background: var(--color-primary);
+    color: var(--color-dark);
+    box-shadow: 0 0 25px var(--color-primary);
+    transform: translateY(-3px);
+}
+
+.btn-menu {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    box-shadow: 0 0 15px var(--color-accent);
+}
+
+.btn-menu:hover {
+    background: var(--color-accent);
+    color: var(--color-dark);
+    box-shadow: 0 0 25px var(--color-accent);
+    transform: translateY(-3px);
+}
+
+/* === CRÉDITOS === */
+.credits {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 0.9em;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.credits p {
+    margin: 5px 0;
+}
+
+/* === CANVAS DEL JUEGO === */
+#gameCanvas {
+    display: block;
+    background: rgba(0, 0, 0, 0.5);
+    border: 3px solid var(--color-primary);
+    border-radius: 10px;
+    box-shadow: 
+        0 0 20px var(--color-primary),
+        inset 0 0 50px rgba(0, 0, 0, 0.5);
+    margin: 20px auto;
+}
+
+/* === HUD (Heads-Up Display) === */
+#hud {
+    display: flex;
+    justify-content: space-around;
+    padding: 15px;
+    background: rgba(10, 14, 39, 0.9);
+    border-bottom: 2px solid var(--color-primary);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.hud-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.hud-label {
+    font-size: 1em;
+    color: var(--color-primary);
+    font-weight: bold;
+    text-shadow: 0 0 5px var(--color-primary);
+}
+
+.hud-value {
+    font-size: 1.2em;
+    color: var(--color-accent);
+    font-weight: bold;
+    text-shadow: 0 0 5px var(--color-accent);
+    min-width: 60px;
+    text-align: left;
+}
+
+/* === OVERLAY DE PAUSA === */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    backdrop-filter: blur(5px);
+}
+
+.overlay.hidden {
+    display: none;
+}
+
+.overlay-content {
+    text-align: center;
+    padding: 40px;
+    background: rgba(10, 14, 39, 0.95);
+    border-radius: 15px;
+    border: 2px solid var(--color-accent);
+    box-shadow: 0 0 30px var(--color-accent);
+}
+
+.overlay-content h2 {
+    font-size: 2.5em;
+    color: var(--color-accent);
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px var(--color-accent);
+}
+
+.overlay-content p {
+    font-size: 1.2em;
+    color: white;
+}
+
+/* === ESTADÍSTICAS FINALES === */
+.final-stats {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 25px;
+    border-radius: 10px;
+    margin: 25px 0;
+    border: 1px solid var(--color-primary);
+}
+
+.final-stats h3 {
+    color: var(--color-primary);
+    margin-bottom: 15px;
+    font-size: 1.3em;
+}
+
+.final-stats p {
+    font-size: 1.2em;
+    margin: 10px 0;
+    color: white;
+}
+
+.final-stats span {
+    color: var(--color-accent);
+    font-weight: bold;
+    text-shadow: 0 0 5px var(--color-accent);
+}
+
+/* === ANIMACIONES ADICIONALES === */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.container {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+    .title {
+        font-size: 2.5em;
+    }
+    
+    .container {
+        padding: 30px 20px;
+        margin: 20px;
+    }
+    
+    .btn {
+        font-size: 1em;
+        padding: 12px 30px;
+    }
+    
+    #hud {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .controls-info p {
+        font-size: 0.9em;
+    }
+}
