@@ -43,8 +43,9 @@ class Player {
 
     /**
      * Actualiza la lógica del jugador
+     * @param {number} canvasWidth - Ancho del canvas (para responsive)
      */
-    update() {
+    update(canvasWidth = CONFIG.CANVAS.BASE_WIDTH) {
         // Movimiento horizontal
         if (this.keys.left) {
             this.x -= this.speed;
@@ -55,11 +56,18 @@ class Player {
 
         // Limitar a los bordes del canvas
         const halfWidth = this.width / 2;
-        if (this.x < halfWidth) {
-            this.x = halfWidth;
+        const margin = 10; // Margen de seguridad para evitar que se salga
+        
+        // Límite izquierdo
+        const minX = halfWidth + margin;
+        if (this.x < minX) {
+            this.x = minX;
         }
-        if (this.x > CONFIG.CANVAS.WIDTH - halfWidth) {
-            this.x = CONFIG.CANVAS.WIDTH - halfWidth;
+        
+        // Límite derecho
+        const maxX = canvasWidth - halfWidth - margin;
+        if (this.x > maxX) {
+            this.x = maxX;
         }
 
         // Actualizar timer de parpadeo si es invencible

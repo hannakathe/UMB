@@ -29,8 +29,8 @@ const CONFIG = {
     BULLET: {
         WIDTH: 4,
         HEIGHT: 15,
-        PLAYER_SPEED: -6,          // ⭐ Reducido de -8 a -6 (menos tunneling)
-        ENEMY_SPEED: 4,             // ⭐ Reducido de 5 a 4
+        PLAYER_SPEED: -6,          // Reducido de -8 a -6 (menos tunneling)
+        ENEMY_SPEED: 4,             // Reducido de 5 a 4
         PLAYER_COLOR: '#ffffff',
         ENEMY_COLOR: '#ff0000'
     },
@@ -39,8 +39,8 @@ const CONFIG = {
     ENEMY: {
         WIDTH: 35,
         HEIGHT: 30,
-        // ⭐ NUEVO: Expansión de hitbox para colisiones más generosas
-        HITBOX_EXPANSION: 8,        // Píxeles extra en cada lado
+        // Expansión de hitbox para colisiones más generosas
+        HITBOX_EXPANSION: 12,        // Píxeles extra en cada lado
         
         // Sistema de Spawn
         SPAWN: {
@@ -228,10 +228,10 @@ const CONFIG = {
         }
     },
 
-    // Debug
+    // Modo Debug
     DEBUG: {
         ENABLED: false,
-        SHOW_HITBOXES: false,       // ⭐ Cambia a true para ver las hitboxes mejoradas
+        SHOW_HITBOXES: false,       
         SHOW_FPS: false,
         GOD_MODE: false,
         SHOW_PATTERN_INFO: false
