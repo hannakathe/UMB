@@ -14,7 +14,7 @@ class Bullet {
     constructor(x, y, isPlayerBullet = true) {
         this.x = x;
         this.y = y;
-        this.lastY = y;  // ⭐ Para detección continua
+        this.lastY = y;  // Para detección continua
         this.isPlayerBullet = isPlayerBullet;
         
         // Obtener configuración desde CONFIG

@@ -17,41 +17,41 @@ class Enemy {
         // Posición base
         this.baseX = x;
         this.baseY = y;
-        
+
         // Posición actual (base + offset del patrón)
         this.x = x;
         this.y = y;
-        
+
         this.type = Math.min(Math.max(type, 1), 3);
         this.canvasWidth = canvasWidth;
-        
+
         // Configuración del tipo
         this.width = CONFIG.ENEMY.WIDTH;
         this.height = CONFIG.ENEMY.HEIGHT;
-        
+
         const typeConfig = CONFIG.ENEMY.TYPES[this.type];
         this.points = typeConfig.POINTS;
         this.color = typeConfig.COLOR;
         this.shootChance = typeConfig.SHOOT_CHANCE;
         this.speed = typeConfig.SPEED;
         this.name = typeConfig.NAME;
-        
+
         // Patrón de movimiento
         this.pattern = pattern;
-        
+
         // Estado
         this.active = true;
-        
+
         // Animación
         this.animationFrame = 0;
         this.animationCounter = 0;
         this.animationSpeed = CONFIG.ENEMY.ANIMATION_SPEED;
-        
+
         // ID único y tiempo de spawn para patrones
         this.id = Date.now() + Math.random();
         this.spawnTime = Date.now();
         this.timeAlive = 0;
-        
+
         // Offsets de patrón
         this.patternOffsetX = 0;
         this.patternOffsetY = 0;
@@ -64,21 +64,21 @@ class Enemy {
      */
     update(time, canvasHeight) {
         this.timeAlive++;
-        
+
         // Aplicar patrón de movimiento si existe
         if (this.pattern && this.pattern.apply) {
             const offset = this.pattern.apply(this, time);
             this.patternOffsetX = offset.offsetX || 0;
             this.patternOffsetY = offset.offsetY || 0;
         }
-        
+
         // Movimiento vertical base (descenso)
         this.baseY += this.speed;
-        
+
         // Calcular posición final
         this.x = this.baseX + this.patternOffsetX;
         this.y = this.baseY + this.patternOffsetY;
-        
+
         // Mantener dentro de límites horizontales
         const margin = CONFIG.ENEMY.WIDTH / 2;
         if (this.x < margin) {
@@ -87,13 +87,13 @@ class Enemy {
         if (this.x > this.canvasWidth - margin) {
             this.x = this.canvasWidth - margin;
         }
-        
+
         // Desactivar si sale por abajo
         const despawnY = canvasHeight * CONFIG.PHYSICS.ENEMY_DESPAWN_Y_PERCENT;
         if (this.baseY > despawnY) {
             this.active = false;
         }
-        
+
         // Actualizar animación
         this.animationCounter++;
         if (this.animationCounter >= this.animationSpeed) {
@@ -110,11 +110,11 @@ class Enemy {
         ctx.shadowBlur = 10;
         ctx.shadowColor = this.color;
         ctx.fillStyle = this.color;
-        
+
         const offset = this.animationFrame * 3;
         const halfWidth = this.width / 2;
         const halfHeight = this.height / 2;
-        
+
         // Cuerpo
         ctx.fillRect(
             this.x - halfWidth + 8,
@@ -122,15 +122,15 @@ class Enemy {
             this.width - 16,
             this.height - 15
         );
-        
+
         // Antenas animadas
         ctx.fillRect(this.x - halfWidth + offset, this.y - halfHeight, 8, 15);
         ctx.fillRect(this.x + halfWidth - 8 - offset, this.y - halfHeight, 8, 15);
-        
+
         // Patas
         ctx.fillRect(this.x - halfWidth, this.y + halfHeight - 10, 8, 10);
         ctx.fillRect(this.x + halfWidth - 8, this.y + halfHeight - 10, 8, 10);
-        
+
         // Ojos
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(this.x - 10, this.y - 5, 6, 6);
@@ -144,7 +144,7 @@ class Enemy {
             ctx.strokeStyle = this.color;
             ctx.lineWidth = 2;
             ctx.strokeRect(bounds.x, bounds.y, bounds.width, bounds.height);
-            
+
             // Mostrar hitbox real del sprite (sin expansión)
             ctx.strokeStyle = '#ffffff';
             ctx.lineWidth = 1;
@@ -156,22 +156,22 @@ class Enemy {
                 this.height
             );
             ctx.setLineDash([]);
-            
+
             // Mostrar posición base
             ctx.fillStyle = '#00ff00';
             ctx.fillRect(this.baseX - 2, this.baseY - 2, 4, 4);
-            
+
             // Mostrar centro
             ctx.fillStyle = '#ff00ff';
             ctx.fillRect(this.x - 2, this.y - 2, 4, 4);
         }
-        
+
         if (CONFIG.DEBUG.SHOW_PATTERN_INFO) {
             ctx.fillStyle = '#ffffff';
             ctx.font = '10px monospace';
             ctx.fillText(
-                `${this.pattern ? this.pattern.name : 'none'}`, 
-                this.x - 20, 
+                `${this.pattern ? this.pattern.name : 'none'}`,
+                this.x - 20,
                 this.y - 25
             );
         }
@@ -183,7 +183,7 @@ class Enemy {
      */
     shoot() {
         if (Math.random() < this.shootChance) {
-            // ⭐ Audio completamente aislado - NO PUEDE bloquear
+            // Audio completamente aislado - NO PUEDE bloquear
             try {
                 if (window.game && window.game.audioSystem) {
                     Promise.resolve().then(() => {
@@ -193,7 +193,7 @@ class Enemy {
                     });
                 }
             } catch (e) { /* Silenciar */ }
-            
+
             return new Bullet(this.x, this.y + this.height / 2, false);
         }
         return null;
@@ -248,7 +248,7 @@ class EnemySpawner {
         this.level = level;
         this.canvasWidth = canvasWidth;
         this.canvasHeight = canvasHeight;
-        
+
         // Sistema de spawn
         this.spawnInterval = Math.max(
             CONFIG.ENEMY.SPAWN.BASE_INTERVAL - (level * CONFIG.ENEMY.SPAWN.INTERVAL_DECREASE),
@@ -256,21 +256,21 @@ class EnemySpawner {
         );
         this.timeSinceLastSpawn = 0;
         this.isSpawning = false;
-        
+
         // Tiempo global (para patrones)
         this.time = 0;
-        
+
         // Patrón actual según nivel
         this.currentPattern = this.getPatternForLevel(level);
-        
+
         // Estadísticas
         this.totalSpawned = 0;
-        
+
         // Iniciar spawn
         setTimeout(() => {
             this.isSpawning = true;
         }, CONFIG.ENEMY.SPAWN.INITIAL_DELAY);
-        
+
         console.log(`🎮 Nivel ${level} - Patrón: ${this.currentPattern.description}`);
     }
 
@@ -281,7 +281,8 @@ class EnemySpawner {
      */
     getPatternForLevel(level) {
         const patterns = CONFIG.ENEMY.MOVEMENT_PATTERNS;
-        
+
+        if (level >= 6) return patterns.RANDOM;    
         if (level >= 5) return patterns.ERRATIC;
         if (level >= 4) return patterns.CIRCULAR;
         if (level >= 3) return patterns.ZIGZAG;
@@ -290,19 +291,40 @@ class EnemySpawner {
     }
 
     /**
+     * Calcula max enemigos por nivel
+     * @param {number} level
+     * @returns {number}
+     */
+    getMaxActiveForLevel(level) {
+        const base = CONFIG.ENEMY.SPAWN.MAX_ACTIVE_BASE;
+        const perLevel = CONFIG.ENEMY.SPAWN.MAX_ACTIVE_PER_LEVEL;
+        const cap = CONFIG.ENEMY.SPAWN.MAX_ACTIVE_CAP;
+
+        // Fórmula: base + (perLevel × (level - 1))
+        const calculated = base + (perLevel * (level - 1));
+
+        // No exceder el tope máximo
+        return Math.min(calculated, cap);
+    }
+    // ⭐⭐⭐ FIN NUEVO MÉTODO ⭐⭐⭐
+
+    /**
+     * Selecciona tipo aleatorio
+
+    /**
      * Selecciona tipo aleatorio
      * @returns {number}
      */
     selectRandomType() {
         const types = CONFIG.ENEMY.TYPES;
         const weights = [];
-        
+
         for (let type in types) {
             for (let i = 0; i < types[type].SPAWN_WEIGHT; i++) {
                 weights.push(parseInt(type));
             }
         }
-        
+
         return weights[Math.floor(Math.random() * weights.length)];
     }
 
@@ -322,9 +344,13 @@ class EnemySpawner {
     trySpawn() {
         const activeCount = this.enemies.filter(e => e.active).length;
         
-        if (activeCount >= CONFIG.ENEMY.SPAWN.MAX_ACTIVE) {
+        // Usar máximo dinámico según nivel 
+        const maxActive = this.getMaxActiveForLevel(this.level);
+        
+        if (activeCount >= maxActive) {
             return;
         }
+  
         
         const type = this.selectRandomType();
         const x = this.getRandomSpawnX();
@@ -343,35 +369,35 @@ class EnemySpawner {
      */
     update(deltaTime = 16) {
         const bullets = [];
-        
+
         // Incrementar tiempo global
         this.time++;
-        
+
         // Sistema de spawn
         if (this.isSpawning) {
             this.timeSinceLastSpawn += deltaTime;
-            
+
             if (this.timeSinceLastSpawn >= this.spawnInterval) {
                 this.trySpawn();
                 this.timeSinceLastSpawn = 0;
             }
         }
-        
+
         // Actualizar cada enemigo
         this.enemies.forEach(enemy => {
             if (enemy.active) {
                 enemy.update(this.time, this.canvasHeight);
-                
+
                 const bullet = enemy.shoot();
                 if (bullet) bullets.push(bullet);
             }
         });
-        
+
         // Limpiar enemigos inactivos
         if (this.enemies.length > 100) {
             this.enemies = this.enemies.filter(e => e.active);
         }
-        
+
         return bullets;
     }
 
@@ -405,7 +431,7 @@ class EnemySpawner {
     updateCanvasSize(width, height) {
         this.canvasWidth = width;
         this.canvasHeight = height;
-        
+
         // Actualizar enemigos existentes
         this.enemies.forEach(enemy => {
             enemy.canvasWidth = width;
@@ -433,7 +459,7 @@ class EnemySpawner {
      * @returns {boolean}
      */
     hasReachedBottom() {
-        return this.enemies.some(e => 
+        return this.enemies.some(e =>
             e.active && e.hasReachedBottom(this.canvasHeight)
         );
     }
@@ -460,26 +486,42 @@ class EnemySpawner {
      */
     resetForLevel(level) {
         this.level = level;
-        this.enemies = [];
+        
+        
+        // Marcar enemigos existentes como del nivel anterior
+        this.enemies.forEach(enemy => {
+            if (enemy.active) {
+                enemy.fromPreviousLevel = true;
+            }
+        });
+
+        
         this.spawnInterval = Math.max(
             CONFIG.ENEMY.SPAWN.BASE_INTERVAL - (level * CONFIG.ENEMY.SPAWN.INTERVAL_DECREASE),
             CONFIG.ENEMY.SPAWN.MIN_INTERVAL
         );
         this.timeSinceLastSpawn = 0;
-        this.totalSpawned = 0;
+        
+        // ⭐ OPCIONAL: No resetear totalSpawned para mantener conteo global
+        // this.totalSpawned = 0;
+        
         this.time = 0;
         this.isSpawning = false;
         
-        // Actualizar patrón
+        // Actualizar patrón (nuevos enemigos usarán este patrón)
         this.currentPattern = this.getPatternForLevel(level);
         
         setTimeout(() => {
             this.isSpawning = true;
         }, CONFIG.ENEMY.SPAWN.INITIAL_DELAY);
         
+        // Mostrar info del nivel en consola
+        const maxEnemies = this.getMaxActiveForLevel(level);
         console.log(`🎮 Nivel ${level} - Patrón: ${this.currentPattern.description}`);
+        console.log(`   Max enemigos: ${maxEnemies} | Frecuencia: ${this.spawnInterval}ms`);
+
     }
 }
 
 // Alias
-class EnemyManager extends EnemySpawner {}
+class EnemyManager extends EnemySpawner { }

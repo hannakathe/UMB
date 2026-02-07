@@ -45,6 +45,12 @@ class Game {
         this.enemiesKilled = 0;
         this.enemiesKilledThisLevel = 0;
         this.enemiesForNextLevel = 10;
+        
+
+        this.scoreForNextLevel = 150;  // Puntos necesarios para subir
+        this.scoreThisLevel = 0;        // Puntos acumulados este nivel
+     
+        
         this.highScore = this.loadHighScore();
         
         // Efectos
@@ -419,6 +425,8 @@ class Game {
         this.level++;
         this.enemiesKilledThisLevel = 0;
         
+        this.scoreThisLevel = 0;
+        
         // ⭐ Audio aislado - NO PUEDE bloquear
         try {
             Promise.resolve().then(() => {
@@ -432,7 +440,11 @@ class Game {
             this.enemySpawner.resetForLevel(this.level);
         }
         
+        this.scoreForNextLevel = CONFIG.LEVELS.SCORE_FOR_NEXT_LEVEL * this.level;
+        
         console.log(`⭐ Nivel ${this.level} - Patrón: ${this.enemySpawner.getCurrentPatternName()}`);
+        
+        console.log(`   Requisitos: ${CONFIG.LEVELS.ENEMIES_FOR_NEXT_LEVEL} kills + ${this.scoreForNextLevel} puntos`);
     }
 
     /**
@@ -476,11 +488,17 @@ class Game {
         
         if (pointsEarned > 0) {
             this.score += pointsEarned;
+            
+            this.scoreThisLevel += pointsEarned;
+            
             const enemiesDestroyed = Math.floor(pointsEarned / 10);
             this.enemiesKilled += enemiesDestroyed;
             this.enemiesKilledThisLevel += enemiesDestroyed;
             
-            if (this.enemiesKilledThisLevel >= this.enemiesForNextLevel) {
+            const hasEnoughKills = this.enemiesKilledThisLevel >= this.enemiesForNextLevel;
+            const hasEnoughScore = this.scoreThisLevel >= this.scoreForNextLevel;
+            
+            if (hasEnoughKills && hasEnoughScore) {
                 this.nextLevel();
             }
         }
@@ -665,6 +683,7 @@ class Game {
             `Estado: ${this.currentState}`,
             `Balas: ${this.bullets.length}`,
             `Kills: ${this.enemiesKilledThisLevel}/${this.enemiesForNextLevel}`,
+            `Score Level: ${this.scoreThisLevel}/${this.scoreForNextLevel}`,
             `Patrón: ${this.enemySpawner ? this.enemySpawner.currentPattern.name : 'N/A'}`
         ];
 
