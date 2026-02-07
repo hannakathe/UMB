@@ -17,7 +17,7 @@ const CONFIG = {
         WIDTH: 40,
         HEIGHT: 30,
         SPEED: 6,
-        INITIAL_LIVES: 4,
+        INITIAL_LIVES: 8,
         SHOOT_COOLDOWN: 200,
         INVINCIBLE_TIME: 2000,
         START_X_PERCENT: 0.5,  // 50% del ancho
@@ -39,7 +39,6 @@ const CONFIG = {
     ENEMY: {
         WIDTH: 35,
         HEIGHT: 30,
-        // ⭐ NUEVO: Expansión de hitbox para colisiones más generosas
         HITBOX_EXPANSION: 8,        // Píxeles extra en cada lado
         
         // Sistema de Spawn
@@ -81,7 +80,7 @@ const CONFIG = {
             }
         },
 
-        // ⭐ PATRONES DE MOVIMIENTO INDIVIDUALES
+        // PATRONES DE MOVIMIENTO INDIVIDUALES
         MOVEMENT_PATTERNS: {
             // Nivel 1: Solo vertical (clásico)
             CLASSIC: {
@@ -102,8 +101,8 @@ const CONFIG = {
                 amplitude: 30,
                 frequency: 0.04,
                 apply: function(enemy, time) {
-                    const wave = Math.sin(time * this.frequency + enemy.spawnTime * 0.3) * this.amplitude;
-                    return { offsetX: wave, offsetY: 0 };
+                    const wave = Math.sin(time * this.frequency + enemy.spawnTime * 0.3) * this.amplitude; // Agregado spawnTime para variar fases
+                    return { offsetX: wave, offsetY: 0 }; // Solo afecta el desplazamiento horizontal
                 }
             },
             
@@ -115,8 +114,8 @@ const CONFIG = {
                 amplitude: 2.5,
                 frequency: 0.08,
                 apply: function(enemy, time) {
-                    const zigzag = Math.sin(time * this.frequency + enemy.id) * this.amplitude;
-                    return { offsetX: zigzag, offsetY: 0 };
+                    const zigzag = Math.sin(time * this.frequency + enemy.id) * this.amplitude; // Agregado id para variar fases
+                    return { offsetX: zigzag, offsetY: 0 }; // Solo afecta el desplazamiento horizontal
                 }
             },
             
@@ -129,7 +128,7 @@ const CONFIG = {
                 speed: 0.05,
                 apply: function(enemy, time) {
                     const angle = time * this.speed + enemy.id;
-                    const offsetX = Math.cos(angle) * this.radius;
+                    const offsetX = Math.cos(angle) * this.radius; // Movimiento circular horizontal
                     const offsetY = Math.sin(angle) * this.radius * 0.3; // Aplastado
                     return { offsetX, offsetY };
                 }
@@ -143,25 +142,25 @@ const CONFIG = {
                 changeInterval: 60,
                 maxOffset: 25,
                 apply: function(enemy, time) {
-                    if (!enemy.erraticTarget) {
-                        enemy.erraticTarget = { x: 0, y: 0 };
-                        enemy.erraticTimer = 0;
+                    if (!enemy.erraticTarget) { // Inicializar propiedades para movimiento errático
+                        enemy.erraticTarget = { x: 0, y: 0 }; // Objetivo de desplazamiento actual
+                        enemy.erraticTimer = 0; // Temporizador para cambiar objetivo
                     }
                     
                     enemy.erraticTimer++;
-                    if (enemy.erraticTimer >= this.changeInterval) {
-                        enemy.erraticTarget.x = (Math.random() - 0.5) * this.maxOffset * 2;
-                        enemy.erraticTarget.y = (Math.random() - 0.5) * this.maxOffset;
-                        enemy.erraticTimer = 0;
+                    if (enemy.erraticTimer >= this.changeInterval) { // Cambiar objetivo cada cierto tiempo
+                        enemy.erraticTarget.x = (Math.random() - 0.5) * this.maxOffset * 2; // Rango completo de -maxOffset a +maxOffset
+                        enemy.erraticTarget.y = (Math.random() - 0.5) * this.maxOffset; // Menos movimiento vertical para evitar que se alejen demasiado
+                        enemy.erraticTimer = 0; // Reiniciar temporizador
                     }
                     
-                    if (!enemy.erraticCurrent) enemy.erraticCurrent = { x: 0, y: 0 };
-                    enemy.erraticCurrent.x += (enemy.erraticTarget.x - enemy.erraticCurrent.x) * 0.1;
-                    enemy.erraticCurrent.y += (enemy.erraticTarget.y - enemy.erraticCurrent.y) * 0.1;
+                    if (!enemy.erraticCurrent) enemy.erraticCurrent = { x: 0, y: 0 }; // Posición actual suavizada
+                    enemy.erraticCurrent.x += (enemy.erraticTarget.x - enemy.erraticCurrent.x) * 0.1; // Suavizado para movimiento más fluido
+                    enemy.erraticCurrent.y += (enemy.erraticTarget.y - enemy.erraticCurrent.y) * 0.1; // Suavizado para movimiento más fluido
                     
                     return { 
-                        offsetX: enemy.erraticCurrent.x, 
-                        offsetY: enemy.erraticCurrent.y 
+                        offsetX: enemy.erraticCurrent.x,  // Desplazamiento horizontal errático
+                        offsetY: enemy.erraticCurrent.y   // Desplazamiento vertical errático (más suave para evitar que se alejen demasiado)
                     };
                 }
             }
@@ -203,12 +202,11 @@ const CONFIG = {
     AUDIO: {
         ENABLED: true,
         VOLUME: {
-            MASTER: 0.7,   // 0.0 a 1.0 | Volumen general del juego
-            SFX: 0.8,      // 0.0 a 1.0 | Efectos de sonido (disparos, explosiones)
-            MUSIC: 0.5     // 0.0 a 1.0 | Música de fondo
+            MASTER: 0.7,   
+            SFX: 0.8,      
+            MUSIC: 0.5     
         },
-        // Nota: También puedes ajustar el volumen en tiempo real usando
-        // los controles en el panel derecho del juego
+
         
         // Rutas de efectos de sonido
         SOUNDS: {
