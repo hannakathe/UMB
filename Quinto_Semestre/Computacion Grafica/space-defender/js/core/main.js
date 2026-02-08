@@ -1,11 +1,11 @@
 /* ===================================
-   CORE/MAIN.JS - v5.0 RESPONSIVE
+   CORE/MAIN.JS - Entrada principal del juego
    ===================================
    Spawn individual + Patrones de movimiento + Responsive.
 */
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🚀 Iniciando Space Defender v5.0...');
+    console.log('🚀 Iniciando Space Defender...');
     
     const canvas = document.getElementById('gameCanvas');
     
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Crear juego y hacerlo global
     const game = new Game(canvas);
-    window.game = game; // ⭐ Hacer accesible globalmente
+    window.game = game; 
     console.log('✅ Juego creado');
 
     let lastTime = 0;
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Logs informativos
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.log('🎮 SPACE DEFENDER v5.0 - RESPONSIVE EDITION');
+    console.log('🎮 SPACE DEFENDER - RESPONSIVE EDITION');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     console.log('');
     console.log('✨ NUEVAS CARACTERÍSTICAS:');
@@ -88,82 +88,3 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('');
 });
 
-/* ===================================
-   DOCUMENTACIÓN v5.0
-   ===================================
-
-   VERSIÓN 5.0 - LA VERSIÓN DEFINITIVA
-   
-   CARACTERÍSTICAS PRINCIPALES:
-   
-   1. SISTEMA DE SPAWN INDIVIDUAL (v4.0):
-      - Enemigos aparecen uno por uno
-      - Cada tipo con velocidad propia
-      - Spawn continuo durante partida
-      - Máximo 15 enemigos en pantalla
-   
-   2. PATRONES DE MOVIMIENTO (v3.0):
-      ⭐ NUEVO: Aplicados a enemigos individuales
-      
-      Nivel 1 - CLÁSICO:
-      - Solo descenso vertical
-      - Sin offsets horizontales
-      
-      Nivel 2 - ONDAS:
-      - Movimiento sinusoidal horizontal
-      - Amplitude: 30px
-      - Frequency: 0.04
-      
-      Nivel 3 - ZIGZAG:
-      - Oscilación más rápida
-      - Amplitude: 2.5px
-      - Frequency: 0.08
-      
-      Nivel 4 - CIRCULAR:
-      - Órbitas elípticas
-      - Radius: 15px
-      - Speed: 0.05
-      
-      Nivel 5+ - ERRÁTICO:
-      - Cambios aleatorios cada 60 frames
-      - Offset máximo: 25px
-      - Movimiento impredecible
-   
-   3. DISEÑO RESPONSIVE:
-      - Canvas escala automáticamente
-      - Mantiene aspect ratio 4:3
-      - Funciona en móviles/tablets/desktop
-      - UI adaptable
-      - Controles laterales ocultos en móvil
-   
-   ARQUITECTURA:
-   
-   Enemy:
-   - baseX, baseY: Posición de descenso
-   - patternOffsetX, patternOffsetY: Offset del patrón
-   - x, y: Posición final (base + offset)
-   
-   EnemySpawner:
-   - Genera enemigos con patrón actual
-   - Patrón cambia según nivel
-   - Aplica patrón en cada update
-   
-   Game:
-   - setupResponsiveCanvas(): Configura escalado
-   - resizeCanvas(): Ajusta dimensiones
-   - handleResize(): Listener de window.resize
-   
-   RESPONSIVE:
-   
-   CSS:
-   - clamp() para tamaños de fuente
-   - Media queries para breakpoints
-   - Canvas con max-width y aspect-ratio
-   
-   JavaScript:
-   - Dimensiones base (lógicas): 800x600
-   - Dimensiones físicas: Escaladas
-   - Factor de escala calculado automáticamente
-   
-   ===================================
-*/

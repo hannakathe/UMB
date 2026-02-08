@@ -1,5 +1,5 @@
 /* ===================================
-   SYSTEMS/AUDIO.JS - Sistema de Audio v1.0
+   SYSTEMS/AUDIO.JS - Sistema de Audio
    ===================================
    Gestiona todos los efectos de sonido y música del juego.
 */
@@ -115,7 +115,6 @@ class AudioSystem {
 
     /**
      * Reproduce un efecto de sonido
-     * TOTALMENTE NO BLOQUEANTE - Garantizado
      * @param {string} soundName - Nombre del sonido
      * @param {number} volumeMultiplier - Multiplicador de volumen (0-1)
      */
@@ -124,7 +123,6 @@ class AudioSystem {
         if (!this.enabled || this.muted) return;
 
         // Ejecutar de forma completamente asíncrona
-        // NO PUEDE bloquear el juego bajo ninguna circunstancia
         requestAnimationFrame(() => {
             try {
                 // Si es un pool, buscar una instancia disponible
@@ -163,7 +161,6 @@ class AudioSystem {
                     }
                 }
             } catch {
-                // Silenciar TODOS los errores
             }
         });
     }

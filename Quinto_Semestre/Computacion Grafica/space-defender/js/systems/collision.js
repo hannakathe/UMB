@@ -72,7 +72,6 @@ class CollisionSystem {
             enemies.forEach(enemy => {
                 if (!enemy.active) return;
 
-                // ⭐ Usar detección continua para balas rápidas
                 const enemyBounds = enemy.getBounds();
                 const collision = CollisionSystem.checkContinuousCollision(bullet, enemyBounds);
                 
@@ -82,7 +81,7 @@ class CollisionSystem {
                     enemy.destroy();
                     points += enemy.points;
 
-                    // ⭐ Audio aislado - NO PUEDE bloquear
+                    // Audio aislado
                     try {
                         if (window.game && window.game.audioSystem) {
                             Promise.resolve().then(() => {

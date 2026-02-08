@@ -1,7 +1,7 @@
 /* ===================================
-   ENTITIES/ENEMY.JS - v5.0
+   ENTITIES/ENEMY.JS - Gestión de enemigos y spawner
    ===================================
-   Enemigos individuales CON patrones de movimiento.
+    Este módulo define la clase Enemy, que representa a cada enemigo individual, y la clase EnemySpawner, que gestiona la creación y actualización de los enemigos en el juego.
 */
 
 class Enemy {
@@ -229,12 +229,6 @@ class Enemy {
         this.active = false;
     }
 }
-
-/* ===================================
-   ENEMY SPAWNER v5.0
-   ===================================
-   Con patrones de movimiento por nivel.
-*/
 
 class EnemySpawner {
     /**
@@ -501,9 +495,7 @@ class EnemySpawner {
             CONFIG.ENEMY.SPAWN.MIN_INTERVAL
         );
         this.timeSinceLastSpawn = 0;
-        
-        // ⭐ OPCIONAL: No resetear totalSpawned para mantener conteo global
-        // this.totalSpawned = 0;
+
         
         this.time = 0;
         this.isSpawning = false;

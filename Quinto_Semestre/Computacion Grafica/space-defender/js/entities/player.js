@@ -190,7 +190,7 @@ class Player {
         if (!this.invincible) {
             this.lives--;
             
-            // ⭐ Audio aislado - NO PUEDE bloquear
+            //Audio aislado - NO PUEDE bloquear
             try {
                 if (window.game && window.game.audioSystem && this.lives > 0) {
                     Promise.resolve().then(() => {

@@ -1,7 +1,9 @@
 /* ===================================
-   CONFIG.JS - v5.0
+   CONFIG.JS - Configuración Centralizada para Space Defender
+     - Contiene todas las constantes y parámetros del juego
+     - Facilita ajustes de dificultad, balance y depuración
+     - Mejora la mantenibilidad al centralizar valores clave
    ===================================
-   Con patrones de movimiento individuales + Responsive
 */
 
 const CONFIG = {
@@ -9,7 +11,7 @@ const CONFIG = {
     CANVAS: {
         BASE_WIDTH: 800,
         BASE_HEIGHT: 600,
-        ASPECT_RATIO: 800 / 600  // 4:3
+        ASPECT_RATIO: 800 / 600  
     },
 
     // Configuración del Jugador
@@ -20,8 +22,8 @@ const CONFIG = {
         INITIAL_LIVES: 8,
         SHOOT_COOLDOWN: 200,
         INVINCIBLE_TIME: 2000,
-        START_X_PERCENT: 0.5,  // 50% del ancho
-        START_Y_PERCENT: 0.9,  // 90% del alto
+        START_X_PERCENT: 0.5,  
+        START_Y_PERCENT: 0.9,  
         COLOR: '#00d4ff'
     },
 
@@ -29,8 +31,8 @@ const CONFIG = {
     BULLET: {
         WIDTH: 4,
         HEIGHT: 15,
-        PLAYER_SPEED: -6,          // Reducido de -8 a -6 (menos tunneling)
-        ENEMY_SPEED: 4,             // Reducido de 5 a 4
+        PLAYER_SPEED: -6,
+        ENEMY_SPEED: 4,
         PLAYER_COLOR: '#ffffff',
         ENEMY_COLOR: '#ff0000'
     },
@@ -39,17 +41,19 @@ const CONFIG = {
     ENEMY: {
         WIDTH: 35,
         HEIGHT: 30,
-        HITBOX_EXPANSION: 8,        // Píxeles extra en cada lado
+        HITBOX_EXPANSION: 8,
         
         // Sistema de Spawn
         SPAWN: {
             INITIAL_DELAY: 1000,
-            BASE_INTERVAL: 2000,
+            BASE_INTERVAL: 1500,
             INTERVAL_DECREASE: 100,
             MIN_INTERVAL: 400,
-            MAX_ACTIVE: 10,
+            MAX_ACTIVE_BASE: 15,        // Nivel 1 = 15 enemigos
+            MAX_ACTIVE_PER_LEVEL: 3,    // +3 enemigos por nivel
+            MAX_ACTIVE_CAP: 35,          // Máximo absoluto = 35 enemigos            
             SPAWN_Y: -40,
-            MARGIN_X_PERCENT: 0.06  // 6% del ancho como margen
+            MARGIN_X_PERCENT: 0.06
         },
 
         // Tipos de enemigos
@@ -57,24 +61,24 @@ const CONFIG = {
             1: { 
                 POINTS: 10, 
                 COLOR: '#00ff41',
-                SPEED: 0.2,
-                SHOOT_CHANCE: 0.002,  // Aumentado
+                SPEED: 0.5,           
+                SHOOT_CHANCE: 0.002,
                 SPAWN_WEIGHT: 5,
                 NAME: 'Verde'
             },
             2: { 
                 POINTS: 20, 
                 COLOR: '#ffff00',
-                SPEED: 0.8,
-                SHOOT_CHANCE: 0.004,  // Aumentado
+                SPEED: 1,        
+                SHOOT_CHANCE: 0.004,
                 SPAWN_WEIGHT: 3,
                 NAME: 'Amarillo'
             },
             3: { 
                 POINTS: 30, 
                 COLOR: '#ff0000',
-                SPEED: 1.2,
-                SHOOT_CHANCE: 0.007,  // Aumentado
+                SPEED: 1.5,         
+                SHOOT_CHANCE: 0.007,
                 SPAWN_WEIGHT: 2,
                 NAME: 'Rojo'
             }
@@ -88,7 +92,6 @@ const CONFIG = {
                 description: 'Descenso Directo',
                 minLevel: 1,
                 apply: function(enemy, time) {
-                    // Solo movimiento vertical (ya manejado en update)
                     return { offsetX: 0, offsetY: 0 };
                 }
             },
@@ -98,11 +101,11 @@ const CONFIG = {
                 name: 'wave',
                 description: 'Ondas Sinusoidales',
                 minLevel: 2,
-                amplitude: 30,
+                amplitude: 50,     
                 frequency: 0.04,
                 apply: function(enemy, time) {
-                    const wave = Math.sin(time * this.frequency + enemy.spawnTime * 0.3) * this.amplitude; // Agregado spawnTime para variar fases
-                    return { offsetX: wave, offsetY: 0 }; // Solo afecta el desplazamiento horizontal
+                    const wave = Math.sin(time * this.frequency + enemy.spawnTime * 0.3) * this.amplitude;
+                    return { offsetX: wave, offsetY: 0 };
                 }
             },
             
@@ -111,11 +114,11 @@ const CONFIG = {
                 name: 'zigzag',
                 description: 'Movimiento en Zigzag',
                 minLevel: 3,
-                amplitude: 2.5,
-                frequency: 0.08,
+                amplitude: 5.0,    
+                frequency: 0.12,    
                 apply: function(enemy, time) {
-                    const zigzag = Math.sin(time * this.frequency + enemy.id) * this.amplitude; // Agregado id para variar fases
-                    return { offsetX: zigzag, offsetY: 0 }; // Solo afecta el desplazamiento horizontal
+                    const zigzag = Math.sin(time * this.frequency + enemy.id) * this.amplitude;
+                    return { offsetX: zigzag, offsetY: 0 };
                 }
             },
             
@@ -124,12 +127,12 @@ const CONFIG = {
                 name: 'circular',
                 description: 'Órbitas Circulares',
                 minLevel: 4,
-                radius: 15,
+                radius: 25,        
                 speed: 0.05,
                 apply: function(enemy, time) {
                     const angle = time * this.speed + enemy.id;
-                    const offsetX = Math.cos(angle) * this.radius; // Movimiento circular horizontal
-                    const offsetY = Math.sin(angle) * this.radius * 0.3; // Aplastado
+                    const offsetX = Math.cos(angle) * this.radius;
+                    const offsetY = Math.sin(angle) * this.radius * 0.3;
                     return { offsetX, offsetY };
                 }
             },
@@ -139,29 +142,62 @@ const CONFIG = {
                 name: 'erratic',
                 description: 'Movimiento Caótico',
                 minLevel: 5,
-                changeInterval: 60,
-                maxOffset: 25,
+                changeInterval: 40,  
+                maxOffset: 45,      
                 apply: function(enemy, time) {
-                    if (!enemy.erraticTarget) { // Inicializar propiedades para movimiento errático
-                        enemy.erraticTarget = { x: 0, y: 0 }; // Objetivo de desplazamiento actual
-                        enemy.erraticTimer = 0; // Temporizador para cambiar objetivo
+                    if (!enemy.erraticTarget) {
+                        enemy.erraticTarget = { x: 0, y: 0 };
+                        enemy.erraticTimer = 0;
                     }
                     
                     enemy.erraticTimer++;
-                    if (enemy.erraticTimer >= this.changeInterval) { // Cambiar objetivo cada cierto tiempo
-                        enemy.erraticTarget.x = (Math.random() - 0.5) * this.maxOffset * 2; // Rango completo de -maxOffset a +maxOffset
-                        enemy.erraticTarget.y = (Math.random() - 0.5) * this.maxOffset; // Menos movimiento vertical para evitar que se alejen demasiado
-                        enemy.erraticTimer = 0; // Reiniciar temporizador
+                    if (enemy.erraticTimer >= this.changeInterval) {
+                        enemy.erraticTarget.x = (Math.random() - 0.5) * this.maxOffset * 2;
+                        enemy.erraticTarget.y = (Math.random() - 0.5) * this.maxOffset;
+                        enemy.erraticTimer = 0;
                     }
                     
-                    if (!enemy.erraticCurrent) enemy.erraticCurrent = { x: 0, y: 0 }; // Posición actual suavizada
-                    enemy.erraticCurrent.x += (enemy.erraticTarget.x - enemy.erraticCurrent.x) * 0.1; // Suavizado para movimiento más fluido
-                    enemy.erraticCurrent.y += (enemy.erraticTarget.y - enemy.erraticCurrent.y) * 0.1; // Suavizado para movimiento más fluido
+                    if (!enemy.erraticCurrent) enemy.erraticCurrent = { x: 0, y: 0 };
+                    enemy.erraticCurrent.x += (enemy.erraticTarget.x - enemy.erraticCurrent.x) * 0.1;
+                    enemy.erraticCurrent.y += (enemy.erraticTarget.y - enemy.erraticCurrent.y) * 0.1;
                     
                     return { 
-                        offsetX: enemy.erraticCurrent.x,  // Desplazamiento horizontal errático
-                        offsetY: enemy.erraticCurrent.y   // Desplazamiento vertical errático (más suave para evitar que se alejen demasiado)
+                        offsetX: enemy.erraticCurrent.x, 
+                        offsetY: enemy.erraticCurrent.y 
                     };
+                }
+            },
+            
+            // Nivel 6+: Random
+            RANDOM: {
+                name: 'random',
+                description: 'Movimiento Aleatorio',
+                minLevel: 6,
+                apply: function(enemy, time) {
+                    // 1. Si el enemigo aún no tiene un patrón asignado, elegimos uno
+                    if (!enemy.assignedPattern) {
+                        // Obtenemos todos los patrones disponibles en CONFIG
+                        const patterns = CONFIG.ENEMY.MOVEMENT_PATTERNS;
+                        
+                        // Filtramos para NO elegir 'RANDOM' (evitar bucle infinito) 
+                        // y respetar el nivel mínimo del patrón
+                        const validKeys = Object.keys(patterns).filter(key => 
+                            key !== 'RANDOM' && 
+                            (enemy.level || 1) >= patterns[key].minLevel
+                        );
+
+                        // Elegimos una clave al azar y guardamos el objeto del patrón
+                        const randomKey = validKeys[Math.floor(Math.random() * validKeys.length)];
+                        enemy.assignedPattern = patterns[randomKey];
+                        
+                        // Opcional: Para Debug
+                        if (CONFIG.DEBUG.SHOW_PATTERN_INFO) {
+                            console.log(`Enemigo ${enemy.id} asignado a: ${enemy.assignedPattern.name}`);
+                        }
+                    }
+
+                    // 2. Ejecutamos el patrón que le fue asignado
+                    return enemy.assignedPattern.apply(enemy, time);
                 }
             }
         },
@@ -175,6 +211,12 @@ const CONFIG = {
         ENEMY_TYPE_1: 10,
         ENEMY_TYPE_2: 20,
         ENEMY_TYPE_3: 30
+    },
+
+    // Sistema de Niveles DUAL
+    LEVELS: {
+        ENEMIES_FOR_NEXT_LEVEL: 10,   // Enemigos necesarios para subir de nivel
+        SCORE_FOR_NEXT_LEVEL: 150     // Puntos necesarios (se multiplica × nivel)
     },
 
     // Estados del Juego
@@ -195,18 +237,17 @@ const CONFIG = {
 
     // Física
     PHYSICS: {
-        ENEMY_DESPAWN_Y_PERCENT: 1.03  // 103% del alto
+        ENEMY_DESPAWN_Y_PERCENT: 1.03
     },
 
     // Audio
     AUDIO: {
         ENABLED: true,
         VOLUME: {
-            MASTER: 0.7,   
-            SFX: 0.8,      
-            MUSIC: 0.5     
+            MASTER: 0.7,
+            SFX: 0.8,
+            MUSIC: 0.5
         },
-
         
         // Rutas de efectos de sonido
         SOUNDS: {
@@ -219,7 +260,6 @@ const CONFIG = {
             uiClick: 'assets/sounds/sfx/ui-click.mp3',
             gameStart: 'assets/sounds/sfx/game-start.mp3'
         },
-        // Música de fondo
         MUSIC: {
             gameplay: 'assets/sounds/music/gameplay.mp3'
         }
@@ -251,11 +291,11 @@ const CONFIG = {
 
     // Debug
     DEBUG: {
-        ENABLED: false,
-        SHOW_HITBOXES: false,       
-        SHOW_FPS: false,
-        GOD_MODE: false,
-        SHOW_PATTERN_INFO: false
+        ENABLED: false ,
+        SHOW_HITBOXES: false ,
+        SHOW_FPS: false ,
+        GOD_MODE: false ,
+        SHOW_PATTERN_INFO: false  
     }
 };
 

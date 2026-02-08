@@ -1,5 +1,5 @@
 /* ===================================
-   CORE/GAME.JS - v5.0 RESPONSIVE
+   CORE/GAME.JS - Lógica principal del juego
    ===================================
    Sistema responsive con patrones de movimiento.
 */
@@ -145,7 +145,7 @@ class Game {
         document.addEventListener('keydown', (e) => this.handleKeyDown(e));
         document.addEventListener('keyup', (e) => this.handleKeyUp(e));
         
-        // ⭐ Controles de volumen
+        // Controles de volumen
         this.setupVolumeControls();
     }
     
@@ -282,7 +282,6 @@ class Game {
             this.ui.gameContainer.style.display = 'flex';
         }
         
-        // ⭐ Audio aislado - NO PUEDE bloquear
         try {
             Promise.resolve().then(() => {
                 try {
@@ -329,7 +328,6 @@ class Game {
             this.enemySpawner.setSpawning(true);
         }
         
-        // ⭐ Audio aislado - NO PUEDE bloquear
         try {
             Promise.resolve().then(() => {
                 try {
@@ -352,7 +350,6 @@ class Game {
             this.enemySpawner.setSpawning(false);
         }
         
-        // ⭐ Audio aislado - NO PUEDE bloquear
         try {
             Promise.resolve().then(() => {
                 try {
@@ -372,7 +369,6 @@ class Game {
         // Ocultar mensaje de game over
         this.hideMessage();
         
-        // ⭐ Audio aislado - NO PUEDE bloquear
         try {
             Promise.resolve().then(() => {
                 try {
@@ -395,7 +391,6 @@ class Game {
             this.enemySpawner.setSpawning(true);
         }
         
-        // ⭐ Audio aislado - NO PUEDE bloquear
         try {
             Promise.resolve().then(() => {
                 try {
@@ -427,7 +422,6 @@ class Game {
         
         this.scoreThisLevel = 0;
         
-        // ⭐ Audio aislado - NO PUEDE bloquear
         try {
             Promise.resolve().then(() => {
                 try {
