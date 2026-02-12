@@ -19,7 +19,7 @@ const CONFIG = {
         WIDTH: 40,
         HEIGHT: 30,
         SPEED: 6,
-        INITIAL_LIVES: 8,
+        INITIAL_LIVES: 4,
         SHOOT_COOLDOWN: 200,
         INVINCIBLE_TIME: 2000,
         START_X_PERCENT: 0.5,  
@@ -41,12 +41,12 @@ const CONFIG = {
     ENEMY: {
         WIDTH: 35,
         HEIGHT: 30,
-        HITBOX_EXPANSION: 8,
+        HITBOX_EXPANSION: 4,
         
         // Sistema de Spawn
         SPAWN: {
-            INITIAL_DELAY: 1000,
-            BASE_INTERVAL: 1500,
+            INITIAL_DELAY: 500,
+            BASE_INTERVAL: 1000,
             INTERVAL_DECREASE: 100,
             MIN_INTERVAL: 400,
             MAX_ACTIVE_BASE: 15,        // Nivel 1 = 15 enemigos
@@ -61,7 +61,7 @@ const CONFIG = {
             1: { 
                 POINTS: 10, 
                 COLOR: '#00ff41',
-                SPEED: 0.5,           
+                SPEED: 2,           
                 SHOOT_CHANCE: 0.002,
                 SPAWN_WEIGHT: 5,
                 NAME: 'Verde'
@@ -69,7 +69,7 @@ const CONFIG = {
             2: { 
                 POINTS: 20, 
                 COLOR: '#ffff00',
-                SPEED: 1,        
+                SPEED: 2.5,        
                 SHOOT_CHANCE: 0.004,
                 SPAWN_WEIGHT: 3,
                 NAME: 'Amarillo'
@@ -77,7 +77,7 @@ const CONFIG = {
             3: { 
                 POINTS: 30, 
                 COLOR: '#ff0000',
-                SPEED: 1.5,         
+                SPEED: 3,         
                 SHOOT_CHANCE: 0.007,
                 SPAWN_WEIGHT: 2,
                 NAME: 'Rojo'
