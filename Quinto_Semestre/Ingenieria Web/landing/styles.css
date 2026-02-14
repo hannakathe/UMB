@@ -11,31 +11,42 @@
 
 :root {
     /* Colores principales */
-    --primary-color: #06b6d4;      /* Cyan 500 - neón */
-    --primary-dark: #0891b2;       /* Cyan 600 */
-    --secondary-color: #6366f1;    /* Indigo - contraste */
-    
+    --primary-color: #06b6d4;
+    /* Cyan 500 - neón */
+    --primary-dark: #0891b2;
+    /* Cyan 600 */
+    --secondary-color: #6366f1;
+    /* Indigo - contraste */
+
     /* Colores base */
-    --dark: #020617;               /* Slate 950 - casi negro */
-    --dark-lighter: #0f172a;       /* Slate 900 */
-    --gray: #475569;               /* Slate 600 */
-    --light-gray: #f8fafc;         /* Slate 50 */
+    --dark: #020617;
+    /* Slate 950 - casi negro */
+    --dark-lighter: #0f172a;
+    /* Slate 900 */
+    --gray: #475569;
+    /* Slate 600 */
+    --light-gray: #f8fafc;
+    /* Slate 50 */
     --white: #ffffff;
-    
+
     /* Gradientes */
     --gradient: linear-gradient(135deg, #06b6d4 0%, #6366f1 100%);
     --gradient-hover: linear-gradient(135deg, #0891b2 0%, #4f46e5 100%);
-    
+
     /* Colores adicionales - neón */
-    --neon-blue: #0ea5e9;          /* Sky 500 */
-    --neon-purple: #a78bfa;        /* Violet 400 */
-    --neon-pink: #f472b6;          /* Pink 400 */
-    --neon-green: #34d399;         /* Emerald 400 */
-    
+    --neon-blue: #0ea5e9;
+    /* Sky 500 */
+    --neon-purple: #a78bfa;
+    /* Violet 400 */
+    --neon-pink: #f472b6;
+    /* Pink 400 */
+    --neon-green: #34d399;
+    /* Emerald 400 */
+
     /* Sombras */
     --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.15);
-    
+
     /* Transiciones */
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -140,11 +151,21 @@ body {
 
 .logo {
     font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     font-weight: 700;
     background: var(--gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+}
+
+.logo img {
+    width: 60px;
+    height: 35px;
+    display: block;
+    -webkit-text-fill-color: initial;
 }
 
 .nav-menu {
@@ -257,8 +278,8 @@ body {
 }
 
 .feature-icon-image {
-    width: 80%;    
-    height: auto;   
+    width: 80%;
+    height: auto;
     display: block;
 }
 
@@ -454,13 +475,13 @@ body {
 }
 
 .social-link img {
-    width: 40px;   
+    width: 40px;
     height: 40px;
     transition: transform 0.3s ease;
 }
 
 .social-link img:hover {
-    transform: scale(1.2); 
+    transform: scale(1.2);
 }
 
 .member-info {
@@ -595,6 +616,7 @@ body {
         opacity: 0;
         transform: translateY(30px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -616,7 +638,8 @@ body {
     }
 
     .nav-menu {
-        display: none; /* Implementar menú móvil si es necesario */
+        display: none;
+        /* Implementar menú móvil si es necesario */
     }
 
     .mv-grid,
