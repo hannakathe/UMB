@@ -1,10 +1,4 @@
-/**
- * DevMatch Landing Page - Scripts
- */
-
-// ============================================
-// NAVBAR SCROLL EFFECT
-// ============================================
+// navbar scrol
 const navbar = document.getElementById('navbar');
 
 window.addEventListener('scroll', () => {
@@ -15,9 +9,7 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// ============================================
-// SMOOTH SCROLL PARA ENLACES INTERNOS
-// ============================================
+// smooth scroll
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
@@ -34,9 +26,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// ============================================
-// INTERSECTION OBSERVER PARA ANIMACIONES
-// ============================================
+// animaciones 
 const observerOptions = {
     threshold: 0.1,
     rootMargin: '0px 0px -100px 0px'
@@ -56,9 +46,7 @@ document.querySelectorAll('.feature-card, .step, .mockup-item, .team-member, .mv
     observer.observe(element);
 });
 
-// ============================================
-// LAZY LOADING DE IMÁGENES (cuando las agregues)
-// ============================================
+// carga de imagenes
 document.addEventListener('DOMContentLoaded', () => {
     const lazyImages = document.querySelectorAll('img[data-src]');
     
@@ -76,86 +64,5 @@ document.addEventListener('DOMContentLoaded', () => {
     lazyImages.forEach(img => imageObserver.observe(img));
 });
 
-// ============================================
-// TOGGLE MENÚ MÓVIL (cuando lo implementes)
-// ============================================
-// Descomentar cuando agregues el botón hamburguesa
-/*
-const menuToggle = document.getElementById('menu-toggle');
-const navMenu = document.querySelector('.nav-menu');
 
-if (menuToggle) {
-    menuToggle.addEventListener('click', () => {
-        navMenu.classList.toggle('active');
-    });
-}
-*/
-
-// ============================================
-// CONTADOR ANIMADO (ejemplo para stats)
-// ============================================
-function animateCounter(element, target, duration = 2000) {
-    let current = 0;
-    const increment = target / (duration / 16);
-    
-    const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-            element.textContent = target.toLocaleString();
-            clearInterval(timer);
-        } else {
-            element.textContent = Math.floor(current).toLocaleString();
-        }
-    }, 16);
-}
-
-// Ejemplo de uso (activar cuando pases por la sección)
-// const statsObserver = new IntersectionObserver((entries) => {
-//     entries.forEach(entry => {
-//         if (entry.isIntersecting) {
-//             const counters = entry.target.querySelectorAll('[data-count]');
-//             counters.forEach(counter => {
-//                 const target = parseInt(counter.dataset.count);
-//                 animateCounter(counter, target);
-//             });
-//             statsObserver.unobserve(entry.target);
-//         }
-//     });
-// });
-
-// ============================================
-// FORMULARIO DE CONTACTO (si lo agregas)
-// ============================================
-/*
-const contactForm = document.getElementById('contact-form');
-
-if (contactForm) {
-    contactForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const formData = new FormData(contactForm);
-        const data = Object.fromEntries(formData);
-        
-        try {
-            const response = await fetch('/api/contact', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
-            
-            if (response.ok) {
-                alert('¡Mensaje enviado correctamente!');
-                contactForm.reset();
-            } else {
-                alert('Error al enviar el mensaje. Por favor intenta de nuevo.');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Error al enviar el mensaje. Por favor intenta de nuevo.');
-        }
-    });
-}
-*/
 

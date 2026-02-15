@@ -1,0 +1,1700 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JuniorSwipe - Mockups Detallados</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, sans-serif;
+            background: #020617;
+            color: white;
+            padding: 50px 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 50px;
+            background: linear-gradient(135deg, #06b6d4 0%, #6366f1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 48px;
+        }
+
+        .mockups-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 60px;
+            margin-bottom: 60px;
+        }
+
+        .mockup-item {
+            text-align: center;
+        }
+
+        .mockup-item h3 {
+            margin: 25px 0 15px;
+            color: #06b6d4;
+            font-size: 24px;
+        }
+
+        .mockup-item p {
+            color: #94a3b8;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        /* ============================================
+           BASE MOCKUP STYLES
+           ============================================ */
+        .mockup-visual {
+            width: 100%;
+            background: linear-gradient(135deg, #0f172a 0%, #020617 100%);
+            border-radius: 16px;
+            border: 2px solid rgba(6, 182, 212, 0.2);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .mockup-visual:hover {
+            border-color: #06b6d4;
+            box-shadow: 0 0 40px rgba(6, 182, 212, 0.4), 0 30px 70px rgba(0, 0, 0, 0.6);
+            transform: translateY(-8px);
+        }
+
+        /* ============================================
+           DASHBOARD DEVELOPER - MUY DETALLADO
+           ============================================ */
+        .mockup-dashboard {
+            padding: 25px;
+            min-height: 600px;
+        }
+
+        /* Navbar superior */
+        .dash-navbar {
+            height: 60px;
+            background: rgba(6, 182, 212, 0.08);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            gap: 15px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(6, 182, 212, 0.15);
+        }
+
+        .dash-logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #06b6d4, #6366f1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .dash-search {
+            flex: 1;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .dash-icons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .dash-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .dash-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #6366f1, #a78bfa);
+            border-radius: 50%;
+            border: 2px solid rgba(99, 102, 241, 0.3);
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(6, 182, 212, 0.15);
+            border-radius: 12px;
+            padding: 20px 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #06b6d4, #6366f1);
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: 700;
+            color: #06b6d4;
+            margin: 8px 0;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-trend {
+            font-size: 10px;
+            color: #10b981;
+            margin-top: 5px;
+        }
+
+        /* Main Content Grid */
+        .dash-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        /* Recent Matches */
+        .matches-section {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(6, 182, 212, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        .view-all {
+            font-size: 12px;
+            color: #06b6d4;
+            text-decoration: none;
+        }
+
+        .job-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+            display: flex;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .job-card:hover {
+            border-color: rgba(6, 182, 212, 0.3);
+            background: rgba(6, 182, 212, 0.05);
+            transform: translateX(4px);
+        }
+
+        .job-logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #06b6d4, #6366f1);
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+
+        .job-info {
+            flex: 1;
+        }
+
+        .job-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 4px;
+        }
+
+        .job-company {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+
+        .job-tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            font-size: 10px;
+            padding: 3px 8px;
+            background: rgba(6, 182, 212, 0.1);
+            color: #06b6d4;
+            border-radius: 4px;
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+
+        .match-score-badge {
+            font-size: 18px;
+            font-weight: 700;
+            color: #06b6d4;
+            white-space: nowrap;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .profile-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(6, 182, 212, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .profile-avatar-large {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #6366f1, #a78bfa);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            border: 3px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .profile-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 5px;
+        }
+
+        .profile-role {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 15px;
+        }
+
+        .profile-completion {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .completion-label {
+            font-size: 11px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #06b6d4, #6366f1);
+            width: 75%;
+            border-radius: 3px;
+            animation: fillProgress 2s ease-out;
+        }
+
+        @keyframes fillProgress {
+            from { width: 0%; }
+        }
+
+        .quick-actions {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(6, 182, 212, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 12px;
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            border-radius: 8px;
+            color: #06b6d4;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: rgba(6, 182, 212, 0.2);
+            border-color: #06b6d4;
+            transform: translateY(-2px);
+        }
+
+        /* ============================================
+           MATCHING ALGORITHM - MUY DETALLADO
+           ============================================ */
+        .mockup-matching {
+            padding: 35px;
+            min-height: 550px;
+        }
+
+        .match-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .match-job-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .match-company-logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #6366f1, #a78bfa);
+            border-radius: 12px;
+        }
+
+        .match-job-details h4 {
+            font-size: 18px;
+            color: #e2e8f0;
+            margin-bottom: 4px;
+        }
+
+        .match-job-details p {
+            font-size: 14px;
+            color: #94a3b8;
+        }
+
+        .match-main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .match-score-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .match-score-circle {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: conic-gradient(
+                #06b6d4 0% 85%,
+                rgba(255, 255, 255, 0.08) 85% 100%
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: rotateScore 4s ease-in-out infinite;
+            position: relative;
+        }
+
+        @keyframes rotateScore {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(3deg); }
+        }
+
+        .match-score-circle::before {
+            content: '85%';
+            width: 150px;
+            height: 150px;
+            background: #0f172a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+            font-weight: 700;
+            color: #06b6d4;
+            border: 3px solid rgba(6, 182, 212, 0.2);
+        }
+
+        .match-label {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Breakdown detallado */
+        .match-breakdown {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .breakdown-item {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .breakdown-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .breakdown-title {
+            font-size: 13px;
+            color: #e2e8f0;
+            font-weight: 600;
+        }
+
+        .breakdown-percentage {
+            font-size: 16px;
+            font-weight: 700;
+            color: #06b6d4;
+        }
+
+        .breakdown-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .breakdown-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #06b6d4, #6366f1);
+            border-radius: 4px;
+            animation: fillBreakdown 1.5s ease-out forwards;
+        }
+
+        .breakdown-item:nth-child(1) .breakdown-fill { width: 92%; animation-delay: 0.2s; }
+        .breakdown-item:nth-child(2) .breakdown-fill { width: 88%; animation-delay: 0.4s; }
+        .breakdown-item:nth-child(3) .breakdown-fill { width: 75%; animation-delay: 0.6s; }
+        .breakdown-item:nth-child(4) .breakdown-fill { width: 85%; animation-delay: 0.8s; }
+
+        @keyframes fillBreakdown {
+            from { width: 0%; }
+        }
+
+        /* Skills comparison */
+        .skills-comparison {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(6, 182, 212, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .skill-chip {
+            padding: 10px 15px;
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            border-radius: 8px;
+            font-size: 12px;
+            color: #06b6d4;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .skill-chip::before {
+            content: '✓';
+            width: 18px;
+            height: 18px;
+            background: linear-gradient(135deg, #06b6d4, #6366f1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            flex-shrink: 0;
+        }
+
+        .skill-chip.missing {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .skill-chip.missing::before {
+            content: '×';
+            background: #ef4444;
+        }
+
+        /* ============================================
+           LEARNING PATH - MUY DETALLADO
+           ============================================ */
+        .mockup-learning {
+            padding: 35px;
+            min-height: 600px;
+        }
+
+        .learning-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .learning-title {
+            font-size: 20px;
+            color: #e2e8f0;
+            margin-bottom: 8px;
+        }
+
+        .learning-subtitle {
+            font-size: 14px;
+            color: #94a3b8;
+        }
+
+        .learning-progress {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(6, 182, 212, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .progress-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .progress-stat {
+            text-align: center;
+        }
+
+        .progress-number {
+            font-size: 28px;
+            font-weight: 700;
+            color: #06b6d4;
+        }
+
+        .progress-text {
+            font-size: 11px;
+            color: #94a3b8;
+            text-transform: uppercase;
+        }
+
+        .overall-progress {
+            margin-top: 15px;
+        }
+
+        .overall-bar {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .overall-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #06b6d4, #6366f1, #a78bfa);
+            width: 65%;
+            border-radius: 5px;
+            animation: fillOverall 2s ease-out;
+        }
+
+        @keyframes fillOverall {
+            from { width: 0%; }
+        }
+
+        .projects-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(6, 182, 212, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, #06b6d4, #6366f1);
+        }
+
+        .project-card.completed::before {
+            background: #10b981;
+        }
+
+        .project-card.in-progress::before {
+            background: linear-gradient(180deg, #06b6d4, #a78bfa);
+        }
+
+        .project-card:hover {
+            border-color: rgba(6, 182, 212, 0.3);
+            background: rgba(6, 182, 212, 0.05);
+            transform: translateX(5px);
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .project-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 5px;
+        }
+
+        .project-desc {
+            font-size: 12px;
+            color: #94a3b8;
+            line-height: 1.5;
+        }
+
+        .project-status {
+            font-size: 10px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .status-completed {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .status-in-progress {
+            background: rgba(6, 182, 212, 0.1);
+            color: #06b6d4;
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+
+        .status-not-started {
+            background: rgba(148, 163, 184, 0.1);
+            color: #94a3b8;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+        }
+
+        .project-skills {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .skill-tag {
+            font-size: 10px;
+            padding: 4px 8px;
+            background: rgba(99, 102, 241, 0.1);
+            color: #a78bfa;
+            border-radius: 4px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .project-progress-bar {
+            margin-top: 12px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .project-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #06b6d4, #6366f1);
+            border-radius: 2px;
+        }
+
+        .project-card:nth-child(1) .project-progress-fill { width: 100%; }
+        .project-card:nth-child(2) .project-progress-fill { width: 60%; }
+        .project-card:nth-child(3) .project-progress-fill { width: 0%; }
+
+        /* ============================================
+           COMPANY DASHBOARD - MUY DETALLADO
+           ============================================ */
+        .mockup-company {
+            padding: 30px;
+            min-height: 650px;
+        }
+
+        .company-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .company-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        .filter-section {
+            display: flex;
+            gap: 10px;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            font-size: 12px;
+            color: #94a3b8;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active {
+            background: rgba(6, 182, 212, 0.1);
+            border-color: #06b6d4;
+            color: #06b6d4;
+        }
+
+        .candidates-table {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(6, 182, 212, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .table-header {
+            display: grid;
+            grid-template-columns: 3fr 2fr 1.5fr 1fr;
+            gap: 15px;
+            padding: 15px 20px;
+            background: rgba(6, 182, 212, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .table-header-cell {
+            font-size: 11px;
+            color: #94a3b8;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .table-row {
+            display: grid;
+            grid-template-columns: 3fr 2fr 1.5fr 1fr;
+            gap: 15px;
+            padding: 18px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .table-row:hover {
+            background: rgba(6, 182, 212, 0.05);
+        }
+
+        .candidate-info-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .candidate-avatar-table {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, #06b6d4, #6366f1);
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .candidate-details {
+            flex: 1;
+        }
+
+        .candidate-name-table {
+            font-size: 14px;
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 3px;
+        }
+
+        .candidate-position {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .skills-cell {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .skill-badge {
+            font-size: 10px;
+            padding: 4px 8px;
+            background: rgba(6, 182, 212, 0.1);
+            color: #06b6d4;
+            border-radius: 4px;
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+
+        .score-cell {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .score-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #06b6d4;
+        }
+
+        .score-bar-mini {
+            width: 50px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .score-fill-mini {
+            height: 100%;
+            background: linear-gradient(90deg, #06b6d4, #6366f1);
+            border-radius: 3px;
+        }
+
+        .table-row:nth-child(1) .score-fill-mini { width: 92%; }
+        .table-row:nth-child(2) .score-fill-mini { width: 88%; }
+        .table-row:nth-child(3) .score-fill-mini { width: 85%; }
+        .table-row:nth-child(4) .score-fill-mini { width: 78%; }
+        .table-row:nth-child(5) .score-fill-mini { width: 75%; }
+
+        .action-cell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-button {
+            width: 32px;
+            height: 32px;
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .action-button:hover {
+            background: rgba(6, 182, 212, 0.2);
+            border-color: #06b6d4;
+        }
+
+        /* ============================================
+           HERO MOCKUP GRANDE
+           ============================================ */
+        .hero-mockup-large {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, #06b6d4 0%, #6366f1 100%);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 30px 80px rgba(6, 182, 212, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-mockup-large::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -30%;
+            width: 80%;
+            height: 120%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+            animation: floatGlow 6s ease-in-out infinite;
+        }
+
+        @keyframes floatGlow {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-5%, -5%) rotate(5deg); }
+        }
+
+        .hero-nav {
+            height: 60px;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            padding: 0 25px;
+            gap: 20px;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 25px;
+        }
+
+        .hero-logo-box {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+        }
+
+        .hero-nav-items {
+            display: flex;
+            gap: 25px;
+            flex: 1;
+            margin-left: 30px;
+        }
+
+        .hero-nav-item {
+            height: 12px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+        }
+
+        .hero-nav-item:nth-child(1) { width: 60px; }
+        .hero-nav-item:nth-child(2) { width: 80px; }
+        .hero-nav-item:nth-child(3) { width: 70px; }
+
+        .hero-nav-button {
+            width: 90px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            margin-left: auto;
+        }
+
+        .hero-body {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 25px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-main {
+            background: rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .hero-text-block {
+            height: 24px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+        }
+
+        .hero-text-block:nth-child(1) { width: 80%; }
+        .hero-text-block:nth-child(2) { width: 90%; }
+        .hero-text-block:nth-child(3) { width: 70%; }
+
+        .hero-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: auto;
+        }
+
+        .hero-mini-card {
+            height: 80px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+
+        .hero-sidebar {
+            background: rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .hero-widget {
+            height: 100px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+
+        /* ============================================
+           UTILITIES
+           ============================================ */
+        .btn {
+            display: inline-block;
+            margin: 40px auto;
+            padding: 18px 40px;
+            background: linear-gradient(135deg, #06b6d4, #6366f1);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(6, 182, 212, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(6, 182, 212, 0.4);
+        }
+
+        .note {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(99, 102, 241, 0.1));
+            border-left: 4px solid #06b6d4;
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 60px;
+            text-align: center;
+        }
+
+        .note strong {
+            color: #06b6d4;
+            font-size: 18px;
+        }
+
+        .note p {
+            color: #94a3b8;
+            margin-top: 10px;
+            line-height: 1.6;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .mockups-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .dash-content,
+            .match-main,
+            .hero-body {
+                grid-template-columns: 1fr;
+            }
+            
+            .table-header,
+            .table-row {
+                grid-template-columns: 2fr 1fr;
+            }
+            
+            .skills-cell,
+            .score-cell {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 JuniorSwipe - Mockups Detallados</h1>
+
+        <!-- Hero Mockup Grande -->
+        <div style="margin-bottom: 80px;">
+            <h2 style="text-align: center; color: #06b6d4; margin-bottom: 30px;">Hero Landing Page</h2>
+            <div class="hero-mockup-large">
+                <div class="hero-nav">
+                    <div class="hero-logo-box"></div>
+                    <div class="hero-nav-items">
+                        <div class="hero-nav-item"></div>
+                        <div class="hero-nav-item"></div>
+                        <div class="hero-nav-item"></div>
+                    </div>
+                    <div class="hero-nav-button"></div>
+                </div>
+                <div class="hero-body">
+                    <div class="hero-main">
+                        <div class="hero-text-block"></div>
+                        <div class="hero-text-block"></div>
+                        <div class="hero-text-block"></div>
+                        <div class="hero-cards">
+                            <div class="hero-mini-card"></div>
+                            <div class="hero-mini-card"></div>
+                        </div>
+                    </div>
+                    <div class="hero-sidebar">
+                        <div class="hero-widget"></div>
+                        <div class="hero-widget"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mockups-grid">
+            <!-- Mockup 1: Dashboard Developer -->
+            <div class="mockup-item">
+                <div class="mockup-visual mockup-dashboard">
+                    <!-- Navbar -->
+                    <div class="dash-navbar">
+                        <div class="dash-logo">JS</div>
+                        <div class="dash-search"></div>
+                        <div class="dash-icons">
+                            <div class="dash-icon"></div>
+                            <div class="dash-icon"></div>
+                        </div>
+                        <div class="dash-avatar"></div>
+                    </div>
+
+                    <!-- Stats Cards -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-label">Matches</div>
+                            <div class="stat-number">24</div>
+                            <div class="stat-trend">↑ 12% esta semana</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Profile Views</div>
+                            <div class="stat-number">156</div>
+                            <div class="stat-trend">↑ 8% esta semana</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Applications</div>
+                            <div class="stat-number">8</div>
+                            <div class="stat-trend">↑ 4 nuevas</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Avg. Match</div>
+                            <div class="stat-number">82%</div>
+                            <div class="stat-trend">↑ +3%</div>
+                        </div>
+                    </div>
+
+                    <!-- Main Content -->
+                    <div class="dash-content">
+                        <!-- Recent Matches -->
+                        <div class="matches-section">
+                            <div class="section-header">
+                                <span class="section-title">Top Matches</span>
+                                <a href="#" class="view-all">Ver todos →</a>
+                            </div>
+
+                            <div class="job-card">
+                                <div class="job-logo"></div>
+                                <div class="job-info">
+                                    <div class="job-title">Frontend Developer</div>
+                                    <div class="job-company">TechCorp Inc.</div>
+                                    <div class="job-tags">
+                                        <span class="tag">React</span>
+                                        <span class="tag">TypeScript</span>
+                                        <span class="tag">Remoto</span>
+                                    </div>
+                                </div>
+                                <div class="match-score-badge">92%</div>
+                            </div>
+
+                            <div class="job-card">
+                                <div class="job-logo"></div>
+                                <div class="job-info">
+                                    <div class="job-title">Full Stack Developer</div>
+                                    <div class="job-company">StartupXYZ</div>
+                                    <div class="job-tags">
+                                        <span class="tag">Node.js</span>
+                                        <span class="tag">MongoDB</span>
+                                    </div>
+                                </div>
+                                <div class="match-score-badge">88%</div>
+                            </div>
+
+                            <div class="job-card">
+                                <div class="job-logo"></div>
+                                <div class="job-info">
+                                    <div class="job-title">Junior React Dev</div>
+                                    <div class="job-company">Digital Agency</div>
+                                    <div class="job-tags">
+                                        <span class="tag">React</span>
+                                        <span class="tag">CSS</span>
+                                    </div>
+                                </div>
+                                <div class="match-score-badge">85%</div>
+                            </div>
+                        </div>
+
+                        <!-- Sidebar -->
+                        <div class="sidebar">
+                            <div class="profile-card">
+                                <div class="profile-avatar-large"></div>
+                                <div class="profile-name">Juan Developer</div>
+                                <div class="profile-role">Junior Full Stack</div>
+                                <div class="profile-completion">
+                                    <div class="completion-label">Perfil Completo</div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="quick-actions">
+                                <div class="section-title" style="margin-bottom: 15px; font-size: 14px;">Acciones</div>
+                                <button class="action-btn">Subir CV</button>
+                                <button class="action-btn">Explorar Jobs</button>
+                                <button class="action-btn">Mi Progreso</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h3>Dashboard Personalizado</h3>
+                <p>Vista completa con stats, matches recientes y acciones rápidas</p>
+            </div>
+
+            <!-- Mockup 2: Matching Algorithm -->
+            <div class="mockup-item">
+                <div class="mockup-visual mockup-matching">
+                    <div class="match-header">
+                        <div class="match-job-info">
+                            <div class="match-company-logo"></div>
+                            <div class="match-job-details">
+                                <h4>Frontend Developer</h4>
+                                <p>TechCorp Inc. • Remoto</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="match-main">
+                        <div class="match-score-section">
+                            <div class="match-score-circle"></div>
+                            <div class="match-label">Match Score</div>
+                        </div>
+
+                        <div class="match-breakdown">
+                            <div class="breakdown-item">
+                                <div class="breakdown-header">
+                                    <span class="breakdown-title">Skills Match</span>
+                                    <span class="breakdown-percentage">92%</span>
+                                </div>
+                                <div class="breakdown-bar">
+                                    <div class="breakdown-fill"></div>
+                                </div>
+                            </div>
+
+                            <div class="breakdown-item">
+                                <div class="breakdown-header">
+                                    <span class="breakdown-title">Experience</span>
+                                    <span class="breakdown-percentage">88%</span>
+                                </div>
+                                <div class="breakdown-bar">
+                                    <div class="breakdown-fill"></div>
+                                </div>
+                            </div>
+
+                            <div class="breakdown-item">
+                                <div class="breakdown-header">
+                                    <span class="breakdown-title">Cultural Fit</span>
+                                    <span class="breakdown-percentage">75%</span>
+                                </div>
+                                <div class="breakdown-bar">
+                                    <div class="breakdown-fill"></div>
+                                </div>
+                            </div>
+
+                            <div class="breakdown-item">
+                                <div class="breakdown-header">
+                                    <span class="breakdown-title">Location</span>
+                                    <span class="breakdown-percentage">85%</span>
+                                </div>
+                                <div class="breakdown-bar">
+                                    <div class="breakdown-fill"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="skills-comparison">
+                        <div class="section-header">
+                            <span class="section-title">Skills Comparison</span>
+                        </div>
+                        <div class="skills-grid">
+                            <div class="skill-chip">React</div>
+                            <div class="skill-chip">TypeScript</div>
+                            <div class="skill-chip">Node.js</div>
+                            <div class="skill-chip missing">GraphQL</div>
+                            <div class="skill-chip">CSS/SASS</div>
+                            <div class="skill-chip missing">Docker</div>
+                        </div>
+                    </div>
+                </div>
+                <h3>Match Score Detallado</h3>
+                <p>Análisis completo de compatibilidad con breakdown por categoría</p>
+            </div>
+
+            <!-- Mockup 3: Learning Path -->
+            <div class="mockup-item">
+                <div class="mockup-visual mockup-learning">
+                    <div class="learning-header">
+                        <div class="learning-title">Mi Ruta de Aprendizaje</div>
+                        <div class="learning-subtitle">Proyectos para cerrar gaps identificados</div>
+                    </div>
+
+                    <div class="learning-progress">
+                        <div class="progress-stats">
+                            <div class="progress-stat">
+                                <div class="progress-number">3</div>
+                                <div class="progress-text">Total Proyectos</div>
+                            </div>
+                            <div class="progress-stat">
+                                <div class="progress-number">1</div>
+                                <div class="progress-text">Completados</div>
+                            </div>
+                            <div class="progress-stat">
+                                <div class="progress-number">65%</div>
+                                <div class="progress-text">Progreso</div>
+                            </div>
+                        </div>
+                        <div class="overall-progress">
+                            <div class="overall-bar">
+                                <div class="overall-fill"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="projects-list">
+                        <div class="project-card completed">
+                            <div class="project-header">
+                                <div>
+                                    <div class="project-title">E-commerce con React & Stripe</div>
+                                    <div class="project-desc">Construye un e-commerce completo con carrito y pagos</div>
+                                </div>
+                                <div class="project-status status-completed">Completado</div>
+                            </div>
+                            <div class="project-skills">
+                                <span class="skill-tag">React</span>
+                                <span class="skill-tag">API Integration</span>
+                                <span class="skill-tag">State Management</span>
+                            </div>
+                            <div class="project-progress-bar">
+                                <div class="project-progress-fill"></div>
+                            </div>
+                        </div>
+
+                        <div class="project-card in-progress">
+                            <div class="project-header">
+                                <div>
+                                    <div class="project-title">API REST con Node.js & MongoDB</div>
+                                    <div class="project-desc">Backend completo con autenticación JWT</div>
+                                </div>
+                                <div class="project-status status-in-progress">En progreso</div>
+                            </div>
+                            <div class="project-skills">
+                                <span class="skill-tag">Node.js</span>
+                                <span class="skill-tag">MongoDB</span>
+                                <span class="skill-tag">JWT</span>
+                            </div>
+                            <div class="project-progress-bar">
+                                <div class="project-progress-fill"></div>
+                            </div>
+                        </div>
+
+                        <div class="project-card">
+                            <div class="project-header">
+                                <div>
+                                    <div class="project-title">DevOps: Deploy con Docker & AWS</div>
+                                    <div class="project-desc">Aprende deployment y containerización</div>
+                                </div>
+                                <div class="project-status status-not-started">No iniciado</div>
+                            </div>
+                            <div class="project-skills">
+                                <span class="skill-tag">Docker</span>
+                                <span class="skill-tag">AWS</span>
+                                <span class="skill-tag">CI/CD</span>
+                            </div>
+                            <div class="project-progress-bar">
+                                <div class="project-progress-fill"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h3>Ruta de Aprendizaje</h3>
+                <p>Proyectos personalizados con progreso trackeable y skills a desarrollar</p>
+            </div>
+
+            <!-- Mockup 4: Company Dashboard -->
+            <div class="mockup-item">
+                <div class="mockup-visual mockup-company">
+                    <div class="company-header">
+                        <div class="company-title">Candidatos Recomendados</div>
+                        <div class="filter-section">
+                            <button class="filter-btn active">Top Matches</button>
+                            <button class="filter-btn">Recent</button>
+                            <button class="filter-btn">Applied</button>
+                        </div>
+                    </div>
+
+                    <div class="candidates-table">
+                        <div class="table-header">
+                            <div class="table-header-cell">Candidato</div>
+                            <div class="table-header-cell">Skills</div>
+                            <div class="table-header-cell">Match Score</div>
+                            <div class="table-header-cell">Action</div>
+                        </div>
+
+                        <div class="table-row">
+                            <div class="candidate-info-cell">
+                                <div class="candidate-avatar-table"></div>
+                                <div class="candidate-details">
+                                    <div class="candidate-name-table">Ana García</div>
+                                    <div class="candidate-position">Full Stack Developer</div>
+                                </div>
+                            </div>
+                            <div class="skills-cell">
+                                <span class="skill-badge">React</span>
+                                <span class="skill-badge">Node</span>
+                                <span class="skill-badge">+3</span>
+                            </div>
+                            <div class="score-cell">
+                                <span class="score-value">92%</span>
+                                <div class="score-bar-mini">
+                                    <div class="score-fill-mini"></div>
+                                </div>
+                            </div>
+                            <div class="action-cell">
+                                <div class="action-button">→</div>
+                            </div>
+                        </div>
+
+                        <div class="table-row">
+                            <div class="candidate-info-cell">
+                                <div class="candidate-avatar-table"></div>
+                                <div class="candidate-details">
+                                    <div class="candidate-name-table">Carlos Ruiz</div>
+                                    <div class="candidate-position">Frontend Developer</div>
+                                </div>
+                            </div>
+                            <div class="skills-cell">
+                                <span class="skill-badge">Vue</span>
+                                <span class="skill-badge">TS</span>
+                                <span class="skill-badge">+2</span>
+                            </div>
+                            <div class="score-cell">
+                                <span class="score-value">88%</span>
+                                <div class="score-bar-mini">
+                                    <div class="score-fill-mini"></div>
+                                </div>
+                            </div>
+                            <div class="action-cell">
+                                <div class="action-button">→</div>
+                            </div>
+                        </div>
+
+                        <div class="table-row">
+                            <div class="candidate-info-cell">
+                                <div class="candidate-avatar-table"></div>
+                                <div class="candidate-details">
+                                    <div class="candidate-name-table">María López</div>
+                                    <div class="candidate-position">Backend Developer</div>
+                                </div>
+                            </div>
+                            <div class="skills-cell">
+                                <span class="skill-badge">Python</span>
+                                <span class="skill-badge">SQL</span>
+                                <span class="skill-badge">+4</span>
+                            </div>
+                            <div class="score-cell">
+                                <span class="score-value">85%</span>
+                                <div class="score-bar-mini">
+                                    <div class="score-fill-mini"></div>
+                                </div>
+                            </div>
+                            <div class="action-cell">
+                                <div class="action-button">→</div>
+                            </div>
+                        </div>
+
+                        <div class="table-row">
+                            <div class="candidate-info-cell">
+                                <div class="candidate-avatar-table"></div>
+                                <div class="candidate-details">
+                                    <div class="candidate-name-table">Pedro Sánchez</div>
+                                    <div class="candidate-position">DevOps Engineer</div>
+                                </div>
+                            </div>
+                            <div class="skills-cell">
+                                <span class="skill-badge">AWS</span>
+                                <span class="skill-badge">K8s</span>
+                                <span class="skill-badge">+2</span>
+                            </div>
+                            <div class="score-cell">
+                                <span class="score-value">78%</span>
+                                <div class="score-bar-mini">
+                                    <div class="score-fill-mini"></div>
+                                </div>
+                            </div>
+                            <div class="action-cell">
+                                <div class="action-button">→</div>
+                            </div>
+                        </div>
+
+                        <div class="table-row">
+                            <div class="candidate-info-cell">
+                                <div class="candidate-avatar-table"></div>
+                                <div class="candidate-details">
+                                    <div class="candidate-name-table">Laura Martín</div>
+                                    <div class="candidate-position">Mobile Developer</div>
+                                </div>
+                            </div>
+                            <div class="skills-cell">
+                                <span class="skill-badge">React Native</span>
+                                <span class="skill-badge">+3</span>
+                            </div>
+                            <div class="score-cell">
+                                <span class="score-value">75%</span>
+                                <div class="score-bar-mini">
+                                    <div class="score-fill-mini"></div>
+                                </div>
+                            </div>
+                            <div class="action-cell">
+                                <div class="action-button">→</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h3>Panel de Empresa</h3>
+                <p>Tabla completa de candidatos con filtros, skills y scores instantáneos</p>
+            </div>
+        </div>
+
+        <div class="note">
+            <p><strong>✨ Mockups Ultra Detallados con CSS Puro</strong></p>
+            <p>Estos mockups incluyen elementos realistas: navbars, stats cards, tablas, gráficos de progreso, animaciones suaves y hover effects. Perfectos para tu landing page o para convertir en imágenes PNG de alta calidad.</p>
+            <p style="margin-top: 15px; font-size: 14px;">💡 <strong>Tip:</strong> Haz clic derecho → Inspeccionar → Clic derecho en el elemento → "Capture node screenshot" para guardar como PNG</p>
+        </div>
+
+      
+    </div>
+</body>
+</html>
+```
+
+---
+
+## 🎨 Mejoras en los Mockups Detallados:
+
+### **Dashboard Developer:**
+- ✅ Navbar completa con logo, search bar, iconos y avatar
+- ✅ 4 Stats cards con números animados
+- ✅ Lista de jobs con logos, tags y match scores
+- ✅ Sidebar con perfil y acciones rápidas
+- ✅ Barra de progreso animada
+
+### **Matching Algorithm:**
+- ✅ Info del job con logo de empresa
+- ✅ Score circular grande y animado
+- ✅ Breakdown detallado por categoría (Skills, Experience, Cultural Fit, Location)
+- ✅ Comparación de skills con chips verdes (match) y rojos (missing)
+- ✅ Barras de progreso animadas
+
+### **Learning Path:**
+- ✅ Header con título y stats (3 proyectos, 1 completado, 65%)
+- ✅ Barra de progreso general
+- ✅ 3 project cards con:
+  - Estado (Completado, En progreso, No iniciado)
+  - Descripción del proyecto
+  - Skills a desarrollar
+  - Barra de progreso individual
+
+### **Company Dashboard:**
+- ✅ Header con título y filtros activos
+- ✅ Tabla completa con columnas:
+  - Candidato (avatar + nombre + posición)
+  - Skills (badges)
+  - Match Score (número + barra mini)
+  - Acción (botón)
+- ✅ 5 candidatos de ejemplo
+- ✅ Hover effects en las filas
+
+### **Hero Grande:**
+- ✅ Navbar con logo, items y botón
+- ✅ Grid 2 columnas (main + sidebar)
+- ✅ Elementos placeholder animados
+- ✅ Fondo con gradiente y glow flotante
+
+---
+
+## 📸 Cómo Convertir a PNG
+```
+1. Abre el HTML en Chrome
+2. Clic derecho en un mockup
+3. "Inspeccionar" (F12)
+4. En DevTools, ubica el elemento .mockup-visual
+5. Clic derecho → "Capture node screenshot"
+6. Guarda como: dashboard.png, matching.png, etc.
