@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motores de Videojuegos Alternativos - Guía Profesional</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0e1a;
+            color: #ffffff;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 4px;
+            background: linear-gradient(90deg, #00f5ff, #ff0080, #8000ff);
+            border-radius: 2px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 10px #00f5ff; }
+            to { box-shadow: 0 0 30px #ff0080, 0 0 40px #8000ff; }
+        }
+
+        .main-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #00f5ff, #ff0080, #8000ff, #00ff80);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient-shift 3s ease infinite;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 8px rgba(0, 245, 255, 0.3);
+        }
+
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .subtitle {
+            font-size: 1.4rem;
+            color: #a0aec0;
+            font-weight: 400;
+            margin-bottom: 10px;
+        }
+
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 40px 0 60px 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(145deg, #1a1f2e, #2d3748);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid rgba(0, 245, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 245, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .stat-card:hover::before {
+            left: 100%;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: #00f5ff;
+            box-shadow: 0 20px 40px rgba(0, 245, 255, 0.15);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #00f5ff;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: #cbd5e0;
+            font-weight: 500;
+        }
+
+        .engines-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .engine-card {
+            background: linear-gradient(145deg, #1a1f2e, #2d3748);
+            border-radius: 25px;
+            padding: 35px;
+            border: 2px solid transparent;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .engine-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, var(--accent-color), transparent);
+            animation: rotate 4s linear infinite;
+            z-index: -1;
+        }
+
+        .engine-card::after {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            background: linear-gradient(145deg, #1a1f2e, #2d3748);
+            border-radius: 23px;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+
+        .engine-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .cryengine { --accent-color: #ff4757; }
+        .open3d { --accent-color: #ffa726; }
+        .defold { --accent-color: #5c6bc0; }
+        .solar2d { --accent-color: #66bb6a; }
+        .jmonkey { --accent-color: #42a5f5; }
+        .phaser { --accent-color: #ef5350; }
+
+        .engine-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .engine-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .engine-logo::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, var(--accent-color), transparent, var(--accent-color));
+            border-radius: 15px;
+        }
+
+        .engine-logo span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .engine-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 5px;
+        }
+
+        .engine-subtitle {
+            font-size: 0.95rem;
+            color: #a0aec0;
+            font-weight: 500;
+        }
+
+        .engine-description {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #e2e8f0;
+            margin-bottom: 25px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .feature-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px 15px;
+            border-radius: 10px;
+            border-left: 3px solid var(--accent-color);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .tech-specs {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+        }
+
+        .spec-item {
+            text-align: center;
+        }
+
+        .spec-label {
+            font-size: 0.75rem;
+            color: #a0aec0;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .spec-value {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        .engine-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .tag {
+            background: linear-gradient(45deg, var(--accent-color), transparent);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            border: 1px solid var(--accent-color);
+            transition: all 0.3s ease;
+        }
+
+        .tag:hover {
+            background: var(--accent-color);
+            transform: scale(1.05);
+        }
+
+        .comparison-section {
+            background: linear-gradient(145deg, #1a1f2e, #2d3748);
+            border-radius: 30px;
+            padding: 40px;
+            margin-top: 60px;
+            border: 1px solid rgba(0, 245, 255, 0.2);
+            position: relative;
+        }
+
+        .comparison-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #00f5ff, #ff0080, #8000ff, #00ff80);
+            border-radius: 30px 30px 0 0;
+        }
+
+        .comparison-title {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 40px;
+            color: #00f5ff;
+            font-weight: 700;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .comparison-card {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .comparison-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-5px);
+        }
+
+        .comparison-label {
+            font-weight: 600;
+            color: #00f5ff;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .comparison-content {
+            color: #e2e8f0;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .market-analysis {
+            margin-top: 50px;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(0, 245, 255, 0.1), rgba(255, 0, 128, 0.1));
+            border-radius: 20px;
+            border: 1px solid rgba(0, 245, 255, 0.2);
+        }
+
+        .analysis-title {
+            font-size: 1.5rem;
+            color: #00f5ff;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .analysis-item {
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            border-left: 4px solid #00f5ff;
+        }
+
+        .analysis-metric {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #00f5ff;
+            margin-bottom: 5px;
+        }
+
+        .analysis-desc {
+            color: #cbd5e0;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2.5rem;
+            }
+            
+            .engines-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .engine-card {
+                padding: 25px;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tech-specs {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="main-title">MOTORES DE VIDEOJUEGOS ALTERNATIVOS</h1>
+            <p class="subtitle">Guía Profesional de Motores Gráficos Avanzados</p>
+            <p style="color: #718096; font-size: 0.9rem; margin-top: 10px;">Más allá de Unity, Unreal, Godot y GameMaker</p>
+        </div>
+
+        <div class="stats-overview">
+            <div class="stat-card">
+                <span class="stat-number">6</span>
+                <div class="stat-label">Motores Analizados</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">15+</span>
+                <div class="stat-label">Juegos AAA Potenciados</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">100%</span>
+                <div class="stat-label">Alternativos Viables</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">5</span>
+                <div class="stat-label">Gratuitos Total</div>
+            </div>
+        </div>
+
+        <div class="engines-grid">
+            <!-- CryEngine -->
+            <div class="engine-card cryengine">
+                <div class="engine-header">
+                    <div class="engine-logo">
+                        <span>CE</span>
+                    </div>
+                    <div>
+                        <div class="engine-title">CryEngine</div>
+                        <div class="engine-subtitle">Crytek GmbH • Alemania • AAA Engine</div>
+                    </div>
+                </div>
+
+                <div class="engine-description">
+                    Motor gráfico alemán de calibre AAA, reconocido mundialmente por impulsar las series Far Cry y Crysis. Famoso por sus gráficos fotorrealistas y sistemas de física avanzada que han establecido benchmarks en la industria durante décadas.
+                </div>
+
+                <div class="tech-specs">
+                    <div class="spec-item">
+                        <div class="spec-label">Año</div>
+                        <div class="spec-value">2002</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Lenguaje</div>
+                        <div class="spec-value">C++/Lua</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Plataformas</div>
+                        <div class="spec-value">PC/Console</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Precio</div>
+                        <div class="spec-value">5% Royalty</div>
+                    </div>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-item">🌟 Physically Based Shading</div>
+                    <div class="feature-item">⚡ Real-time Global Illumination</div>
+                    <div class="feature-item">🌊 Advanced Fluid Simulation</div>
+                    <div class="feature-item">🎯 Native VR/AR Support</div>
+                    <div class="feature-item">💎 Hardware Ray Tracing</div>
+                    <div class="feature-item">🌿 Dynamic Vegetation System</div>
+                </div>
+
+                <div class="engine-tags">
+                    <span class="tag">3D</span>
+                    <span class="tag">High-End Graphics</span>
+                    <span class="tag">Physics</span>
+                    <span class="tag">Open Source</span>
+                </div>
+            </div>
+
+            <!-- Open 3D Engine -->
+            <div class="engine-card open3d">
+                <div class="engine-header">
+                    <div class="engine-logo">
+                        <span>O3</span>
+                    </div>
+                    <div>
+                        <div class="engine-title">Open 3D Engine</div>
+                        <div class="engine-subtitle">Linux Foundation • Ex-Amazon Lumberyard</div>
+                    </div>
+                </div>
+
+                <div class="engine-description">
+                    Sucesor opensource de Amazon Lumberyard, basado en CryEngine pero optimizado para la nube y juegos multijugador masivos. Diseñado para la próxima generación de juegos conectados y experiencias metaversales.
+                </div>
+
+                <div class="tech-specs">
+                    <div class="spec-item">
+                        <div class="spec-label">Año</div>
+                        <div class="spec-value">2021</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Lenguaje</div>
+                        <div class="spec-value">C++/Lua</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Plataformas</div>
+                        <div class="spec-value">Multi/Cloud</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Precio</div>
+                        <div class="spec-value">100% Free</div>
+                    </div>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-item">☁️ AWS Integration Native</div>
+                    <div class="feature-item">📡 Twitch Broadcasting Built-in</div>
+                    <div class="feature-item">🎮 Scalable Multiplayer</div>
+                    <div class="feature-item">🔧 Visual Scripting System</div>
+                    <div class="feature-item">🚀 Cloud-First Architecture</div>
+                    <div class="feature-item">⚖️ Apache 2.0 License</div>
+                </div>
+
+                <div class="engine-tags">
+                    <span class="tag">3D</span>
+                    <span class="tag">Cloud Gaming</span>
+                    <span class="tag">MMO</span>
+                    <span class="tag">Open Source</span>
+                </div>
+            </div>
+
+            <!-- Defold -->
+            <div class="engine-card defold">
+                <div class="engine-header">
+                    <div class="engine-logo">
+                        <span>DF</span>
+                    </div>
+                    <div>
+                        <div class="engine-title">Defold</div>
+                        <div class="engine-subtitle">King Digital • Mobile-First Engine</div>
+                    </div>
+                </div>
+
+                <div class="engine-description">
+                    Motor especializado creado por los desarrolladores de Candy Crush Saga. Optimizado específicamente para juegos móviles 2D de alto rendimiento con descargas ultra-ligeras y monetización integrada.
+                </div>
+
+                <div class="tech-specs">
+                    <div class="spec-item">
+                        <div class="spec-label">Año</div>
+                        <div class="spec-value">2014</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Lenguaje</div>
+                        <div class="spec-value">Lua/C++</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Plataformas</div>
+                        <div class="spec-value">Mobile/Web</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Precio</div>
+                        <div class="spec-value">Free</div>
+                    </div>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-item">📱 Ultra Mobile Optimization</div>
+                    <div class="feature-item">⚡ Sub-10MB Game Builds</div>
+                    <div class="feature-item">🎨 Visual Scene Editor</div>
+                    <div class="feature-item">💰 Monetization SDKs</div>
+                    <div class="feature-item">📊 Analytics Integration</div>
+                    <div class="feature-item">🔄 Hot Reload Development</div>
+                </div>
+
+                <div class="engine-tags">
+                    <span class="tag">2D</span>
+                    <span class="tag">Mobile</span>
+                    <span class="tag">Lightweight</span>
+                    <span class="tag">Free</span>
+                </div>
+            </div>
+
+            <!-- Solar2D -->
+            <div class="engine-card solar2d">
+                <div class="engine-header">
+                    <div class="engine-logo">
+                        <span>S2</span>
+                    </div>
+                    <div>
+                        <div class="engine-title">Solar2D</div>
+                        <div class="engine-subtitle">Corona Labs Legacy • Cross-Platform</div>
+                    </div>
+                </div>
+
+                <div class="engine-description">
+                    Heredero del legendario Corona SDK, Solar2D es la evolución opensource de una de las plataformas de desarrollo móvil más exitosas. Perfecto para desarrollo rápido con Lua y despliegue universal.
+                </div>
+
+                <div class="tech-specs">
+                    <div class="spec-item">
+                        <div class="spec-label">Año</div>
+                        <div class="spec-value">2020</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Lenguaje</div>
+                        <div class="spec-value">Lua</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Plataformas</div>
+                        <div class="spec-value">All Platforms</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Precio</div>
+                        <div class="spec-value">Free</div>
+                    </div>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-item">🚀 One Codebase, All Platforms</div>
+                    <div class="feature-item">🔍 Real-time Simulator</div>
+                    <div class="feature-item">🧩 Rich Plugin Ecosystem</div>
+                    <div class="feature-item">📱 Native Mobile Performance</div>
+                    <div class="feature-item">💡 Lua Simplicity</div>
+                    <div class="feature-item">🌐 HTML5 Export</div>
+                </div>
+
+                <div class="engine-tags">
+                    <span class="tag">2D</span>
+                    <span class="tag">Cross-Platform</span>
+                    <span class="tag">Lua</span>
+                    <span class="tag">MIT License</span>
+                </div>
+            </div>
+
+            <!-- jMonkeyEngine -->
+            <div class="engine-card jmonkey">
+                <div class="engine-header">
+                    <div class="engine-logo">
+                        <span>JM</span>
+                    </div>
+                    <div>
+                        <div class="engine-title">jMonkeyEngine</div>
+                        <div class="engine-subtitle">Community Driven • Educational Favorite</div>
+                    </div>
+                </div>
+
+                <div class="engine-description">
+                    Motor 3D Java de código abierto, ampliamente utilizado en entornos educativos y por desarrolladores Java. Ofrece un enfoque code-first con herramientas profesionales y una comunidad académica sólida.
+                </div>
+
+                <div class="tech-specs">
+                    <div class="spec-item">
+                        <div class="spec-label">Año</div>
+                        <div class="spec-value">2003</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Lenguaje</div>
+                        <div class="spec-value">Java</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Plataformas</div>
+                        <div class="spec-value">Multi-OS</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Precio</div>
+                        <div class="spec-value">BSD License</div>
+                    </div>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-item">☕ 100% Pure Java</div>
+                    <div class="feature-item">🎓 Educational Standard</div>
+                    <div class="feature-item">🔊 3D Spatial Audio (OpenAL)</div>
+                    <div class="feature-item">⚙️ jBullet Physics</div>
+                    <div class="feature-item">🌐 SpiderMonkey Networking</div>
+                    <div class="feature-item">🛠️ Comprehensive SDK</div>
+                </div>
+
+                <div class="engine-tags">
+                    <span class="tag">3D</span>
+                    <span class="tag">Java</span>
+                    <span class="tag">Educational</span>
+                    <span class="tag">Open Source</span>
+                </div>
+            </div>
+
+            <!-- Phaser -->
+            <div class="engine-card phaser">
+                <div class="engine-header">
+                    <div class="engine-logo">
+                        <span>PH</span>
+                    </div>
+                    <div>
+                        <div class="engine-title">Phaser</div>
+                        <div class="engine-subtitle">Photon Storm • HTML5 Champion</div>
+                    </div>
+                </div>
+
+                <div class="engine-description">
+                    Framework JavaScript líder mundial para desarrollo de juegos HTML5. Potente, flexible y con la comunidad más activa en el desarrollo web gaming. Ideal para juegos que funcionan en cualquier dispositivo con navegador.
+                </div>
+
+                <div class="tech-specs">
+                    <div class="spec-item">
+                        <div class="spec-label">Año</div>
+                        <div class="spec-value">2013</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Lenguaje</div>
+                        <div class="spec-value">JavaScript</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Plataformas</div>
+                        <div class="spec-value">Web/Hybrid</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Precio</div>
+                        <div class="spec-value">MIT License</div>
+                    </div>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-item">🌐 WebGL/Canvas Auto-Switch</div>
+                    <div class="feature-item">🎮 Touch & Gesture Support</div>
+                    <div class="feature-item">⚡ Multiple Physics Engines</div>
+                    <div class="feature-item">📱 Cordova/PhoneGap Ready</div>
+                    <div class="feature-item">📚 1800+ Code Examples</div>
+                    <div class="feature-item">🔄 TypeScript Support</div>
+                </div>
+
+                <div class="engine-tags">
+                    <span class="tag">2D</span>
+                    <span class="tag">Web Native</span>
+                    <span class="tag">JavaScript</span>
+                    <span class="tag">Open Source</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección de Comparación Avanzada -->
+        <div class="comparison-section">
+            <h2 class="comparison-title">📊 Análisis Comparativo Detallado</h2>
+            <div class="comparison-grid">
+                <div class="comparison-card">
+                    <div class="comparison-label">🏆 Mejor para Gráficos AAA</div>
+                    <div class="comparison-content">
+                        <strong>CryEngine</strong> lidera con tecnologías como Physically Based Shading y ray tracing hardware.<br><br>
+                        <strong>Open 3D Engine</strong> hereda esta potencia añadiendo capacidades cloud-native.
+                    </div>
+                </div>
+
+                <div class="comparison-card">
+                    <div class="comparison-label">📱 Especialización Móvil</div>
+                    <div class="comparison-content">
+                        <strong>Defold</strong> domina con builds sub-10MB y optimizaciones específicas para iOS/Android.<br><br>
+                        <strong>Solar2D</strong> ofrece desarrollo rápido con Lua para prototipos móviles.
+                    </div>
+                </div>
+
+                <div class="comparison-card">
+                    <div class="comparison-label">🌐 Liderazgo Web</div>
+                    <div class="comparison-content">
+                        <strong>Phaser</strong> es el estándar de facto para HTML5 gaming con 1800+ ejemplos de código.<br><br>
+                        <strong>Solar2D</strong> también exporta a HTML5 manteniendo performance nativa.
+                    </div>
+                </div>
+
+                <div class="comparison-card">
+                    <div class="comparison-label">🎓 Mejor para Educación</div>
+                    <div class="comparison-content">
+                        <strong>jMonkeyEngine</strong> es el favorito académico con extensa documentación educativa.<br><br>
+                        <strong>Solar2D</strong> con Lua es ideal para principiantes en programación.
+                    </div>
+                </div>
+
+                <div class="comparison-card">
+                    <div class="comparison-label">💰 Modelo Económico</div>
+                    <div class="comparison-content">
+                        <strong>100% Gratuitos:</strong> Open 3D, Defold, Solar2D, jMonkey, Phaser<br><br>
+                        <strong>Royalty:</strong> Solo CryEngine (5% sobre ingresos)
+                    </div>
+                </div>
+
+                <div class="comparison-card">
+                    <div class="comparison-label">🚀 Curva de Aprendizaje</div>
+                    <div class="comparison-content">
+                        <strong>Más fácil:</strong> Solar2D (Lua), Phaser (JavaScript)<br><br>
+                        <strong>Intermedio:</strong> Defold, jMonkeyEngine<br><br>
+                        <strong>Avanzado:</strong> CryEngine, Open 3D Engine
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Análisis de Mercado -->
+        <div class="market-analysis">
+            <div class="analysis-title">📈 Análisis de Mercado y Tendencias 2024</div>
+            <div class="analysis-grid">
+                <div class="analysis-item">
+                    <div class="analysis-metric">15% Crecimiento</div>
+                    <div class="analysis-desc">Motores alternativos han crecido 15% en adopción tras los cambios de Unity</div>
+                </div>
+                <div class="analysis-item">
+                    <div class="analysis-metric">Cloud-First</div>
+                    <div class="analysis-desc">Open 3D Engine lidera la tendencia hacia desarrollo cloud-native</div>
+                </div>
+                <div class="analysis-item">
+                    <div class="analysis-metric">Web Gaming</div>
+                    <div class="analysis-desc">Phaser mantiene 40% de market share en desarrollo HTML5</div>
+                </div>
+                <div class="analysis-item">
+                    <div class="analysis-metric">Mobile Specialization</div>
+                    <div class="analysis-desc">Defold y Solar2D dominan nichos específicos de gaming móvil</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
