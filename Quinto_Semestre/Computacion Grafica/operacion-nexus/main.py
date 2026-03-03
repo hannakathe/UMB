@@ -1,3 +1,4 @@
+# main.py
 import os
 
 from direct.showbase.ShowBase import ShowBase
