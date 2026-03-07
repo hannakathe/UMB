@@ -194,7 +194,8 @@ body.story-page {
 }
 
 #challenge-box {
-  width: 100%; max-width: 900px;
+  width: 80vw;
+  max-width: 80vw;
   border: 1px solid var(--color-primary, #00d4ff);
   border-radius: 10px; overflow: hidden;
   box-shadow: 0 0 40px rgba(0,212,255,.1);

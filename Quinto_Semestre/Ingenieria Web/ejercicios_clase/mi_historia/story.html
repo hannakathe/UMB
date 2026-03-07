@@ -92,6 +92,22 @@
   <script src="js/story-state.js"></script>
   <script src="js/story-data.js"></script>
   <script src="js/engine.js"></script>
+  <script>
+    /* Pantalla completa al cargar story.html */
+    (function tryFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen({ navigationUI: 'hide' })
+          .catch(() => {});
+      }
+    })();
+    /* Garantía en primer click por si el navegador bloquea el autostart */
+    document.addEventListener('click', function fs() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen({ navigationUI: 'hide' }).catch(() => {});
+      }
+      document.removeEventListener('click', fs);
+    });
+  </script>
 
 </body>
 </html>

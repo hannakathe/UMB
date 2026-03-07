@@ -77,16 +77,34 @@ const StoryState = {
     return `${h}h ${m}m`;
   },
 
-  /** Contador regresivo de NEXUS: 72h → 0. Formato "HH:MM:SS". */
+  /**
+   * Contador regresivo de NEXUS: 72h → 0. Formato "HH:MM:SS".
+   *
+   * Lógica proporcional (regla de 3):
+   *   Duración estimada de la historia : 30 minutos reales
+   *   Contador de NEXUS total          : 72 horas = 259 200 s
+   *   Escala                           : 259 200 / 1 800 = 144×
+   *
+   *   ∴  1 segundo real  ≡  144 segundos del contador
+   *      1 minuto real   ≡  2.4 horas del contador
+   *      30 minutos real ≡  72 horas del contador → llega a 00:00:00
+   */
   getContadorNexus() {
-    const estado      = this.get();
-    const maxSegundos = 72 * 3600;
+    const MINS_HISTORIA   = 30;                          // duración estimada de la historia
+    const SECS_HISTORIA   = MINS_HISTORIA * 60;          // 1 800 s reales
+    const NEXUS_TOTAL     = 72 * 3600;                   // 259 200 s en el contador de NEXUS
+    const ESCALA          = NEXUS_TOTAL / SECS_HISTORIA; // 144× más rápido
+
+    const estado = this.get();
     if (!estado.tiempoInicio) return "72:00:00";
-    const transcurrido = Math.floor((Date.now() - estado.tiempoInicio) / 1000);
-    const restante     = Math.max(0, maxSegundos - transcurrido);
-    const h = Math.floor(restante / 3600);
-    const m = Math.floor((restante % 3600) / 60);
-    const s = restante % 60;
+
+    const realTranscurrido  = Math.floor((Date.now() - estado.tiempoInicio) / 1000);
+    const nexusTranscurrido = Math.floor(realTranscurrido * ESCALA);
+    const restante          = Math.max(0, NEXUS_TOTAL - nexusTranscurrido);
+
+    const h   = Math.floor(restante / 3600);
+    const m   = Math.floor((restante % 3600) / 60);
+    const s   = restante % 60;
     const pad = n => String(n).padStart(2, "0");
     return `${pad(h)}:${pad(m)}:${pad(s)}`;
   },

@@ -3,6 +3,14 @@
  * Utilidades compartidas para las páginas HTML de capítulos.
  */
 
+/* ─── Pantalla completa ──────────────────────────────────────── */
+function tryFullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen({ navigationUI: 'hide' })
+      .catch(() => {/* bloqueado por el navegador — sin problema */});
+  }
+}
+
 /* ─── Countdown HUD ──────────────────────────────────────────── */
 function updateCountdown() {
   const el = document.getElementById('hud-countdown');
@@ -191,8 +199,17 @@ function _applyDecisionUI(container, cfg, choiceId) {
   }
 }
 
-/* ─── Init automático del countdown ─────────────────────────── */
+/* ─── Init automático al cargar ─────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
+  /* Pantalla completa */
+  tryFullscreen();
+  /* Garantía en primer click */
+  document.addEventListener('click', function fs() {
+    tryFullscreen();
+    document.removeEventListener('click', fs);
+  });
+
+  /* Countdown */
   if (typeof StoryState !== 'undefined') {
     updateCountdown();
     setInterval(updateCountdown, 1000);
