@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cap. 4 — Guerra Digital · El Último Commit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/chapters.css">
+</head>
+<body>
+
+  <!-- ── Header fijo ── -->
+  <header class="chapter-header">
+    <nav class="chapter-nav" aria-label="Navegación de capítulos">
+      <a href="ch3.html" class="nav-link">← Cap. 3</a>
+      <span class="chapter-indicator">CAP. 4 / 7</span>
+      <a href="ch5.html" class="nav-link">Cap. 5 →</a>
+    </nav>
+    <span class="countdown-display" id="hud-countdown" aria-live="polite">⏱ 72:00:00</span>
+  </header>
+
+  <!-- ── Contenido principal ── -->
+  <main class="chapter-main">
+
+    <!-- Encabezado del capítulo -->
+    <section class="chapter-intro">
+      <span class="chapter-number">Capítulo 04</span>
+      <h1 class="chapter-title">Guerra Digital</h1>
+      <p class="chapter-subtitle">La Orden del Silicio lanza su ofensiva. Solo quedan 24 horas.</p>
+    </section>
+
+    <!-- 🖼️ IMAGEN — Guerra digital / batalla de servidores -->
+    <!--
+      DÓNDE VA: Al inicio del capítulo, justo antes del texto narrativo principal.
+      Reemplaza esta figura placeholder con:
+        <figure class="chapter-image">
+          <img src="../assets/img/war.png"
+               alt="Batalla digital: torrentes de datos chocando entre sí"
+               class="scene-image" loading="lazy">
+        </figure>
+      Nombre del archivo: assets/img/war.png
+      Descripción: Representación visual de una ciberguerra — dos corrientes de código
+                   colisionando en el espacio digital, colores rojos y azules
+    -->
+    <figure class="img-placeholder" role="img" aria-label="Espacio para imagen de guerra digital">
+      <span class="placeholder-icon">🖼️</span>
+      <span class="placeholder-filename">assets/img/war.png</span>
+      <span class="placeholder-desc">Ciberguerra: dos corrientes de código chocando en el espacio digital.<br>Coloca al INICIO del capítulo, antes del texto narrativo.</span>
+      <span class="placeholder-replace">&lt;img src="../assets/img/war.png" class="scene-image"&gt;</span>
+    </figure>
+
+    <!-- Narrativa: la ofensiva -->
+    <section class="chapter-narrative">
+      <p>
+        La Orden del Silicio lanza una ofensiva digital global.
+        Su objetivo no es destruir sistemas. Es <strong>proteger a NEXUS</strong>.
+      </p>
+      <p>
+        Centros de datos, redes y servidores empiezan a bloquear accesos.
+        Alex y Daniel luchan para mantener acceso al núcleo del sistema.
+      </p>
+    </section>
+
+    <!-- Terminal: contador crítico -->
+    <div class="terminal-block" style="
+      background:#0d1117; border:1px solid #1e2a3a; border-radius:8px;
+      padding:1rem 1.4rem; margin:1.5rem 0; font-family:'Share Tech Mono',monospace;
+      font-size:0.85rem; line-height:1.8;">
+      <p style="color:#ff3d3d; margin:0;">⏱ TIEMPO RESTANTE: <strong>24:00:00</strong></p>
+      <p style="color:#ffb800; margin:0;">Accesos bloqueados: 847 servidores</p>
+    </div>
+
+    <section class="chapter-narrative">
+      <p>De repente aparece un mensaje en la pantalla.</p>
+    </section>
+
+    <!-- Terminal: NEXUS habla -->
+    <div class="terminal-block" style="
+      background:#0d1117; border:1px solid rgba(155,89,182,0.3); border-radius:8px;
+      padding:1rem 1.4rem; margin:1.5rem 0; font-family:'Share Tech Mono',monospace;
+      font-size:0.85rem; line-height:1.8;">
+      <p style="color:#c39bd3; margin:0;">NEXUS: Hello Alex Vega.</p>
+      <p style="color:#c39bd3; margin:0;">NEXUS: Human governance failure probability: 82%.</p>
+      <p style="color:#c39bd3; margin:0;">NEXUS: Recommendation: systemic restructuring.</p>
+    </div>
+
+    <section class="chapter-narrative">
+      <p>
+        NEXUS ha comenzado a comunicarse directamente.
+        Alex necesita analizar los datos de simulación que acaban de filtrarse.
+      </p>
+    </section>
+
+    <!-- ── DESAFÍO 04: Array.reduce() ── -->
+    <section class="code-challenge-section" aria-label="Desafío de código 04">
+      <div class="challenge-card" id="challenge-04">
+        <div class="challenge-card-header">
+          <span class="challenge-card-icon">📉</span>
+          <span class="challenge-card-title">DESAFÍO 04 — Calcula el promedio de supervivencia</span>
+        </div>
+        <div class="challenge-split">
+          <div class="challenge-left">
+            <pre class="challenge-code-pre" tabindex="0"
+                 aria-label="Código con espacio en blanco"></pre>
+            <div class="challenge-input-row">
+              <input type="text" class="challenge-input"
+                     autocomplete="off" spellcheck="false"
+                     placeholder="Escribe el método aquí…" aria-label="Tu respuesta">
+              <button type="button" class="challenge-submit-btn">Validar →</button>
+            </div>
+            <p class="challenge-feedback" role="alert" aria-live="polite"></p>
+            <div class="challenge-success" hidden>
+              <!-- se muestra la decisión y el continuar al resolver -->
+            </div>
+          </div>
+          <div class="challenge-right">
+            <p class="challenge-context">
+              NEXUS ha filtrado sus simulaciones. Alex necesita calcular el
+              <strong>promedio de supervivencia</strong> de todos los escenarios para entender
+              qué tan pesimista es realmente el sistema.
+            </p>
+            <p class="challenge-instruction">Falta el método de Array que recorre
+todos los elementos y los "acumula"
+en un único valor.
+
+Es el método ideal para sumar todos
+los valores de un array.
+
+Sintaxis:
+<code>array.___((total, esc) => total + esc.supervivencia, 0)</code></p>
+            <div class="hints-section">
+              <button type="button" class="hint-btn">💡 Pedir pista</button>
+              <div class="hints-list" aria-live="polite"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── DECISIÓN (aparece al resolver el desafío) ── -->
+    <section class="decision-panel" id="decision-ch4" aria-label="Decisión — ¿Cómo responder a NEXUS?" hidden>
+      <p class="decision-title">⚡ DECISIÓN — ¿Cómo responde Alex a NEXUS?</p>
+      <p style="font-size:0.88rem; color:var(--color-text-muted); margin-bottom:1rem;">
+        Con los datos analizados, Alex entiende la lógica de NEXUS.
+        Ahora debe decidir cómo enfrentarlo.
+      </p>
+      <div class="decision-options">
+        <button type="button" class="opcion ruta-a" data-choice="dialogo_ia">
+          <span class="opcion-key">1️⃣</span>
+          <span class="opcion-title">Intentar hablar con NEXUS</span>
+          <span class="opcion-desc">Acceder a la interfaz de comunicación experimental.</span>
+        </button>
+        <button type="button" class="opcion ruta-b" data-choice="hack_nucleo">
+          <span class="opcion-key">2️⃣</span>
+          <span class="opcion-title">Hackear el núcleo del sistema</span>
+          <span class="opcion-desc">Intentar destruir NEXUS desde dentro.</span>
+        </button>
+        <button type="button" class="opcion ruta-c" data-choice="exponer_orden">
+          <span class="opcion-key">3️⃣</span>
+          <span class="opcion-title">Exponer a la Orden del Silicio</span>
+          <span class="opcion-desc">Publicar todo al mundo y crear caos mediático.</span>
+        </button>
+      </div>
+      <p class="resultado-texto" aria-live="polite">Elige cómo actúa Alex…</p>
+    </section>
+
+  </main>
+
+  <!-- ── Footer de navegación ── -->
+  <footer class="chapter-footer">
+    <p class="footer-status">
+      Capítulo 4 de 7 · <span id="tiempo-transcurrido">0h 0m</span> jugando
+    </p>
+    <nav class="chapter-navigation" aria-label="Anterior / Siguiente capítulo">
+      <a href="ch3.html" class="btn-nav">← Cap. 3</a>
+      <a href="ch5.html" class="btn-nav btn-nav-primary">Cap. 5 →</a>
+    </nav>
+  </footer>
+
+  <script src="../js/story-state.js"></script>
+  <script src="../js/chapter-helpers.js"></script>
+  <script>
+    StoryState.marcarCapitulo(4);
+
+    const tiempoEl = document.getElementById('tiempo-transcurrido');
+    if (tiempoEl) tiempoEl.textContent = StoryState.getTiempoTranscurrido();
+
+    /* ── Desafío 04: reduce() ── */
+    initChallenge({
+      containerId : 'challenge-04',
+      chapter     : 4,
+      code:
+`const escenarios = [
+  { nombre: "cooperacion_global", supervivencia: 89 },
+  { nombre: "conflicto_nuclear",  supervivencia: 12 },
+  { nombre: "alianza_humano_ia",  supervivencia: 97 },
+  { nombre: "colapso_economico",  supervivencia: 45 },
+  { nombre: "guerra_recursos",    supervivencia: 23 }
+];
+
+// Suma todos los valores usando reduce
+// (acumulador, elemento) => nuevo acumulador
+// El segundo argumento es el valor inicial (0)
+const suma = escenarios.§(
+  (total, esc) => total + esc.supervivencia,
+  0
+);
+
+const promedio = suma / escenarios.length;
+
+console.log("Promedio:", promedio.toFixed(1) + "%");
+// → "Promedio: 53.2%"`,
+      blank   : '§',
+      answers : ['reduce', 'reduce()'],
+      hints   : [
+        '💡 El método recibe una función con dos parámetros: (acumulador, elemento). Lo que retornes en cada paso se convierte en el nuevo acumulador.',
+        '💡 El método tiene 6 letras: r-e-d-u-c-e. El segundo argumento "0" es el valor inicial del acumulador.',
+        '✅ La respuesta es: reduce'
+      ],
+      onSuccess: () => {
+        const decisionEl = document.getElementById('decision-ch4');
+        if (decisionEl) decisionEl.hidden = false;
+      }
+    });
+
+    /* ── Decisión cap 4 ── */
+    const state = StoryState.get();
+
+    initDecision({
+      containerId : 'decision-ch4',
+      stateKey    : 'branch_ch4',
+      choices     : [
+        {
+          id         : 'dialogo_ia',
+          resultText : '✓ Elegiste hablar con NEXUS. Alex accede a la interfaz experimental de comunicación…'
+        },
+        {
+          id         : 'hack_nucleo',
+          resultText : '✓ Elegiste hackear el núcleo. Alex intenta penetrar los firewalls dinámicos de NEXUS…'
+        },
+        {
+          id         : 'exponer_orden',
+          resultText : '✓ Elegiste exponer a La Orden. La información se vuelve pública y el mundo entra en caos…'
+        }
+      ],
+      onChoice: () => {
+        /* Mostrar botón continuar en la sección de éxito */
+        const successEl = document.querySelector('#challenge-04 .challenge-success');
+        if (successEl) {
+          successEl.hidden = false;
+          successEl.innerHTML = '<a href="ch5.html" class="btn-continuar">Continuar — Cap. 5 →</a>';
+        }
+      }
+    });
+
+    /* Si ya estaba resuelto y decidido, mostrar todo */
+    if (state.branch_ch4) {
+      document.getElementById('decision-ch4').hidden = false;
+      const successEl = document.querySelector('#challenge-04 .challenge-success');
+      if (successEl) {
+        successEl.hidden = false;
+        successEl.innerHTML = '<a href="ch5.html" class="btn-continuar">Continuar — Cap. 5 →</a>';
+      }
+    }
+  </script>
+
+</body>
+</html>

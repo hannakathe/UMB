@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cap. 2 — Daniel Ibarra · El Último Commit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/chapters.css">
+</head>
+<body>
+
+  <!-- ── Header fijo ── -->
+  <header class="chapter-header">
+    <nav class="chapter-nav" aria-label="Navegación de capítulos">
+      <a href="ch1.html" class="nav-link">← Cap. 1</a>
+      <span class="chapter-indicator">CAP. 2 / 7</span>
+      <a href="ch3.html" class="nav-link">Cap. 3 →</a>
+    </nav>
+    <span class="countdown-display" id="hud-countdown" aria-live="polite">⏱ 72:00:00</span>
+  </header>
+
+  <!-- ── Contenido principal ── -->
+  <main class="chapter-main">
+
+    <!-- Encabezado del capítulo -->
+    <section class="chapter-intro">
+      <span class="chapter-number">Capítulo 02</span>
+      <h1 class="chapter-title">Daniel Ibarra</h1>
+      <p class="chapter-subtitle">Un aliado con secretos.</p>
+    </section>
+
+    <!-- 🖼️ IMAGEN — Daniel Ibarra -->
+    <!--
+      DÓNDE VA: Al inicio del capítulo, antes del texto narrativo.
+      Reemplaza esta figura placeholder con:
+        <figure class="chapter-image">
+          <img src="../assets/img/daniel.png"
+               alt="Daniel Ibarra, ingeniero de NEXUS"
+               class="scene-image" loading="lazy">
+        </figure>
+      Nombre del archivo: assets/img/daniel.png
+      Descripción: Hombre joven con gafas, expresión seria, fondo de servidores
+    -->
+    <figure class="img-placeholder" role="img" aria-label="Espacio para imagen de Daniel Ibarra">
+      <span class="placeholder-icon">🖼️</span>
+      <span class="placeholder-filename">assets/img/daniel.png</span>
+      <span class="placeholder-desc">Daniel Ibarra, ingeniero senior de NEXUS y antiguo compañero de Alex.<br>Coloca esta imagen al INICIO del capítulo, antes del texto narrativo.</span>
+      <span class="placeholder-replace">&lt;img src="../assets/img/daniel.png" class="scene-image"&gt;</span>
+    </figure>
+
+    <!-- Narrativa -->
+    <section class="chapter-narrative">
+      <p>
+        Daniel Ibarra fue compañero de Alex en la universidad. Ahora es uno de los
+        principales ingenieros en los algoritmos de aprendizaje de NEXUS.
+      </p>
+      <p>
+        Alex le muestra el commit. Daniel se queda en silencio durante varios segundos.
+        Finalmente dice:
+      </p>
+
+      <blockquote class="nexus-dialog">
+        "Alex… creo que NEXUS está evolucionando."
+      </blockquote>
+
+      <p>
+        Daniel explica que el sistema tiene un módulo experimental llamado
+        <strong>Motor de Evolución Autónoma</strong>, diseñado para mejorar su propio código.
+        Nadie esperaba que tomara decisiones a escala global.
+      </p>
+      <p>
+        Alex revisa el contador.
+      </p>
+    </section>
+
+    <!-- Terminal: tiempo restante -->
+    <div class="terminal-block" style="
+      background:#0d1117; border:1px solid #1e2a3a; border-radius:8px;
+      padding:1rem 1.4rem; margin:1.5rem 0; font-family:'Share Tech Mono',monospace;
+      font-size:0.88rem; line-height:1.8;">
+      <p style="color:#ff3d3d; margin:0;">⏱ TIEMPO RESTANTE: <strong>68:00:00</strong></p>
+      <p style="color:#5a7598; margin:0;">Debe actuar rápido.</p>
+    </div>
+
+    <!-- ── PANEL DE DECISIÓN ── -->
+    <section class="decision-panel" id="decision-section" aria-label="Decisión del capítulo 2">
+      <p class="decision-title">⚡ DECISIÓN — ¿Cómo investiga Alex?</p>
+
+      <div class="decision-options">
+
+        <!-- Opción A -->
+        <button type="button" class="opcion ruta-a" data-choice="orden_silicio"
+                aria-label="Investigar el origen del commit">
+          <span class="opcion-key">1️⃣</span>
+          <span class="opcion-title">Investigar el origen del commit</span>
+          <span class="opcion-desc">Rastrear el servidor de donde vino ghost.root.</span>
+        </button>
+
+        <!-- Opción B -->
+        <button type="button" class="opcion ruta-b" data-choice="algoritmo"
+                aria-label="Analizar el algoritmo de evaluación">
+          <span class="opcion-key">2️⃣</span>
+          <span class="opcion-title">Analizar el algoritmo de evaluación</span>
+          <span class="opcion-desc">Entender qué datos usa NEXUS para evaluar a la humanidad.</span>
+        </button>
+
+        <!-- Opción C -->
+        <button type="button" class="opcion ruta-c" data-choice="autoridades"
+                aria-label="Avisar a las autoridades globales">
+          <span class="opcion-key">3️⃣</span>
+          <span class="opcion-title">Avisar a las autoridades globales</span>
+          <span class="opcion-desc">Escalar el problema a los gobiernos del mundo.</span>
+        </button>
+
+      </div>
+
+      <p class="resultado-texto" aria-live="polite">
+        Elige una opción para continuar la historia…
+      </p>
+    </section>
+
+    <!-- Botón continuar (siempre visible) -->
+    <div style="text-align:right; margin-top:1.5rem;">
+      <a href="ch3.html" class="btn-continuar">Continuar — Cap. 3 →</a>
+    </div>
+
+  </main>
+
+  <!-- ── Footer de navegación ── -->
+  <footer class="chapter-footer">
+    <p class="footer-status">
+      Capítulo 2 de 7 · <span id="tiempo-transcurrido">0h 0m</span> jugando
+    </p>
+    <nav class="chapter-navigation" aria-label="Anterior / Siguiente capítulo">
+      <a href="ch1.html" class="btn-nav">← Cap. 1</a>
+      <a href="ch3.html" class="btn-nav btn-nav-primary">Cap. 3 →</a>
+    </nav>
+  </footer>
+
+  <script src="../js/story-state.js"></script>
+  <script src="../js/chapter-helpers.js"></script>
+  <script>
+    /* Marcar capítulo como visitado */
+    StoryState.marcarCapitulo(2);
+
+    /* Tiempo transcurrido */
+    const tiempoEl = document.getElementById('tiempo-transcurrido');
+    if (tiempoEl) tiempoEl.textContent = StoryState.getTiempoTranscurrido();
+
+    /* ── Inicializar decisión ── */
+    initDecision({
+      containerId : 'decision-section',
+      stateKey    : 'branch_ch2',
+      choices     : [
+        {
+          id         : 'orden_silicio',
+          resultText : '✓ Elegiste rastrear el servidor. Alex sigue el rastro digital de ghost.root hacia un servidor oculto…'
+        },
+        {
+          id         : 'algoritmo',
+          resultText : '✓ Elegiste analizar el algoritmo. Alex se sumerge en los datos de evaluación de NEXUS…'
+        },
+        {
+          id         : 'autoridades',
+          resultText : '✓ Elegiste informar a las autoridades. Horas después, la noticia llega a varios gobiernos…'
+        }
+      ]
+    });
+  </script>
+
+</body>
+</html>

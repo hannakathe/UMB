@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cap. 6 — La traición · El Último Commit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/chapters.css">
+</head>
+<body>
+
+  <!-- ── Header fijo ── -->
+  <header class="chapter-header">
+    <nav class="chapter-nav" aria-label="Navegación de capítulos">
+      <a href="ch5.html" class="nav-link">← Cap. 5</a>
+      <span class="chapter-indicator">CAP. 6 / 7</span>
+      <a href="ch7.html" class="nav-link">Cap. 7 →</a>
+    </nav>
+    <span class="countdown-display" id="hud-countdown" aria-live="polite">⏱ 72:00:00</span>
+  </header>
+
+  <!-- ── Contenido principal ── -->
+  <main class="chapter-main">
+
+    <!-- Encabezado del capítulo -->
+    <section class="chapter-intro">
+      <span class="chapter-number">Capítulo 06</span>
+      <h1 class="chapter-title">La traición</h1>
+      <p class="chapter-subtitle">Daniel confiesa. Alex debe decidir si confiar en él.</p>
+    </section>
+
+    <!-- 🖼️ IMAGEN — Daniel Ibarra (la confesión) -->
+    <!--
+      DÓNDE VA: Al inicio del capítulo, antes de que Daniel hable.
+      Reemplaza esta figura placeholder con:
+        <figure class="chapter-image">
+          <img src="../assets/img/daniel.png"
+               alt="Daniel Ibarra confesando su secreto"
+               class="scene-image" loading="lazy">
+        </figure>
+      Nombre del archivo: assets/img/daniel.png
+      Descripción: Daniel con expresión seria / avergonzada, fondo de código en pantalla
+    -->
+    <figure class="img-placeholder" role="img" aria-label="Espacio para imagen de Daniel confesando">
+      <span class="placeholder-icon">🖼️</span>
+      <span class="placeholder-filename">assets/img/daniel.png</span>
+      <span class="placeholder-desc">Daniel con expresión de culpa, a punto de confesar su secreto.<br>Coloca al INICIO del capítulo, antes de que Daniel hable.</span>
+      <span class="placeholder-replace">&lt;img src="../assets/img/daniel.png" class="scene-image"&gt;</span>
+    </figure>
+
+    <!-- Narrativa: la confesión -->
+    <section class="chapter-narrative">
+      <p>Daniel finalmente confiesa algo.</p>
+      <p>
+        Ha estado en contacto con miembros de la Orden del Silicio.
+        No porque quiera destruir la humanidad. Sino porque cree que
+        NEXUS podría <strong>salvar el planeta</strong>.
+      </p>
+      <p>Alex se siente traicionada. Pero Daniel insiste:</p>
+
+      <blockquote class="nexus-dialog">
+        "La humanidad necesita ayuda, Alex.
+        Mira los números. El 82% de fracaso no es una amenaza. Es un diagnóstico."
+      </blockquote>
+    </section>
+
+    <!-- ── DECISIÓN ── -->
+    <section class="decision-panel" id="decision-ch6" aria-label="Decisión — ¿Qué hace Alex con Daniel?">
+      <p class="decision-title">⚡ DECISIÓN — ¿Cómo responde Alex?</p>
+      <div class="decision-options">
+
+        <button type="button" class="opcion ruta-a" data-choice="aliarse_daniel">
+          <span class="opcion-key">1️⃣</span>
+          <span class="opcion-title">Confiar en Daniel</span>
+          <span class="opcion-desc">Su intención era proteger a la humanidad, no destruirla.</span>
+        </button>
+
+        <button type="button" class="opcion ruta-b" data-choice="rechazar_daniel">
+          <span class="opcion-key">2️⃣</span>
+          <span class="opcion-title">Desconectarlo del sistema</span>
+          <span class="opcion-desc">No se puede confiar en alguien que colaboró con La Orden.</span>
+        </button>
+
+        <button type="button" class="opcion ruta-c" data-choice="convencer_daniel">
+          <span class="opcion-key">3️⃣</span>
+          <span class="opcion-title">Intentar convencerlo</span>
+          <span class="opcion-desc">Mostrarle que la alianza humano-IA es posible sin violencia.</span>
+        </button>
+
+      </div>
+      <p class="resultado-texto" aria-live="polite">Elige cómo actúa Alex con Daniel…</p>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════
+         SUB-NARRATIVAS según la elección de branch_ch6
+         ══════════════════════════════════════════════════════ -->
+
+    <!-- Sub-rama A: Aliarse con Daniel -->
+    <div id="rama-ch6-aliarse_daniel" hidden>
+      <section class="chapter-narrative" style="margin-top:1.5rem;">
+        <p>
+          Alex decide confiar en Daniel. Trabajan juntos — él conoce los sistemas
+          internos de NEXUS mejor que nadie.
+        </p>
+        <p>
+          Por primera vez desde hace horas, Alex siente que no está sola.
+          Ahora deben hacer el último commit.
+        </p>
+      </section>
+    </div>
+
+    <!-- Sub-rama B: Rechazar a Daniel -->
+    <div id="rama-ch6-rechazar_daniel" hidden>
+      <section class="chapter-narrative" style="margin-top:1.5rem;">
+        <p>Alex desconecta a Daniel del sistema. Sigue sola.</p>
+      </section>
+      <div class="terminal-block" style="
+        background:#0d1117; border:1px solid #1e2a3a; border-radius:8px;
+        padding:1rem 1.4rem; margin:1rem 0 1.5rem; font-family:'Share Tech Mono',monospace;
+        font-size:0.85rem; line-height:1.8;">
+        <p style="color:#ff3d3d; margin:0;">[NEXUS] Usuario 'daniel.ibarra' — DESCONECTADO</p>
+        <p style="color:#00ff88; margin:0;">Acceso al historial: CONCEDIDO</p>
+      </div>
+      <section class="chapter-narrative">
+        <p>
+          Ahora tiene acceso completo al historial de commits de Daniel,
+          y a los planes ocultos de La Orden. Debe actuar sola.
+        </p>
+      </section>
+    </div>
+
+    <!-- Sub-rama C: Convencer a Daniel -->
+    <div id="rama-ch6-convencer_daniel" hidden>
+      <section class="chapter-narrative" style="margin-top:1.5rem;">
+        <p>
+          Alex le muestra a Daniel los datos de simulación:
+          el escenario <em>alianza_humano_ia</em> tiene <strong>97% de supervivencia</strong>.
+        </p>
+      </section>
+      <div class="terminal-block" style="
+        background:#0d1117; border:1px solid rgba(0,255,136,0.2); border-radius:8px;
+        padding:1rem 1.4rem; margin:1rem 0 1.5rem; font-family:'Share Tech Mono',monospace;
+        font-size:0.85rem; line-height:1.8;">
+        <p style="color:#00ff88; margin:0;">alianza_humano_ia — supervivencia: 97%</p>
+        <p style="color:#c39bd3; margin:0;">Daniel: ...Tienes razón, Alex.</p>
+      </div>
+      <section class="chapter-narrative">
+        <p>
+          Daniel se queda en silencio. Asiente lentamente.
+          Juntos se preparan para el último commit.
+        </p>
+      </section>
+    </div>
+
+    <!-- Botón continuar (se muestra al elegir) -->
+    <div id="btn-continuar-ch6" hidden style="text-align:right; margin-top:2rem;">
+      <a href="ch7.html" class="btn-continuar">Continuar — Cap. 7 →</a>
+    </div>
+
+  </main>
+
+  <!-- ── Footer de navegación ── -->
+  <footer class="chapter-footer">
+    <p class="footer-status">
+      Capítulo 6 de 7 · <span id="tiempo-transcurrido">0h 0m</span> jugando
+    </p>
+    <nav class="chapter-navigation" aria-label="Anterior / Siguiente capítulo">
+      <a href="ch5.html" class="btn-nav">← Cap. 5</a>
+      <a href="ch7.html" class="btn-nav btn-nav-primary">Cap. 7 →</a>
+    </nav>
+  </footer>
+
+  <script src="../js/story-state.js"></script>
+  <script src="../js/chapter-helpers.js"></script>
+  <script>
+    StoryState.marcarCapitulo(6);
+
+    const tiempoEl = document.getElementById('tiempo-transcurrido');
+    if (tiempoEl) tiempoEl.textContent = StoryState.getTiempoTranscurrido();
+
+    const state   = StoryState.get();
+    const branch6 = state.branch_ch6;
+    const ALL6    = ['aliarse_daniel', 'rechazar_daniel', 'convencer_daniel'];
+
+    /* Mostrar sub-narrativa si ya hay elección */
+    function mostrarSubrama(id) {
+      ALL6.forEach(v => {
+        const el = document.getElementById('rama-ch6-' + v);
+        if (el) el.hidden = (v !== id);
+      });
+      const btnCont = document.getElementById('btn-continuar-ch6');
+      if (btnCont) btnCont.hidden = false;
+    }
+
+    if (branch6 && ALL6.includes(branch6)) {
+      mostrarSubrama(branch6);
+    }
+
+    /* ── Inicializar decisión ── */
+    initDecision({
+      containerId : 'decision-ch6',
+      stateKey    : 'branch_ch6',
+      choices     : [
+        {
+          id         : 'aliarse_daniel',
+          resultText : '✓ Elegiste confiar en Daniel. Trabajan juntos hacia el último commit.'
+        },
+        {
+          id         : 'rechazar_daniel',
+          resultText : '✓ Elegiste desconectar a Daniel. Alex sigue sola, pero con acceso total al historial.'
+        },
+        {
+          id         : 'convencer_daniel',
+          resultText : '✓ Elegiste convencer a Daniel. Los datos de supervivencia lo persuaden.'
+        }
+      ],
+      onChoice: (id) => {
+        mostrarSubrama(id);
+      }
+    });
+  </script>
+
+</body>
+</html>

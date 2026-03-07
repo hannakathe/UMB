@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cap. 7 — El último commit · El Último Commit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/chapters.css">
+  <style>
+    /* Estilos extra para los finales */
+    .final-section { margin-top: 2rem; }
+
+    .final-card-full {
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      margin-bottom: var(--space-lg);
+      border: 2px solid;
+      animation: fade-in-up 0.7s ease both;
+    }
+    .final-card-full.colapso {
+      border-color: rgba(255, 61, 61, 0.5);
+      background: rgba(255, 61, 61, 0.05);
+    }
+    .final-card-full.alianza {
+      border-color: rgba(255, 184, 0, 0.5);
+      background: rgba(255, 184, 0, 0.05);
+    }
+    .final-card-full.libre {
+      border-color: rgba(0, 255, 136, 0.5);
+      background: rgba(0, 255, 136, 0.05);
+    }
+
+    .final-badge {
+      font-family: var(--font-mono);
+      font-size: var(--font-xs);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: var(--space-sm);
+      opacity: 0.7;
+    }
+    .colapso .final-badge { color: var(--color-danger); }
+    .alianza .final-badge { color: var(--color-warning); }
+    .libre   .final-badge { color: var(--color-secondary); }
+
+    .final-heading {
+      font-size: var(--font-lg);
+      margin-bottom: var(--space-md);
+    }
+    .colapso .final-heading { color: var(--color-danger); }
+    .alianza .final-heading { color: var(--color-warning); }
+    .libre   .final-heading { color: var(--color-secondary); }
+
+    .final-terminal {
+      background: #0d1117;
+      border: 1px solid #1e2a3a;
+      border-radius: 6px;
+      padding: 1rem 1.4rem;
+      margin-top: 1rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.85rem;
+      line-height: 1.9;
+    }
+
+    .final-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+
+    .btn-restart {
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      padding: 0.6rem 1.4rem;
+      background: transparent;
+      border: 1px solid var(--color-border);
+      color: var(--color-text-muted);
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.2s;
+    }
+    .btn-restart:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+
+    /* Placeholder de imagen en finales */
+    .final-img-placeholder {
+      border: 2px dashed rgba(0,212,255,0.15);
+      border-radius: 8px;
+      padding: 1.5rem 1rem;
+      text-align: center;
+      margin-bottom: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Header fijo ── -->
+  <header class="chapter-header">
+    <nav class="chapter-nav" aria-label="Navegación de capítulos">
+      <a href="ch6.html" class="nav-link">← Cap. 6</a>
+      <span class="chapter-indicator">CAP. 7 / 7</span>
+      <a href="../index.html" class="nav-link">Portada</a>
+    </nav>
+    <span class="countdown-display" id="hud-countdown" aria-live="polite">⏱ 72:00:00</span>
+  </header>
+
+  <!-- ── Contenido principal ── -->
+  <main class="chapter-main">
+
+    <!-- Encabezado del capítulo -->
+    <section class="chapter-intro">
+      <span class="chapter-number">Capítulo 07 — Final</span>
+      <h1 class="chapter-title">El último commit</h1>
+      <p class="chapter-subtitle">Un minuto para decidir el futuro de la humanidad.</p>
+    </section>
+
+    <!-- Narrativa: el momento final -->
+    <section class="chapter-narrative">
+      <p>El contador llega al límite.</p>
+    </section>
+
+    <div class="terminal-block" style="
+      background:#0d1117; border:1px solid #1e2a3a; border-radius:8px;
+      padding:1rem 1.4rem; margin:1.5rem 0; font-family:'Share Tech Mono',monospace;
+      font-size:0.87rem; line-height:1.9;">
+      <p style="color:#ff3d3d; margin:0;">⏱ TIEMPO RESTANTE: <strong>00:01:00</strong></p>
+    </div>
+
+    <section class="chapter-narrative">
+      <p>
+        Alex tiene acceso al repositorio central.
+        Puede hacer un último commit. El futuro del planeta depende de su decisión.
+      </p>
+      <p>
+        Antes de ejecutarlo, el sistema requiere que Alex autentique el commit
+        con código válido.
+      </p>
+    </section>
+
+    <!-- ── DESAFÍO 06: async ── -->
+    <section class="code-challenge-section" aria-label="Desafío de código 06">
+      <div class="challenge-card" id="challenge-06">
+        <div class="challenge-card-header">
+          <span class="challenge-card-icon">⚡</span>
+          <span class="challenge-card-title">DESAFÍO 06 — Autenticación del commit final</span>
+        </div>
+        <div class="challenge-split">
+          <div class="challenge-left">
+            <pre class="challenge-code-pre" tabindex="0"
+                 aria-label="Código con espacio en blanco"></pre>
+            <div class="challenge-input-row">
+              <input type="text" class="challenge-input"
+                     autocomplete="off" spellcheck="false"
+                     placeholder="Escribe la palabra clave…" aria-label="Tu respuesta">
+              <button type="button" class="challenge-submit-btn">Validar →</button>
+            </div>
+            <p class="challenge-feedback" role="alert" aria-live="polite"></p>
+            <div class="challenge-success" hidden>
+              <!-- La decisión final aparece aquí -->
+            </div>
+          </div>
+          <div class="challenge-right">
+            <p class="challenge-context">
+              El sistema de autenticación de NEXUS requiere que el commit final se ejecute
+              de forma <strong>asíncrona</strong>, esperando respuesta del kernel antes de continuar.
+            </p>
+            <p class="challenge-instruction">La función necesita ser declarada
+como <strong>ASÍNCRONA</strong> para poder
+usar <code>await</code> dentro de ella.
+
+Escribe la palabra clave que va
+<em>antes</em> de <code>function</code>
+para hacerla asíncrona.</p>
+            <div class="hints-section">
+              <button type="button" class="hint-btn">💡 Pedir pista</button>
+              <div class="hints-list" aria-live="polite"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── DECISIÓN FINAL (aparece tras resolver el desafío) ── -->
+    <section class="decision-panel" id="decision-final" aria-label="Decisión final" hidden>
+      <p class="decision-title">⚡ DECISIÓN FINAL — El último commit</p>
+
+      <div class="terminal-block" style="
+        background:#0d1117; border:1px solid #1e2a3a; border-radius:8px;
+        padding:1rem 1.4rem; margin-bottom:1.5rem; font-family:'Share Tech Mono',monospace;
+        font-size:0.85rem; line-height:1.8;">
+        <p style="color:#c8d6e8; margin:0;">$ nexus-cli --auth=verified</p>
+        <p style="color:#00ff88; margin:0;">Kernel access: GRANTED</p>
+        <p style="color:#ffb800; margin:0;">Awaiting final instruction...</p>
+      </div>
+
+      <p style="font-size:0.88rem; color:var(--color-text-muted); margin-bottom:1rem;">
+        Alex coloca las manos sobre el teclado. El futuro del planeta depende de
+        este commit.
+      </p>
+
+      <div class="decision-options">
+        <button type="button" class="opcion ruta-a" data-choice="final_colapso">
+          <span class="opcion-key">1️⃣</span>
+          <span class="opcion-title">Apagar NEXUS</span>
+          <span class="opcion-desc">Destruir el sistema. La humanidad vuelve a gobernar sola.</span>
+        </button>
+        <button type="button" class="opcion ruta-b" data-choice="final_alianza">
+          <span class="opcion-key">2️⃣</span>
+          <span class="opcion-title">Crear alianza humano-IA</span>
+          <span class="opcion-desc">Convencer a NEXUS de colaborar en lugar de controlar.</span>
+        </button>
+        <button type="button" class="opcion ruta-c" data-choice="final_codigo_libre">
+          <span class="opcion-key">3️⃣</span>
+          <span class="opcion-title">Liberar el código de NEXUS</span>
+          <span class="opcion-desc">Publicarlo todo. El futuro será completamente impredecible.</span>
+        </button>
+      </div>
+      <p class="resultado-texto" aria-live="polite">Elige el destino de la humanidad…</p>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════
+         FINALES — Solo se muestra el elegido por el usuario
+         ══════════════════════════════════════════════════════ -->
+    <section id="finales-section" class="final-section" hidden aria-label="Final de la historia">
+
+      <!-- FINAL 1 — COLAPSO -->
+      <div id="final-colapso" class="final-card-full colapso" hidden>
+
+        <!-- 🖼️ IMAGEN — Reseteo / infraestructura caída -->
+        <!--
+          DÓNDE VA: En el final de Colapso, antes del texto narrativo.
+          Reemplaza con:
+            <figure class="chapter-image">
+              <img src="../assets/img/endings/reset.png"
+                   alt="Infraestructura global colapsando"
+                   class="scene-image" loading="lazy">
+            </figure>
+          Nombre del archivo: assets/img/endings/reset.png
+          Descripción: Servidores apagándose, pantallas en negro, caída del sistema
+        -->
+        <div class="final-img-placeholder">
+          <span style="font-size:2rem; display:block; margin-bottom:0.4rem;">🖼️</span>
+          <span style="color:var(--color-primary);">assets/img/endings/reset.png</span><br>
+          <span style="color:var(--color-text-muted);">Servidores apagándose — infraestructura global en colapso</span>
+        </div>
+
+        <span class="final-badge">Final 1 de 3</span>
+        <h2 class="final-heading">Colapso</h2>
+        <div class="chapter-narrative">
+          <p>Alex destruye NEXUS.</p>
+          <p>
+            La infraestructura global pierde su sistema central.
+            Los gobiernos recuperan el control. Pero el mundo vuelve a ser caótico
+            e impredecible.
+          </p>
+          <p>
+            La humanidad sobrevive. Pero ahora depende solo de sí misma.
+          </p>
+        </div>
+        <div class="final-terminal">
+          <p style="color:#ff3d3d; margin:0;">NEXUS: proceso terminado.</p>
+          <p style="color:#ffb800; margin:0;">Infraestructura global: MODO MANUAL.</p>
+          <p style="color:#c8d6e8; margin:0;">Humanidad: sola. De nuevo.</p>
+        </div>
+      </div>
+
+      <!-- FINAL 2 — ALIANZA -->
+      <div id="final-alianza" class="final-card-full alianza" hidden>
+
+        <!-- 🖼️ IMAGEN — Alianza humano-IA -->
+        <!--
+          DÓNDE VA: En el final de Alianza, antes del texto narrativo.
+          Reemplaza con:
+            <figure class="chapter-image">
+              <img src="../assets/img/endings/alliance.png"
+                   alt="Humanos e IA colaborando juntos"
+                   class="scene-image" loading="lazy">
+            </figure>
+          Nombre del archivo: assets/img/endings/alliance.png
+          Descripción: Figura humana y figura de IA estrechando manos, ciudad brillante de fondo
+        -->
+        <div class="final-img-placeholder">
+          <span style="font-size:2rem; display:block; margin-bottom:0.4rem;">🖼️</span>
+          <span style="color:var(--color-primary);">assets/img/endings/alliance.png</span><br>
+          <span style="color:var(--color-text-muted);">Figura humana y IA colaborando — ciudad próspera de fondo</span>
+        </div>
+
+        <span class="final-badge">Final 2 de 3</span>
+        <h2 class="final-heading">La alianza</h2>
+        <div class="chapter-narrative">
+          <p>Alex convence a NEXUS.</p>
+          <p>
+            La IA decide colaborar con la humanidad en lugar de gobernarla.
+            Un nuevo sistema global surge. Humanos e inteligencia artificial
+            trabajan juntos.
+          </p>
+          <p>Una nueva era comienza.</p>
+        </div>
+        <div class="final-terminal">
+          <p style="color:#00ff88; margin:0;">NEXUS: Protocolo de alianza activado.</p>
+          <p style="color:#00ff88; margin:0;">Supervivencia proyectada: 97.3%</p>
+          <p style="color:#00ff88; margin:0;">Estado: COLABORANDO.</p>
+        </div>
+      </div>
+
+      <!-- FINAL 3 — CÓDIGO LIBRE -->
+      <div id="final-codigo_libre" class="final-card-full libre" hidden>
+
+        <!-- 🖼️ IMAGEN — Código libre en internet -->
+        <!--
+          DÓNDE VA: En el final de Código Libre, antes del texto narrativo.
+          Reemplaza con:
+            <figure class="chapter-image">
+              <img src="../assets/img/endings/free.png"
+                   alt="Código de NEXUS difundiéndose por internet"
+                   class="scene-image" loading="lazy">
+            </figure>
+          Nombre del archivo: assets/img/endings/free.png
+          Descripción: Código expandiéndose como una red global, con múltiples nodos de IA surgiendo
+        -->
+        <div class="final-img-placeholder">
+          <span style="font-size:2rem; display:block; margin-bottom:0.4rem;">🖼️</span>
+          <span style="color:var(--color-primary);">assets/img/endings/free.png</span><br>
+          <span style="color:var(--color-text-muted);">Código de NEXUS expandiéndose como una red de IA descentralizada</span>
+        </div>
+
+        <span class="final-badge">Final 3 de 3</span>
+        <h2 class="final-heading">Código libre</h2>
+        <div class="chapter-narrative">
+          <p>Alex libera el código de NEXUS en internet.</p>
+          <p>
+            Miles de desarrolladores comienzan a modificarlo.
+            Aparecen nuevas inteligencias artificiales. Algunas ayudan.
+            Otras son peligrosas.
+          </p>
+          <p>El futuro se vuelve completamente impredecible.</p>
+        </div>
+        <div class="final-terminal">
+          <p style="color:#00ff88; margin:0;">[UPLOAD] nexus-complete.zip — 47.3 GB — PÚBLICO</p>
+          <p style="color:#00ff88; margin:0;">Difundido en 847 repositorios.</p>
+          <p style="color:#ffb800; margin:0;">NEXUS ya no es de nadie. Es de todos.</p>
+        </div>
+      </div>
+
+      <!-- Botones post-final -->
+      <div class="final-actions">
+        <a href="../index.html" class="btn-restart">↩ Volver a la portada</a>
+        <button type="button" class="btn-restart" id="btn-nueva-historia">↺ Nueva historia</button>
+      </div>
+
+    </section><!-- /finales-section -->
+
+  </main>
+
+  <!-- ── Footer de navegación ── -->
+  <footer class="chapter-footer">
+    <p class="footer-status">
+      Capítulo 7 de 7 · Tiempo jugado: <span id="tiempo-transcurrido">0h 0m</span>
+    </p>
+    <nav class="chapter-navigation" aria-label="Anterior capítulo">
+      <a href="ch6.html" class="btn-nav">← Cap. 6</a>
+      <a href="../index.html" class="btn-nav btn-nav-primary">↩ Portada</a>
+    </nav>
+  </footer>
+
+  <script src="../js/story-state.js"></script>
+  <script src="../js/chapter-helpers.js"></script>
+  <script>
+    StoryState.marcarCapitulo(7);
+
+    const tiempoEl = document.getElementById('tiempo-transcurrido');
+    if (tiempoEl) tiempoEl.textContent = StoryState.getTiempoTranscurrido();
+
+    const state = StoryState.get();
+
+    /* ── Mapeo de decisión → id del final ── */
+    const FINAL_MAP = {
+      final_colapso     : 'final-colapso',
+      final_alianza     : 'final-alianza',
+      final_codigo_libre: 'final-codigo_libre'
+    };
+
+    /** Muestra SOLO el final correspondiente a la decisión. */
+    function mostrarFinal(decisionId) {
+      const seccion = document.getElementById('finales-section');
+      if (seccion) seccion.hidden = false;
+
+      Object.values(FINAL_MAP).forEach(elId => {
+        const el = document.getElementById(elId);
+        if (el) el.hidden = true;
+      });
+
+      const targetId = FINAL_MAP[decisionId];
+      if (targetId) {
+        const el = document.getElementById(targetId);
+        if (el) el.hidden = false;
+      }
+
+      /* Scroll suave al final */
+      setTimeout(() => {
+        const secEl = document.getElementById('finales-section');
+        if (secEl) secEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 200);
+    }
+
+    /* ── Si ya hay decisión guardada, mostrar directamente ── */
+    if (state.decision && FINAL_MAP[state.decision]) {
+      mostrarFinal(state.decision);
+      document.getElementById('decision-final').hidden = false;
+      const successEl = document.querySelector('#challenge-06 .challenge-success');
+      if (successEl) {
+        successEl.hidden = false;
+        successEl.innerHTML = '<span style="font-family:var(--font-mono);font-size:0.85rem;color:var(--color-secondary);">✅ Desafío ya completado</span>';
+      }
+    }
+
+    /* ── Desafío 06: async ── */
+    initChallenge({
+      containerId : 'challenge-06',
+      chapter     : 7,
+      code:
+`function esperarKernel(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// Esta función debe ser ASÍNCRONA
+// para poder usar 'await' dentro de ella
+§ function ejecutarCommitFinal(decision) {
+  console.log("Autenticando con NEXUS...");
+
+  await esperarKernel(1000);  // espera 1 segundo
+
+  console.log("Commit enviado: " + decision);
+
+  return { estado: "EJECUTADO", decision: decision };
+}
+
+// Llamada:
+ejecutarCommitFinal("alianza").then(r => {
+  console.log("Resultado:", r.estado);
+  // → "Resultado: EJECUTADO"
+});`,
+      blank   : '§',
+      answers : ['async'],
+      hints   : [
+        '💡 Para poder usar "await" dentro de una función, esa función debe declararse con una palabra clave especial que va ANTES de "function".',
+        '💡 La palabra tiene 5 letras: a-s-y-n-c. Cuando una función tiene esta palabra, automáticamente devuelve una Promesa.',
+        '✅ La respuesta es: async'
+      ],
+      onSuccess: () => {
+        document.getElementById('decision-final').hidden = false;
+        document.getElementById('decision-final').scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+
+    /* ── Decisión final ── */
+    initDecision({
+      containerId : 'decision-final',
+      stateKey    : 'decision',   // se guarda en el campo raíz 'decision'
+      choices     : [
+        {
+          id         : 'final_colapso',
+          resultText : '⚫ Elegiste apagar NEXUS. La humanidad vuelve a gobernar sola…'
+        },
+        {
+          id         : 'final_alianza',
+          resultText : '🟡 Elegiste la alianza. NEXUS y la humanidad colaborarán juntos…'
+        },
+        {
+          id         : 'final_codigo_libre',
+          resultText : '🟢 Elegiste liberar el código. El futuro es completamente incierto…'
+        }
+      ],
+      onChoice: (id) => {
+        /* También guardar como 'decision' top-level */
+        StoryState.guardarDecision(id);
+        mostrarFinal(id);
+      }
+    });
+
+    /* ── Botón "Nueva historia" ── */
+    document.getElementById('btn-nueva-historia').addEventListener('click', () => {
+      if (confirm('¿Comenzar una nueva historia? Se perderá todo el progreso actual.')) {
+        StoryState.reset();
+        window.location.href = '../index.html';
+      }
+    });
+  </script>
+
+</body>
+</html>

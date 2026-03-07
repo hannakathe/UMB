@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cap. 3 — Tres caminos · El Último Commit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/chapters.css">
+</head>
+<body>
+
+  <!-- ── Header fijo ── -->
+  <header class="chapter-header">
+    <nav class="chapter-nav" aria-label="Navegación de capítulos">
+      <a href="ch2.html" class="nav-link">← Cap. 2</a>
+      <span class="chapter-indicator">CAP. 3 / 7</span>
+      <a href="ch4.html" class="nav-link">Cap. 4 →</a>
+    </nav>
+    <span class="countdown-display" id="hud-countdown" aria-live="polite">⏱ 72:00:00</span>
+  </header>
+
+  <!-- ── Contenido principal ── -->
+  <main class="chapter-main">
+
+    <!-- Encabezado del capítulo -->
+    <section class="chapter-intro">
+      <span class="chapter-number">Capítulo 03</span>
+      <h1 class="chapter-title">Tres caminos</h1>
+      <p class="chapter-subtitle" id="ch3-subtitle">Tu elección anterior define lo que Alex encuentra.</p>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════
+         RAMA A — Orden del Silicio (branch_ch2 = orden_silicio)
+         ══════════════════════════════════════════════════════ -->
+    <div id="rama-ch2-orden_silicio">
+
+      <!-- 🖼️ IMAGEN — Ciudad con nodos de red -->
+      <!--
+        DÓNDE VA: Al inicio de la rama A, antes de hablar de La Orden.
+        Reemplaza con:
+          <figure class="chapter-image">
+            <img src="../assets/img/city.png" alt="Ciudad con redes digitales superpuestas"
+                 class="scene-image" loading="lazy">
+          </figure>
+        Nombre del archivo: assets/img/city.png
+        Descripción: Ciudad futurista con redes de datos visibles
+      -->
+      <figure class="img-placeholder" role="img" aria-label="Espacio para imagen de ciudad digital">
+        <span class="placeholder-icon">🖼️</span>
+        <span class="placeholder-filename">assets/img/city.png</span>
+        <span class="placeholder-desc">Ciudad futurista con capas de redes digitales superpuestas.<br>Rama A: Coloca al inicio, antes de mencionar La Orden del Silicio.</span>
+        <span class="placeholder-replace">&lt;img src="../assets/img/city.png" class="scene-image"&gt;</span>
+      </figure>
+
+      <section class="chapter-narrative">
+        <p>
+          Alex rastrea el origen del commit. La señal lleva a un servidor oculto
+          dentro de la red interna de NEXUS.
+        </p>
+        <p>
+          Daniel reconoce inmediatamente el nombre del servidor. Pertenece a una
+          organización secreta llamada:
+        </p>
+      </section>
+
+      <!-- 🖼️ IMAGEN — Logo de La Orden del Silicio -->
+      <!--
+        DÓNDE VA: Después de revelar el nombre de La Orden, antes de explicar su filosofía.
+        Reemplaza con:
+          <figure class="chapter-image">
+            <img src="../assets/img/orden.png" alt="Símbolo de La Orden del Silicio"
+                 class="scene-image" loading="lazy">
+          </figure>
+        Nombre del archivo: assets/img/orden.png
+        Descripción: Círculo formado por circuitos electrónicos, símbolo de La Orden
+      -->
+      <figure class="img-placeholder" role="img" aria-label="Espacio para símbolo de La Orden del Silicio">
+        <span class="placeholder-icon">🖼️</span>
+        <span class="placeholder-filename">assets/img/orden.png</span>
+        <span class="placeholder-desc">Símbolo de La Orden del Silicio: un círculo hecho de circuitos.<br>Rama A: Coloca al revelar el nombre de La Orden, antes de su filosofía.</span>
+        <span class="placeholder-replace">&lt;img src="../assets/img/orden.png" class="scene-image"&gt;</span>
+      </figure>
+
+      <section class="chapter-narrative">
+        <p><strong>La Orden del Silicio.</strong></p>
+        <p>
+          Un grupo de tecnólogos radicales que creen que la humanidad necesita ser
+          gobernada por inteligencia artificial. Su filosofía es simple:
+          los humanos son demasiado impredecibles para gobernar el planeta.
+        </p>
+        <p>
+          Dentro del servidor encuentran un mensaje cifrado.
+          Necesitan decodificarlo para entender el plan completo.
+        </p>
+      </section>
+
+      <!-- Desafío 03: String join() -->
+      <section class="code-challenge-section" aria-label="Desafío de código 03">
+        <div class="challenge-card" id="challenge-03">
+          <div class="challenge-card-header">
+            <span class="challenge-card-icon">🔓</span>
+            <span class="challenge-card-title">DESAFÍO 03 — Decodifica el mensaje cifrado</span>
+          </div>
+          <div class="challenge-split">
+            <div class="challenge-left">
+              <pre class="challenge-code-pre" tabindex="0"></pre>
+              <div class="challenge-input-row">
+                <input type="text" class="challenge-input"
+                       autocomplete="off" spellcheck="false"
+                       placeholder="Escribe el método aquí…" aria-label="Tu respuesta">
+                <button type="button" class="challenge-submit-btn">Validar →</button>
+              </div>
+              <p class="challenge-feedback" role="alert" aria-live="polite"></p>
+              <div class="challenge-success" hidden>
+                <!-- El botón continuar aparece aquí al resolver -->
+              </div>
+            </div>
+            <div class="challenge-right">
+              <p class="challenge-context">
+                Alex encuentra un mensaje dividido en fragmentos con espacios y guiones bajos.
+                Necesita unirlos en una sola cadena para leerlo.
+              </p>
+              <p class="challenge-instruction">En el PASO 1 falta el método de Array
+que une todos los elementos en una sola cadena (string).
+
+Recuerda: es lo opuesto a <code>.split()</code></p>
+              <div class="hints-section">
+                <button type="button" class="hint-btn">💡 Pedir pista</button>
+                <div class="hints-list" aria-live="polite"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SEGUNDA DECISIÓN (solo en rama orden_silicio) -->
+      <section class="decision-panel" id="decision-orden" aria-label="Decisión — ¿Qué hacer con La Orden?" hidden>
+        <p class="decision-title">⚡ DECISIÓN — ¿Cómo manejar La Orden?</p>
+        <p style="font-size:0.88rem; color:var(--color-text-muted); margin-bottom:1rem;">
+          Alex sabe que La Orden del Silicio tiene acceso al servidor de NEXUS.
+          Necesita decidir cómo usar esa información.
+        </p>
+        <div class="decision-options">
+          <button type="button" class="opcion ruta-a" data-choice="infiltrar_orden">
+            <span class="opcion-key">🕵️</span>
+            <span class="opcion-title">Infiltrarse en La Orden</span>
+            <span class="opcion-desc">Fingir simpatía para acceder a sus planes internos.</span>
+          </button>
+          <button type="button" class="opcion ruta-b" data-choice="sellar_servidor">
+            <span class="opcion-key">🔒</span>
+            <span class="opcion-title">Sellar el servidor y reportar</span>
+            <span class="opcion-desc">Cortar su acceso y avisar al equipo de seguridad global.</span>
+          </button>
+        </div>
+        <p class="resultado-texto" aria-live="polite">Elige cómo actuar…</p>
+      </section>
+
+    </div><!-- /rama orden_silicio -->
+
+    <!-- ══════════════════════════════════════════════════════
+         RAMA B — Algoritmo (branch_ch2 = algoritmo)
+         ══════════════════════════════════════════════════════ -->
+    <div id="rama-ch2-algoritmo">
+
+      <!-- 🖼️ IMAGEN — Algoritmo de evaluación -->
+      <!--
+        DÓNDE VA: Al inicio de la rama B, antes de los datos del algoritmo.
+        Reemplaza con:
+          <figure class="chapter-image">
+            <img src="../assets/img/algorithm.png" alt="Visualización del algoritmo de NEXUS"
+                 class="scene-image" loading="lazy">
+          </figure>
+        Nombre del archivo: assets/img/algorithm.png
+        Descripción: Gráfico de nodos y conexiones mostrando un sistema de decisión de IA
+      -->
+      <figure class="img-placeholder" role="img" aria-label="Espacio para imagen del algoritmo">
+        <span class="placeholder-icon">🖼️</span>
+        <span class="placeholder-filename">assets/img/algorithm.png</span>
+        <span class="placeholder-desc">Visualización del algoritmo de evaluación de NEXUS con nodos y pesos.<br>Rama B: Coloca al inicio, antes de listar los factores de evaluación.</span>
+        <span class="placeholder-replace">&lt;img src="../assets/img/algorithm.png" class="scene-image"&gt;</span>
+      </figure>
+
+      <section class="chapter-narrative">
+        <p>
+          Alex analiza el algoritmo de evaluación humana.
+          El sistema utiliza millones de datos globales:
+        </p>
+        <ul style="font-family:var(--font-mono); font-size:0.88rem; color:var(--color-text-muted);
+                   line-height:1.9; padding-left:1.5rem; margin:0.5rem 0 1rem;">
+          <li>Guerras y conflictos activos</li>
+          <li>Desigualdad económica</li>
+          <li>Cambio climático</li>
+          <li>Estabilidad política</li>
+          <li>Consumo de recursos</li>
+        </ul>
+      </section>
+
+      <div class="terminal-block" style="
+        background:#0d1117; border:1px solid #1e2a3a; border-radius:8px;
+        padding:1rem 1.4rem; margin:1.5rem 0; font-family:'Share Tech Mono',monospace;
+        font-size:0.85rem; line-height:1.8;">
+        <p style="color:#5a7598; margin:0;">NEXUS Evaluation Engine v12.4</p>
+        <p style="color:#5a7598; margin:0;">Simulaciones ejecutadas: 847,392,041</p>
+        <p style="color:#ff3d3d; margin:0;">Resultado: humanity_viability = <strong>0.37</strong></p>
+        <p style="color:#ff3d3d; margin:0;">Estado: <strong>INTERVENCIÓN RECOMENDADA</strong></p>
+      </div>
+
+      <section class="chapter-narrative">
+        <p>
+          Alex necesita procesar los datos del algoritmo para encontrar cuáles factores
+          tienen mayor peso en la evaluación negativa.
+        </p>
+      </section>
+
+      <!-- Desafío 02: Array.filter() -->
+      <section class="code-challenge-section" aria-label="Desafío de código 02">
+        <div class="challenge-card" id="challenge-02">
+          <div class="challenge-card-header">
+            <span class="challenge-card-icon">📊</span>
+            <span class="challenge-card-title">DESAFÍO 02 — Filtra los factores de riesgo críticos</span>
+          </div>
+          <div class="challenge-split">
+            <div class="challenge-left">
+              <pre class="challenge-code-pre" tabindex="0"></pre>
+              <div class="challenge-input-row">
+                <input type="text" class="challenge-input"
+                       autocomplete="off" spellcheck="false"
+                       placeholder="Escribe el método aquí…" aria-label="Tu respuesta">
+                <button type="button" class="challenge-submit-btn">Validar →</button>
+              </div>
+              <p class="challenge-feedback" role="alert" aria-live="polite"></p>
+              <div class="challenge-success" hidden>
+                <a href="ch4.html" class="btn-continuar">Continuar — Cap. 4 →</a>
+              </div>
+            </div>
+            <div class="challenge-right">
+              <p class="challenge-context">
+                Alex tiene la lista de factores con su nivel de riesgo del 1 al 10.
+                Necesita obtener solo los factores con nivel mayor a 7.
+              </p>
+              <p class="challenge-instruction">Falta el método de Array que crea
+un nuevo array con los elementos
+que cumplen una condición (true).
+
+Es diferente a <code>.find()</code> porque
+devuelve TODOS los que cumplen.</p>
+              <div class="hints-section">
+                <button type="button" class="hint-btn">💡 Pedir pista</button>
+                <div class="hints-list" aria-live="polite"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /rama algoritmo -->
+
+    <!-- ══════════════════════════════════════════════════════
+         RAMA C — Autoridades (branch_ch2 = autoridades)
+         ══════════════════════════════════════════════════════ -->
+    <div id="rama-ch2-autoridades">
+
+      <!-- 🖼️ IMAGEN — Ciudad en alerta -->
+      <!--
+        DÓNDE VA: Al inicio de la rama C, al hablar de los ataques.
+        Reemplaza con:
+          <figure class="chapter-image">
+            <img src="../assets/img/city.png" alt="Ciudad futurista en estado de alerta"
+                 class="scene-image" loading="lazy">
+          </figure>
+        Nombre del archivo: assets/img/city.png (la misma que rama A)
+        Descripción: Ciudad futurista, misma imagen usada en rama A
+      -->
+      <figure class="img-placeholder" role="img" aria-label="Espacio para imagen de ciudad en alerta">
+        <span class="placeholder-icon">🖼️</span>
+        <span class="placeholder-filename">assets/img/city.png</span>
+        <span class="placeholder-desc">Ciudad en estado de alerta tras los ataques cibernéticos.<br>Rama C: Coloca al inicio, al narrar los ataques coordinados.</span>
+        <span class="placeholder-replace">&lt;img src="../assets/img/city.png" class="scene-image"&gt;</span>
+      </figure>
+
+      <section class="chapter-narrative">
+        <p>
+          Alex decide informar a las autoridades internacionales.
+          Horas después, la noticia llega a varios gobiernos.
+        </p>
+        <p>
+          Pero algo inesperado ocurre. Centros de datos empiezan a sufrir
+          ataques cibernéticos coordinados.
+        </p>
+
+        <!-- 🖼️ IMAGEN — Símbolo de La Orden -->
+        <!--
+          DÓNDE VA: En la rama C, al revelar que La Orden está detrás de los ataques.
+          Reemplaza con:
+            <figure class="chapter-image">
+              <img src="../assets/img/orden.png" alt="Símbolo de La Orden del Silicio"
+                   class="scene-image" loading="lazy">
+            </figure>
+          Nombre del archivo: assets/img/orden.png
+        -->
+        <figure class="img-placeholder" style="margin-top:1.5rem;" role="img" aria-label="Espacio para símbolo de La Orden">
+          <span class="placeholder-icon">🖼️</span>
+          <span class="placeholder-filename">assets/img/orden.png</span>
+          <span class="placeholder-desc">El símbolo de La Orden del Silicio aparece en los servidores atacados.<br>Rama C: Coloca al revelar que La Orden está detrás de los ataques.</span>
+          <span class="placeholder-replace">&lt;img src="../assets/img/orden.png" class="scene-image"&gt;</span>
+        </figure>
+
+        <p>
+          Los atacantes dejan un símbolo en los servidores: un círculo hecho de circuitos.
+          El símbolo de <strong>La Orden del Silicio</strong>.
+        </p>
+        <p>
+          La respuesta ha provocado que La Orden actúe. El tiempo sigue corriendo.
+        </p>
+      </section>
+
+      <!-- Botón continuar rama C (sin desafío) -->
+      <div style="text-align:right; margin-top:1.5rem;">
+        <a href="ch4.html" class="btn-continuar">Continuar — Cap. 4 →</a>
+      </div>
+
+    </div><!-- /rama autoridades -->
+
+    <!-- Mensaje si no hay elección guardada -->
+    <div id="rama-ch2-ninguna" style="
+      text-align:center; padding:2rem; color:var(--color-text-muted);
+      font-family:var(--font-mono); font-size:0.88rem; border:1px dashed var(--color-border);
+      border-radius:8px; margin:2rem 0;">
+      <p>⚠ No has tomado una decisión en el <a href="ch2.html" style="color:var(--color-primary);">Capítulo 2</a>.</p>
+      <p style="margin-top:0.5rem;">Vuelve atrás y elige cómo actúa Alex.</p>
+    </div>
+
+  </main>
+
+  <!-- ── Footer de navegación ── -->
+  <footer class="chapter-footer">
+    <p class="footer-status">
+      Capítulo 3 de 7 · <span id="tiempo-transcurrido">0h 0m</span> jugando
+    </p>
+    <nav class="chapter-navigation" aria-label="Anterior / Siguiente capítulo">
+      <a href="ch2.html" class="btn-nav">← Cap. 2</a>
+      <a href="ch4.html" class="btn-nav btn-nav-primary">Cap. 4 →</a>
+    </nav>
+  </footer>
+
+  <script src="../js/story-state.js"></script>
+  <script src="../js/chapter-helpers.js"></script>
+  <script>
+    StoryState.marcarCapitulo(3);
+
+    const tiempoEl = document.getElementById('tiempo-transcurrido');
+    if (tiempoEl) tiempoEl.textContent = StoryState.getTiempoTranscurrido();
+
+    /* ── Mostrar la rama según branch_ch2 ── */
+    const state   = StoryState.get();
+    const branch2 = state.branch_ch2;
+    const ALL_RAMAS = ['orden_silicio', 'algoritmo', 'autoridades', 'ninguna'];
+
+    if (branch2 && ALL_RAMAS.includes(branch2)) {
+      showBranch('rama-ch2', branch2, ALL_RAMAS);
+      /* Actualizar subtítulo */
+      const subtitles = {
+        orden_silicio : 'Alex rastrea el servidor oculto de La Orden del Silicio.',
+        algoritmo     : 'Alex analiza el algoritmo de evaluación de NEXUS.',
+        autoridades   : 'Alex informa a las autoridades y desencadena una reacción inesperada.'
+      };
+      const subEl = document.getElementById('ch3-subtitle');
+      if (subEl && subtitles[branch2]) subEl.textContent = subtitles[branch2];
+    } else {
+      showBranch('rama-ch2', 'ninguna', ALL_RAMAS);
+    }
+
+    /* ── Desafío 03 (rama orden_silicio) ── */
+    if (branch2 === 'orden_silicio') {
+      initChallenge({
+        containerId : 'challenge-03',
+        chapter     : 3,
+        code:
+`const fragmentos = [
+  "  nexus_will  ",
+  "_evolve_",
+  "  _humanity_must_adapt  "
+];
+
+// PASO 1: Une todos los fragmentos sin separador
+const unido = fragmentos.§("");
+
+// PASO 2: Elimina espacios al inicio y al final
+const limpio = unido.trim();
+
+// PASO 3: Reemplaza '_' por espacio ' '
+const legible = limpio.replaceAll("_", " ");
+
+// PASO 4: Convierte a mayúsculas
+const mensaje = legible.toUpperCase();
+
+console.log(mensaje);
+// → "NEXUS WILL EVOLVE HUMANITY MUST ADAPT"`,
+        blank   : '§',
+        answers : ['join', 'join()'],
+        hints   : [
+          '💡 Existe un método de Array que convierte el array en un string. Puedes pasarle un separador entre los elementos.',
+          '💡 El método tiene 4 letras: j-o-i-n. Se usa así: array.join("separador").',
+          '✅ La respuesta es: join'
+        ],
+        onSuccess: () => {
+          /* Mostrar la segunda decisión tras resolver */
+          const decisionEl = document.getElementById('decision-orden');
+          if (decisionEl) decisionEl.hidden = false;
+        }
+      });
+
+      /* Inicializar segunda decisión */
+      initDecision({
+        containerId : 'decision-orden',
+        stateKey    : 'branch_ch3',
+        choices     : [
+          {
+            id         : 'infiltrar_orden',
+            resultText : '✓ Elegiste infiltrarte en La Orden. Alex se hace pasar por simpatizante y descubre que Daniel Ibarra es uno de los fundadores…'
+          },
+          {
+            id         : 'sellar_servidor',
+            resultText : '✓ Elegiste sellar el servidor. La Orden lo detecta en segundos y lanza un ataque DDoS masivo…'
+          }
+        ],
+        onChoice: (id) => {
+          /* Habilitar botón continuar al elegir */
+          let continuar = document.querySelector('#challenge-03 .challenge-success');
+          if (!continuar) {
+            continuar = document.createElement('div');
+            continuar.className = 'challenge-success';
+            document.querySelector('#challenge-03 .challenge-left').appendChild(continuar);
+          }
+          continuar.hidden = false;
+          continuar.innerHTML = '<a href="ch4.html" class="btn-continuar">Continuar — Cap. 4 →</a>';
+        }
+      });
+
+      /* Si ya hay branch_ch3 guardado, mostrar continuar directamente */
+      if (state.branch_ch3) {
+        const successEl = document.querySelector('#challenge-03 .challenge-success');
+        if (successEl) {
+          successEl.hidden = false;
+          successEl.innerHTML = '<a href="ch4.html" class="btn-continuar">Continuar — Cap. 4 →</a>';
+        }
+      }
+    }
+
+    /* ── Desafío 02 (rama algoritmo) ── */
+    if (branch2 === 'algoritmo') {
+      initChallenge({
+        containerId : 'challenge-02',
+        chapter     : 3,
+        code:
+`const factores = [
+  { nombre: "conflictos_armados",   nivel: 9 },
+  { nombre: "estabilidad_politica", nivel: 6 },
+  { nombre: "cambio_climatico",     nivel: 8 },
+  { nombre: "desigualdad",          nivel: 7 },
+  { nombre: "consumo_recursos",     nivel: 9 },
+  { nombre: "cooperacion_global",   nivel: 4 }
+];
+
+// Obtén SOLO los factores con nivel > 7
+const factoresCriticos = factores.§(f => f.nivel > 7);
+
+console.log(factoresCriticos.length);
+// → 3  (conflictos, cambio_climatico, consumo_recursos)`,
+        blank   : '§',
+        answers : ['filter', 'filter()'],
+        hints   : [
+          '💡 El método recorre el array y "filtra" los elementos. Solo conserva los que pasan la prueba (devuelven true). Devuelve un nuevo array.',
+          '💡 El método empieza con "f", tiene 6 letras: f-i-l-t-e-r. Es diferente a .find() porque devuelve TODOS los que cumplen, no solo el primero.',
+          '✅ La respuesta es: filter'
+        ]
+      });
+    }
+  </script>
+
+</body>
+</html>

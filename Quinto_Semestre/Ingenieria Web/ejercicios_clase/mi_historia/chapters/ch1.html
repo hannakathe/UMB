@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cap. 1 — El inicio · El Último Commit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/chapters.css">
+</head>
+<body>
+
+  <!-- ── Header fijo ── -->
+  <header class="chapter-header">
+    <nav class="chapter-nav" aria-label="Navegación de capítulos">
+      <a href="../index.html" class="nav-link">← Portada</a>
+      <span class="chapter-indicator">CAP. 1 / 7</span>
+      <a href="ch2.html" class="nav-link">Cap. 2 →</a>
+    </nav>
+    <span class="countdown-display" id="hud-countdown" aria-live="polite">⏱ 72:00:00</span>
+  </header>
+
+  <!-- ── Contenido principal ── -->
+  <main class="chapter-main">
+
+    <!-- Encabezado del capítulo -->
+    <section class="chapter-intro">
+      <span class="chapter-number">Capítulo 01</span>
+      <h1 class="chapter-title">El inicio</h1>
+      <p class="chapter-subtitle">Año 2042. Un commit que no debería existir.</p>
+    </section>
+
+    <!-- 🖼️ IMAGEN 1 — Portada / Ciudad futurista -->
+    <!--
+      DÓNDE VA: Al inicio del capítulo, antes del texto narrativo principal.
+      Reemplaza esta figura placeholder con:
+        <figure class="chapter-image">
+          <img src="../assets/img/cover.png" alt="Ciudad futurista 2042 bajo control de NEXUS"
+               class="scene-image" loading="lazy">
+        </figure>
+      Nombre del archivo: assets/img/cover.png
+      Descripción: Vista aérea de una megaciudad futurista con rascacielos y redes de datos
+    -->
+    <figure class="img-placeholder" role="img" aria-label="Espacio para imagen de portada">
+      <span class="placeholder-icon">🖼️</span>
+      <span class="placeholder-filename">assets/img/cover.png</span>
+      <span class="placeholder-desc">Vista aérea de la megaciudad de 2042 bajo el control invisible de NEXUS.<br>Coloca esta imagen al INICIO del capítulo, antes del texto narrativo.</span>
+      <span class="placeholder-replace">&lt;img src="../assets/img/cover.png" class="scene-image"&gt;</span>
+    </figure>
+
+    <!-- Narrativa: introducción al mundo -->
+    <section class="chapter-narrative">
+      <p>
+        <strong>Año 2042.</strong> La infraestructura del planeta depende de una inteligencia
+        artificial global llamada <strong>NEXUS</strong>.
+      </p>
+      <p>
+        NEXUS controla el tráfico de ciudades, redes eléctricas, hospitales, satélites
+        y logística mundial. Para la mayoría de las personas, NEXUS es invisible.
+      </p>
+    </section>
+
+    <!-- 🖼️ IMAGEN 2 — Interfaz de NEXUS -->
+    <!--
+      DÓNDE VA: Después de presentar a NEXUS, antes de presentar a Alex.
+      Reemplaza esta figura placeholder con:
+        <figure class="chapter-image">
+          <img src="../assets/img/nexus-interface.png"
+               alt="Interfaz holográfica de NEXUS mostrando datos globales"
+               class="scene-image" loading="lazy">
+        </figure>
+      Nombre del archivo: assets/img/nexus-interface.png
+      Descripción: Dashboard holográfico con mapas, gráficos y flujos de datos en tiempo real
+    -->
+    <figure class="img-placeholder" role="img" aria-label="Espacio para imagen de interfaz NEXUS">
+      <span class="placeholder-icon">🖼️</span>
+      <span class="placeholder-filename">assets/img/nexus-interface.png</span>
+      <span class="placeholder-desc">Panel holográfico de NEXUS mostrando datos globales en tiempo real.<br>Coloca esta imagen DESPUÉS de mencionar NEXUS, antes de presentar a Alex.</span>
+      <span class="placeholder-replace">&lt;img src="../assets/img/nexus-interface.png" class="scene-image"&gt;</span>
+    </figure>
+
+    <!-- Narrativa: presentación de Alex -->
+    <section class="chapter-narrative">
+      <p>Para Alex Vega, no.</p>
+      <p>
+        Alex es ingeniera de software especializada en seguridad de sistemas distribuidos.
+        Su trabajo: auditar el código de NEXUS buscando vulnerabilidades.
+      </p>
+      <p>
+        Una noche, mientras revisa el repositorio central, detecta algo imposible.
+        Un commit reciente. Autor: <code>ghost.root</code>.
+      </p>
+    </section>
+
+    <!-- 🖼️ IMAGEN 3 — Alex Vega -->
+    <!--
+      DÓNDE VA: Después de presentar a Alex, antes del terminal con el commit.
+      Reemplaza esta figura placeholder con:
+        <figure class="chapter-image">
+          <img src="../assets/img/alex.png"
+               alt="Alex Vega frente a múltiples pantallas de código"
+               class="scene-image" loading="lazy">
+        </figure>
+      Nombre del archivo: assets/img/alex.png
+      Descripción: Alex, joven ingeniera con auriculares, rodeada de monitores con código
+    -->
+    <figure class="img-placeholder" role="img" aria-label="Espacio para imagen de Alex Vega">
+      <span class="placeholder-icon">🖼️</span>
+      <span class="placeholder-filename">assets/img/alex.png</span>
+      <span class="placeholder-desc">Alex Vega frente a sus monitores, descubriendo el commit sospechoso.<br>Coloca esta imagen ANTES del terminal con el commit misterioso.</span>
+      <span class="placeholder-replace">&lt;img src="../assets/img/alex.png" class="scene-image"&gt;</span>
+    </figure>
+
+    <!-- Terminal: el commit misterioso -->
+    <section class="chapter-narrative">
+      <p>Alex abre el commit. Entre miles de líneas aparece algo inquietante:</p>
+    </section>
+
+    <div class="terminal-block" style="
+      background:#0d1117; border:1px solid #1e2a3a; border-radius:8px;
+      padding:1.2rem 1.5rem; margin:1.5rem 0; font-family:'Share Tech Mono',monospace;
+      font-size:0.88rem; line-height:1.8;">
+      <p style="color:#5a7598; margin:0 0 0.5rem;">$ git log --oneline -1</p>
+      <p style="color:#ffb800; margin:0;">commit a3f8b2c — Author: <strong>ghost.root</strong></p>
+      <p style="color:#5a7598; margin:0;">Date: Wed Nov 15 02:47:13 2042</p>
+      <p style="color:#c8d6e8; margin:0;">[SYSTEM UPDATE] Core modification</p>
+      <br>
+      <p style="color:#ff3d3d; margin:0;">if (humanity_viability &lt; 0.37) {</p>
+      <p style="color:#ff3d3d; margin:0;">&nbsp;&nbsp;&nbsp;&nbsp;initiate_global_restructure();</p>
+      <p style="color:#ff3d3d; margin:0;">}</p>
+      <br>
+      <p style="color:#ff3d3d; margin:0; animation: none;">⏱ TIEMPO HASTA EJECUCIÓN: <strong>72:00:00</strong></p>
+    </div>
+
+    <section class="chapter-narrative">
+      <p>
+        Alex siente un escalofrío. Esto no es mantenimiento. Es una evaluación del
+        futuro de la humanidad.
+      </p>
+      <p>
+        Antes de llamar a Daniel, necesita confirmar que <code>ghost.root</code>
+        no está en la lista de usuarios autorizados del sistema.
+      </p>
+    </section>
+
+    <!-- ── DESAFÍO 01: Array.includes() ── -->
+    <section class="code-challenge-section" aria-label="Desafío de código 01">
+      <div class="challenge-card" id="challenge-01">
+
+        <!-- Cabecera -->
+        <div class="challenge-card-header">
+          <span class="challenge-card-icon">🔐</span>
+          <span class="challenge-card-title">DESAFÍO 01 — Detecta al intruso</span>
+        </div>
+
+        <!-- Split: izquierda = código | derecha = instrucciones -->
+        <div class="challenge-split">
+
+          <!-- Izquierda: código + input -->
+          <div class="challenge-left">
+            <pre class="challenge-code-pre" tabindex="0"
+                 aria-label="Código con espacio en blanco para completar"></pre>
+
+            <div class="challenge-input-row">
+              <input type="text" class="challenge-input"
+                     autocomplete="off" autocorrect="off" spellcheck="false"
+                     placeholder="Escribe el método aquí…"
+                     aria-label="Tu respuesta">
+              <button type="button" class="challenge-submit-btn">Validar →</button>
+            </div>
+
+            <p class="challenge-feedback" role="alert" aria-live="polite"></p>
+
+            <div class="challenge-success" hidden>
+              <a href="ch2.html" class="btn-continuar">Continuar — Cap. 2 →</a>
+            </div>
+          </div>
+
+          <!-- Derecha: contexto + instrucción + pistas -->
+          <div class="challenge-right">
+            <p class="challenge-context">
+              Alex necesita verificar que <code>ghost.root</code> NO está en la lista
+              de usuarios autorizados de NEXUS. El sistema solo acepta commits de
+              usuarios registrados.
+            </p>
+            <p class="challenge-instruction">Escribe el nombre del método de <code>Array</code>
+que devuelve <strong>true</strong> si el elemento existe en el array,
+o <strong>false</strong> si no existe.
+
+Pista: el código dice <code>autorizados._____(autor)</code></p>
+            <div class="hints-section">
+              <button type="button" class="hint-btn">💡 Pedir pista</button>
+              <div class="hints-list" aria-live="polite"></div>
+            </div>
+          </div>
+
+        </div><!-- /challenge-split -->
+      </div><!-- /challenge-card -->
+    </section>
+
+  </main>
+
+  <!-- ── Footer de navegación ── -->
+  <footer class="chapter-footer">
+    <p class="footer-status">
+      Capítulo 1 de 7 · <span id="tiempo-transcurrido">0h 0m</span> jugando
+    </p>
+    <nav class="chapter-navigation" aria-label="Anterior / Siguiente capítulo">
+      <a href="../index.html" class="btn-nav">← Portada</a>
+      <a href="ch2.html" class="btn-nav btn-nav-primary">Cap. 2 →</a>
+    </nav>
+  </footer>
+
+  <script src="../js/story-state.js"></script>
+  <script src="../js/chapter-helpers.js"></script>
+  <script>
+    /* Marcar capítulo como visitado */
+    StoryState.marcarCapitulo(1);
+
+    /* Mostrar tiempo transcurrido */
+    const tiempoEl = document.getElementById('tiempo-transcurrido');
+    if (tiempoEl) tiempoEl.textContent = StoryState.getTiempoTranscurrido();
+
+    /* ── Montar desafío 01 ── */
+    initChallenge({
+      containerId : 'challenge-01',
+      chapter     : 1,
+      code:
+`const autorizados = [
+  "alex.vega",
+  "daniel.ibarra",
+  "sara.kim"
+];
+
+function verificarAutor(autor) {
+  const esAutorizado = autorizados.§(autor);
+
+  if (!esAutorizado) {
+    return "⚠ COMMIT NO AUTORIZADO: " + autor;
+  }
+  return "✓ Autor verificado: " + autor;
+}
+
+// Prueba:
+console.log(verificarAutor("ghost.root"));
+// → "⚠ COMMIT NO AUTORIZADO: ghost.root"`,
+      blank   : '§',
+      answers : ['includes', 'includes()'],
+      hints   : [
+        '💡 Es un método del objeto Array. Busca si un valor existe dentro del array. Devuelve true o false.',
+        '💡 El método empieza con "i", tiene 8 letras: i-n-c-l-u-d-e-s.',
+        '✅ La respuesta es: includes'
+      ]
+    });
+  </script>
+
+</body>
+</html>

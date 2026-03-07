@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Último Commit — Historia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/comic.css">
+</head>
+<body class="story-page">
+
+  <div id="story-app">
+
+    <!-- HUD -->
+    <header id="hud" role="banner">
+      <span id="hud-chapter">EL ÚLTIMO COMMIT</span>
+      <span id="hud-countdown"></span>
+      <button id="hud-menu" type="button" title="Menú" aria-label="Abrir menú">☰</button>
+    </header>
+
+    <!-- ── Viñeta / panel ── -->
+    <div id="panel-container" role="main" aria-label="Viñeta de historia">
+      <div id="panel-bg" aria-hidden="true"></div>
+      <p id="panel-text" aria-live="polite"></p>
+      <div id="panel-terminal" class="hidden" aria-live="polite"></div>
+      <div id="panel-click-hint" class="hidden" aria-hidden="true">▶ clic para continuar</div>
+    </div>
+
+    <!-- ── Decisiones ── -->
+    <section id="choices-container" class="hidden" aria-label="Opciones de decisión" role="complementary">
+      <div id="choices-grid"></div>
+    </section>
+
+    <!-- ── Desafío de código ── -->
+    <section id="challenge-container" class="hidden" aria-label="Desafío de código" role="complementary">
+      <div id="challenge-box">
+
+        <div id="challenge-header">
+          <span id="challenge-icon" aria-hidden="true"></span>
+          <span id="challenge-title"></span>
+        </div>
+
+        <!-- SPLIT: izquierda = código | derecha = instrucciones -->
+        <div id="challenge-split">
+
+          <!-- IZQUIERDA -->
+          <div id="challenge-left">
+            <pre id="challenge-code" tabindex="0" aria-label="Código con espacio en blanco"></pre>
+
+            <div id="challenge-input-row">
+              <input type="text" id="challenge-input"
+                autocomplete="off" autocorrect="off" spellcheck="false"
+                placeholder="Escribe aquí…" aria-label="Respuesta">
+              <button type="button" id="challenge-submit">Validar →</button>
+            </div>
+
+            <div id="challenge-feedback" role="alert" aria-live="polite" class="challenge-feedback"></div>
+
+            <div id="challenge-success" class="hidden">
+              <button type="button" id="challenge-next">Continuar →</button>
+            </div>
+          </div>
+
+          <!-- DERECHA -->
+          <div id="challenge-right">
+            <p id="challenge-context"></p>
+            <p id="challenge-instruction"></p>
+            <div id="hints-section">
+              <button type="button" id="hint-btn">💡 Pedir pista</button>
+              <div id="hints-list" aria-live="polite"></div>
+            </div>
+          </div>
+
+        </div><!-- /challenge-split -->
+      </div>
+    </section>
+
+    <!-- ── Pantalla de final ── -->
+    <section id="final-container" class="hidden" aria-label="Final de la historia" role="region">
+      <div id="final-content"></div>
+      <div class="final-buttons">
+        <button type="button" id="final-replay">↺ Ver de nuevo</button>
+        <button type="button" id="final-restart">↩ Nueva historia</button>
+      </div>
+    </section>
+
+  </div><!-- /story-app -->
+
+  <script src="js/story-state.js"></script>
+  <script src="js/story-data.js"></script>
+  <script src="js/engine.js"></script>
+
+</body>
+</html>

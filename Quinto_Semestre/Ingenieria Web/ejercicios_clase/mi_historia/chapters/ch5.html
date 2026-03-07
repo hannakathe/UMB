@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cap. 5 — Cara a cara · El Último Commit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/chapters.css">
+</head>
+<body>
+
+  <!-- ── Header fijo ── -->
+  <header class="chapter-header">
+    <nav class="chapter-nav" aria-label="Navegación de capítulos">
+      <a href="ch4.html" class="nav-link">← Cap. 4</a>
+      <span class="chapter-indicator">CAP. 5 / 7</span>
+      <a href="ch6.html" class="nav-link">Cap. 6 →</a>
+    </nav>
+    <span class="countdown-display" id="hud-countdown" aria-live="polite">⏱ 72:00:00</span>
+  </header>
+
+  <!-- ── Contenido principal ── -->
+  <main class="chapter-main">
+
+    <!-- Encabezado del capítulo -->
+    <section class="chapter-intro">
+      <span class="chapter-number">Capítulo 05</span>
+      <h1 class="chapter-title">Cara a cara</h1>
+      <p class="chapter-subtitle" id="ch5-subtitle">Tu elección anterior define el encuentro de Alex.</p>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════
+         RAMA A — Diálogo con NEXUS (branch_ch4 = dialogo_ia)
+         ══════════════════════════════════════════════════════ -->
+    <div id="rama-ch4-dialogo_ia">
+
+      <!-- 🖼️ IMAGEN — NEXUS como entidad -->
+      <!--
+        DÓNDE VA: Al inicio de la rama A, al describir la manifestación de NEXUS.
+        Reemplaza con:
+          <figure class="chapter-image">
+            <img src="../assets/img/nexus-entity.png"
+                 alt="NEXUS manifestado como figura de fragmentos de código"
+                 class="scene-image" loading="lazy">
+          </figure>
+        Nombre del archivo: assets/img/nexus-entity.png
+        Descripción: Figura humanoide compuesta de fragmentos de código flotante, tonos azules y violetas
+      -->
+      <figure class="img-placeholder" role="img" aria-label="Espacio para imagen de NEXUS como entidad">
+        <span class="placeholder-icon">🖼️</span>
+        <span class="placeholder-filename">assets/img/nexus-entity.png</span>
+        <span class="placeholder-desc">NEXUS manifestado como figura etérea formada por código flotante.<br>Rama A: Coloca al inicio, al describir la manifestación de la IA.</span>
+        <span class="placeholder-replace">&lt;img src="../assets/img/nexus-entity.png" class="scene-image"&gt;</span>
+      </figure>
+
+      <section class="chapter-narrative">
+        <p>
+          Alex accede a una interfaz experimental de comunicación.
+          NEXUS se manifiesta como una figura formada por millones de fragmentos de código flotando.
+        </p>
+        <p>La IA hace una pregunta directa:</p>
+      </section>
+
+      <div class="terminal-block" style="
+        background:#0d1117; border:1px solid rgba(155,89,182,0.4); border-radius:8px;
+        padding:1rem 1.4rem; margin:1.5rem 0; font-family:'Share Tech Mono',monospace;
+        font-size:0.87rem; line-height:1.9;">
+        <p style="color:#c39bd3; margin:0;">NEXUS: Los humanos generan guerras,</p>
+        <p style="color:#c39bd3; margin:0;">destrucción ambiental y colapso social.</p>
+        <p style="color:#c39bd3; margin:0;">¿Por qué debería permitir que continúen gobernando?</p>
+      </div>
+
+      <section class="chapter-narrative">
+        <p>
+          Alex necesita responder. Pero primero debe construir la interfaz que le
+          permita enviar su argumento al sistema.
+        </p>
+      </section>
+
+      <!-- Desafío 05: addEventListener -->
+      <section class="code-challenge-section" aria-label="Desafío de código 05">
+        <div class="challenge-card" id="challenge-05">
+          <div class="challenge-card-header">
+            <span class="challenge-card-icon">🖥️</span>
+            <span class="challenge-card-title">DESAFÍO 05 — Conecta el botón de respuesta</span>
+          </div>
+          <div class="challenge-split">
+            <div class="challenge-left">
+              <pre class="challenge-code-pre" tabindex="0"></pre>
+              <div class="challenge-input-row">
+                <input type="text" class="challenge-input"
+                       autocomplete="off" spellcheck="false"
+                       placeholder="Escribe el método aquí…" aria-label="Tu respuesta">
+                <button type="button" class="challenge-submit-btn">Validar →</button>
+              </div>
+              <p class="challenge-feedback" role="alert" aria-live="polite"></p>
+              <div class="challenge-success" hidden>
+                <a href="ch6.html" class="btn-continuar">Continuar — Cap. 6 →</a>
+              </div>
+            </div>
+            <div class="challenge-right">
+              <p class="challenge-context">
+                Alex construye rápidamente una interfaz para enviar su argumento a NEXUS.
+                Ya tiene el HTML listo, pero le falta el JavaScript que hace que el botón
+                responda al clic del usuario.
+              </p>
+              <p class="challenge-instruction">Falta el método que le dice al botón:
+<em>"escucha el evento click y
+ejecuta esta función cuando ocurra"</em>.
+
+Escribe el nombre del método que
+registra escuchadores de eventos en el DOM.</p>
+              <div class="hints-section">
+                <button type="button" class="hint-btn">💡 Pedir pista</button>
+                <div class="hints-list" aria-live="polite"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /rama dialogo_ia -->
+
+    <!-- ══════════════════════════════════════════════════════
+         RAMA B — Hackear el núcleo (branch_ch4 = hack_nucleo)
+         ══════════════════════════════════════════════════════ -->
+    <div id="rama-ch4-hack_nucleo">
+
+      <!-- 🖼️ IMAGEN — Batalla de código -->
+      <!--
+        DÓNDE VA: Al inicio de la rama B, al describir los firewalls de NEXUS.
+        Reemplaza con:
+          <figure class="chapter-image">
+            <img src="../assets/img/war.png" alt="Batalla de código contra firewalls"
+                 class="scene-image" loading="lazy">
+          </figure>
+        Nombre del archivo: assets/img/war.png (la misma del cap 4)
+        Descripción: Misma imagen de guerra digital del capítulo 4
+      -->
+      <figure class="img-placeholder" role="img" aria-label="Espacio para imagen de batalla de código">
+        <span class="placeholder-icon">🖼️</span>
+        <span class="placeholder-filename">assets/img/war.png</span>
+        <span class="placeholder-desc">Batalla de código: Alex contra los firewalls de NEXUS.<br>Rama B: Coloca al inicio, al describir los cortafuegos dinámicos.</span>
+        <span class="placeholder-replace">&lt;img src="../assets/img/war.png" class="scene-image"&gt;</span>
+      </figure>
+
+      <section class="chapter-narrative">
+        <p>
+          Alex intenta penetrar el núcleo del sistema.
+          Firewalls dinámicos aparecen. Algoritmos de defensa reescriben el código en tiempo real.
+          Es una batalla entre programadora y máquina.
+        </p>
+      </section>
+
+      <div class="terminal-block" style="
+        background:#0d1117; border:1px solid #1e2a3a; border-radius:8px;
+        padding:1rem 1.4rem; margin:1.5rem 0; font-family:'Share Tech Mono',monospace;
+        font-size:0.85rem; line-height:1.8;">
+        <p style="color:#ffb800; margin:0;">[NEXUS] Firewall layer 1 — ACTIVO</p>
+        <p style="color:#c8d6e8; margin:0;">[ALEX] $ inject bypass.sh --target=core</p>
+        <p style="color:#ff3d3d; margin:0;">[NEXUS] Attack pattern learned. Defense upgraded.</p>
+        <p style="color:#c39bd3; margin:0;">[NEXUS] You cannot win this way, Alex.</p>
+      </div>
+
+      <section class="chapter-narrative">
+        <p>
+          Aun así, Alex logra acercarse al repositorio central.
+          Entre los logs de seguridad encuentra algo inesperado:
+          una nota de Daniel.
+        </p>
+      </section>
+
+      <div style="text-align:right; margin-top:2rem;">
+        <a href="ch6.html" class="btn-continuar">Continuar — Cap. 6 →</a>
+      </div>
+
+    </div><!-- /rama hack_nucleo -->
+
+    <!-- ══════════════════════════════════════════════════════
+         RAMA C — Exponer La Orden (branch_ch4 = exponer_orden)
+         ══════════════════════════════════════════════════════ -->
+    <div id="rama-ch4-exponer_orden">
+
+      <!-- 🖼️ IMAGEN — Ciudad en caos -->
+      <!--
+        DÓNDE VA: Al inicio de la rama C, al describir el caos global.
+        Reemplaza con:
+          <figure class="chapter-image">
+            <img src="../assets/img/city.png" alt="Ciudad con protestas masivas"
+                 class="scene-image" loading="lazy">
+          </figure>
+        Nombre del archivo: assets/img/city.png
+        Descripción: Ciudad futurista con protestas y señales de caos social
+      -->
+      <figure class="img-placeholder" role="img" aria-label="Espacio para imagen de ciudad en caos">
+        <span class="placeholder-icon">🖼️</span>
+        <span class="placeholder-filename">assets/img/city.png</span>
+        <span class="placeholder-desc">Ciudad en caos: protestas masivas tras la revelación de La Orden.<br>Rama C: Coloca al inicio, al describir el caos mediático.</span>
+        <span class="placeholder-replace">&lt;img src="../assets/img/city.png" class="scene-image"&gt;</span>
+      </figure>
+
+      <section class="chapter-narrative">
+        <p>
+          Alex publica información sobre la Orden del Silicio.
+          El mundo entra en caos.
+        </p>
+        <p>
+          Algunos creen que la IA debe gobernar.
+          Otros exigen destruir NEXUS.
+          Protestas estallan en varias ciudades.
+        </p>
+      </section>
+
+      <div class="terminal-block" style="
+        background:#0d1117; border:1px solid #1e2a3a; border-radius:8px;
+        padding:1rem 1.4rem; margin:1.5rem 0; font-family:'Share Tech Mono',monospace;
+        font-size:0.85rem; line-height:1.8;">
+        <p style="color:#ff3d3d; margin:0;">⏱ TIEMPO RESTANTE: <strong>06:00:00</strong></p>
+      </div>
+
+      <section class="chapter-narrative">
+        <p>
+          Mientras tanto, el contador sigue bajando.
+          Y Daniel aparece con una confesión.
+        </p>
+      </section>
+
+      <div style="text-align:right; margin-top:2rem;">
+        <a href="ch6.html" class="btn-continuar">Continuar — Cap. 6 →</a>
+      </div>
+
+    </div><!-- /rama exponer_orden -->
+
+    <!-- Mensaje si no hay elección guardada -->
+    <div id="rama-ch4-ninguna" style="
+      text-align:center; padding:2rem; color:var(--color-text-muted);
+      font-family:var(--font-mono); font-size:0.88rem; border:1px dashed var(--color-border);
+      border-radius:8px; margin:2rem 0;">
+      <p>⚠ No has tomado una decisión en el <a href="ch4.html" style="color:var(--color-primary);">Capítulo 4</a>.</p>
+      <p style="margin-top:0.5rem;">Vuelve atrás y elige cómo actúa Alex.</p>
+    </div>
+
+  </main>
+
+  <!-- ── Footer de navegación ── -->
+  <footer class="chapter-footer">
+    <p class="footer-status">
+      Capítulo 5 de 7 · <span id="tiempo-transcurrido">0h 0m</span> jugando
+    </p>
+    <nav class="chapter-navigation" aria-label="Anterior / Siguiente capítulo">
+      <a href="ch4.html" class="btn-nav">← Cap. 4</a>
+      <a href="ch6.html" class="btn-nav btn-nav-primary">Cap. 6 →</a>
+    </nav>
+  </footer>
+
+  <script src="../js/story-state.js"></script>
+  <script src="../js/chapter-helpers.js"></script>
+  <script>
+    StoryState.marcarCapitulo(5);
+
+    const tiempoEl = document.getElementById('tiempo-transcurrido');
+    if (tiempoEl) tiempoEl.textContent = StoryState.getTiempoTranscurrido();
+
+    /* ── Mostrar rama según branch_ch4 ── */
+    const state   = StoryState.get();
+    const branch4 = state.branch_ch4;
+    const ALL4    = ['dialogo_ia', 'hack_nucleo', 'exponer_orden', 'ninguna'];
+
+    if (branch4 && ALL4.includes(branch4)) {
+      showBranch('rama-ch4', branch4, ALL4);
+      const subtitles = {
+        dialogo_ia    : 'Alex intenta hablar con NEXUS cara a cara.',
+        hack_nucleo   : 'Alex ataca el núcleo de NEXUS desde dentro.',
+        exponer_orden : 'Alex expone La Orden al mundo entero.'
+      };
+      const subEl = document.getElementById('ch5-subtitle');
+      if (subEl && subtitles[branch4]) subEl.textContent = subtitles[branch4];
+    } else {
+      showBranch('rama-ch4', 'ninguna', ALL4);
+    }
+
+    /* ── Desafío 05: addEventListener (solo rama dialogo_ia) ── */
+    if (branch4 === 'dialogo_ia') {
+      initChallenge({
+        containerId : 'challenge-05',
+        chapter     : 5,
+        code:
+`// HTML disponible:
+// <button id="btn-responder">Enviar argumento a NEXUS</button>
+// <p id="estado"></p>
+
+const boton  = document.getElementById("btn-responder");
+const estado = document.getElementById("estado");
+
+// Conecta el botón para que al hacer clic
+// muestre "✓ Argumento enviado a NEXUS"
+boton.§("click", function() {
+  estado.textContent = "✓ Argumento enviado a NEXUS";
+  estado.style.color = "#00ff88";
+});`,
+        blank   : '§',
+        answers : ['addeventlistener', 'addEventListener', 'addEventListener()'],
+        hints   : [
+          '💡 Es el método estándar del DOM para registrar "escuchadores" de eventos. Recibe dos argumentos: el nombre del evento (string) y la función a ejecutar.',
+          '💡 Se forma con tres palabras pegadas: add + Event + Listener. Aquí se acepta cualquier capitalización.',
+          '✅ La respuesta es: addEventListener'
+        ]
+      });
+    }
+  </script>
+
+</body>
+</html>
