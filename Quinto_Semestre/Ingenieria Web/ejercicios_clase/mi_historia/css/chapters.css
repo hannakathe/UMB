@@ -1,0 +1,414 @@
+/* ============================================================
+   chapters.css — El Último Commit
+   Layout y estilos de capítulos individuales
+   ============================================================ */
+
+/* --- Header del capítulo ----------------------------------- */
+.chapter-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(10, 13, 18, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-sm) var(--space-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+/* Barra de navegación dentro del header */
+.chapter-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.nav-link {
+  font-family: var(--font-mono);
+  font-size: var(--font-sm);
+  color: var(--color-text-muted);
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.nav-link:hover {
+  color: var(--color-primary);
+  border-color: var(--color-border);
+  background: var(--color-bg-secondary);
+}
+
+.chapter-indicator {
+  font-family: var(--font-mono);
+  font-size: var(--font-xs);
+  color: var(--color-text-muted);
+  letter-spacing: 0.1em;
+}
+
+/* Countdown en el header */
+.countdown-display {
+  font-family: var(--font-mono);
+  font-size: var(--font-md);
+  color: var(--color-danger);
+  letter-spacing: 0.15em;
+  animation: neon-pulse 1.5s ease-in-out infinite;
+}
+
+/* --- Layout principal del capítulo ------------------------- */
+.chapter-main {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+/* --- Intro / encabezado del capítulo ----------------------- */
+.chapter-intro {
+  margin-bottom: var(--space-xl);
+  padding-bottom: var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+  animation: fade-in-up 0.5s ease both;
+}
+
+.chapter-number {
+  font-family: var(--font-mono);
+  font-size: var(--font-xs);
+  color: var(--color-text-muted);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: var(--space-sm);
+}
+
+.chapter-title {
+  font-size: var(--font-xl);
+  color: var(--color-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.chapter-subtitle {
+  font-family: var(--font-mono);
+  font-size: var(--font-sm);
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+/* --- Sección de imagen del capítulo ----------------------- */
+.chapter-image {
+  margin: var(--space-lg) 0;
+  animation: fade-in-up 0.6s ease 0.1s both;
+}
+
+.chapter-image figure {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.scene-image {
+  width: 100%;
+  max-height: 420px;
+  object-fit: cover;
+  filter: saturate(0.9) contrast(1.05);
+  transition: filter var(--transition-slow);
+}
+
+.scene-image:hover {
+  filter: saturate(1.1) contrast(1.1);
+}
+
+/* Overlay de escaneo sobre la imagen */
+.chapter-image figure::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    transparent 0%,
+    rgba(0, 212, 255, 0.04) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+/* --- Sección narrativa ------------------------------------ */
+.chapter-narrative {
+  font-size: var(--font-md);
+  line-height: 1.8;
+  color: var(--color-text);
+  animation: fade-in-up 0.6s ease 0.2s both;
+}
+
+.chapter-narrative p {
+  margin-bottom: var(--space-md);
+}
+
+/* Diálogo de NEXUS (destacado en morado) */
+.nexus-dialog {
+  padding: var(--space-md) var(--space-lg);
+  border-left: 3px solid var(--color-purple);
+  background: rgba(155, 89, 182, 0.08);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  margin: var(--space-lg) 0;
+  font-family: var(--font-mono);
+  font-size: var(--font-sm);
+  color: #c39bd3;
+  font-style: italic;
+}
+
+/* --- Sección de media (audio/video) ----------------------- */
+.chapter-media {
+  margin: var(--space-lg) 0;
+  animation: fade-in-up 0.6s ease 0.3s both;
+}
+
+.media-label {
+  font-family: var(--font-mono);
+  font-size: var(--font-xs);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* --- Panel de decisión (capítulo 6) ----------------------- */
+.decision-panel {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  margin: var(--space-lg) 0;
+  animation: fade-in-up 0.6s ease 0.3s both;
+}
+
+.decision-title {
+  font-family: var(--font-mono);
+  font-size: var(--font-sm);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: var(--space-md);
+}
+
+/* Opciones de decisión usando Grid */
+.decision-options {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+@media (min-width: 600px) {
+  .decision-options {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.opcion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-secondary);
+  cursor: pointer;
+  transition: all var(--transition-med);
+  font-family: var(--font-mono);
+  text-align: left;
+}
+
+.opcion-key {
+  font-size: var(--font-lg);
+  font-weight: bold;
+}
+
+.opcion-title {
+  font-size: var(--font-sm);
+  color: var(--color-text);
+}
+
+.opcion-desc {
+  font-size: var(--font-xs);
+  color: var(--color-text-muted);
+}
+
+/* Colores específicos por opción */
+.ruta-a { border-color: rgba(255, 61, 61, 0.3); }
+.ruta-a .opcion-key { color: var(--color-danger); }
+.ruta-a:hover {
+  background: rgba(255, 61, 61, 0.1);
+  border-color: var(--color-danger);
+  box-shadow: var(--shadow-glow-red);
+}
+
+.ruta-b { border-color: rgba(0, 212, 255, 0.3); }
+.ruta-b .opcion-key { color: var(--color-primary); }
+.ruta-b:hover {
+  background: rgba(0, 212, 255, 0.1);
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-glow-cyan);
+}
+
+.ruta-c { border-color: rgba(0, 255, 136, 0.3); }
+.ruta-c .opcion-key { color: var(--color-secondary); }
+.ruta-c:hover {
+  background: rgba(0, 255, 136, 0.1);
+  border-color: var(--color-secondary);
+  box-shadow: var(--shadow-glow-green);
+}
+
+/* Resultado de la decisión */
+.resultado-texto {
+  font-family: var(--font-mono);
+  font-size: var(--font-sm);
+  color: var(--color-primary);
+  padding: var(--space-md);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-sm);
+  min-height: 50px;
+  transition: all var(--transition-med);
+}
+
+/* --- Sección de finales (capítulo 10) --------------------- */
+.finales-container {
+  display: grid;
+  gap: var(--space-lg);
+  margin: var(--space-lg) 0;
+}
+
+.final-card {
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  transition: all var(--transition-med);
+  /* Oculto por defecto, se muestra según la decisión */
+}
+
+.final-card:hover {
+  transform: translateY(-2px);
+}
+
+.final-reset {
+  border-color: rgba(255, 61, 61, 0.4);
+  background: rgba(255, 61, 61, 0.05);
+}
+
+.final-alianza {
+  border-color: rgba(255, 184, 0, 0.4);
+  background: rgba(255, 184, 0, 0.05);
+}
+
+.final-libre {
+  border-color: rgba(0, 255, 136, 0.4);
+  background: rgba(0, 255, 136, 0.05);
+}
+
+.final-titulo {
+  font-family: var(--font-mono);
+  font-size: var(--font-lg);
+  margin-bottom: var(--space-md);
+}
+
+.final-reset   .final-titulo { color: var(--color-danger); }
+.final-alianza .final-titulo { color: var(--color-warning); }
+.final-libre   .final-titulo { color: var(--color-secondary); }
+
+/* --- Footer del capítulo ---------------------------------- */
+.chapter-footer {
+  border-top: 1px solid var(--color-border);
+  padding: var(--space-lg);
+  margin-top: var(--space-xl);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+
+.footer-status {
+  font-family: var(--font-mono);
+  font-size: var(--font-xs);
+  color: var(--color-text-muted);
+}
+
+.chapter-navigation {
+  display: flex;
+  gap: var(--space-md);
+}
+
+.btn-nav {
+  font-family: var(--font-mono);
+  font-size: var(--font-sm);
+  color: var(--color-text-muted);
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  background: transparent;
+  text-decoration: none;
+}
+
+.btn-nav:hover {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  background: rgba(0, 212, 255, 0.07);
+}
+
+.btn-nav-primary {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.btn-nav-primary:hover {
+  background: var(--color-primary);
+  color: var(--color-bg);
+}
+
+/* --- Sección de mostrar/ocultar (interacción JS) ---------- */
+.reveal-section {
+  overflow: hidden;
+  transition: max-height var(--transition-slow), opacity var(--transition-slow);
+}
+
+.reveal-section.hidden {
+  display: block !important;  /* Sobreescribir hidden para usar max-height */
+  max-height: 0;
+  opacity: 0;
+}
+
+.reveal-section.visible {
+  max-height: 2000px;
+  opacity: 1;
+}
+
+.btn-reveal {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin: var(--space-md) 0;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-family: var(--font-mono);
+  font-size: var(--font-sm);
+  color: var(--color-primary);
+  padding: 0;
+  transition: color var(--transition-fast);
+}
+
+.btn-reveal:hover {
+  color: var(--color-secondary);
+}
+
+.btn-reveal::before {
+  content: '▶';
+  transition: transform var(--transition-fast);
+}
+
+.btn-reveal.active::before {
+  transform: rotate(90deg);
+}

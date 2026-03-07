@@ -1,0 +1,264 @@
+/* ============================================================
+   terminal.css — El Último Commit
+   Componentes de terminal y ventana de código
+   ============================================================ */
+
+/* --- Ventana de terminal ----------------------------------- */
+.terminal-window {
+  background: #060a0f;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin: var(--space-md) 0;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  font-family: var(--font-mono);
+}
+
+/* Barra de título de la terminal */
+.terminal-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 10px var(--space-md);
+  background: #0d1117;
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* Botones de semáforo (macOS style) */
+.terminal-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.terminal-dot.red    { background: #ff5f57; }
+.terminal-dot.yellow { background: #febc2e; }
+.terminal-dot.green  { background: #28c840; }
+
+.terminal-title {
+  font-size: var(--font-xs);
+  color: var(--color-text-muted);
+  margin-left: var(--space-sm);
+  letter-spacing: 0.05em;
+}
+
+/* Cuerpo de la terminal */
+.terminal-body {
+  padding: var(--space-md) var(--space-lg);
+  font-size: var(--font-sm);
+  line-height: 1.7;
+  color: #c0c8d0;
+  min-height: 80px;
+  overflow-x: auto;
+}
+
+/* Líneas de la terminal */
+.terminal-line {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: 2px;
+}
+
+/* Prompt del sistema */
+.terminal-prompt {
+  color: var(--color-secondary);
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.terminal-command {
+  color: var(--color-text-code);
+}
+
+/* Líneas de output (respuesta del sistema) */
+.terminal-output {
+  color: var(--color-text-muted);
+  padding-left: calc(var(--space-md) + 2px);
+}
+
+.terminal-output.error {
+  color: var(--color-danger);
+}
+
+.terminal-output.success {
+  color: var(--color-secondary);
+}
+
+.terminal-output.warning {
+  color: var(--color-warning);
+}
+
+.terminal-output.nexus {
+  color: #c39bd3;  /* morado para mensajes de NEXUS */
+  font-style: italic;
+}
+
+/* Cursor parpadeante */
+.terminal-cursor {
+  display: inline-block;
+  width: 8px;
+  height: 1em;
+  background: var(--color-secondary);
+  vertical-align: text-bottom;
+  animation: cursor-blink 1s step-end infinite;
+}
+
+/* --- Efecto de escritura (typewriter) --------------------- */
+/* Se activa con la clase .typing-active via JavaScript */
+.typewriter-text {
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid var(--color-primary);
+  width: 0;
+}
+
+.typewriter-text.typing-active {
+  animation:
+    typing 3s steps(40, end) forwards,
+    cursor-blink 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+
+/* --- Bloque de código con resaltado ----------------------- */
+.code-block {
+  position: relative;
+  margin: var(--space-md) 0;
+}
+
+/* Etiqueta del lenguaje */
+.code-block::before {
+  content: attr(data-lang);
+  position: absolute;
+  top: 0;
+  right: var(--space-md);
+  font-family: var(--font-mono);
+  font-size: var(--font-xs);
+  color: var(--color-text-muted);
+  background: var(--color-bg-secondary);
+  padding: 2px 8px;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.code-block pre {
+  border-radius: var(--radius-md);
+  padding-top: calc(var(--space-md) + 4px);
+}
+
+/* Línea resaltada dentro del código */
+.code-highlight {
+  background: rgba(255, 61, 61, 0.15);
+  border-left: 2px solid var(--color-danger);
+  display: block;
+  margin: 0 calc(-1 * var(--space-md));
+  padding: 0 var(--space-md);
+}
+
+/* --- Efecto matrix rain (canvas overlay) ------------------ */
+#matrix-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.03;
+  pointer-events: none;
+}
+
+/* --- Panel de estado del sistema (header) ----------------- */
+.system-status-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  font-family: var(--font-mono);
+  font-size: var(--font-xs);
+  color: var(--color-text-muted);
+  padding: var(--space-xs) var(--space-lg);
+  background: rgba(0, 212, 255, 0.03);
+  border-bottom: 1px solid var(--color-border);
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.status-dot.online  { background: var(--color-secondary); }
+.status-dot.warning { background: var(--color-warning); }
+.status-dot.danger  { background: var(--color-danger); }
+
+/* --- Scan line overlay ------------------------------------ */
+.scanlines {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+}
+
+/* --- Glitch text ------------------------------------------ */
+.glitch-text {
+  position: relative;
+  color: var(--color-primary);
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitch-text::before {
+  color: var(--color-danger);
+  animation: glitch-before 3s infinite;
+  clip-path: polygon(0 30%, 100% 30%, 100% 50%, 0 50%);
+}
+
+.glitch-text::after {
+  color: var(--color-secondary);
+  animation: glitch-after 3s infinite;
+  clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%);
+}
+
+@keyframes glitch-before {
+  0%, 90%, 100% { transform: none; opacity: 0; }
+  92%            { transform: translateX(-3px); opacity: 0.7; }
+  94%            { transform: translateX(3px); opacity: 0.7; }
+  96%            { transform: none; opacity: 0; }
+}
+
+@keyframes glitch-after {
+  0%, 90%, 100% { transform: none; opacity: 0; }
+  93%            { transform: translateX(3px); opacity: 0.7; }
+  95%            { transform: translateX(-3px); opacity: 0.7; }
+  97%            { transform: none; opacity: 0; }
+}
