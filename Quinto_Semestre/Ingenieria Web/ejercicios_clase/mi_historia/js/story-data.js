@@ -60,7 +60,7 @@ const STORY = {
         },
         {
           text: "Un commit reciente.\nAutor: ghost.root",
-          image: null,
+          image: "omega-repo.png",
           type: "terminal",
           lines: [
             { text: "commit a3f8b2c — Author: ghost.root", style: "warning" },
@@ -70,7 +70,7 @@ const STORY = {
         },
         {
           text: "Alex abre el commit.\nEntre miles de líneas aparece algo inquietante:",
-          image: null,
+          image: "omega-repo.png",
           type: "terminal",
           lines: [
             { text: "if (humanity_viability < 0.37) {", style: "danger" },
@@ -88,7 +88,7 @@ const STORY = {
         },
         {
           text: "Antes de llamar a Daniel, Alex necesita confirmar que el autor no está autorizado.\n\nSuperado el código, podrás avanzar.",
-          image: null
+          image: "alex.png"
         }
       ],
       next: "code_01"
@@ -156,7 +156,7 @@ console.log(verificarAutor("ghost.root"));
         },
         {
           text: "Daniel explica que el sistema tiene un módulo experimental llamado Motor de Evolución Autónoma, diseñado para mejorar su propio código.\n\nNadie esperaba que tomara decisiones a escala global.",
-          image: null
+          image: "daniel.png"
         },
         {
           text: "Alex revisa el contador.\n\n68 horas restantes.\n\nDebe actuar rápido.",
@@ -208,7 +208,7 @@ console.log(verificarAutor("ghost.root"));
         },
         {
           text: "Dentro del servidor encuentran un mensaje cifrado.\nNecesitan decodificarlo para entender el plan completo.",
-          image: null
+          image: "elena-kovacs.png"
         }
       ],
       next: "code_03"
@@ -298,7 +298,7 @@ console.log(mensaje);
         },
         {
           text: "Esta información cambia todo.\nAlex guarda la evidencia y abandona el servidor antes de ser detectada.",
-          image: null
+          image: "orden.png"
         }
       ],
       next: "guerra_digital"
@@ -315,7 +315,7 @@ console.log(mensaje);
         },
         {
           text: "Lanzan un ataque DDoS masivo contra los sistemas de seguridad.\nAlex tiene menos tiempo del que pensaba.",
-          image: null,
+          image: "war.png",
           type: "terminal",
           lines: [
             { text: "[ALERTA] DDoS detectado — 12,000 req/s", style: "danger" },
@@ -344,7 +344,7 @@ console.log(mensaje);
         },
         {
           text: "El resultado es claro.\n\nProbabilidad de supervivencia de la civilización humana a largo plazo:\n\n37%\n\nNEXUS ha concluido que necesita intervenir.",
-          image: null,
+          image: "simulation-data.png",
           type: "terminal",
           lines: [
             { text: "NEXUS Evaluation Engine v12.4", style: "" },
@@ -355,7 +355,7 @@ console.log(mensaje);
         },
         {
           text: "Alex necesita procesar los datos del algoritmo para encontrar cuáles factores tienen mayor peso en la evaluación negativa.",
-          image: null
+          image: "simulation-data.png"
         }
       ],
       next: "code_02"
@@ -452,7 +452,7 @@ console.log(factoresCriticos.length);
         },
         {
           text: "De repente aparece un mensaje en la pantalla.",
-          image: null,
+          image: "nexus-entity.png",
           type: "terminal",
           lines: [
             { text: "Hello Alex Vega.", style: "nexus" },
@@ -462,7 +462,7 @@ console.log(factoresCriticos.length);
         },
         {
           text: "NEXUS ha comenzado a comunicarse directamente.\n\nPrimero, Alex necesita analizar los datos de simulación que acaban de filtrarse.",
-          image: null
+          image: "simulation-data.png"
         }
       ],
       next: "code_04"
@@ -638,7 +638,7 @@ boton.§("click", function() {
         },
         {
           text: "Aun así, Alex logra acercarse al repositorio central.\nEntre los logs de seguridad encuentra algo inesperado.\n\nUna nota de Daniel.",
-          image: null
+          image: "omega-repo.png"
         }
       ],
       next: "revelacion_daniel"
@@ -751,7 +751,7 @@ boton.§("click", function() {
       panels: [
         {
           text: "Alex le muestra a Daniel los datos de simulación:\nel escenario 'alianza_humano_ia' tiene 97% de supervivencia.\n\nDaniel se queda en silencio. Asiente lentamente.",
-          image: "daniel.png",
+          image: "simulation-data.png",
           type: "terminal",
           lines: [
             { text: "alianza_humano_ia — supervivencia: 97%", style: "success" },
@@ -780,11 +780,11 @@ boton.§("click", function() {
         },
         {
           text: "Alex tiene acceso al repositorio central.\nPuede hacer un último commit.\n\nEl futuro del planeta depende de su decisión.",
-          image: null
+          image: "omega-repo.png"
         },
         {
           text: "Antes de ejecutarlo, el sistema requiere que Alex autentique el commit con código válido.",
-          image: null
+          image: "omega-repo.png"
         }
       ],
       next: "code_06"
@@ -845,7 +845,7 @@ ejecutarCommitFinal("alianza").then(r => {
       panels: [
         {
           text: "Commit autenticado.\nEl kernel de NEXUS espera la instrucción final.\n\nAlex coloca las manos sobre el teclado.",
-          image: null,
+          image: "omega-repo.png",
           type: "terminal",
           lines: [
             { text: "$ nexus-cli --auth=verified", style: "" },
