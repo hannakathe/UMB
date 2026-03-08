@@ -187,7 +187,7 @@ body.story-page {
 /* ── CODE CHALLENGE ────────────────────────────────────────────── */
 #challenge-container {
   position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
+  display: flex; align-items: flex-start; justify-content: center;
   padding: 1.5rem; z-index: 20;
   background: var(--challenge-bg);
   overflow-y: auto; box-sizing: border-box;
@@ -423,7 +423,13 @@ body.story-page {
 }
 
 #hud-chapter  { color: var(--color-primary, #00d4ff); font-weight: bold; }
-#hud-countdown{ color: var(--color-danger, #ff3d3d); animation: hint-pulse 2.5s ease infinite; }
+#hud-countdown{
+  color: var(--color-danger, #ff3d3d);
+  font-size: 1rem;
+  font-weight: bold;
+  letter-spacing: .18em;
+  animation: hint-pulse 2.5s ease infinite;
+}
 
 #hud-menu {
   background: transparent; border: 1px solid #333; color: #666;
@@ -434,6 +440,21 @@ body.story-page {
 }
 
 #hud-menu:hover { border-color: var(--color-primary, #00d4ff); color: var(--color-primary, #00d4ff); }
+
+/* Contenedor derecho del HUD (mute + menu) */
+.hud-right {
+  display: flex; align-items: center; gap: .4rem;
+}
+
+/* Botón mute */
+#hud-mute {
+  background: transparent; border: 1px solid #333; color: #666;
+  width: 28px; height: 28px; border-radius: 4px;
+  cursor: pointer; font-size: .85rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color .2s, color .2s;
+}
+#hud-mute:hover { border-color: var(--color-danger, #ff3d3d); color: var(--color-danger, #ff3d3d); }
 
 /* Compensar HUD */
 #panel-container, #choices-container,

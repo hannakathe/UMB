@@ -18,7 +18,10 @@
     <header id="hud" role="banner">
       <span id="hud-chapter">EL ÚLTIMO COMMIT</span>
       <span id="hud-countdown"></span>
-      <button id="hud-menu" type="button" title="Menú" aria-label="Abrir menú">☰</button>
+      <div class="hud-right">
+        <button id="hud-mute" type="button" title="Activar/desactivar sonido" aria-label="Mute">🔊</button>
+        <button id="hud-menu" type="button" title="Menú" aria-label="Abrir menú">☰</button>
+      </div>
     </header>
 
     <!-- ── Viñeta / panel ── -->
@@ -89,6 +92,7 @@
 
   </div><!-- /story-app -->
 
+  <script src="js/sound-engine.js"></script>
   <script src="js/story-state.js"></script>
   <script src="js/story-data.js"></script>
   <script src="js/engine.js"></script>
@@ -100,13 +104,33 @@
           .catch(() => {});
       }
     })();
-    /* Garantía en primer click por si el navegador bloquea el autostart */
     document.addEventListener('click', function fs() {
       if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen({ navigationUI: 'hide' }).catch(() => {});
       }
       document.removeEventListener('click', fs);
     });
+
+    /* Inicializar sonido con primer gesto */
+    let _soundReady = false;
+    function initSound() {
+      if (_soundReady) return;
+      _soundReady = true;
+      SoundEngine.init();
+    }
+    document.addEventListener('click', initSound, { once: true });
+
+    /* Botón mute del HUD */
+    const hudMuteBtn = document.getElementById('hud-mute');
+    if (hudMuteBtn) {
+      hudMuteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        initSound();
+        const active = SoundEngine.toggle();
+        hudMuteBtn.textContent = active ? '🔊' : '🔇';
+        hudMuteBtn.title = active ? 'Silenciar' : 'Activar sonido';
+      });
+    }
   </script>
 
 </body>

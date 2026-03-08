@@ -48,12 +48,14 @@
   letter-spacing: 0.1em;
 }
 
-/* Countdown en el header */
+/* Countdown en el header — tamaño grande para generar urgencia */
 .countdown-display {
   font-family: var(--font-mono);
-  font-size: var(--font-md);
+  font-size: 1.35rem;
+  font-weight: bold;
   color: var(--color-danger);
-  letter-spacing: 0.15em;
+  letter-spacing: 0.18em;
+  text-shadow: 0 0 12px rgba(255, 61, 61, 0.6), 0 0 30px rgba(255, 61, 61, 0.25);
   animation: neon-pulse 1.5s ease-in-out infinite;
 }
 

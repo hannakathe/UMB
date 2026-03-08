@@ -62,10 +62,13 @@ function loadNode(nodeId) {
   // Ocultar todas las capas de UI
   hideAllOverlays();
 
+  // Cambiar ambiente sonoro según el capítulo
+  _updateAmbient(node);
+
   if (node.type === 'code') {
     showCodeChallenge(node);
   } else if (node.type === 'final') {
-    showPanels();   // al terminar las viñetas, showFinalScreen() se llama automáticamente
+    showPanels();
   } else {
     showPanels();
   }
@@ -116,6 +119,7 @@ function startTypewriter(rawText, onDone) {
 
   const text = rawText || '';
   let i = 0;
+  let _lastTypingSound = 0;
 
   function tick() {
     if (i < text.length) {
@@ -123,6 +127,12 @@ function startTypewriter(rawText, onDone) {
         el.appendChild(document.createElement('br'));
       } else {
         el.appendChild(document.createTextNode(text[i]));
+        // Sonido de tecleo: no en cada char, sino cada 2-3 para no saturar
+        const now = Date.now();
+        if (now - _lastTypingSound > 45 && text[i] !== ' ') {
+          SoundEngine.play('typing');
+          _lastTypingSound = now;
+        }
       }
       i++;
       typewriterTimer = setTimeout(tick, 28);
@@ -189,6 +199,15 @@ function renderTerminalPanel(panel) {
       lineEl.textContent = line.text;
       body.appendChild(lineEl);
 
+      // Sonido según el tipo de línea del terminal
+      if (line.style === 'nexus') {
+        SoundEngine.play('nexusMessage');
+      } else if (line.style === 'danger') {
+        SoundEngine.play('alarm');
+      } else {
+        SoundEngine.play('terminalLine');
+      }
+
       if (i === lines.length - 1) {
         isAnimating = false;
         panelClickHint().classList.remove('hidden');
@@ -216,6 +235,9 @@ function handlePanelClick() {
     }
     return;
   }
+
+  // Sonido de avance de viñeta
+  SoundEngine.play('panelAdvance');
 
   // Avanzar a la siguiente viñeta
   currentPanelIdx++;
@@ -252,7 +274,9 @@ function showChoices() {
       <span class="choice-text">${choice.text}</span>
       <span class="choice-desc">${choice.description}</span>
     `;
+    btn.addEventListener('mouseenter', () => SoundEngine.play('buttonHover'));
     btn.addEventListener('click', () => {
+      SoundEngine.play('choiceSelect');
       // Persistir decisión (para finales dinámicos)
       if (currentNode.id === 'final_decision') {
         StoryState.guardarDecision(choice.next);
@@ -307,6 +331,9 @@ function showCodeChallenge(node) {
   };
   input.onkeydown = (e) => { if (e.key === 'Enter') validateAnswer(node); };
 
+  // Sonido de activación del desafío (con pequeño delay para no solapar con ambient)
+  SoundEngine.play('codeChallenge');
+
   challengeBox().classList.remove('hidden');
   input.focus();
 }
@@ -335,11 +362,17 @@ function validateAnswer(node) {
     document.getElementById('hint-btn').disabled = true;
     input.disabled = true;
     document.getElementById('challenge-submit').disabled = true;
+
+    // Sonido de éxito
+    SoundEngine.play('codeCorrect');
   } else {
     feedback.textContent = '❌ Respuesta incorrecta. Intenta de nuevo o pide una pista.';
     feedback.className = 'challenge-feedback error';
     input.classList.add('shake');
     setTimeout(() => input.classList.remove('shake'), 500);
+
+    // Sonido de error
+    SoundEngine.play('codeError');
   }
 }
 
@@ -351,6 +384,8 @@ function showNextHint(node) {
   hintEl.className = 'hint-item';
   hintEl.textContent = ch.hints[hintsShown];
   document.getElementById('hints-list').appendChild(hintEl);
+
+  SoundEngine.play('hint');
 
   hintsShown++;
   if (hintsShown >= ch.hints.length) {
@@ -368,12 +403,10 @@ function showFinalScreen() {
 
   const content = document.getElementById('final-content');
   content.innerHTML = `
-    <div class="final-badge">${node.id === 'final_alianza' ? '🤝' : node.id === 'final_codigo_libre' ? '🌐' : '🌑'}</div>
     <h1 class="final-title">${node.title || 'FIN'}</h1>
     <p class="final-summary">${getFinalSummary(node.id)}</p>
     <div class="final-stats">
-      <div class="stat"><span class="stat-label">Tiempo de juego</span><span class="stat-value">${elapsed}</span></div>
-      <div class="stat"><span class="stat-label">Decisión tomada</span><span class="stat-value">${getFinalLabel(node.id)}</span></div>
+      <div class="stat"><span class="stat-label">Tiempo de lectura</span><span class="stat-value">${elapsed}</span></div>
     </div>
   `;
 
@@ -393,6 +426,18 @@ function showFinalScreen() {
 
   panelContainer().style.opacity = '0';
   finalContainer().classList.remove('hidden');
+
+  // Sonido del final según el tipo de ending
+  if (node.id === 'final_colapso') {
+    SoundEngine.stopAmbient(0.5);
+    setTimeout(() => SoundEngine.play('finalColapso'), 600);
+  } else if (node.id === 'final_alianza') {
+    SoundEngine.stopAmbient(1.0);
+    setTimeout(() => SoundEngine.play('finalAlianza'), 1100);
+  } else if (node.id === 'final_codigo_libre') {
+    SoundEngine.stopAmbient(0.7);
+    setTimeout(() => SoundEngine.play('finalCodigoLibre'), 800);
+  }
 }
 
 function getFinalSummary(nodeId) {
@@ -467,6 +512,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (menuBtn) {
     menuBtn.addEventListener('click', () => {
       if (confirm('¿Reiniciar la historia desde el principio?')) {
+        SoundEngine.play('reset');
+        SoundEngine.stopAmbient(1.0);
         StoryState.reset();
         hideAllOverlays();
         loadNode('intro');
@@ -474,10 +521,66 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Actualizar contador cada minuto
-  setInterval(refreshCountdown, 60000);
+  // Actualizar contador cada segundo
+  setInterval(refreshCountdown, 1000);
 
   // Cargar nodo guardado o empezar desde intro
   const state = StoryState.get();
   loadNode(state.currentNode || 'intro');
+
+  // Jingle de inicio
+  setTimeout(() => SoundEngine.play('chapterStart'), 600);
 });
+
+/* ================================================================
+   GESTOR DE AMBIENTE POR CAPÍTULO Y NODO
+   ================================================================ */
+function _updateAmbient(node) {
+  if (!node) return;
+
+  const ch = node.chapter || 1;
+  let ambientName = null;
+
+  if (ch <= 3) {
+    ambientName = 'serverRoom';     // Cap 1-3: sala de servidores
+  } else if (ch === 4) {
+    ambientName = 'warZone';        // Cap 4: guerra digital
+  } else if (ch === 5) {
+    ambientName = 'nexusPresence';  // Cap 5: diálogo con la IA
+  } else {
+    ambientName = 'finalTension';   // Cap 6-7: tensión final
+  }
+
+  if (ambientName) {
+    SoundEngine.crossfadeAmbient(ambientName, 0.18);
+  }
+
+  const nodeId = node.id;
+
+  // Alarma en la decisión final
+  if (nodeId === 'final_decision') {
+    setTimeout(() => SoundEngine.play('alarm'), 500);
+  }
+
+  // Glitch en escenas de hackeo y guerra
+  if (['sellar_servidor', 'hack_nucleo', 'guerra_digital'].includes(nodeId)) {
+    setTimeout(() => SoundEngine.play('glitch'), 800);
+  }
+
+  // Ataque DDoS
+  if (nodeId === 'sellar_servidor') {
+    setTimeout(() => SoundEngine.play('ddosAttack'), 2200);
+  }
+
+  // Intento de hackeo
+  if (nodeId === 'hack_nucleo') {
+    setTimeout(() => SoundEngine.play('hackAttempt'), 1600);
+  }
+
+  // Jingle de inicio en capítulos nuevos
+  const chapterStartNodes = ['intro', 'daniel', 'guerra_digital', 'dialogo_ia', 'revelacion_daniel', 'final_decision'];
+  if (chapterStartNodes.includes(nodeId)) {
+    setTimeout(() => SoundEngine.play('chapterStart'), 350);
+  }
+}
+

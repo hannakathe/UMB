@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <script src="js/sound-engine.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -90,10 +91,17 @@
       line-height: 1.8; margin-bottom: 2rem;
     }
 
-    /* Contador NEXUS */
+    /* Contador NEXUS — grande para sensación de urgencia */
     .cover-timer {
-      font-size: .72rem; color: var(--danger);
-      letter-spacing: .15em; margin-bottom: 2.2rem; opacity: .9;
+      font-size: 1.1rem; font-weight: bold;
+      color: var(--danger);
+      letter-spacing: .18em; margin-bottom: 2.2rem;
+      text-shadow: 0 0 14px rgba(255,61,61,.7), 0 0 35px rgba(255,61,61,.3);
+      animation: danger-pulse 1.8s ease-in-out infinite;
+    }
+    @keyframes danger-pulse {
+      0%, 100% { text-shadow: 0 0 14px rgba(255,61,61,.6), 0 0 35px rgba(255,61,61,.2); }
+      50%       { text-shadow: 0 0 25px rgba(255,61,61,.95), 0 0 60px rgba(255,61,61,.45); }
     }
 
     /* ── Botones ── */
@@ -132,6 +140,17 @@
     }
     #btn-reset:hover { color: var(--danger); }
 
+    /* ── Botón mute ── */
+    #btn-mute {
+      position: fixed; top: 1.1rem; right: 1.5rem; z-index: 300;
+      font-family: var(--font); font-size: .72rem; padding: .35rem .7rem;
+      background: rgba(0,212,255,.07); border: 1px solid rgba(0,212,255,.25);
+      color: rgba(0,212,255,.6); border-radius: 4px; cursor: pointer;
+      transition: all .2s; letter-spacing: .08em;
+    }
+    #btn-mute:hover { background: rgba(0,212,255,.15); color: var(--cyan); }
+    #btn-mute.muted { color: rgba(255,255,255,.25); border-color: rgba(255,255,255,.1); }
+
     /* Aviso ESC */
     #esc-hint {
       position: fixed; bottom: 1.2rem; right: 1.5rem; z-index: 200;
@@ -165,6 +184,7 @@
   <canvas id="matrix-canvas" aria-hidden="true"></canvas>
   <div id="transition-overlay" aria-hidden="true"></div>
   <p id="esc-hint">ESC — salir de pantalla completa</p>
+  <button id="btn-mute" title="Activar/desactivar sonido">🔊 SONIDO</button>
 
   <main id="cover-content">
     <p class="cover-sub">
@@ -187,14 +207,11 @@
     function tryFullscreen() {
       if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen({ navigationUI: 'hide' })
-          .catch(() => {/* bloqueado por el navegador — sin problema */});
+          .catch(() => {});
       }
     }
-    /* Intentar al cargar */
     tryFullscreen();
-    /* Garantizar en primer click del usuario (gesto requerido por algunos navegadores) */
     document.addEventListener('click', tryFullscreen, { once: true });
-    /* ESC ya sale de pantalla completa de forma nativa en todos los navegadores */
 
     /* ── Contador ── */
     function updateTimer() {
@@ -211,26 +228,49 @@
         `Continuar — Cap. ${state.capituloActual} →`;
     }
 
+    /* ── SONIDO: inicializar con primer gesto de usuario ── */
+    let _soundReady = false;
+    function initSound() {
+      if (_soundReady) return;
+      _soundReady = true;
+      SoundEngine.init();
+      SoundEngine.startAmbient('coverHum', 0.15);
+    }
+    document.addEventListener('click', initSound, { once: true });
+
+    /* ── Botón de mute ── */
+    const btnMute = document.getElementById('btn-mute');
+    btnMute.addEventListener('click', (e) => {
+      e.stopPropagation();
+      initSound();
+      const active = SoundEngine.toggle();
+      btnMute.textContent = active ? '🔊 SONIDO' : '🔇 MUDO';
+      btnMute.classList.toggle('muted', !active);
+    });
+
+    /* ── Hover sonido en botones ── */
+    document.getElementById('btn-start').addEventListener('mouseenter', () => { SoundEngine.play('buttonHover'); });
+    document.getElementById('btn-reset').addEventListener('mouseenter', () => { SoundEngine.play('buttonHover'); });
+
     /* ── Matrix Rain ── */
     function initMatrixRain(canvasId) {
       const canvas = document.getElementById(canvasId);
       if (!canvas) return;
-      const ctx = canvas.getContext('2d');
+      const c = canvas.getContext('2d');
       function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
       resize();
       window.addEventListener('resize', resize);
       const CHARS = 'アイウエオカキクケコ0123456789ABCDEF<>{}[]();'.split('');
-      const FONT_SIZE = 14;
-      let drops = Array(Math.floor(canvas.width / FONT_SIZE)).fill(1);
+      const FS = 14;
+      let drops = Array(Math.floor(canvas.width / FS)).fill(1);
       function draw() {
-        ctx.fillStyle = 'rgba(10,13,18,.05)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#00d4ff';
-        ctx.font = `${FONT_SIZE}px 'Share Tech Mono', monospace`;
+        c.fillStyle = 'rgba(10,13,18,.05)';
+        c.fillRect(0, 0, canvas.width, canvas.height);
+        c.fillStyle = '#00d4ff';
+        c.font = `${FS}px 'Share Tech Mono', monospace`;
         for (let i = 0; i < drops.length; i++) {
-          const char = CHARS[Math.floor(Math.random() * CHARS.length)];
-          ctx.fillText(char, i * FONT_SIZE, drops[i] * FONT_SIZE);
-          if (drops[i] * FONT_SIZE > canvas.height && Math.random() > .975) drops[i] = 0;
+          c.fillText(CHARS[Math.floor(Math.random() * CHARS.length)], i * FS, drops[i] * FS);
+          if (drops[i] * FS > canvas.height && Math.random() > .975) drops[i] = 0;
           drops[i]++;
         }
       }
@@ -240,8 +280,12 @@
     /* ── Secuencia de inicio (SPA) ── */
     let matrixInterval = null;
     document.getElementById('btn-start').addEventListener('click', () => {
-      /* Asegurar pantalla completa */
       tryFullscreen();
+      initSound();
+
+      /* Glitch + fade del ambiente al entrar */
+      SoundEngine.play('glitch');
+      SoundEngine.stopAmbient(0.8);
 
       const content = document.getElementById('cover-content');
       const bg      = document.getElementById('cover-bg');
@@ -255,6 +299,7 @@
       setTimeout(() => {
         canvas.classList.add('active');
         matrixInterval = initMatrixRain('matrix-canvas');
+        SoundEngine.play('codeChallenge'); // sonido de arranque de sistema
       }, 400);
 
       setTimeout(() => { overlay.classList.add('active'); }, 2800);
@@ -264,13 +309,10 @@
       }, 3500);
     });
 
-    /* ── Leer por capítulos: también intentar fullscreen ── */
-    document.getElementById('btn-chapters').addEventListener('click', () => {
-      tryFullscreen();
-    });
-
     /* ── Reiniciar progreso ── */
     document.getElementById('btn-reset').addEventListener('click', () => {
+      initSound();
+      SoundEngine.play('reset');
       if (confirm('¿Reiniciar la historia desde el principio? Se perderá el progreso.')) {
         StoryState.reset();
         document.getElementById('btn-start').textContent = 'Iniciar investigación →';
