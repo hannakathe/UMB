@@ -4,7 +4,7 @@
    ================================================================= */
 
 :root {
-  --panel-text-size: 1.15rem;
+  --panel-text-size: 1.3rem;
   --panel-text-lh:   1.7;
   --overlay-gradient: linear-gradient(to top, rgba(0,0,0,.92) 0%, rgba(0,0,0,.5) 55%, transparent 100%);
   --challenge-bg:    rgba(10, 13, 18, 0.97);
@@ -55,6 +55,24 @@ body.story-page {
 #panel-bg.no-image {
   background-image: none !important;
   background-color: #080b10;
+}
+
+/* Placeholder visual cuando la imagen de la escena aún no existe */
+#panel-bg.no-image[data-image]:not([data-image=""])::before {
+  content: '🖼  ' attr(data-image);
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  color: rgba(0, 212, 255, .28);
+  font-size: .78rem;
+  letter-spacing: .1em;
+  font-family: 'Share Tech Mono', monospace;
+  border: 1px dashed rgba(0, 212, 255, .18);
+  padding: .55rem 1.3rem;
+  border-radius: 5px;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 1;
 }
 
 /* Texto de narración */
@@ -352,7 +370,11 @@ body.story-page {
 #hint-btn:hover:not(:disabled) { background: rgba(240,192,64,.1); }
 #hint-btn:disabled { opacity: .3; cursor: not-allowed; }
 
-#hints-list { display: flex; flex-direction: column; gap: .4rem; }
+#hints-list {
+  display: flex; flex-direction: column; gap: .4rem;
+  max-height: 28vh;
+  overflow-y: auto;
+}
 
 .hint-item {
   font-size: .85rem; color: var(--hint-color);

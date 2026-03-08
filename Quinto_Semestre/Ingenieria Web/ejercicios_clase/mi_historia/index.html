@@ -41,6 +41,38 @@
         rgba(10,13,18,.10) 100%
       );
     }
+    /* Efecto glitch ocasional sobre la imagen de portada (no afecta botones ni contenido) */
+    #cover-bg::before {
+      content: ''; position: absolute; inset: 0; z-index: 1;
+      background: url('assets/img/cover.png') center/cover no-repeat;
+      pointer-events: none; opacity: 0;
+      animation: cover-glitch 11s steps(1) infinite;
+    }
+    @keyframes cover-glitch {
+      0%,  86% { opacity: 0; transform: none; filter: none; clip-path: none; }
+      87% {
+        opacity: .75;
+        clip-path: inset(15% 0 72% 0);
+        filter: hue-rotate(95deg) saturate(4) brightness(1.6);
+        transform: translateX(-7px);
+      }
+      88% { opacity: 0; }
+      89% {
+        opacity: .6;
+        clip-path: inset(58% 0 14% 0);
+        filter: hue-rotate(200deg) saturate(5) brightness(1.3);
+        transform: translateX(6px);
+      }
+      90% { opacity: 0; }
+      91% {
+        opacity: .5;
+        clip-path: inset(38% 0 47% 0);
+        filter: hue-rotate(320deg) saturate(3) brightness(1.4);
+        transform: translateX(-4px);
+      }
+      92% { opacity: 0; transform: none; filter: none; clip-path: none; }
+      100%{ opacity: 0; }
+    }
 
     /* ── Canvas matrix rain ── */
     #matrix-canvas {
@@ -196,7 +228,7 @@
       ⏱ NEXUS — TIEMPO HASTA EJECUCIÓN: <span id="timer-val">72:00:00</span>
     </p>
     <div class="btn-group">
-      <button id="btn-start" type="button">Iniciar investigación →</button>
+      <button id="btn-start" type="button">Iniciar</button>
       <button id="btn-reset" type="button">Reiniciar progreso</button>
     </div>
   </main>

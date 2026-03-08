@@ -396,7 +396,11 @@
 }
 .hint-btn:hover:not(:disabled) { background: rgba(240,192,64,.08); }
 .hint-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-.hints-list    { display: flex; flex-direction: column; gap: 0.4rem; }
+.hints-list {
+  display: flex; flex-direction: column; gap: 0.4rem;
+  max-height: 28vh;
+  overflow-y: auto;
+}
 .hint-item     { font-size: 0.83rem; color: #f0c040; padding: 0.45rem 0.75rem; background: rgba(240,192,64,.06); border-radius: 4px; line-height: 1.5; animation: fade-in-up 0.3s ease; }
 
 .challenge-success { display: flex; justify-content: flex-end; padding-top: 0.3rem; }

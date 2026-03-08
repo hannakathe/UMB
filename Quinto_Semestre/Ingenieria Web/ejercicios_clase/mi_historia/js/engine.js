@@ -88,9 +88,18 @@ function renderPanel(idx) {
   panelClickHint().classList.add('hidden');
 
   // --- Fondo ---
+  panelBg().dataset.image = panel.image || '';
   if (panel.image) {
-    panelBg().style.backgroundImage = `url('assets/img/${panel.image}')`;
-    panelBg().classList.remove('no-image');
+    // Mostrar placeholder mientras carga; quitar si la imagen existe
+    panelBg().style.backgroundImage = 'none';
+    panelBg().classList.add('no-image');
+    const probe = new Image();
+    probe.onload = () => {
+      panelBg().style.backgroundImage = `url('assets/img/${panel.image}')`;
+      panelBg().classList.remove('no-image');
+      panelBg().dataset.image = '';   // ocultar placeholder cuando imagen carga
+    };
+    probe.src = `assets/img/${panel.image}`;
   } else {
     panelBg().style.backgroundImage = 'none';
     panelBg().classList.add('no-image');

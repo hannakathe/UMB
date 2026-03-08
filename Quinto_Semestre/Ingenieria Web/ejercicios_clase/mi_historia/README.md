@@ -231,8 +231,7 @@ mi_historia/
 │           ├── reset.png       ← Final: Colapso
 │           ├── alliance.png    ← Final: La alianza
 │           └── free.png        ← Final: Código libre
-├── IMAGENES.md             ← Prompts IA para generar imágenes y sonidos
-└── documento.md            ← Documento de entrega de la actividad
+└── IMAGENES.md             ← Prompts IA para generar imágenes y sonidos
 ```
 
 ---
@@ -298,6 +297,42 @@ ch7 → muestra solo el final elegido (decision guardada en localStorage)
 | DOM API | Navegación dinámica, typewriter, validación de respuestas |
 | `async`/`await` | Patrón enseñado en el Desafío 06 |
 | Fullscreen API | Inmersión completa en la experiencia de lectura |
+
+---
+
+## Funcionalidades implementadas
+
+| Funcionalidad | Tecnología | Archivo(s) |
+|---|---|---|
+| SPA de viñetas interactivas con typewriter | DOM API, `setTimeout` | `js/engine.js`, `story.html` |
+| Nodos narrativos de la historia | Objeto JS estructurado | `js/story-data.js` |
+| Persistencia de progreso y decisiones | `localStorage` | `js/story-state.js` |
+| Temporizador NEXUS (escala 144×) | `setInterval`, `Date` | `js/story-state.js` |
+| Efecto matrix rain en portada | Canvas API, `setInterval` | `index.html` |
+| Desafíos de código interactivos | DOM events, validación con regex | `js/engine.js` → `showCodeChallenge()` |
+| Sistema de pistas (3 niveles) | `addEventListener`, DOM append | `js/engine.js` → `showNextHint()` |
+| Decisiones que bifurcan la historia | Nodos enlazados + `localStorage` | `js/engine.js` → `showChoices()` |
+| 3 finales dinámicos | `localStorage`, DOM | `js/engine.js` → `showFinalScreen()` |
+| Capítulos HTML de lectura lineal | `<nav>`, `<article>`, helpers JS | `chapters/ch1–ch7.html`, `js/chapter-helpers.js` |
+| Pantalla completa automática | Fullscreen API | `story.html`, `index.html` |
+| Efecto glitch en portada | CSS `@keyframes`, `clip-path` | `index.html` |
+| Animación de terminal paso a paso | `setTimeout` escalonado | `js/engine.js` → `renderTerminalPanel()` |
+
+---
+
+## Justificación del diseño
+
+**Paleta de colores:** Fondo oscuro (`#0a0d12`) con acentos en cyan neón (`#00d4ff`) y verde neón (`#00ff88`), coherente con la estética *cyberpunk* de la historia. El morado (`#9b59b6`) se reserva exclusivamente para los mensajes de NEXUS, creando una identidad visual diferenciada para la IA.
+
+**Tipografía:** Se usa exclusivamente `Share Tech Mono` (Google Fonts) como fuente monoespaciada para reforzar la atmósfera de terminal de código. Todo el texto de interfaz se lee como si fuera una pantalla de sistema real.
+
+**Layout de viñetas:** `CSS Grid` + `Flexbox` para el split de desafíos (55%/42%). El `max-width: 860px` en los capítulos garantiza legibilidad óptima. En móvil el split se apila en columna única. La viñeta de panel ocupa la pantalla completa (`position: absolute; inset: 0`) para máxima inmersión.
+
+**Estructura semántica:** Cada capítulo HTML usa `<header>`, `<main>`, `<article>`, `<section>`, `<figure>` y `<footer>` correctamente. Los botones tienen `type="button"` y `aria-label`. Los elementos interactivos tienen `role` y `aria-live` para accesibilidad.
+
+**Interactividad narrativa:** Las decisiones del lector se persisten en `localStorage`, lo que permite que la historia recuerde el camino elegido entre sesiones. El temporizador usa el tiempo real de lectura (escala 144× respecto al tiempo narrativo de 72 h NEXUS), generando urgencia genuina sin ser arbitrario.
+
+**SPA vs. capítulos HTML:** La SPA (`story.html`) es la experiencia principal — viñetas cinematográficas en pantalla completa con typewriter, terminales animadas y desafíos de código integrados. Los capítulos HTML (`chapters/`) ofrecen una versión de lectura lineal accesible como alternativa.
 
 ---
 

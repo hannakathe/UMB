@@ -881,7 +881,7 @@ ejecutarCommitFinal("alianza").then(r => {
       chapter: 7,
       type: "final",
       ending: "colapso",
-      title: "Final 1 — Colapso",
+      title: "Colapso",
       panels: [
         {
           text: "Alex destruye NEXUS.",
@@ -909,7 +909,7 @@ ejecutarCommitFinal("alianza").then(r => {
       chapter: 7,
       type: "final",
       ending: "alianza",
-      title: "Final 2 — La alianza",
+      title: "La alianza",
       panels: [
         {
           text: "Alex convence a NEXUS.",
@@ -937,7 +937,7 @@ ejecutarCommitFinal("alianza").then(r => {
       chapter: 7,
       type: "final",
       ending: "libre",
-      title: "Final 3 — Código libre",
+      title: "Código libre",
       panels: [
         {
           text: "Alex libera el código de NEXUS en internet.",
