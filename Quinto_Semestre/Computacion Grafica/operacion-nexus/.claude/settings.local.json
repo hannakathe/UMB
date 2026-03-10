@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c \"import panda3d; print\\(panda3d.__version__\\)\")",
+      "Bash(python -c \"from panda3d.core import Filename; print\\(''panda3d OK''\\)\")",
+      "Bash(python3 -c \"import panda3d; print\\(panda3d.__version__\\)\")",
+      "Bash(where python)",
+      "Bash(where py)",
+      "Bash(C:/Users/Usuario/AppData/Local/Programs/Python/Python312/python.exe -c \"import panda3d; print\\(panda3d.__version__\\)\")",
+      "Bash(C:/Python314/python.exe -c \"import panda3d; print\\(panda3d.__version__\\)\")",
+      "Bash(pip3.12 list)",
+      "Bash(pip3.12 show panda3d)",
+      "Bash(cmd /c \"pip list 2>&1\")",
+      "Bash(cmd /c \"pip3 list 2>&1\")",
+      "Bash(pip show panda3d)",
+      "Bash(pip3 show panda3d)",
+      "Bash(C:/Users/Usuario/AppData/Local/Programs/Python/Python312/python.exe -c \"import panda3d\")",
+      "Bash(C:/Users/Usuario/AppData/Local/Programs/Python/Python312/python.exe --version)",
+      "Bash(C:/Users/Usuario/AppData/Local/Programs/Python/Python312/python.exe -m pip install panda3d)",
+      "Bash(C:/Users/Usuario/AppData/Local/Programs/Python/Python312/python.exe -c \"import panda3d; print\\(''panda3d'', panda3d.__version__\\); from direct.showbase.ShowBase import ShowBase; print\\(''direct OK''\\)\")",
+      "Bash(C:/Users/Usuario/AppData/Local/Programs/Python/Python312/python.exe -c \":*)"
+    ]
+  }
+}

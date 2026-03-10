@@ -10,7 +10,7 @@ CHARACTER_DATA = {
         "ability": "Escudo Temporal",
         "desc":    "+defensa por 5 seg",
         "color":   (0.2, 0.6, 1.0, 1),
-        "image":   "alex-soldado.png",
+        "image":   "player/alex-soldado.png",
         "bio":     "Veterano de elite especializado\nen combate urbano y defensa tactica.",
         "abilities": [
             {
@@ -39,7 +39,7 @@ CHARACTER_DATA = {
         "ability": "Disparo Preciso",
         "desc":    "x3 dano, menor cadencia",
         "color":   (1.0, 0.55, 0.1, 1),
-        "image":   "hanna-francotirador.png",
+        "image":   "player/hanna-francotirador.png",
         "bio":     "Especialista en eliminaciones\nde largo alcance y alto valor.",
         "abilities": [
             {
@@ -68,7 +68,7 @@ CHARACTER_DATA = {
         "ability": "Rafaga Rapida",
         "desc":    "3 balas por disparo",
         "color":   (1.0, 0.15, 0.3, 1),
-        "image":   "negro-operador.png",
+        "image":   "player/negro-operador.png",
         "bio":     "Agente de choque con maxima\nvelocidad y potencia de fuego.",
         "abilities": [
             {

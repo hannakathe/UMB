@@ -1,0 +1,21 @@
+# Modelos 3D pesados — no subir al repo
+assets/3d_models/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Entornos virtuales
+venv/
+.venv/
+env/
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
