@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh api repos/hannakathe/UMB/contents/Quinto_Semestre/Computacion%20Grafica/space-defender)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(python -c \":*)",
+      "Bash(python -c \"import panda3d; print\\(''Panda3D version:'', panda3d.__version__\\)\")",
+      "Bash(where ppython)",
+      "Bash(where python3)",
+      "Bash(pip show panda3d)",
+      "Bash(pip install panda3d)",
+      "Bash(python -c \"import panda3d; print\\(''Panda3D'', panda3d.__version__\\)\")"
+    ]
+  }
+}
