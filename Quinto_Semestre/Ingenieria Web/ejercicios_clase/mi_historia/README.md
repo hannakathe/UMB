@@ -335,5 +335,86 @@ ch7 → muestra solo el final elegido (decision guardada en localStorage)
 **SPA vs. capítulos HTML:** La SPA (`story.html`) es la experiencia principal — viñetas cinematográficas en pantalla completa con typewriter, terminales animadas y desafíos de código integrados. Los capítulos HTML (`chapters/`) ofrecen una versión de lectura lineal accesible como alternativa.
 
 ---
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║             EL ÚLTIMO COMMIT — Árbol de continuidad                     ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+  [CAP. 1 — El inicio]
+  INTRO
+  └── 🔐 CODE_01 ── respuesta: includes
+       └── [CAP. 2 — Daniel Ibarra]
+           DANIEL
+           ├─────────────────────────────────────────────────────────────┐
+           │                                                             │
+           1️⃣ Investigar el origen            2️⃣ Analizar el algoritmo    3️⃣ Avisar autoridades
+           │                                  │                          │
+  [CAP. 3] ORDEN_SILICIO            [CAP. 3] ALGORITMO         [CAP. 3] AUTORIDADES
+           │                                  │                          │
+  🔓 CODE_03                        📊 CODE_02                           │
+  respuesta: join                   respuesta: filter                    │
+           │                                  │                          │
+     DECISION_ORDEN                           │                          │
+     ├── 🕵️  Infiltrarse                       │                          │
+     │       └── INFILTRAR_ORDEN              │                          │
+     │                   └────────────────────┤                          │
+     └── 🔒  Sellar servidor                  │                          │
+             └── SELLAR_SERVIDOR              │                          │
+                         └──────────────────────────────────────────────┘
+                                              │
+                                    ╔═════════╧══════════╗
+                                    ║  [CAP. 4] GUERRA   ║
+                                    ║    DIGITAL         ║
+                                    ╚═════════╤══════════╝
+                                              │
+                                    📉 CODE_04 ── respuesta: reduce
+                                              │
+                                    GUERRA_DIGITAL_CHOICES
+                    ┌─────────────────────────┼────────────────────────┐
+                    │                         │                        │
+          1️⃣ Hablar con NEXUS       2️⃣ Hackear núcleo      3️⃣ Exponer la Orden
+                    │                         │                        │
+         [CAP. 5] DIALOGO_IA       [CAP. 5] HACK_NUCLEO    [CAP. 5] EXPONER_ORDEN
+                    │                         │                        │
+          🖥️ CODE_05                           │                        │
+          respuesta:                          │                        │
+          addEventListener                   │                        │
+                    └─────────────────────────┴────────────────────────┘
+                                              │
+                                    ╔═════════╧══════════╗
+                                    ║  [CAP. 6] LA       ║
+                                    ║  TRAICIÓN          ║
+                                    ╚═════════╤══════════╝
+                                    REVELACION_DANIEL
+                    ┌─────────────────────────┼────────────────────────┐
+                    │                         │                        │
+          1️⃣ Confiar en Daniel     2️⃣ Desconectarlo        3️⃣ Convencerlo
+                    │                         │                        │
+           ALIARSE_DANIEL          RECHAZAR_DANIEL          CONVENCER_DANIEL
+                    └─────────────────────────┴────────────────────────┘
+                                              │
+                                    ╔═════════╧══════════╗
+                                    ║  [CAP. 7] DECISIÓN ║
+                                    ║    FINAL           ║
+                                    ╚═════════╤══════════╝
+                                    FINAL_DECISION
+                                              │
+                                    ⚡ CODE_06 ── respuesta: async
+                                              │
+                                       FINAL_CHOICE
+                         ┌────────────────────┼─────────────────────┐
+                         │                    │                     │
+               1️⃣ Apagar NEXUS    2️⃣ Crear alianza        3️⃣ Liberar código
+                         │                    │                     │
+               ╔══════════╗        ╔══════════╗          ╔══════════╗
+               ║ COLAPSO  ║        ║LA ALIANZA║          ║  CÓDIGO  ║
+               ║          ║        ║          ║          ║  LIBRE   ║
+               ╚══════════╝        ╚══════════╝          ╚══════════╝
+               La humanidad        Humanos e IA          El código de
+               sola, sin NEXUS.    colaboran.            NEXUS es público,
+               Caos predecible.    Supervivencia 97%.    futuro incierto.
+
+```
+
 
 *Actividad: Narrando una historia con la web · Ingeniería Web, 5° Semestre*
