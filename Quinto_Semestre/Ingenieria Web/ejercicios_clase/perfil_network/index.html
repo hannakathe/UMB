@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perfil — Hannah Abril</title>
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+
+  <!-- ===== CABECERA DEL PERFIL (Grid 2 columnas en desktop) ===== -->
+  <div>
+
+    <!-- Columna izquierda: foto + nombre + acciones -->
+    <section>
+      <!-- Foto con overlay para cambiar imagen (clic = abre selector de archivo) -->
+      <div>
+        <img src="assets/img/profile.png" alt="Foto de perfil"
+             onerror="this.src='https://i.pravatar.cc/200?img=47'" />
+        <div><i data-lucide="camera"></i> Cambiar foto</div>
+        <input type="file" accept="image/*" />
+      </div>
+
+      <h1 data-field="name">Hannah Abril</h1>
+      <p data-field="bio">Desarrollador Web · Bogotá, Colombia</p>
+
+      <button data-modal="add-friend"><i data-lucide="user-plus"></i> Agregar amigo</button>
+      <button data-modal="message"><i data-lucide="mail"></i> Enviar mensaje</button>
+      <button data-edit><i data-lucide="pencil"></i> Editar perfil</button>
+    </section>
+
+    <!-- Columna derecha: información + menú de navegación -->
+    <section>
+
+      <!-- Tarjeta de información -->
+      <div>
+        <h2>Información</h2>
+        <ul>
+          <li>Trabaja en <strong data-field="work">TechCorp</strong></li>
+          <li>Estudió en <strong data-field="school">UMB</strong></li>
+          <li>Vive en <strong data-field="city">Bogotá</strong></li>
+          <li>Miembro desde <strong data-field="year">2022</strong></li>
+        </ul>
+      </div>
+
+      <!-- Menú de navegación (Flexbox) -->
+      <nav>
+        <ul>
+          <li><a href="#" data-tab="publicaciones" data-active>Publicaciones</a></li>
+          <li><a href="#" data-tab="amigos">Amigos</a></li>
+          <li><a href="#" data-tab="fotos">Fotos</a></li>
+          <li><a href="#" data-tab="videos">Videos</a></li>
+          <li><a href="#" data-tab="mas">Más</a></li>
+        </ul>
+      </nav>
+
+    </section>
+  </div>
+
+  <!-- ===== CONTENIDO POR TAB ===== -->
+  <main>
+
+    <!-- ── TAB: PUBLICACIONES (activo por defecto) ── -->
+    <section data-section="publicaciones" data-active>
+      <h2>Publicaciones recientes</h2>
+
+      <article>
+        <header>
+          <img src="assets/img/profile.png" alt="Avatar"
+               onerror="this.src='https://i.pravatar.cc/40?img=47'" />
+          <div>
+            <strong>Hannah Abril</strong>
+            <time>Hace 2 horas</time>
+          </div>
+        </header>
+        <p>¡Acabo de terminar mi primer proyecto con CSS Grid y Flexbox! El resultado fue increíble 🚀</p>
+        <footer>
+          <span data-action="like" data-count="142" data-liked="false"><i data-lucide="thumbs-up"></i> 142 Me gusta</span>
+          <span data-action="comment"><i data-lucide="message-circle"></i> 38 Comentarios</span>
+          <span data-modal="share"><i data-lucide="share-2"></i> Compartir</span>
+        </footer>
+        <!-- Sección de comentarios (oculta por defecto) -->
+        <div data-comments>
+          <div data-comment-item>
+            <img src="https://i.pravatar.cc/32?img=5" alt="María" />
+            <div><strong>María López</strong><p>¡Qué genial! Felicitaciones 🎉</p></div>
+          </div>
+          <div data-comment-item>
+            <img src="https://i.pravatar.cc/32?img=12" alt="Carlos" />
+            <div><strong>Carlos Gómez</strong><p>Muy buen trabajo, se nota el esfuerzo 💪</p></div>
+          </div>
+          <div data-comment-input>
+            <img src="assets/img/profile.png" alt="Tú"
+                 onerror="this.src='https://i.pravatar.cc/32?img=47'" />
+            <input type="text" placeholder="Escribe un comentario..." />
+            <button data-send-comment><i data-lucide="send"></i></button>
+          </div>
+        </div>
+      </article>
+
+      <article>
+        <header>
+          <img src="assets/img/profile.png" alt="Avatar"
+               onerror="this.src='https://i.pravatar.cc/40?img=47'" />
+          <div>
+            <strong>Hannah Abril</strong>
+            <time>Ayer</time>
+          </div>
+        </header>
+        <p>Asistí al meetup de desarrollo web en Bogotá. Aprendí mucho sobre diseño adaptable y buenas prácticas de accesibilidad.</p>
+        <footer>
+          <span data-action="like" data-count="87" data-liked="false"><i data-lucide="thumbs-up"></i> 87 Me gusta</span>
+          <span data-action="comment"><i data-lucide="message-circle"></i> 15 Comentarios</span>
+          <span data-modal="share"><i data-lucide="share-2"></i> Compartir</span>
+        </footer>
+        <div data-comments>
+          <div data-comment-item>
+            <img src="https://i.pravatar.cc/32?img=20" alt="Laura" />
+            <div><strong>Laura Pérez</strong><p>¡Me lo perdí! ¿Cuándo es el próximo? 🙌</p></div>
+          </div>
+          <div data-comment-input>
+            <img src="assets/img/profile.png" alt="Tú"
+                 onerror="this.src='https://i.pravatar.cc/32?img=47'" />
+            <input type="text" placeholder="Escribe un comentario..." />
+            <button data-send-comment><i data-lucide="send"></i></button>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ── TAB: AMIGOS ── -->
+    <section data-section="amigos">
+      <h2>Amigos · 6</h2>
+      <div data-friends-grid>
+        <div>
+          <img src="https://i.pravatar.cc/90?img=1" alt="María López" />
+          <strong>María López</strong>
+          <span>15 amigos en común</span>
+          <button data-modal="add-friend"><i data-lucide="user-plus"></i> Seguir</button>
+        </div>
+        <div>
+          <img src="https://i.pravatar.cc/90?img=5" alt="Carlos Gómez" />
+          <strong>Carlos Gómez</strong>
+          <span>8 amigos en común</span>
+          <button data-modal="add-friend"><i data-lucide="user-plus"></i> Seguir</button>
+        </div>
+        <div>
+          <img src="https://i.pravatar.cc/90?img=12" alt="Laura Pérez" />
+          <strong>Laura Pérez</strong>
+          <span>3 amigos en común</span>
+          <button data-modal="add-friend"><i data-lucide="user-plus"></i> Seguir</button>
+        </div>
+        <div>
+          <img src="https://i.pravatar.cc/90?img=18" alt="Jorge Ruiz" />
+          <strong>Jorge Ruiz</strong>
+          <span>21 amigos en común</span>
+          <button data-modal="add-friend"><i data-lucide="user-plus"></i> Seguir</button>
+        </div>
+        <div>
+          <img src="https://i.pravatar.cc/90?img=25" alt="Ana Torres" />
+          <strong>Ana Torres</strong>
+          <span>11 amigos en común</span>
+          <button data-modal="add-friend"><i data-lucide="user-plus"></i> Seguir</button>
+        </div>
+        <div>
+          <img src="https://i.pravatar.cc/90?img=33" alt="Diego Silva" />
+          <strong>Diego Silva</strong>
+          <span>5 amigos en común</span>
+          <button data-modal="add-friend"><i data-lucide="user-plus"></i> Seguir</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TAB: FOTOS ── -->
+    <section data-section="fotos">
+      <h2>Fotos · 9</h2>
+      <div data-photos-grid>
+        <img src="https://picsum.photos/seed/p1/220/220" alt="Foto 1" />
+        <img src="https://picsum.photos/seed/p2/220/220" alt="Foto 2" />
+        <img src="https://picsum.photos/seed/p3/220/220" alt="Foto 3" />
+        <img src="https://picsum.photos/seed/p4/220/220" alt="Foto 4" />
+        <img src="https://picsum.photos/seed/p5/220/220" alt="Foto 5" />
+        <img src="https://picsum.photos/seed/p6/220/220" alt="Foto 6" />
+        <img src="https://picsum.photos/seed/p7/220/220" alt="Foto 7" />
+        <img src="https://picsum.photos/seed/p8/220/220" alt="Foto 8" />
+        <img src="https://picsum.photos/seed/p9/220/220" alt="Foto 9" />
+      </div>
+    </section>
+
+    <!-- ── TAB: VIDEOS ── -->
+    <section data-section="videos">
+      <h2>Videos · 3</h2>
+      <div data-videos-list>
+        <div>
+          <div data-video-thumb>
+            <img src="https://picsum.photos/seed/v1/320/180" alt="Video 1" />
+            <span><i data-lucide="play"></i></span>
+          </div>
+          <div>
+            <strong>Demo proyecto CSS Grid + Flexbox</strong>
+            <span>hace 3 días · 1.2K vistas</span>
+          </div>
+        </div>
+        <div>
+          <div data-video-thumb>
+            <img src="https://picsum.photos/seed/v2/320/180" alt="Video 2" />
+            <span><i data-lucide="play"></i></span>
+          </div>
+          <div>
+            <strong>Meetup Web Dev Bogotá</strong>
+            <span>hace 1 semana · 874 vistas</span>
+          </div>
+        </div>
+        <div>
+          <div data-video-thumb>
+            <img src="https://picsum.photos/seed/v3/320/180" alt="Video 3" />
+            <span><i data-lucide="play"></i></span>
+          </div>
+          <div>
+            <strong>Tutorial Flexbox desde cero</strong>
+            <span>hace 2 semanas · 3.5K vistas</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TAB: MÁS ── -->
+    <section data-section="mas">
+      <h2>Más información</h2>
+      <div data-more-info>
+        <div>
+          <h3><i data-lucide="wrench"></i> Habilidades</h3>
+          <ul>
+            <li>HTML / CSS</li>
+            <li>JavaScript</li>
+            <li>Python</li>
+            <li>Panda3D</li>
+            <li>Git &amp; GitHub</li>
+          </ul>
+        </div>
+        <div>
+          <h3><i data-lucide="target"></i> Intereses</h3>
+          <ul>
+            <li>Desarrollo Web</li>
+            <li>Computación Gráfica</li>
+            <li>Videojuegos indie</li>
+            <li>Open Source</li>
+          </ul>
+        </div>
+        <div>
+          <h3><i data-lucide="at-sign"></i> Redes sociales</h3>
+          <ul>
+            <li><i data-lucide="github"></i>https://github.com/hannakathe</li>
+            <li><i data-lucide="linkedin"></i>https://www.linkedin.com/hanna</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== MODALES / OVERLAYS ===== -->
+
+  <!-- Modal: Agregar amigo -->
+  <div data-overlay="add-friend">
+    <div>
+      <button data-close><i data-lucide="x"></i></button>
+      <img src="assets/img/profile.png" alt="Hannah"
+           onerror="this.src='https://i.pravatar.cc/80?img=47'" />
+      <h3>¿Agregar a Hannah Abril?</h3>
+      <p>Se enviará una solicitud de amistad. Hannah deberá aceptarla para que sean amigos.</p>
+      <button data-confirm-friend><i data-lucide="check"></i> Enviar solicitud</button>
+      <button data-close>Cancelar</button>
+    </div>
+  </div>
+
+  <!-- Modal: Enviar mensaje (chat simulado) -->
+  <div data-overlay="message">
+    <div>
+      <button data-close><i data-lucide="x"></i></button>
+      <h3><i data-lucide="message-circle"></i> Mensaje a Hannah Abril</h3>
+      <div data-chat>
+        <div data-bubble data-them>¡Hola! Gracias por visitar mi perfil 👋</div>
+      </div>
+      <div data-chat-input>
+        <input type="text" placeholder="Escribe un mensaje..." />
+        <button data-send-msg><i data-lucide="send"></i> Enviar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Compartir -->
+  <div data-overlay="share">
+    <div>
+      <button data-close><i data-lucide="x"></i></button>
+      <h3><i data-lucide="share-2"></i> Compartir publicación</h3>
+      <div data-share-options>
+        <button data-share-opt><i data-lucide="clipboard"></i> Copiar enlace</button>
+        <button data-share-opt><i data-lucide="message-circle"></i> Enviar por mensaje</button>
+        <button data-share-opt><i data-lucide="layout"></i> Compartir en tu muro</button>
+        <button data-share-opt><i data-lucide="smartphone"></i> Compartir en historia</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Editar perfil -->
+  <div data-overlay="edit">
+    <div>
+      <button data-close><i data-lucide="x"></i></button>
+      <h3><i data-lucide="pencil"></i> Editar perfil</h3>
+      <form data-edit-form>
+        <label>
+          Nombre
+          <input type="text" name="name" />
+        </label>
+        <label>
+          Bio / Cargo
+          <input type="text" name="bio" />
+        </label>
+        <label>
+          Trabajo
+          <input type="text" name="work" />
+        </label>
+        <label>
+          Escuela
+          <input type="text" name="school" />
+        </label>
+        <label>
+          Ciudad
+          <input type="text" name="city" />
+        </label>
+        <label>
+          Miembro desde
+          <input type="text" name="year" />
+        </label>
+        <div>
+          <button type="submit"><i data-lucide="save"></i> Guardar cambios</button>
+          <button type="button" data-close>Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Selector de reacciones (flotante, posicionado por JS) -->
+  <div data-reaction-picker>
+    <span data-reaction="👍" title="Me gusta">👍</span>
+    <span data-reaction="❤️" title="Me encanta">❤️</span>
+    <span data-reaction="😂" title="Divertido">😂</span>
+    <span data-reaction="😮" title="Asombrado">😮</span>
+    <span data-reaction="😢" title="Triste">😢</span>
+    <span data-reaction="😡" title="Enojado">😡</span>
+  </div>
+
+  <!-- Toast de notificación global -->
+  <div data-toast></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

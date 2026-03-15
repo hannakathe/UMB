@@ -1,0 +1,1154 @@
+/* =========================================
+   PERFIL DE RED SOCIAL — Mobile-First CSS
+   Sin clases ni IDs: selectores avanzados
+   ========================================= */
+
+/* --- Reset y base --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f0f2f5;
+  color: #1c1e21;
+  min-height: 100vh;
+}
+
+/* =========================================
+   CONTENEDOR PRINCIPAL — Mobile (1 columna)
+   ========================================= */
+
+body > div {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  max-width: 960px;
+  margin: 1.5rem auto;
+  padding: 0 1rem;
+}
+
+/* =========================================
+   COLUMNA IZQUIERDA — Foto y nombre
+   ========================================= */
+
+body > div > section:first-child {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.10);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .75rem;
+}
+
+/* ── Wrapper de foto de perfil ── */
+body > div > section:first-child > div {
+  position: relative;
+  width: 148px;
+  height: 148px;
+  border-radius: 50%;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* Foto */
+body > div > section:first-child > div > img {
+  width: 148px;
+  height: 148px;
+  border-radius: 50%;
+  border: 4px solid #1877f2;
+  object-fit: cover;
+  display: block;
+  transition: filter .2s;
+}
+
+/* Overlay "Cambiar foto" */
+body > div > section:first-child > div > div {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 48%;
+  background: rgba(0, 0, 0, .52);
+  color: #fff;
+  font-size: .72rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 0 50% 50%;
+  opacity: 0;
+  transition: opacity .2s;
+  pointer-events: none;
+}
+
+body > div > section:first-child > div:hover > div {
+  opacity: 1;
+}
+
+body > div > section:first-child > div:hover > img {
+  filter: brightness(.85);
+}
+
+/* Input de archivo oculto */
+body > div > section:first-child > div > input[type="file"] {
+  display: none;
+}
+
+/* Nombre */
+body > div > section:first-child > h1 {
+  font-size: 1.5rem;
+  color: #1c1e21;
+}
+
+/* Bio / subtítulo */
+body > div > section:first-child > p {
+  font-size: .9rem;
+  color: #65676b;
+}
+
+/* ── Botones de acción ── */
+body > div > section:first-child > button {
+  width: 100%;
+  max-width: 200px;
+  padding: .6rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  font-size: .9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s, transform .1s, box-shadow .2s;
+}
+
+/* Agregar amigo — azul primario */
+body > div > section:first-child > button:nth-of-type(1) {
+  background: #1877f2;
+  color: #fff;
+}
+body > div > section:first-child > button:nth-of-type(1):hover {
+  background: #145dbf;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(24,119,242,.35);
+}
+
+/* Enviar mensaje — gris */
+body > div > section:first-child > button:nth-of-type(2) {
+  background: #e4e6eb;
+  color: #1c1e21;
+}
+body > div > section:first-child > button:nth-of-type(2):hover {
+  background: #ccd0d5;
+  transform: translateY(-1px);
+}
+
+/* Editar perfil — borde outlined */
+body > div > section:first-child > button:nth-of-type(3) {
+  background: transparent;
+  color: #1877f2;
+  border: 2px solid #1877f2;
+}
+body > div > section:first-child > button:nth-of-type(3):hover {
+  background: #e7f3ff;
+  transform: translateY(-1px);
+}
+
+/* Sin pseudo-elemento: el ícono Lucide ya actúa como indicador visual */
+
+/* =========================================
+   COLUMNA DERECHA — Info + Navegación
+   ========================================= */
+
+body > div > section:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Tarjeta de información */
+body > div > section:last-child > div {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.10);
+  padding: 1.5rem;
+}
+
+body > div > section:last-child > div > h2 {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: #1c1e21;
+  border-bottom: 2px solid #e4e6eb;
+  padding-bottom: .5rem;
+}
+
+/* Selector descendiente: ul li */
+body > div > section:last-child > div > ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+}
+
+/* Pseudo-elemento ::before — punto decorativo azul */
+body > div > section:last-child > div > ul > li::before {
+  content: "▸";
+  color: #1877f2;
+  margin-right: .5rem;
+  font-size: .85rem;
+}
+
+body > div > section:last-child > div > ul > li {
+  font-size: .95rem;
+  color: #4b4f56;
+}
+
+/* Menú de navegación — Flexbox */
+body > div > section:last-child > nav {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.10);
+  padding: .75rem 1rem;
+}
+
+body > div > section:last-child > nav > ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: .5rem;
+}
+
+/* Selector descendiente: ul li a */
+body > div > section:last-child > nav > ul li a {
+  display: block;
+  padding: .55rem 1rem;
+  border-radius: 8px;
+  font-size: .9rem;
+  font-weight: 600;
+  color: #65676b;
+  text-decoration: none;
+  transition: background .2s, color .2s;
+  position: relative;
+  user-select: none;
+}
+
+/* Pseudo-clase :hover */
+body > div > section:last-child > nav > ul li a:hover {
+  background: #e7f3ff;
+  color: #1877f2;
+}
+
+/* Tab activo: atributo data-active */
+body > div > section:last-child > nav > ul li a[data-active] {
+  color: #1877f2;
+  background: #e7f3ff;
+}
+
+/* Pseudo-elemento ::after — línea activa bajo el tab seleccionado */
+body > div > section:last-child > nav > ul li a[data-active]::after {
+  content: "";
+  display: block;
+  height: 3px;
+  background: #1877f2;
+  border-radius: 3px;
+  margin-top: 4px;
+}
+
+/* =========================================
+   CONTENIDO DE TABS (main)
+   ========================================= */
+
+body > main {
+  max-width: 960px;
+  margin: 0 auto 2rem;
+  padding: 0 1rem;
+}
+
+/* Todas las secciones ocultas por defecto */
+body > main > section {
+  display: none;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Solo la sección activa se muestra */
+body > main > section[data-active] {
+  display: flex;
+}
+
+body > main > section > h2 {
+  font-size: 1.15rem;
+  color: #4b4f56;
+}
+
+/* ─── PUBLICACIONES ─── */
+
+body > main > section article {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.10);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: .85rem;
+}
+
+body > main > section article > header {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+}
+
+body > main > section article > header > img {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+body > main > section article > header > div {
+  display: flex;
+  flex-direction: column;
+}
+
+body > main > section article > header > div > strong {
+  font-size: .95rem;
+  color: #1c1e21;
+}
+
+body > main > section article > header > div > time {
+  font-size: .8rem;
+  color: #8a8d91;
+}
+
+body > main > section article > p {
+  font-size: .95rem;
+  line-height: 1.5;
+  color: #1c1e21;
+}
+
+/* Footer de reacciones */
+body > main > section article > footer {
+  display: flex;
+  gap: 1.25rem;
+  border-top: 1px solid #e4e6eb;
+  padding-top: .75rem;
+  flex-wrap: wrap;
+}
+
+body > main > section article > footer > span {
+  font-size: .85rem;
+  color: #65676b;
+  cursor: pointer;
+  transition: color .2s, transform .1s;
+  user-select: none;
+}
+
+body > main > section article > footer > span:hover {
+  color: #1877f2;
+  transform: scale(1.05);
+}
+
+/* Like activo */
+body > main > section article > footer > span[data-liked="true"] {
+  color: #1877f2;
+  font-weight: 700;
+}
+
+/* ─── SECCIÓN DE COMENTARIOS (inline en artículo) ─── */
+
+article > [data-comments] {
+  display: none;
+  flex-direction: column;
+  gap: .75rem;
+  border-top: 1px solid #e4e6eb;
+  padding-top: .85rem;
+  animation: slideDown .2s ease;
+}
+
+article > [data-comments][data-active] {
+  display: flex;
+}
+
+[data-comment-item] {
+  display: flex;
+  gap: .6rem;
+  align-items: flex-start;
+}
+
+[data-comment-item] > img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+[data-comment-item] > div > strong {
+  font-size: .82rem;
+  color: #1c1e21;
+  display: block;
+  margin-bottom: 2px;
+}
+
+[data-comment-item] > div > p {
+  font-size: .88rem;
+  background: #f0f2f5;
+  padding: .4rem .8rem;
+  border-radius: 12px;
+  color: #1c1e21;
+  line-height: 1.4;
+}
+
+[data-comment-input] {
+  display: flex;
+  gap: .5rem;
+  align-items: center;
+}
+
+[data-comment-input] > img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+[data-comment-input] > input {
+  flex: 1;
+  padding: .48rem .9rem;
+  border: 1px solid #e4e6eb;
+  border-radius: 20px;
+  font-size: .88rem;
+  outline: none;
+  transition: border-color .2s;
+  background: #f0f2f5;
+}
+
+[data-comment-input] > input:focus {
+  border-color: #1877f2;
+  background: #fff;
+}
+
+[data-comment-input] > button[data-send-comment] {
+  padding: .4rem .75rem;
+  background: #1877f2;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: .9rem;
+  cursor: pointer;
+  transition: background .2s;
+}
+
+[data-comment-input] > button[data-send-comment]:hover {
+  background: #145dbf;
+}
+
+/* ─── TAB: AMIGOS ─── */
+
+[data-friends-grid] {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1rem;
+}
+
+[data-friends-grid] > div {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.08);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .5rem;
+  text-align: center;
+}
+
+[data-friends-grid] > div > img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #e4e6eb;
+}
+
+[data-friends-grid] > div > strong {
+  font-size: .9rem;
+  color: #1c1e21;
+}
+
+[data-friends-grid] > div > span {
+  font-size: .75rem;
+  color: #8a8d91;
+}
+
+[data-friends-grid] > div > button {
+  padding: .35rem .8rem;
+  background: #e7f3ff;
+  color: #1877f2;
+  border: none;
+  border-radius: 6px;
+  font-size: .8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s;
+}
+
+[data-friends-grid] > div > button:hover {
+  background: #1877f2;
+  color: #fff;
+}
+
+/* ─── TAB: FOTOS ─── */
+
+[data-photos-grid] {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: .5rem;
+}
+
+[data-photos-grid] > img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: opacity .2s, transform .2s;
+}
+
+[data-photos-grid] > img:hover {
+  opacity: .85;
+  transform: scale(1.02);
+}
+
+/* ─── TAB: VIDEOS ─── */
+
+[data-videos-list] {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+[data-videos-list] > div {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.08);
+  overflow: hidden;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: .75rem;
+  cursor: pointer;
+  transition: box-shadow .2s;
+}
+
+[data-videos-list] > div:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,.14);
+}
+
+[data-video-thumb] {
+  position: relative;
+  flex-shrink: 0;
+  width: 140px;
+  height: 80px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+[data-video-thumb] > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Pseudo-elemento: botón de play superpuesto */
+[data-video-thumb] > span {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,.4);
+  color: #fff;
+  font-size: 1.6rem;
+}
+
+[data-videos-list] > div > div > strong {
+  display: block;
+  font-size: .95rem;
+  color: #1c1e21;
+  margin-bottom: .3rem;
+}
+
+[data-videos-list] > div > div > span {
+  font-size: .8rem;
+  color: #8a8d91;
+}
+
+/* ─── TAB: MÁS ─── */
+
+[data-more-info] {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+[data-more-info] > div {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.08);
+  padding: 1.25rem;
+}
+
+[data-more-info] > div > h3 {
+  font-size: 1rem;
+  margin-bottom: .75rem;
+  color: #1c1e21;
+  border-bottom: 1px solid #e4e6eb;
+  padding-bottom: .4rem;
+}
+
+[data-more-info] > div > ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: .45rem;
+}
+
+/* Pseudo-elemento ::before en "Más info" */
+[data-more-info] > div > ul > li::before {
+  content: "→";
+  color: #1877f2;
+  margin-right: .5rem;
+  font-weight: 700;
+}
+
+[data-more-info] > div > ul > li {
+  font-size: .9rem;
+  color: #4b4f56;
+}
+
+/* =========================================
+   MODALES / OVERLAYS
+   ========================================= */
+
+[data-overlay] {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .55);
+  z-index: 900;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  animation: fadeIn .18s ease;
+}
+
+[data-overlay][data-active] {
+  display: flex;
+}
+
+/* Caja interior del modal */
+[data-overlay] > div {
+  background: #fff;
+  border-radius: 14px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 440px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  animation: slideUp .22s ease;
+}
+
+/* Título del modal */
+[data-overlay] > div > h3 {
+  font-size: 1.15rem;
+  color: #1c1e21;
+  text-align: center;
+}
+
+/* Párrafo descriptivo */
+[data-overlay] > div > p {
+  font-size: .9rem;
+  color: #65676b;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* Imagen dentro del modal */
+[data-overlay] > div > img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #1877f2;
+  align-self: center;
+}
+
+/* Botón de cerrar (✕) */
+[data-overlay] > div > button[data-close]:first-child {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: #f0f2f5;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: .85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .2s;
+}
+
+[data-overlay] > div > button[data-close]:first-child:hover {
+  background: #e4e6eb;
+}
+
+/* Botones de acción dentro del modal */
+[data-overlay] > div > button:not([data-close]:first-child),
+[data-overlay] > div > div > button {
+  padding: .65rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  font-size: .92rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s, transform .1s;
+}
+
+/* Botón de confirmación — azul */
+[data-overlay] > div > button[data-confirm-friend] {
+  background: #1877f2;
+  color: #fff;
+}
+[data-overlay] > div > button[data-confirm-friend]:hover {
+  background: #145dbf;
+  transform: translateY(-1px);
+}
+
+/* Botón cancelar (segundo data-close) */
+[data-overlay] > div > button[data-close]:not(:first-child) {
+  background: #e4e6eb;
+  color: #1c1e21;
+  position: static;
+  width: auto;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* ─── MODAL: CHAT ─── */
+
+[data-chat] {
+  min-height: 180px;
+  max-height: 280px;
+  overflow-y: auto;
+  background: #f0f2f5;
+  border-radius: 10px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+  scroll-behavior: smooth;
+}
+
+[data-bubble] {
+  max-width: 78%;
+  padding: .55rem .85rem;
+  border-radius: 16px;
+  font-size: .9rem;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+[data-bubble][data-them] {
+  background: #e4e6eb;
+  color: #1c1e21;
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+
+[data-bubble][data-me] {
+  background: #1877f2;
+  color: #fff;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+[data-chat-input] {
+  display: flex;
+  gap: .5rem;
+}
+
+[data-chat-input] > input {
+  flex: 1;
+  padding: .55rem .9rem;
+  border: 1px solid #e4e6eb;
+  border-radius: 20px;
+  font-size: .9rem;
+  outline: none;
+  transition: border-color .2s;
+}
+
+[data-chat-input] > input:focus {
+  border-color: #1877f2;
+}
+
+[data-chat-input] > button[data-send-msg] {
+  background: #1877f2;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: .55rem 1.1rem;
+  font-size: .9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s;
+}
+
+[data-chat-input] > button[data-send-msg]:hover {
+  background: #145dbf;
+}
+
+/* ─── MODAL: COMPARTIR ─── */
+
+[data-share-options] {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .6rem;
+}
+
+[data-share-options] > button[data-share-opt] {
+  background: #f0f2f5;
+  color: #1c1e21;
+  border: none;
+  border-radius: 10px;
+  padding: .85rem .6rem;
+  font-size: .88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s, transform .1s;
+  text-align: center;
+}
+
+[data-share-options] > button[data-share-opt]:hover {
+  background: #e7f3ff;
+  color: #1877f2;
+  transform: translateY(-2px);
+}
+
+/* ─── MODAL: EDITAR PERFIL ─── */
+
+[data-edit-form] {
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+}
+
+[data-edit-form] > label {
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+  font-size: .85rem;
+  font-weight: 600;
+  color: #65676b;
+}
+
+[data-edit-form] > label > input {
+  padding: .55rem .9rem;
+  border: 1px solid #e4e6eb;
+  border-radius: 8px;
+  font-size: .92rem;
+  outline: none;
+  transition: border-color .2s;
+}
+
+[data-edit-form] > label > input:focus {
+  border-color: #1877f2;
+}
+
+[data-edit-form] > div {
+  display: flex;
+  gap: .75rem;
+  justify-content: flex-end;
+  padding-top: .5rem;
+}
+
+[data-edit-form] > div > button[type="submit"] {
+  background: #1877f2;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: .6rem 1.3rem;
+  font-size: .92rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s;
+}
+
+[data-edit-form] > div > button[type="submit"]:hover {
+  background: #145dbf;
+}
+
+[data-edit-form] > div > button[type="button"][data-close] {
+  background: #e4e6eb;
+  color: #1c1e21;
+  border: none;
+  border-radius: 8px;
+  padding: .6rem 1.1rem;
+  font-size: .92rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s;
+  position: static;
+  width: auto;
+  height: auto;
+}
+
+[data-edit-form] > div > button[type="button"][data-close]:hover {
+  background: #ccd0d5;
+}
+
+/* =========================================
+   SELECTOR DE REACCIONES (flotante)
+   ========================================= */
+
+[data-reaction-picker] {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  background: #fff;
+  border-radius: 30px;
+  padding: .5rem .75rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,.2);
+  gap: .3rem;
+  animation: bounceIn .2s ease;
+}
+
+[data-reaction-picker][data-active] {
+  display: flex;
+}
+
+[data-reaction-picker] > span[data-reaction] {
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: transform .15s;
+  line-height: 1;
+  display: inline-block;
+}
+
+[data-reaction-picker] > span[data-reaction]:hover {
+  transform: scale(1.4) translateY(-4px);
+}
+
+/* =========================================
+   TOAST DE NOTIFICACIÓN
+   ========================================= */
+
+[data-toast] {
+  position: fixed;
+  bottom: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1c1e21;
+  color: #fff;
+  padding: .75rem 1.5rem;
+  border-radius: 30px;
+  font-size: .9rem;
+  font-weight: 500;
+  z-index: 1100;
+  white-space: nowrap;
+  box-shadow: 0 4px 16px rgba(0,0,0,.25);
+  transition: bottom .3s ease;
+  pointer-events: none;
+}
+
+[data-toast][data-active] {
+  bottom: 2rem;
+}
+
+/* =========================================
+   ANIMACIONES
+   ========================================= */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bounceIn {
+  from { opacity: 0; transform: scale(.7); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* =========================================
+   MEDIA QUERY — Desktop (min-width: 768px)
+   CSS Grid: 2 columnas en el perfil
+   ========================================= */
+
+@media (min-width: 768px) {
+  body > div {
+    grid-template-columns: 260px 1fr;
+    align-items: start;
+  }
+
+  /* Columna izquierda sticky */
+  body > div > section:first-child {
+    position: sticky;
+    top: 1.5rem;
+  }
+
+  body > div > section:first-child > button {
+    max-width: 180px;
+  }
+
+  /* Nav sin wrap en desktop */
+  body > div > section:last-child > nav > ul {
+    justify-content: space-evenly;
+    flex-wrap: nowrap;
+  }
+
+  /* Más info en 3 columnas */
+  [data-more-info] {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  body > div,
+  body > main {
+    padding: 0 2rem;
+  }
+}
+
+/* =========================================
+   LUCIDE ICONS — tamaño y alineación SVG
+   ========================================= */
+
+/* Tamaño base para SVGs generados por Lucide */
+svg {
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+/* Íconos en botones de acción principales */
+body > div > section:first-child > button > svg {
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+}
+
+/* Íconos en el overlay de la foto */
+body > div > section:first-child > div > div > svg {
+  width: 14px;
+  height: 14px;
+  margin-right: 3px;
+}
+
+/* Íconos en el footer de los artículos (Me gusta, Comentarios, Compartir) */
+body > main > section article > footer > span > svg {
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+}
+
+/* Ícono del botón enviar comentario */
+[data-comment-input] > button[data-send-comment] > svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* Ícono botón "Seguir" en amigos */
+[data-friends-grid] > div > button > svg {
+  width: 14px;
+  height: 14px;
+  margin-right: 3px;
+}
+
+/* Ícono play en thumbs de video */
+[data-video-thumb] > span > svg {
+  width: 30px;
+  height: 30px;
+  color: #fff;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,.4));
+}
+
+/* Íconos en títulos h3 de "Más info" */
+[data-more-info] > div > h3 > svg {
+  width: 17px;
+  height: 17px;
+  margin-right: 5px;
+  color: #1877f2;
+}
+
+/* Íconos en items de lista de redes sociales */
+[data-more-info] > div > ul > li > svg {
+  width: 15px;
+  height: 15px;
+  margin-right: 5px;
+  color: #1877f2;
+  vertical-align: text-bottom;
+}
+
+/* Ícono cerrar modal (✕) */
+[data-overlay] > div > button[data-close]:first-child > svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Íconos en botones de acción del modal */
+[data-overlay] > div > button > svg {
+  width: 16px;
+  height: 16px;
+  margin-right: 5px;
+}
+
+/* Íconos en títulos h3 de modales */
+[data-overlay] > div > h3 > svg {
+  width: 18px;
+  height: 18px;
+  margin-right: 6px;
+  vertical-align: text-bottom;
+}
+
+/* Íconos en botones de opciones de compartir */
+[data-share-options] > button[data-share-opt] > svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+  margin: 0 auto .4rem;
+}
+
+/* Ícono en botón enviar mensaje del chat */
+[data-chat-input] > button[data-send-msg] > svg {
+  width: 15px;
+  height: 15px;
+  margin-right: 4px;
+}
+
+/* Íconos del formulario editar perfil */
+[data-edit-form] > div > button > svg {
+  width: 15px;
+  height: 15px;
+  margin-right: 4px;
+}
