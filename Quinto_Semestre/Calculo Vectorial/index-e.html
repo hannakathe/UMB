@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cálculo Vectorial — Banco de Ejercicios</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Source+Serif+4:opsz,wght@8..60,300;400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script>
+MathJax = {
+  tex: { inlineMath:[['$','$'],['\\(','\\)']], displayMath:[['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags:['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+<style>
+:root{
+  --bg:#0c0c16;--surface:#14141f;--surface2:#1a1a2a;--surface3:#1f1f30;
+  --border:#252538;--gold:#e8a920;--gold-light:#f5c84a;--gold-dim:rgba(232,169,32,.13);
+  --teal:#4ec9b0;--teal-dim:rgba(78,201,176,.12);
+  --blue:#4f83cc;--blue-dim:rgba(79,131,204,.12);
+  --red:#f48771;--red-dim:rgba(244,135,113,.12);
+  --green:#6cc16c;--green-dim:rgba(108,193,108,.12);
+  --text:#e2e2ee;--text-muted:#7a7a96;--text-dim:#4a4a66;
+  --radius:12px;--radius-sm:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Source Serif 4',Georgia,serif;font-size:17px;line-height:1.8;min-height:100vh;}
+
+/* ── SIDEBAR ── */
+.sidebar{position:fixed;top:0;left:0;width:268px;height:100vh;background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;z-index:100;padding:24px 0 40px;}
+.sidebar-logo{padding:0 22px 22px;border-bottom:1px solid var(--border);margin-bottom:14px;}
+.sidebar-logo .title{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:var(--gold);line-height:1.3;}
+.sidebar-logo .sub{font-size:.7rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-top:4px;letter-spacing:.05em;}
+.nav-section{padding:5px 16px;font-size:.65rem;font-family:'JetBrains Mono',monospace;letter-spacing:.12em;color:var(--text-dim);text-transform:uppercase;margin-top:10px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 22px;text-decoration:none;color:var(--text-muted);font-size:.82rem;transition:all .18s;border-left:2px solid transparent;}
+.nav-item:hover{color:var(--gold-light);background:var(--gold-dim);border-left-color:var(--gold);}
+.nav-num{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--text-dim);min-width:18px;}
+.nav-dots{display:flex;gap:3px;margin-left:auto;}
+.nd{width:6px;height:6px;border-radius:50%;background:var(--text-dim);}
+.nd.easy{background:var(--teal);}
+.nd.med{background:var(--blue);}
+.nd.hard{background:var(--red);}
+
+/* ── MAIN ── */
+.main{margin-left:268px;padding-bottom:100px;}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(160deg,#0d0d1e 0%,#131228 45%,#0c1422 100%);padding:72px 60px 64px;border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-80px;right:-80px;width:500px;height:500px;background:radial-gradient(circle,rgba(232,169,32,.06) 0%,transparent 65%);pointer-events:none;}
+.hero::after{content:'∂²f/∂x∂y';position:absolute;bottom:-16px;right:56px;font-family:'Playfair Display',serif;font-size:7.5rem;font-weight:900;color:rgba(232,169,32,.035);pointer-events:none;line-height:1;}
+.hero-tag{display:inline-block;background:var(--gold-dim);border:1px solid rgba(232,169,32,.3);color:var(--gold);padding:4px 14px;border-radius:20px;font-size:.72rem;font-family:'JetBrains Mono',monospace;letter-spacing:.08em;margin-bottom:20px;}
+.hero h1{font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;line-height:1.1;color:#fff;max-width:620px;}
+.hero h1 span{color:var(--gold);}
+.hero-sub{margin-top:18px;color:var(--text-muted);max-width:540px;font-size:.97rem;}
+.hero-meta{display:flex;gap:36px;margin-top:32px;}
+.meta-item{text-align:center;}
+.meta-num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--gold);line-height:1;}
+.meta-label{font-size:.7rem;color:var(--text-dim);font-family:'JetBrains Mono',monospace;letter-spacing:.08em;text-transform:uppercase;margin-top:4px;}
+.diff-legend{display:flex;gap:20px;margin-top:28px;padding-top:24px;border-top:1px solid var(--border);}
+.dl-item{display:flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:.72rem;}
+.dl-dot{width:10px;height:10px;border-radius:50%;}
+
+/* ── SECTION ── */
+.topic-section{padding:56px 60px 44px;border-bottom:1px solid var(--border);}
+.section-header{display:flex;align-items:flex-start;gap:18px;margin-bottom:32px;}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--gold);background:var(--gold-dim);border:1px solid rgba(232,169,32,.25);border-radius:var(--radius-sm);padding:6px 12px;margin-top:5px;white-space:nowrap;letter-spacing:.06em;}
+.section-title{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;color:#fff;line-height:1.2;}
+.ex-separator{height:1px;background:var(--border);margin:0 0 24px;}
+
+/* ── EXERCISE CARD ── */
+.exercise-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:border-color .2s;margin-bottom:18px;}
+.exercise-card:hover{border-color:rgba(232,169,32,.3);}
+.ex-header{display:flex;align-items:flex-start;gap:16px;padding:22px 26px;}
+.ex-badge{flex-shrink:0;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:600;margin-top:2px;letter-spacing:.03em;}
+.badge-easy{background:linear-gradient(135deg,#3baa90,#2d8a72);color:#000;}
+.badge-med{background:linear-gradient(135deg,#3a6db5,#2a5499);color:#fff;}
+.badge-hard{background:linear-gradient(135deg,var(--gold),#b87d10);color:#000;}
+.ex-content{flex:1;}
+.ex-label{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--text-dim);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;}
+.ex-problem{font-size:.97rem;color:var(--text);line-height:1.8;}
+.ex-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+.tag{font-family:'JetBrains Mono',monospace;font-size:.67rem;padding:3px 10px;border-radius:20px;letter-spacing:.05em;}
+.tag-easy{background:var(--teal-dim);border:1px solid rgba(78,201,176,.3);color:var(--teal);}
+.tag-med{background:var(--blue-dim);border:1px solid rgba(79,131,204,.3);color:var(--blue);}
+.tag-hard{background:var(--red-dim);border:1px solid rgba(244,135,113,.3);color:var(--red);}
+.tag-topic{background:rgba(90,90,130,.15);border:1px solid rgba(90,90,130,.3);color:#9090b8;}
+
+/* ── SOLUTION ── */
+details.solution{border-top:1px solid var(--border);}
+details.solution summary{display:flex;align-items:center;gap:10px;padding:13px 26px;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--teal);letter-spacing:.06em;list-style:none;user-select:none;transition:background .2s;}
+details.solution summary::-webkit-details-marker{display:none;}
+details.solution summary:hover{background:rgba(78,201,176,.05);}
+.sum-icon{width:21px;height:21px;background:rgba(78,201,176,.1);border:1px solid rgba(78,201,176,.28);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.82rem;transition:transform .22s;}
+details[open] .sum-icon{transform:rotate(45deg);}
+.solution-body{padding:22px 26px 26px;background:var(--surface2);border-top:1px solid var(--border);}
+.sol-step{display:flex;gap:14px;margin-bottom:20px;}
+.sol-step:last-child{margin-bottom:0;}
+.step-n{flex-shrink:0;width:24px;height:24px;background:var(--gold-dim);border:1px solid rgba(232,169,32,.22);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--gold);margin-top:2px;}
+.step-c{flex:1;font-size:.91rem;line-height:1.85;color:var(--text);}
+.step-c strong{color:var(--gold-light);}
+.step-c em{color:var(--teal);font-style:normal;}
+.step-math{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:11px 18px;margin:9px 0;text-align:center;font-size:.95rem;overflow-x:auto;}
+.concl{margin-top:16px;padding:13px 18px;background:rgba(232,169,32,.065);border:1px solid rgba(232,169,32,.18);border-radius:var(--radius-sm);font-size:.9rem;color:var(--gold-light);}
+.concl strong{color:var(--gold);}
+
+/* ── GRAPH ── */
+.sol-graph{margin:16px 0;border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;background:#070710;}
+.sol-graph canvas{display:block;width:100%;height:auto;}
+.sol-graph .gcap{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--text-dim);padding:6px 14px;text-align:center;letter-spacing:.05em;border-top:1px solid var(--border);background:var(--surface);}
+
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:var(--surface);}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+::-webkit-scrollbar-thumb:hover{background:var(--text-dim);}
+@media(max-width:900px){.sidebar{display:none;}.main{margin-left:0;}.hero,.topic-section{padding:36px 20px;}}
+</style>
+</head>
+<body>
+
+<!-- ══ SIDEBAR ══ -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="title">Banco de Ejercicios</div>
+    <div class="sub">CÁLCULO VECTORIAL // 2026</div>
+  </div>
+  <div class="nav-section">Temas</div>
+  <a class="nav-item" href="#t1"><span class="nav-num">01</span>Funciones de varias variables<span class="nav-dots"><span class="nd easy"></span><span class="nd med"></span><span class="nd hard"></span></span></a>
+  <a class="nav-item" href="#t2"><span class="nav-num">02</span>Curvas de nivel<span class="nav-dots"><span class="nd easy"></span><span class="nd med"></span><span class="nd hard"></span></span></a>
+  <a class="nav-item" href="#t3"><span class="nav-num">03</span>Superficies cuadráticas<span class="nav-dots"><span class="nd easy"></span><span class="nd med"></span><span class="nd hard"></span></span></a>
+  <a class="nav-item" href="#t4"><span class="nav-num">04</span>Límites multivariados<span class="nav-dots"><span class="nd easy"></span><span class="nd med"></span><span class="nd hard"></span></span></a>
+  <a class="nav-item" href="#t5"><span class="nav-num">05</span>Polares y continuidad<span class="nav-dots"><span class="nd easy"></span><span class="nd med"></span><span class="nd hard"></span></span></a>
+  <a class="nav-item" href="#t6"><span class="nav-num">06</span>Deriv. parciales y direccional<span class="nav-dots"><span class="nd easy"></span><span class="nd med"></span><span class="nd hard"></span></span></a>
+  <a class="nav-item" href="#t7"><span class="nav-num">07</span>Derivadas de orden superior<span class="nav-dots"><span class="nd easy"></span><span class="nd med"></span><span class="nd hard"></span></span></a>
+  <a class="nav-item" href="#t8"><span class="nav-num">08</span>Valores extremos<span class="nav-dots"><span class="nd easy"></span><span class="nd med"></span><span class="nd hard"></span></span></a>
+  <a class="nav-item" href="#t9"><span class="nav-num">09</span>Multiplicadores de Lagrange<span class="nav-dots"><span class="nd easy"></span><span class="nd med"></span><span class="nd hard"></span></span></a>
+</nav>
+
+<!-- ══ MAIN ══ -->
+<main class="main">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">CÁLCULO VECTORIAL · PRÁCTICA PROGRESIVA</div>
+  <h1>Banco de <span>Ejercicios</span></h1>
+  <p class="hero-sub">27 ejercicios con dificultad progresiva, soluciones paso a paso colapsables y gráficas. Intenta cada ejercicio antes de abrir la solución.</p>
+  <div class="hero-meta">
+    <div class="meta-item"><div class="meta-num">9</div><div class="meta-label">Temas</div></div>
+    <div class="meta-item"><div class="meta-num">27</div><div class="meta-label">Ejercicios</div></div>
+    <div class="meta-item"><div class="meta-num">★→★★★</div><div class="meta-label">Progresivo</div></div>
+  </div>
+  <div class="diff-legend">
+    <div class="dl-item"><div class="dl-dot" style="background:var(--teal)"></div><span style="color:var(--teal)">★ Básico</span></div>
+    <div class="dl-item"><div class="dl-dot" style="background:var(--blue)"></div><span style="color:var(--blue)">★★ Intermedio</span></div>
+    <div class="dl-item"><div class="dl-dot" style="background:var(--red)"></div><span style="color:var(--red)">★★★ Avanzado</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════ T1 ═══════════════ -->
+<section class="topic-section" id="t1">
+  <div class="section-header"><div class="section-num">TEMA 01</div><div class="section-title">Funciones en Varias Variables</div></div>
+  <div class="ex-separator"></div>
+
+  <!-- T1E1 ★ -->
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-badge badge-easy">★</div>
+      <div class="ex-content">
+        <div class="ex-label">Ejercicio 1.1 — Dominio básico</div>
+        <div class="ex-problem">Halle y describa el dominio natural de: $$f(x,y)=\sqrt{4-x^2}+\ln(y-1)$$</div>
+        <div class="ex-tags"><span class="tag tag-easy">★ Básico</span><span class="tag tag-topic">Dominio / Franja vertical</span></div>
+      </div>
+    </div>
+    <details class="solution"><summary><span class="sum-icon">+</span> VER SOLUCIÓN</summary>
+    <div class="solution-body">
+      <div class="sol-step"><div class="step-n">1</div><div class="step-c"><strong>Condición del radical:</strong>
+        <div class="step-math">$4-x^2\geq0\implies x^2\leq4\implies -2\leq x\leq2$</div>
+        Segmento cerrado en $x$, las fronteras $x=\pm2$ están incluidas.</div></div>
+      <div class="sol-step"><div class="step-n">2</div><div class="step-c"><strong>Condición del logaritmo:</strong>
+        <div class="step-math">$y-1>0\implies y>1$</div>
+        La recta $y=1$ queda excluida.</div></div>
+      <div class="sol-step"><div class="step-n">3</div><div class="step-c"><strong>Intersección:</strong>
+        <div class="step-math">$\text{Dom}(f)=[-2,2]\times(1,+\infty)$</div></div></div>
+      <div class="sol-graph"><canvas id="g11" width="480" height="260"></canvas><div class="gcap">REGIÓN DORADA = Dom(f): franja vertical −2 ≤ x ≤ 2, y &gt; 1 · BORDES SÓLIDOS = incluidos · PUNTEADO = excluido</div></div>
+      <div class="concl"><strong>Resultado:</strong> Semibanda rectangular infinita: $x\in[-2,2]$ y $y>1$. Las fronteras $x=\pm2$ están incluidas; $y=1$ no.</div>
+    </div></details>
+  </div>
+
+  <!-- T1E2 ★★ -->
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-badge badge-med">★★</div>
+      <div class="ex-content">
+        <div class="ex-label">Ejercicio 1.2 — Corona circular</div>
+        <div class="ex-problem">Halle el dominio natural de: $$f(x,y)=\frac{\sqrt{16-x^2-y^2}}{\sqrt{x^2+y^2-4}}$$</div>
+        <div class="ex-tags"><span class="tag tag-med">★★ Intermedio</span><span class="tag tag-topic">Dominio / Anillo</span></div>
+      </div>
+    </div>
+    <details class="solution"><summary><span class="sum-icon">+</span> VER SOLUCIÓN</summary>
+    <div class="solution-body">
+      <div class="sol-step"><div class="step-n">1</div><div class="step-c"><strong>Numerador</strong> ($\sqrt{16-x^2-y^2}\geq0$):
+        <div class="step-math">$16-x^2-y^2\geq0\implies x^2+y^2\leq16$</div>
+        Disco cerrado de radio 4.</div></div>
+      <div class="sol-step"><div class="step-n">2</div><div class="step-c"><strong>Denominador</strong> (el radical está abajo: debe ser $>0$):
+        <div class="step-math">$x^2+y^2-4>0\implies x^2+y^2>4$</div>
+        Exterior estricto del círculo de radio 2.</div></div>
+      <div class="sol-step"><div class="step-n">3</div><div class="step-c"><strong>Intersección:</strong>
+        <div class="step-math">$\text{Dom}(f)=\{(x,y)\mid 4 < x^2+y^2\leq16\}$</div></div></div>
+      <div class="sol-graph"><canvas id="g12" width="480" height="280"></canvas><div class="gcap">CORONA DORADA: radio interior 2 (excluido, punteado) — radio exterior 4 (incluido)</div></div>
+      <div class="concl"><strong>Resultado:</strong> Corona circular (anillo) entre radio 2 (excluido) y radio 4 (incluido). La frontera exterior sí pertenece al dominio.</div>
+    </div></details>
+  </div>
+
+  <!-- T1E3 ★★★ -->
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-badge badge-hard">★★★</div>
+      <div class="ex-content">
+        <div class="ex-label">Ejercicio 1.3 — Tres condiciones simultáneas</div>
+        <div class="ex-problem">Halle el dominio natural de: $$f(x,y)=\arcsin\!\left(\frac{x^2+y^2-2}{2}\right)+\ln(4-x^2-y^2)$$</div>
+        <div class="ex-tags"><span class="tag tag-hard">★★★ Avanzado</span><span class="tag tag-topic">Disco abierto / Arcoseno + Log</span></div>
+      </div>
+    </div>
+    <details class="solution"><summary><span class="sum-icon">+</span> VER SOLUCIÓN</summary>
+    <div class="solution-body">
+      <div class="sol-step"><div class="step-n">1</div><div class="step-c"><strong>Condición del arcoseno</strong> ($-1\leq\text{arg}\leq1$):
+        <div class="step-math">$-1\leq\frac{x^2+y^2-2}{2}\leq1\implies-2\leq x^2+y^2-2\leq2\implies0\leq x^2+y^2\leq4$</div></div></div>
+      <div class="sol-step"><div class="step-n">2</div><div class="step-c"><strong>Condición del logaritmo:</strong>
+        <div class="step-math">$4-x^2-y^2>0\implies x^2+y^2<4$</div></div></div>
+      <div class="sol-step"><div class="step-n">3</div><div class="step-c"><strong>Combinar ambas:</strong> la restricción del arcoseno exige $x^2+y^2\leq4$ y el logaritmo exige $x^2+y^2<4$. La más estricta manda:
+        <div class="step-math">$\text{Dom}(f)=\{(x,y)\mid 0\leq x^2+y^2<4\}$</div>
+        Incluye el origen (en el arcoseno, $\frac{0-2}{2}=-1$, que sí cumple $\geq-1$).</div></div>
+      <div class="sol-graph"><canvas id="g13" width="480" height="260"></canvas><div class="gcap">DISCO ABIERTO DE RADIO 2 (incluyendo el origen) — frontera punteada = excluida</div></div>
+      <div class="concl"><strong>Resultado:</strong> Disco abierto de radio 2, <em>incluyendo el origen</em>. La circunferencia $x^2+y^2=4$ está excluida por el logaritmo.</div>
+    </div></details>
+  </div>
+</section>
+
+<!-- ═══════════════ T2 ═══════════════ -->
+<section class="topic-section" id="t2">
+  <div class="section-header"><div class="section-num">TEMA 02</div><div class="section-title">Curvas de Nivel</div></div>
+  <div class="ex-separator"></div>
+
+  <!-- T2E1 ★ -->
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-badge badge-easy">★</div>
+      <div class="ex-content">
+        <div class="ex-label">Ejercicio 2.1 — Función lineal</div>
+        <div class="ex-problem">Describa y trace las curvas de nivel de $f(x,y)=x-2y+3$ para $c=0,\,3,\,6$.</div>
+        <div class="ex-tags"><span class="tag tag-easy">★ Básico</span><span class="tag tag-topic">Rectas paralelas</span></div>
+      </div>
+    </div>
+    <details class="solution"><summary><span class="sum-icon">+</span> VER SOLUCIÓN</summary>
+    <div class="solution-body">
+      <div class="sol-step"><div class="step-n">1</div><div class="step-c"><strong>Ecuación de la curva nivel:</strong>
+        <div class="step-math">$x-2y+3=c\implies y=\frac{x-(c-3)}{2}=\frac{x}{2}-\frac{c-3}{2}$</div>
+        Todas las curvas de nivel son <em>rectas con pendiente $1/2$</em>.</div></div>
+      <div class="sol-step"><div class="step-n">2</div><div class="step-c">
+        <strong>$c=0$:</strong> $y=\frac{x+3}{2}$ — intercepto en $y=3/2$<br/>
+        <strong>$c=3$:</strong> $y=\frac{x}{2}$ — pasa por el origen<br/>
+        <strong>$c=6$:</strong> $y=\frac{x-3}{2}$ — intercepto en $y=-3/2$</div></div>
+      <div class="sol-graph"><canvas id="g21" width="480" height="260"></canvas><div class="gcap">CURVAS DE NIVEL: rectas paralelas con pendiente 1/2 · ORO: c=0 · TEAL: c=3 · AZUL: c=6</div></div>
+      <div class="concl"><strong>Resultado:</strong> La función lineal siempre produce curvas de nivel que son <strong>rectas paralelas</strong> entre sí, desplazadas según el valor de $c$.</div>
+    </div></details>
+  </div>
+
+  <!-- T2E2 ★★ -->
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-badge badge-med">★★</div>
+      <div class="ex-content">
+        <div class="ex-label">Ejercicio 2.2 — Función cuadrática elíptica</div>
+        <div class="ex-problem">Trace y describa las curvas de nivel de $f(x,y)=\dfrac{x^2}{4}+y^2$ para $c=0,\,1,\,4$.</div>
+        <div class="ex-tags"><span class="tag tag-med">★★ Intermedio</span><span class="tag tag-topic">Elipses concéntricas</span></div>
+      </div>
+    </div>
+    <details class="solution"><summary><span class="sum-icon">+</span> VER SOLUCIÓN</summary>
+    <div class="solution-body">
+      <div class="sol-step"><div class="step-n">1</div><div class="step-c"><strong>Ecuación general:</strong> $\frac{x^2}{4}+y^2=c\implies\frac{x^2}{4c}+\frac{y^2}{c}=1$ (para $c>0$). Semiejes: $a=2\sqrt{c}$ (en $x$), $b=\sqrt{c}$ (en $y$).</div></div>
+      <div class="sol-step"><div class="step-n">2</div><div class="step-c">
+        <strong>$c=0$:</strong> solo el origen $(0,0)$ (mínimo global)<br/>
+        <strong>$c=1$:</strong> $\frac{x^2}{4}+y^2=1$ → elipse, semiejes $a=2$, $b=1$<br/>
+        <strong>$c=4$:</strong> $\frac{x^2}{16}+\frac{y^2}{4}=1$ → elipse, semiejes $a=4$, $b=2$
+      </div></div>
+      <div class="sol-graph"><canvas id="g22" width="480" height="280"></canvas><div class="gcap">ELIPSES CONCÉNTRICAS: PUNTO en c=0 (origen) · ORO: c=1, a=2,b=1 · AZUL: c=4, a=4,b=2</div></div>
+      <div class="concl"><strong>Resultado:</strong> Elipses concéntricas centradas en el origen. Los semiejes crecen como $\sqrt{c}$. La función tiene mínimo global $0$ en el origen.</div>
+    </div></details>
+  </div>
+
+  <!-- T2E3 ★★★ -->
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-badge badge-hard">★★★</div>
+      <div class="ex-content">
+        <div class="ex-label">Ejercicio 2.3 — Cambio de orientación de hipérbolas</div>
+        <div class="ex-problem">Describa las curvas de nivel de $f(x,y)=y^2-x^2$ para $c=-4,\,0,\,4$ e identifique el caso degenerado.</div>
+        <div class="ex-tags"><span class="tag tag-hard">★★★ Avanzado</span><span class="tag tag-topic">Hipérbolas / Par degenerado</span></div>
+      </div>
+    </div>
+    <details class="solution"><summary><span class="sum-icon">+</span> VER SOLUCIÓN</summary>
+    <div class="solution-body">
+      <div class="sol-step"><div class="step-n">1</div><div class="step-c"><strong>Ecuación general:</strong> $y^2-x^2=c$. El signo de $c$ determina la orientación.</div></div>
+      <div class="sol-step"><div class="step-n">2</div><div class="step-c"><strong>$c=0$:</strong> $y^2=x^2\implies y=\pm x$ → <em>dos rectas</em> que se cruzan en el origen (caso degenerado — son las asíntotas de todas las demás).</div></div>
+      <div class="sol-step"><div class="step-n">3</div><div class="step-c"><strong>$c=4$:</strong>
+        <div class="step-math">$\frac{y^2}{4}-\frac{x^2}{4}=1$</div>
+        <em>Hipérbola vertical</em>, vértices en $(0,\pm2)$. Abre en dirección $y$.</div></div>
+      <div class="sol-step"><div class="step-n">4</div><div class="step-c"><strong>$c=-4$:</strong>
+        <div class="step-math">$\frac{x^2}{4}-\frac{y^2}{4}=1$</div>
+        <em>Hipérbola horizontal</em>, vértices en $(\pm2,0)$. Abre en dirección $x$. (La orientación se invierte.)</div></div>
+      <div class="sol-graph"><canvas id="g23" width="480" height="280"></canvas><div class="gcap">HIPÉRBOLAS: ORO: c=4 (vertical) · AZUL: c=−4 (horizontal) · TEAL punteado: c=0 (asíntotas y=±x)</div></div>
+      <div class="concl"><strong>Resultado:</strong> Para $c>0$: hipérbolas verticales. Para $c<0$: hipérbolas horizontales. Para $c=0$: par de rectas (asíntotas de todas).</div>
+    </div></details>
+  </div>
+</section>
+
+<!-- ═══════════════ T3 ═══════════════ -->
+<section class="topic-section" id="t3">
+  <div class="section-header"><div class="section-num">TEMA 03</div><div class="section-title">Superficies Cuadráticas</div></div>
+  <div class="ex-separator"></div>
+
+  <!-- T3E1 ★ -->
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-badge badge-easy">★</div>
+      <div class="ex-content">
+        <div class="ex-label">Ejercicio 3.1 — Paraboloide circular</div>
+        <div class="ex-problem">Identifique la superficie $z=x^2+y^2$, halle sus trazas en los planos coordenados y descríbala geométricamente.</div>
+        <div class="ex-tags"><span class="tag tag-easy">★ Básico</span><span class="tag tag-topic">Paraboloide elíptico circular</span></div>
+      </div>
+    </div>
+    <details class="solution"><summary><span class="sum-icon">+</span> VER SOLUCIÓN</summary>
+    <div class="solution-body">
+      <div class="sol-step"><div class="step-n">1</div><div class="step-c"><strong>Identificación:</strong> $z=\frac{x^2}{1}+\frac{y^2}{1}$ → <em>paraboloide elíptico</em> (circular, ya que los coeficientes son iguales). El eje de simetría es el eje $z$.</div></div>
+      <div class="sol-step"><div class="step-n">2</div><div class="step-c"><strong>Traza $z=k>0$:</strong>
+        <div class="step-math">$x^2+y^2=k$</div>
+        Círculo de radio $\sqrt{k}$. La superficie se abre infinitamente hacia arriba.</div></div>
+      <div class="sol-step"><div class="step-n">3</div><div class="step-c"><strong>Traza $y=0$ (plano $xz$):</strong>
+        <div class="step-math">$z=x^2$</div>
+        Parábola que abre hacia arriba.</div></div>
+      <div class="sol-step"><div class="step-n">4</div><div class="step-c"><strong>Traza $x=0$ (plano $yz$):</strong>
+        <div class="step-math">$z=y^2$</div>
+        Parábola idéntica (simetría de revolución).</div></div>
+      <div class="sol-graph"><canvas id="g31" width="480" height="320"></canvas><div class="gcap">PARABOLOIDE z=x²+y² — WIREFRAME 3D · Sección $z=0$: único punto en el vértice · crece simétricamente</div></div>
+      <div class="concl"><strong>Resultado:</strong> Paraboloide de revolución con vértice en el origen, eje $z$, que abre hacia $z>0$. Las secciones horizontales son círculos concéntricos crecientes.</div>
+    </div></details>
+  </div>
+
+  <!-- T3E2 ★★ -->
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-badge badge-med">★★</div>
+      <div class="ex-content">
+        <div class="ex-label">Ejercicio 3.2 — Hiperboloide de una hoja (eje $y$)</div>
+        <div class="ex-problem">Identifique la superficie $x^2-y^2+z^2=1$ y describa sus trazas en los tres planos coordenados.</div>
+        <div class="ex-tags"><span class="tag tag-med">★★ Intermedio</span><span class="tag tag-topic">Hiperboloide 1 hoja / Eje y</span></div>
+      </div>
+    </div>
+    <details class="solution"><summary><span class="sum-icon">+</span> VER SOLUCIÓN</summary>
+    <div class="solution-body">
+      <div class="sol-step"><div class="step-n">1</div><div class="step-c"><strong>Identificación:</strong> reescribir como $\frac{x^2}{1}+\frac{z^2}{1}-\frac{y^2}{1}=1$. Dos signos $+$ y un signo $-$ → <em>hiperboloide de una hoja</em>. El <strong>eje de simetría es $y$</strong> (es la variable con signo negativo).</div></div>
+      <div class="sol-step"><div class="step-n">2</div><div class="step-c"><strong>Traza $y=0$ (cintura):</strong>
+        <div class="step-math">$x^2+z^2=1$</div>
+        Círculo de radio 1 — la sección mínima.</div></div>
+      <div class="sol-step"><div class="step-n">3</div><div class="step-c"><strong>Traza $z=0$ (plano $xy$):</strong>
+        <div class="step-math">$x^2-y^2=1$</div>
+        Hipérbola horizontal con vértices en $(\pm1,0,0)$.</div></div>
+      <div class="sol-step"><div class="step-n">4</div><div class="step-c"><strong>Traza $y=k$ (sección transversal):</strong>
+        <div class="step-math">$x^2+z^2=1+k^2$</div>
+        Círculo de radio $\sqrt{1+k^2}$ — crece al alejarse de $y=0$.</div></div>
+      <div class="concl"><strong>Resultado:</strong> Hiperboloide de una hoja con eje $y$. La cintura mínima es el círculo $x^2+z^2=1$ en $y=0$. Superficie conexa.</div>
+    </div></details>
+  </div>
+
+  <!-- T3E3 ★★★ -->
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-badge badge-hard">★★★</div>
+      <div class="ex-content">
+        <div class="ex-label">Ejercicio 3.3 — Completar cuadrado e identificar</div>
+        <div class="ex-problem">Complete el cuadrado e identifique la superficie: $$2x^2+y^2-4x-2y+2z+3=0$$</div>
+        <div class="ex-tags"><span class="tag tag-hard">★★★ Avanzado</span><span class="tag tag-topic">Paraboloide invertido / Completar cuadrado</span></div>
+      </div>
+    </div>
+    <details class="solution"><summary><span class="sum-icon">+</span> VER SOLUCIÓN</summary>
+    <div class="solution-body">
+      <div class="sol-step"><div class="step-n">1</div><div class="step-c"><strong>Agrupar por variable:</strong>
+        <div class="step-math">$2(x^2-2x)+(y^2-2y)+2z+3=0$</div></div></div>
+      <div class="sol-step"><div class="step-n">2</div><div class="step-c"><strong>Completar en $x$:</strong>
+        <div class="step-math">$2(x-1)^2-2$</div></div></div>
+      <div class="sol-step"><div class="step-n">3</div><div class="step-c"><strong>Completar en $y$:</strong>
+        <div class="step-math">$(y-1)^2-1$</div></div></div>
+      <div class="sol-step"><div class="step-n">4</div><div class="step-c"><strong>Sustituir y simplificar:</strong>
+        <div class="step-math">$2(x-1)^2-2+(y-1)^2-1+2z+3=0$</div>
+        <div class="step-math">$2(x-1)^2+(y-1)^2+2z=0$</div>
+        <div class="step-math">$z=-(x-1)^2-\frac{(y-1)^2}{2}$</div></div></div>
+      <div class="sol-step"><div class="step-n">5</div><div class="step-c">Forma $z=z_0-\frac{(x-x_0)^2}{a^2}-\frac{(y-y_0)^2}{b^2}$ → <em>paraboloide elíptico invertido</em>, vértice en $(1,1,0)$, abre hacia abajo.</div></div>
+      <div class="concl"><strong>Resultado:</strong> Paraboloide elíptico invertido (concavidad hacia abajo), con vértice (máximo) en $(1,1,0)$ y semiejes horizontales $a=1$, $b=\sqrt{2}$.</div>
+    </div></details>
+  </div>
+</section>
+
+<!-- ═══════════════ T4 ═══════════════ -->
+<section class="topic-section" id="t4">
+  <div class="section-header"><div class="section-num">TEMA 04</div><div class="section-title">Límites en Funciones Multivariadas</div></div>
+  <div class="ex-separator"></div>
+
+  <!-- T4E1 ★ -->
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-badge badge-easy">★</div>
+      <div class="ex-content">
+        <div class="ex-label">Ejercicio 4.1 — Límite por sustitución directa</div>
+        <div class="ex-problem">Calcule: $$\lim_{(x,y)\to(1,-2)}\left(x^2+2xy-y^2\right)$$</div>
+        <div class="ex-tags"><span class="tag tag-easy">★ Básico</span><span class="tag tag-topic">Polinomio / Sustitución</span></div>
+      </div>
+    </div>
+    <details class="solution"><summary><span class="sum-icon">+</span> VER SOLUCIÓN</summary>
+    <div class="solution-body">
+      <div class="sol-step"><div class="step-n">1</div><div class="step-c"><strong>Reconocer el tipo de función:</strong> $f(x,y)=x^2+2xy-y^2$ es un <em>polinomio en dos variables</em>, que es continuo en todo $\mathbb{R}^2$.</div></div>
+      <div class="sol-step"><div class="step-n">2</div><div class="step-c"><strong>Para funciones continuas</strong>, el límite es igual al valor en el punto:
+        <div class="step-math">$\lim_{(x,y)\to(1,-2)}f(x,y)=f(1,-2)$</div></div></div>
+      <div class="sol-step"><div class="step-n">3</div><div class="step-c"><strong>Sustitución:</strong>
+        <div class="step-math">$f(1,-2)=1^2+2(1)(-2)-(-2)^2=1-4-4=-7$</div></div></div>
+      <div class="concl"><strong>Resultado:</strong> $\displaystyle\lim_{(x,y)\to(1,-2)}(x^2+2xy-y^2)=-7$.</div>
+    </div></details>
+  </div>
+
+  <!-- T4E2 ★★ -->
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-badge badge-med">★★</div>
+      <div class="ex-content">
+        <div class="ex-label">Ejercicio 4.2 — Límite cero por polares</div>
+        <div class="ex-problem">Calcule: $$\lim_{(x,y)\to(0,0)}\frac{x^2y}{x^2+y^2}$$</div>
+        <div class="ex-tags"><span class="tag tag-med">★★ Intermedio</span><span class="tag tag-topic">Polares / Squeeze</span></div>
+      </div>
+    </div>
+    <details class="solution"><summary><span class="sum-icon">+</span> VER SOLUCIÓN</summary>
+    <div class="solution-body">
+      <div class="sol-step"><div class="step-n">1</div><div class="step-c"><strong>Cambio a polares:</strong> $x=r\cos\theta$, $y=r\sin\theta$:
+        <div class="step-math">$\frac{r^2\cos^2\theta\cdot r\sin\theta}{r^2}=r\cos^2\theta\sin\theta$</div></div></div>
+      <div class="sol-step"><div class="step-n">2</div><div class="step-c"><strong>Acotar:</strong> $|\cos^2\theta\sin\theta|\leq1$ para todo $\theta$, entonces:
+        <div class="step-math">$|r\cos^2\theta\sin\theta|\leq r\xrightarrow{r\to0}0$</div></div></div>
+      <div class="sol-step"><div class="step-n">3</div><div class="step-c">La cota $r$ tiende a 0 independientemente de $\theta$ → el límite existe y vale 0.</div></div>
+      <div class="concl"><strong>Resultado:</strong> $\displaystyle\lim_{(x,y)\to(0,0)}\frac{x^2y}{x^2+y^2}=0$.</div>
+    </div></details>
+  </div>
+
+  <!-- T4E3 ★★★ -->
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-badge badge-hard">★★★</div>
+      <div class="ex-content">
+        <div class="ex-label">Ejercicio 4.3 — Límite que no existe (dos caminos)</div>
+        <div class="ex-problem">Demuestre que no existe: $$\lim_{(x,y)\to(0,0)}\frac{x^2-y^2}{x^2+y^2}$$</div>
+        <div class="ex-tags"><span class="tag tag-hard">★★★ Avanzado</span><span class="tag tag-topic">DNE / Visualización por color</span></div>
+      </div>
+    </div>
+    <details class="solution"><summary><span class="sum-icon">+</span> VER SOLUCIÓN</summary>
+    <div class="solution-body">
+      <div class="sol-step"><div class="step-n">1</div><div class="step-c"><strong>Camino 1 — eje $x$ ($y=0$):</strong>
+        <div class="step-math">$\frac{x^2-0}{x^2+0}=\frac{x^2}{x^2}=1\xrightarrow{x\to0}1$</div></div></div>
+      <div class="sol-step"><div class="step-n">2</div><div class="step-c"><strong>Camino 2 — eje $y$ ($x=0$):</strong>
+        <div class="step-math">$\frac{0-y^2}{0+y^2}=\frac{-y^2}{y^2}=-1\xrightarrow{y\to0}-1$</div></div></div>
+      <div class="sol-step"><div class="step-n">3</div><div class="step-c">$1\neq-1$ → contradicción. El límite no puede existir.</div></div>
+      <div class="sol-step"><div class="step-n">4</div><div class="step-c"><strong>Intuición polar:</strong> $\frac{x^2-y^2}{x^2+y^2}=\cos(2\theta)$. El valor depende únicamente de $\theta$ (el ángulo de aproximación), no de $r$. Esto confirma que el límite es distinto según el camino.</div></div>
+      <div class="sol-graph"><canvas id="g43" width="480" height="280"></canvas><div class="gcap">MAPA DE COLOR de f=(x²−y²)/(x²+y²) = cos(2θ) · ORO = f≈+1 · AZUL = f≈−1 · El "pie" de color muestra por qué el límite no existe en el origen</div></div>
+      <div class="concl"><strong>El límite NO existe.</strong> Al acercarse por $y=0$ se obtiene $+1$; por $x=0$ se obtiene $-1$.</div>
+    </div></details>
+  </div>
+</section>
+
+<!-- ═══════════════ T5 ═══════════════ -->
+<section class="topic-section" id="t5">
+  <div class="section-header"><div class="section-num">TEMA 05</div><div class="section-title">Coordenadas Polares y Continuidad</div></div>
+  <div class="ex-separator"></div>
+
+  <!-- T5E1 ★ -->
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-badge badge-easy">★</div>
+      <div class="ex-content">
+        <div class="ex-label">Ejercicio 5.1 — Polares directas</div>
+        <div class="ex-problem">Calcule usando coordenadas polares: $$\lim_{(x,y)\to(0,0)}\frac{x^4+y^4}{x^2+y^2}$$</div>
+        <div class="ex-tags"><span class="tag tag-easy">★ Básico</span><span class="tag tag-topic">Polares / Acotación trig</span></div>
+      </div>
+    </div>
+    <details class="solution"><summary><span class="sum-icon">+</span> VER SOLUCIÓN</summary>
+    <div class="solution-body">
+      <div class="sol-step"><div class="step-n">1</div><div class="step-c"><strong>Sustitución polar:</strong>
+        <div class="step-math">$\frac{r^4\cos^4\theta+r^4\sin^4\theta}{r^2}=r^2(\cos^4\theta+\sin^4\theta)$</div></div></div>
+      <div class="sol-step"><div class="step-n">2</div><div class="step-c"><strong>Acotar:</strong> como $\cos^4\theta\leq1$ y $\sin^4\theta\leq1$:
+        <div class="step-math">$0\leq r^2(\cos^4\theta+\sin^4\theta)\leq2r^2\xrightarrow{r\to0}0$</div>
+        Independiente de $\theta$.</div></div>
+      <div class="concl"><strong>Resultado:</strong> $\displaystyle\lim_{(x,y)\to(0,0)}\frac{x^4+y^4}{x^2+y^2}=0$.</div>
+    </div></details>
+  </div>
+
+  <!-- T5E2 ★★ -->
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-badge badge-med">★★</div>
+      <div class="ex-content">
+        <div class="ex-label">Ejercicio 5.2 — Truco de la parábola + polares</div>
+        <div class="ex-problem">Determine si existe: $$\lim_{(x,y)\to(0,0)}\frac{x^2 y}{x^4+y^2}$$</div>
+        <div class="ex-tags"><span class="tag tag-med">★★ Intermedio</span><span class="tag tag-topic">DNE / Parábola y=x²</span></div>
+      </div>
+    </div>
+    <details class="solution"><summary><span class="sum-icon">+</span> VER SOLUCIÓN</summary>
+    <div class="solution-body">
+      <div class="sol-step"><div class="step-n">1</div><div class="step-c"><strong>Camino 1 — rectas $y=mx$:</strong>
+        <div class="step-math">$\frac{x^2(mx)}{x^4+m^2x^2}=\frac{mx}{x^2+m^2}\to0$</div>
+        Todas las rectas dan 0 — ¡pero esto no prueba que el límite exista!</div></div>
+      <div class="sol-step"><div class="step-n">2</div><div class="step-c"><strong>Camino 2 — parábola $y=x^2$:</strong>
+        <div class="step-math">$\frac{x^2\cdot x^2}{x^4+(x^2)^2}=\frac{x^4}{2x^4}=\frac{1}{2}$</div>
+        Constante $\frac{1}{2}$ para todo $x\neq0$.</div></div>
+      <div class="sol-step"><div class="step-n">3</div><div class="step-c">$0\neq\frac{1}{2}$ → contradicción. <strong>Nota:</strong> intentar polares aquí también revela el problema, ya que la parábola $y=x^2$ no corresponde a un ángulo fijo en polares — hay que tener cuidado.</div></div>
+      <div class="concl"><strong>El límite NO existe.</strong> La clave: el denominador combina $x^4$ e $y^2$ del mismo grado solo cuando $y\sim x^2$. Usar $y=x^2$ "equilibra" el problema y revela la discontinuidad.</div>
+    </div></details>
+  </div>
+
+  <!-- T5E3 ★★★ -->
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-badge badge-hard">★★★</div>
+      <div class="ex-content">
+        <div class="ex-label">Ejercicio 5.3 — Verificar continuidad de extensión</div>
+        <div class="ex-problem">Sea $f(x,y)=\begin{cases}\dfrac{xy(x^2-y^2)}{x^2+y^2}&(x,y)\neq(0,0)\\0&(x,y)=(0,0)\end{cases}$. ¿Es $f$ continua en $(0,0)$?</div>
+        <div class="ex-tags"><span class="tag tag-hard">★★★ Avanzado</span><span class="tag tag-topic">Extensión continua / Polares</span></div>
+      </div>
+    </div>
+    <details class="solution"><summary><span class="sum-icon">+</span> VER SOLUCIÓN</summary>
+    <div class="solution-body">
+      <div class="sol-step"><div class="step-n">1</div><div class="step-c"><strong>Calcular el límite con polares:</strong>
+        <div class="step-math">$\frac{r\cos\theta\cdot r\sin\theta\cdot r^2(\cos^2\theta-\sin^2\theta)}{r^2}=r^2\cos\theta\sin\theta(\cos^2\theta-\sin^2\theta)$</div></div></div>
+      <div class="sol-step"><div class="step-n">2</div><div class="step-c"><strong>Acotar:</strong> $|\cos\theta\sin\theta(\cos^2\theta-\sin^2\theta)|\leq1$ siempre, entonces:
+        <div class="step-math">$|r^2\cos\theta\sin\theta(\cos^2\theta-\sin^2\theta)|\leq r^2\xrightarrow{r\to0}0$</div>
+        Independiente de $\theta$.</div></div>
+      <div class="sol-step"><div class="step-n">3</div><div class="step-c"><strong>Comparar con el valor asignado:</strong> $\lim_{(x,y)\to(0,0)}f(x,y)=0=f(0,0)$ ✓</div></div>
+      <div class="concl"><strong>Sí, $f$ es continua en $(0,0)$.</strong> El límite coincide con el valor definido en ese punto. Esta función es un ejemplo clásico de extensión continua en 2D.</div>
+    </div></details>
+  </div>
+</section>
+
+<!-- ═══════════════ T6 ═══════════════ -->
+<section class="topic-section" id="t6">
+  <div class="section-header"><div class="section-num">TEMA 06</div><div class="section-title">Derivadas Parciales y Derivada Direccional</div></div>
+  <div class="ex-separator"></div>
+
+  <!-- T6E1 ★ -->
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-badge badge-easy">★</div>
+      <div class="ex-content">
+        <div class="ex-label">Ejercicio 6.1 — Gradiente y tasa máxima</div>
+        <div class="ex-problem">Para $f(x,y)=3x^2y-y^3$, halle $\nabla f$ y calcula la tasa máxima de crecimiento en $(2,-1)$.</div>
+        <div class="ex-tags"><span class="tag tag-easy">★ Básico</span><span class="tag tag-topic">Gradiente / Tasa máxima</span></div>
+      </div>
+    </div>
+    <details class="solution"><summary><span class="sum-icon">+</span> VER SOLUCIÓN</summary>
+    <div class="solution-body">
+      <div class="sol-step"><div class="step-n">1</div><div class="step-c"><strong>Derivadas parciales:</strong>
+        <div class="step-math">$f_x=6xy,\qquad f_y=3x^2-3y^2$</div></div></div>
+      <div class="sol-step"><div class="step-n">2</div><div class="step-c"><strong>Evaluar en $(2,-1)$:</strong>
+        <div class="step-math">$f_x(2,-1)=6(2)(-1)=-12,\qquad f_y(2,-1)=3(4)-3(1)=9$</div>
+        <div class="step-math">$\nabla f(2,-1)=(-12,\,9)$</div></div></div>
+      <div class="sol-step"><div class="step-n">3</div><div class="step-c"><strong>Tasa máxima de crecimiento</strong> = magnitud del gradiente:
+        <div class="step-math">$\|\nabla f(2,-1)\|=\sqrt{(-12)^2+9^2}=\sqrt{144+81}=\sqrt{225}=15$</div></div></div>
+      <div class="sol-step"><div class="step-n">4</div><div class="step-c"><strong>Dirección de máximo crecimiento:</strong> $\hat{u}_{\max}=\frac{(-12,9)}{15}=\left(-\frac{4}{5},\frac{3}{5}\right)$</div></div>
+      <div class="concl"><strong>Resultado:</strong> $\nabla f(2,-1)=(-12,9)$. Tasa máxima $=15$ en dirección $(-4/5,\,3/5)$.</div>
+    </div></details>
+  </div>
+
+  <!-- T6E2 ★★ -->
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-badge badge-med">★★</div>
+      <div class="ex-content">
+        <div class="ex-label">Ejercicio 6.2 — Derivada cero y máxima</div>
+        <div class="ex-problem">Para $f(x,y)=e^x\cos(y)$, calcula $\nabla f$ en $\left(\dfrac{\pi}{2},\dfrac{\pi}{4}\right)$, luego:<br/>(a) la derivada en dirección $(1,1)$, y (b) la tasa máxima de variación.</div>
+        <div class="ex-tags"><span class="tag tag-med">★★ Intermedio</span><span class="tag tag-topic">Dirección tangente a nivel / Tasa máxima</span></div>
+      </div>
+    </div>
+    <details class="solution"><summary><span class="sum-icon">+</span> VER SOLUCIÓN</summary>
+    <div class="solution-body">
+      <div class="sol-step"><div class="step-n">1</div><div class="step-c"><strong>Derivadas parciales:</strong>
+        <div class="step-math">$f_x=e^x\cos(y),\qquad f_y=-e^x\sin(y)$</div></div></div>
+      <div class="sol-step"><div class="step-n">2</div><div class="step-c"><strong>Evaluar en $(\pi/2,\pi/4)$:</strong>
+        <div class="step-math">$\nabla f=e^{\pi/2}\left(\cos\frac{\pi}{4},-\sin\frac{\pi}{4}\right)=e^{\pi/2}\cdot\frac{\sqrt2}{2}(1,-1)$</div></div></div>
+      <div class="sol-step"><div class="step-n">3</div><div class="step-c"><strong>(a) Dirección $(1,1)$:</strong> $\hat{u}=(1,1)/\sqrt2$
+        <div class="step-math">$D_{\hat{u}}f=e^{\pi/2}\cdot\frac{\sqrt2}{2}(1,-1)\cdot\frac{(1,1)}{\sqrt2}=e^{\pi/2}\cdot\frac{\sqrt2}{2}\cdot\frac{1-1}{\sqrt2}=0$</div>
+        El resultado es 0 porque $(1,1)$ es perpendicular al gradiente, es decir, es <em>tangente a la curva de nivel</em> en ese punto.</div></div>
+      <div class="sol-step"><div class="step-n">4</div><div class="step-c"><strong>(b) Tasa máxima:</strong>
+        <div class="step-math">$\|\nabla f\|=e^{\pi/2}\cdot\frac{\sqrt2}{2}\cdot\sqrt{1^2+(-1)^2}=e^{\pi/2}\cdot\frac{\sqrt2}{2}\cdot\sqrt2=e^{\pi/2}$</div></div></div>
+      <div class="concl"><strong>Resultados:</strong> (a) $D_{(1,1)/\sqrt2}f=0$ — la dirección $(1,1)$ no cambia el valor de $f$ allí. (b) Tasa máxima $=e^{\pi/2}\approx4.81$.</div>
+    </div></details>
+  </div>
+
+  <!-- T6E3 ★★★ -->
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-badge badge-hard">★★★</div>
+      <div class="ex-content">
+        <div class="ex-label">Ejercicio 6.3 — Derivada en dirección al origen</div>
+        <div class="ex-problem">Sea $f(x,y)=\ln(x^2+y^2-1)$ (dominio: $x^2+y^2>1$). En el punto $(2,1)$:<br/>(a) Halle $\nabla f$. (b) ¿Con qué tasa cambia $f$ en dirección hacia el origen?</div>
+        <div class="ex-tags"><span class="tag tag-hard">★★★ Avanzado</span><span class="tag tag-topic">Gradiente / Dirección hacia el origen</span></div>
+      </div>
+    </div>
+    <details class="solution"><summary><span class="sum-icon">+</span> VER SOLUCIÓN</summary>
+    <div class="solution-body">
+      <div class="sol-step"><div class="step-n">1</div><div class="step-c"><strong>Derivadas parciales:</strong>
+        <div class="step-math">$f_x=\frac{2x}{x^2+y^2-1},\qquad f_y=\frac{2y}{x^2+y^2-1}$</div></div></div>
+      <div class="sol-step"><div class="step-n">2</div><div class="step-c"><strong>Evaluar en $(2,1)$:</strong> $x^2+y^2-1=4+1-1=4$
+        <div class="step-math">$f_x(2,1)=\frac{4}{4}=1,\qquad f_y(2,1)=\frac{2}{4}=\frac{1}{2}$</div>
+        <div class="step-math">$\nabla f(2,1)=\left(1,\,\frac{1}{2}\right)$</div></div></div>
+      <div class="sol-step"><div class="step-n">3</div><div class="step-c"><strong>Dirección hacia el origen</strong> desde $(2,1)$: vector $=(0,0)-(2,1)=(-2,-1)$
+        <div class="step-math">$\hat{u}=\frac{(-2,-1)}{\sqrt5}$</div></div></div>
+      <div class="sol-step"><div class="step-n">4</div><div class="step-c"><strong>Derivada direccional:</strong>
+        <div class="step-math">$D_{\hat{u}}f=\left(1,\frac{1}{2}\right)\cdot\frac{(-2,-1)}{\sqrt5}=\frac{-2-\frac{1}{2}}{\sqrt5}=\frac{-5/2}{\sqrt5}=-\frac{\sqrt5}{2}\approx-1.12$</div>
+        El signo negativo indica que $f$ <em>decrece</em> al moverse hacia el origen (nos alejamos del borde de la región).</div></div>
+      <div class="concl"><strong>Resultados:</strong> (a) $\nabla f(2,1)=(1,\,1/2)$. (b) Tasa de cambio en dirección al origen: $-\sqrt5/2\approx-1.12$ (decrece).</div>
+    </div></details>
+  </div>
+</section>
+
+<!-- ═══════════════ T7 ═══════════════ -->
+<section class="topic-section" id="t7">
+  <div class="section-header"><div class="section-num">TEMA 07</div><div class="section-title">Derivadas de Orden Superior</div></div>
+  <div class="ex-separator"></div>
+
+  <!-- T7E1 ★ -->
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-badge badge-easy">★</div>
+      <div class="ex-content">
+        <div class="ex-label">Ejercicio 7.1 — Derivadas mixtas de segundo orden</div>
+        <div class="ex-problem">Para $f(x,y)=x^2\sin(y)+y^2\cos(x)$, calcule $f_{xx}$, $f_{yy}$ y $f_{xy}$.</div>
+        <div class="ex-tags"><span class="tag tag-easy">★ Básico</span><span class="tag tag-topic">Regla de la cadena / Segundo orden</span></div>
+      </div>
+    </div>
+    <details class="solution"><summary><span class="sum-icon">+</span> VER SOLUCIÓN</summary>
+    <div class="solution-body">
+      <div class="sol-step"><div class="step-n">1</div><div class="step-c"><strong>Primeras derivadas:</strong>
+        <div class="step-math">$f_x=2x\sin(y)-y^2\sin(x)$</div>
+        <div class="step-math">$f_y=x^2\cos(y)+2y\cos(x)$</div></div></div>
+      <div class="sol-step"><div class="step-n">2</div><div class="step-c"><strong>$f_{xx}$</strong> (derivar $f_x$ respecto a $x$):
+        <div class="step-math">$f_{xx}=2\sin(y)-y^2\cos(x)$</div></div></div>
+      <div class="sol-step"><div class="step-n">3</div><div class="step-c"><strong>$f_{yy}$</strong> (derivar $f_y$ respecto a $y$):
+        <div class="step-math">$f_{yy}=-x^2\sin(y)+2\cos(x)$</div></div></div>
+      <div class="sol-step"><div class="step-n">4</div><div class="step-c"><strong>$f_{xy}$</strong> (derivar $f_x$ respecto a $y$):
+        <div class="step-math">$f_{xy}=2x\cos(y)-2y\sin(x)$</div>
+        Verificación: $f_{yx}$ (derivar $f_y$ respecto a $x$) $=2x\cos(y)-2y\sin(x)=f_{xy}$ ✓ Clairaut.</div></div>
+      <div class="concl"><strong>Resultado:</strong> $f_{xx}=2\sin y-y^2\cos x$, $\;f_{yy}=-x^2\sin y+2\cos x$, $\;f_{xy}=2x\cos y-2y\sin x$.</div>
+    </div></details>
+  </div>
+
+  <!-- T7E2 ★★ -->
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-badge badge-med">★★</div>
+      <div class="ex-content">
+        <div class="ex-label">Ejercicio 7.2 — Función implícita cúbica</div>
+        <div class="ex-problem">Dada la superficie $F(x,y,z)=x^3+y^3+z^3-3xyz=8$, halle $\dfrac{\partial z}{\partial x}$ y $\dfrac{\partial z}{\partial y}$.</div>
+        <div class="ex-tags"><span class="tag tag-med">★★ Intermedio</span><span class="tag tag-topic">Derivación implícita 3D</span></div>
+      </div>
+    </div>
+    <details class="solution"><summary><span class="sum-icon">+</span> VER SOLUCIÓN</summary>
+    <div class="solution-body">
+      <div class="sol-step"><div class="step-n">1</div><div class="step-c"><strong>Calcular $F_x$, $F_y$, $F_z$:</strong>
+        <div class="step-math">$F_x=3x^2-3yz,\quad F_y=3y^2-3xz,\quad F_z=3z^2-3xy$</div></div></div>
+      <div class="sol-step"><div class="step-n">2</div><div class="step-c"><strong>Aplicar la fórmula del teorema de la función implícita:</strong>
+        <div class="step-math">$\frac{\partial z}{\partial x}=-\frac{F_x}{F_z}=-\frac{3(x^2-yz)}{3(z^2-xy)}=-\frac{x^2-yz}{z^2-xy}$</div>
+        <div class="step-math">$\frac{\partial z}{\partial y}=-\frac{F_y}{F_z}=-\frac{3(y^2-xz)}{3(z^2-xy)}=-\frac{y^2-xz}{z^2-xy}$</div></div></div>
+      <div class="sol-step"><div class="step-n">3</div><div class="step-c"><strong>Condición de validez:</strong> $F_z=3(z^2-xy)\neq0$, es decir, $z^2\neq xy$.</div></div>
+      <div class="concl"><strong>Resultado:</strong> $\dfrac{\partial z}{\partial x}=-\dfrac{x^2-yz}{z^2-xy}$, $\quad\dfrac{\partial z}{\partial y}=-\dfrac{y^2-xz}{z^2-xy}$.</div>
+    </div></details>
+  </div>
+
+  <!-- T7E3 ★★★ -->
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-badge badge-hard">★★★</div>
+      <div class="ex-content">
+        <div class="ex-label">Ejercicio 7.3 — Ecuación del calor</div>
+        <div class="ex-problem">Verifique que $u(x,t)=e^{-t}\sin(x)$ es solución de la <strong>ecuación del calor</strong>: $$\frac{\partial u}{\partial t}=\frac{\partial^2 u}{\partial x^2}$$</div>
+        <div class="ex-tags"><span class="tag tag-hard">★★★ Avanzado</span><span class="tag tag-topic">Ecuación del calor / EDP parabólica</span></div>
+      </div>
+    </div>
+    <details class="solution"><summary><span class="sum-icon">+</span> VER SOLUCIÓN</summary>
+    <div class="solution-body">
+      <div class="sol-step"><div class="step-n">1</div><div class="step-c"><strong>Derivada en $t$:</strong>
+        <div class="step-math">$\frac{\partial u}{\partial t}=-e^{-t}\sin(x)$</div></div></div>
+      <div class="sol-step"><div class="step-n">2</div><div class="step-c"><strong>Primera y segunda derivadas en $x$:</strong>
+        <div class="step-math">$\frac{\partial u}{\partial x}=e^{-t}\cos(x)$</div>
+        <div class="step-math">$\frac{\partial^2 u}{\partial x^2}=-e^{-t}\sin(x)$</div></div></div>
+      <div class="sol-step"><div class="step-n">3</div><div class="step-c"><strong>Verificación:</strong>
+        <div class="step-math">$\frac{\partial u}{\partial t}=-e^{-t}\sin(x)=\frac{\partial^2 u}{\partial x^2}\checkmark$</div>
+        Ambos lados son idénticos.</div></div>
+      <div class="sol-step"><div class="step-n">4</div><div class="step-c"><strong>Interpretación física:</strong> Esta función modela la temperatura $u$ en una barra unidimensional: la oscilación $\sin(x)$ en el espacio decae exponencialmente con el tiempo $e^{-t}$ — el calor se disipa.</div></div>
+      <div class="concl"><strong>Verificado:</strong> $u=e^{-t}\sin(x)$ satisface la ecuación del calor $u_t=u_{xx}$.</div>
+    </div></details>
+  </div>
+</section>
+
+<!-- ═══════════════ T8 ═══════════════ -->
+<section class="topic-section" id="t8">
+  <div class="section-header"><div class="section-num">TEMA 08</div><div class="section-title">Valores Extremos: Máximos y Mínimos</div></div>
+  <div class="ex-separator"></div>
+
+  <!-- T8E1 ★ -->
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-badge badge-easy">★</div>
+      <div class="ex-content">
+        <div class="ex-label">Ejercicio 8.1 — Mínimo global por completar cuadrado</div>
+        <div class="ex-problem">Halle el mínimo global de $f(x,y)=x^2+y^2-4x+6y+13$.</div>
+        <div class="ex-tags"><span class="tag tag-easy">★ Básico</span><span class="tag tag-topic">Mínimo global / Completar cuadrado</span></div>
+      </div>
+    </div>
+    <details class="solution"><summary><span class="sum-icon">+</span> VER SOLUCIÓN</summary>
+    <div class="solution-body">
+      <div class="sol-step"><div class="step-n">1</div><div class="step-c"><strong>Completar cuadrado en $x$:</strong> $x^2-4x=(x-2)^2-4$</div></div>
+      <div class="sol-step"><div class="step-n">2</div><div class="step-c"><strong>Completar cuadrado en $y$:</strong> $y^2+6y=(y+3)^2-9$</div></div>
+      <div class="sol-step"><div class="step-n">3</div><div class="step-c"><strong>Reescribir:</strong>
+        <div class="step-math">$f=(x-2)^2-4+(y+3)^2-9+13=(x-2)^2+(y+3)^2$</div>
+        $f$ es suma de cuadrados → siempre $\geq0$.</div></div>
+      <div class="sol-step"><div class="step-n">4</div><div class="step-c">El mínimo ocurre cuando ambos cuadrados valen cero, i.e., $(x,y)=(2,-3)$, con $f(2,-3)=0$.</div></div>
+      <div class="sol-graph"><canvas id="g81" width="480" height="260"></canvas><div class="gcap">CURVAS DE NIVEL DE f=(x−2)²+(y+3)² — círculos concéntricos centrados en el mínimo (2,−3)</div></div>
+      <div class="concl"><strong>Resultado:</strong> Mínimo global $f=0$ en $(2,-3)$. La función es un paraboloide desplazado — no tiene máximo.</div>
+    </div></details>
+  </div>
+
+  <!-- T8E2 ★★ -->
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-badge badge-med">★★</div>
+      <div class="ex-content">
+        <div class="ex-label">Ejercicio 8.2 — Punto silla</div>
+        <div class="ex-problem">Encuentre y clasifique todos los puntos críticos de $f(x,y)=xy-x-y+1$.</div>
+        <div class="ex-tags"><span class="tag tag-med">★★ Intermedio</span><span class="tag tag-topic">Punto silla / $D<0$</span></div>
+      </div>
+    </div>
+    <details class="solution"><summary><span class="sum-icon">+</span> VER SOLUCIÓN</summary>
+    <div class="solution-body">
+      <div class="sol-step"><div class="step-n">1</div><div class="step-c"><strong>Sistema $\nabla f=0$:</strong>
+        <div class="step-math">$f_x=y-1=0\implies y=1$</div>
+        <div class="step-math">$f_y=x-1=0\implies x=1$</div>
+        Único punto crítico: $(1,1)$, $f(1,1)=1-1-1+1=0$.</div></div>
+      <div class="sol-step"><div class="step-n">2</div><div class="step-c"><strong>Segundas derivadas:</strong> $f_{xx}=0$, $f_{yy}=0$, $f_{xy}=1$.</div></div>
+      <div class="sol-step"><div class="step-n">3</div><div class="step-c"><strong>Discriminante:</strong>
+        <div class="step-math">$D=f_{xx}f_{yy}-(f_{xy})^2=0\cdot0-1^2=-1<0\implies\text{punto silla}$</div></div></div>
+      <div class="sol-step"><div class="step-n">4</div><div class="step-c"><strong>Verificación intuitiva:</strong> Factorizando: $f=(x-1)(y-1)$.
+        <ul style="margin-top:8px;padding-left:18px">
+          <li>Sobre $y=1$: $f=0$ (constante)</li>
+          <li>Sobre $x=1$: $f=0$ (constante)</li>
+          <li>Para $x>1,y>1$: $f>0$ (máximo local en esa región)</li>
+          <li>Para $x>1,y<1$: $f<0$ (mínimo local en esa región)</li>
+        </ul>
+        El punto $(1,1)$ es efectivamente una silla.</div></div>
+      <div class="concl"><strong>Resultado:</strong> Único punto crítico $(1,1)$ con $f=0$: es un <strong>punto silla</strong> ($D=-1<0$). No hay extremos locales.</div>
+    </div></details>
+  </div>
+
+  <!-- T8E3 ★★★ -->
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-badge badge-hard">★★★</div>
+      <div class="ex-content">
+        <div class="ex-label">Ejercicio 8.3 — Nueve puntos críticos</div>
+        <div class="ex-problem">Encuentre y clasifique <em>todos</em> los puntos críticos de: $$f(x,y)=x^4+y^4-2x^2-2y^2+1$$</div>
+        <div class="ex-tags"><span class="tag tag-hard">★★★ Avanzado</span><span class="tag tag-topic">9 críticos: máx + sillas + míns</span></div>
+      </div>
+    </div>
+    <details class="solution"><summary><span class="sum-icon">+</span> VER SOLUCIÓN</summary>
+    <div class="solution-body">
+      <div class="sol-step"><div class="step-n">1</div><div class="step-c"><strong>Sistema:</strong>
+        <div class="step-math">$f_x=4x^3-4x=4x(x^2-1)=0\implies x=0,\pm1$</div>
+        <div class="step-math">$f_y=4y^3-4y=4y(y^2-1)=0\implies y=0,\pm1$</div>
+        Combinando: <strong>9 puntos críticos</strong>: $(0,0)$, $(\pm1,0)$, $(0,\pm1)$, $(\pm1,\pm1)$.</div></div>
+      <div class="sol-step"><div class="step-n">2</div><div class="step-c"><strong>Segundas derivadas:</strong> $f_{xx}=12x^2-4$, $f_{yy}=12y^2-4$, $f_{xy}=0$.
+        <div class="step-math">$D=(12x^2-4)(12y^2-4)$</div></div></div>
+      <div class="sol-step"><div class="step-n">3</div><div class="step-c"><strong>En $(0,0)$:</strong> $D=(-4)(-4)=16>0$, $f_{xx}=-4<0$ → <em>máximo local</em>, $f(0,0)=1$.</div></div>
+      <div class="sol-step"><div class="step-n">4</div><div class="step-c"><strong>En $(\pm1,0)$ y $(0,\pm1)$ (4 puntos):</strong>
+        <div class="step-math">$D=(12-4)(0-4)=8\cdot(-4)=-32<0\implies\text{punto silla}$</div>
+        $f(\pm1,0)=f(0,\pm1)=1+0-2-0+1=0$.</div></div>
+      <div class="sol-step"><div class="step-n">5</div><div class="step-c"><strong>En $(\pm1,\pm1)$ (4 puntos):</strong>
+        <div class="step-math">$D=(12-4)(12-4)=8\cdot8=64>0,\quad f_{xx}=8>0\implies\text{mínimo local}$</div>
+        $f(\pm1,\pm1)=1+1-2-2+1=-1$.</div></div>
+      <div class="sol-graph"><canvas id="g83" width="480" height="300"></canvas><div class="gcap">CONTORNO DE f: ● MÁXIMO (0,0) f=1 · ✕ SILLAS (±1,0),(0,±1) f=0 · ■ MÍNIMOS (±1,±1) f=−1</div></div>
+      <div class="concl"><strong>Resumen:</strong> $(0,0)$: máximo local $f=1$. $(\pm1,0),(0,\pm1)$: 4 puntos silla $f=0$. $(\pm1,\pm1)$: 4 mínimos locales $f=-1$.</div>
+    </div></details>
+  </div>
+</section>
+
+<!-- ═══════════════ T9 ═══════════════ -->
+<section class="topic-section" id="t9">
+  <div class="section-header"><div class="section-num">TEMA 09</div><div class="section-title">Optimización: Multiplicadores de Lagrange</div></div>
+  <div class="ex-separator"></div>
+
+  <!-- T9E1 ★ -->
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-badge badge-easy">★</div>
+      <div class="ex-content">
+        <div class="ex-label">Ejercicio 9.1 — Extremos sobre un círculo</div>
+        <div class="ex-problem">Halle el máximo y el mínimo de $f(x,y)=3x+4y$ sujeto a $x^2+y^2=25$.</div>
+        <div class="ex-tags"><span class="tag tag-easy">★ Básico</span><span class="tag tag-topic">Lagrange / Círculo</span></div>
+      </div>
+    </div>
+    <details class="solution"><summary><span class="sum-icon">+</span> VER SOLUCIÓN</summary>
+    <div class="solution-body">
+      <div class="sol-step"><div class="step-n">1</div><div class="step-c"><strong>Sistema $\nabla f=\lambda\nabla g$:</strong>
+        <div class="step-math">$3=2\lambda x,\quad 4=2\lambda y$</div>
+        <div class="step-math">$x=\frac{3}{2\lambda},\quad y=\frac{2}{\lambda}$</div></div></div>
+      <div class="sol-step"><div class="step-n">2</div><div class="step-c"><strong>Sustituir en la restricción $x^2+y^2=25$:</strong>
+        <div class="step-math">$\frac{9}{4\lambda^2}+\frac{4}{\lambda^2}=25\implies\frac{9+16}{4\lambda^2}=25\implies\frac{25}{4\lambda^2}=25\implies\lambda^2=\frac{1}{4}\implies\lambda=\pm\frac{1}{2}$</div></div></div>
+      <div class="sol-step"><div class="step-n">3</div><div class="step-c"><strong>$\lambda=+\frac{1}{2}$:</strong> $(x,y)=(3,4)$, $f=9+16=25$ → <em>máximo</em>.</div></div>
+      <div class="sol-step"><div class="step-n">4</div><div class="step-c"><strong>$\lambda=-\frac{1}{2}$:</strong> $(x,y)=(-3,-4)$, $f=-9-16=-25$ → <em>mínimo</em>.</div></div>
+      <div class="sol-graph"><canvas id="g91" width="480" height="280"></canvas><div class="gcap">CÍRCULO x²+y²=25 con rectas de nivel f=3x+4y · ★ MAX en (3,4), f=25 · ★ MIN en (−3,−4), f=−25</div></div>
+      <div class="concl"><strong>Resultado:</strong> Máximo $=25$ en $(3,4)$. Mínimo $=-25$ en $(-3,-4)$. El gradiente de $f$ es paralelo al radio del círculo en esos puntos.</div>
+    </div></details>
+  </div>
+
+  <!-- T9E2 ★★ -->
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-badge badge-med">★★</div>
+      <div class="ex-content">
+        <div class="ex-label">Ejercicio 9.2 — Distancia mínima a un plano</div>
+        <div class="ex-problem">Halle el punto del plano $x+2y+z=4$ más cercano al origen.</div>
+        <div class="ex-tags"><span class="tag tag-med">★★ Intermedio</span><span class="tag tag-topic">Lagrange / Distancia mínima</span></div>
+      </div>
+    </div>
+    <details class="solution"><summary><span class="sum-icon">+</span> VER SOLUCIÓN</summary>
+    <div class="solution-body">
+      <div class="sol-step"><div class="step-n">1</div><div class="step-c"><strong>Reformular:</strong> minimizar $f=x^2+y^2+z^2$ (distancia al cuadrado) s.a. $g=x+2y+z=4$.</div></div>
+      <div class="sol-step"><div class="step-n">2</div><div class="step-c"><strong>Sistema $\nabla f=\lambda\nabla g$:</strong>
+        <div class="step-math">$2x=\lambda,\quad 2y=2\lambda,\quad 2z=\lambda$</div>
+        <div class="step-math">$x=\frac{\lambda}{2},\quad y=\lambda,\quad z=\frac{\lambda}{2}$</div></div></div>
+      <div class="sol-step"><div class="step-n">3</div><div class="step-c"><strong>Sustituir en la restricción:</strong>
+        <div class="step-math">$\frac{\lambda}{2}+2\lambda+\frac{\lambda}{2}=4\implies3\lambda=4\implies\lambda=\frac{4}{3}$</div></div></div>
+      <div class="sol-step"><div class="step-n">4</div><div class="step-c"><strong>Punto óptimo:</strong>
+        <div class="step-math">$(x,y,z)=\left(\frac{2}{3},\frac{4}{3},\frac{2}{3}\right)$</div></div></div>
+      <div class="sol-step"><div class="step-n">5</div><div class="step-c"><strong>Distancia mínima:</strong>
+        <div class="step-math">$f_{\min}=\frac{4}{9}+\frac{16}{9}+\frac{4}{9}=\frac{24}{9}=\frac{8}{3},\quad d=\sqrt{\frac{8}{3}}=\frac{2\sqrt6}{3}\approx1.63$</div></div></div>
+      <div class="concl"><strong>Resultado:</strong> El punto más cercano al origen en el plano es $\left(\frac{2}{3},\frac{4}{3},\frac{2}{3}\right)$, a distancia $\frac{2\sqrt6}{3}$.</div>
+    </div></details>
+  </div>
+
+  <!-- T9E3 ★★★ -->
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-badge badge-hard">★★★</div>
+      <div class="ex-content">
+        <div class="ex-label">Ejercicio 9.3 — Dos restricciones simultáneas</div>
+        <div class="ex-problem">Halle el máximo y mínimo de $f(x,y,z)=x-y+z$ sujeto a $x^2+y^2+z^2=1$ y $x+y+z=0$.</div>
+        <div class="ex-tags"><span class="tag tag-hard">★★★ Avanzado</span><span class="tag tag-topic">Dos restricciones / Intersección esfera-plano</span></div>
+      </div>
+    </div>
+    <details class="solution"><summary><span class="sum-icon">+</span> VER SOLUCIÓN</summary>
+    <div class="solution-body">
+      <div class="sol-step"><div class="step-n">1</div><div class="step-c"><strong>Sistema $\nabla f=\lambda\nabla g+\mu\nabla h$:</strong>
+        <div class="step-math">$(1,-1,1)=\lambda(2x,2y,2z)+\mu(1,1,1)$</div>
+        <div class="step-math">1=2\lambda x+\mu\quad\text{(i)},\quad -1=2\lambda y+\mu\quad\text{(ii)},\quad 1=2\lambda z+\mu\quad\text{(iii)}</div></div></div>
+      <div class="sol-step"><div class="step-n">2</div><div class="step-c"><strong>De (i) y (iii):</strong> $2\lambda x=2\lambda z$. Si $\lambda\neq0$: $x=z$.</div></div>
+      <div class="sol-step"><div class="step-n">3</div><div class="step-c"><strong>Usar $x=z$ en $h: x+y+z=0$:</strong>
+        <div class="step-math">$2x+y=0\implies y=-2x$</div></div></div>
+      <div class="sol-step"><div class="step-n">4</div><div class="step-c"><strong>De (i) − (ii):</strong> $2=2\lambda(x-y)=2\lambda(x+2x)=6\lambda x\implies\lambda=\frac{1}{3x}$</div></div>
+      <div class="sol-step"><div class="step-n">5</div><div class="step-c"><strong>Usar $g: x^2+y^2+z^2=1$:</strong>
+        <div class="step-math">$x^2+4x^2+x^2=1\implies6x^2=1\implies x=\pm\frac{1}{\sqrt6}$</div></div></div>
+      <div class="sol-step"><div class="step-n">6</div><div class="step-c"><strong>Calcular $f$ en cada caso:</strong>
+        <div class="step-math">$x=\tfrac{1}{\sqrt6}:\;y=-\tfrac{2}{\sqrt6},\;z=\tfrac{1}{\sqrt6}\implies f=\frac{1}{\sqrt6}+\frac{2}{\sqrt6}+\frac{1}{\sqrt6}=\frac{4}{\sqrt6}=\frac{2\sqrt6}{3}$</div>
+        <div class="step-math">$x=-\tfrac{1}{\sqrt6}:\;y=\tfrac{2}{\sqrt6},\;z=-\tfrac{1}{\sqrt6}\implies f=-\frac{4}{\sqrt6}=-\frac{2\sqrt6}{3}$</div></div></div>
+      <div class="concl"><strong>Resultado:</strong> La restricción es un círculo (intersección de esfera y plano). Máximo $=\dfrac{2\sqrt6}{3}\approx1.63$ en $\left(\frac{1}{\sqrt6},-\frac{2}{\sqrt6},\frac{1}{\sqrt6}\right)$. Mínimo $=-\dfrac{2\sqrt6}{3}$ en el punto opuesto.</div>
+    </div></details>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<div style="padding:38px 60px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+  <div>
+    <div style="font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--gold);">Banco de Ejercicios — Cálculo Vectorial</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text-dim);margin-top:4px;">9 temas · 27 ejercicios · Dificultad progresiva ★ → ★★★</div>
+  </div>
+  <div style="display:flex;gap:16px;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--teal);">★ × 9</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--blue);">★★ × 9</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--red);">★★★ × 9</div>
+  </div>
+</div>
+</main>
+
+<!-- ═════════════ CANVAS SCRIPT ═════════════ -->
+<script>
+(function(){
+"use strict";
+
+function getCtx(id){
+  const c=document.getElementById(id); if(!c)return null;
+  return {c,ctx:c.getContext('2d'),W:c.width,H:c.height};
+}
+function bg(ctx,W,H,col){ctx.fillStyle=col||'#070710';ctx.fillRect(0,0,W,H);}
+function grid(ctx,cx,cy,W,H,s){
+  ctx.strokeStyle='rgba(36,36,58,.9)';ctx.lineWidth=.5;
+  for(let i=-12;i<=12;i++){
+    ctx.beginPath();ctx.moveTo(cx+i*s,0);ctx.lineTo(cx+i*s,H);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(0,cy-i*s);ctx.lineTo(W,cy-i*s);ctx.stroke();
+  }
+}
+function axes(ctx,cx,cy,W,H){
+  ctx.strokeStyle='#35354d';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(0,cy);ctx.lineTo(W,cy);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(cx,0);ctx.lineTo(cx,H);ctx.stroke();
+  ctx.fillStyle='#35354d';
+  ctx.beginPath();ctx.moveTo(W-8,cy-4);ctx.lineTo(W,cy);ctx.lineTo(W-8,cy+4);ctx.fill();
+  ctx.beginPath();ctx.moveTo(cx-4,8);ctx.lineTo(cx,0);ctx.lineTo(cx+4,8);ctx.fill();
+  ctx.fillStyle='#44445a';ctx.font='10px monospace';ctx.textAlign='center';
+}
+function circle(ctx,px,py,r,color,lw,dash){
+  ctx.strokeStyle=color;ctx.lineWidth=lw||2;ctx.setLineDash(dash||[]);
+  ctx.beginPath();ctx.arc(px,py,r,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);
+}
+function dot(ctx,px,py,r,color){
+  ctx.fillStyle=color;ctx.beginPath();ctx.arc(px,py,r,0,Math.PI*2);ctx.fill();
+}
+function lbl(ctx,t,px,py,color,sz){
+  ctx.fillStyle=color||'#e2e2ee';ctx.font=(sz||11)+'px monospace';ctx.fillText(t,px,py);
+}
+function line(ctx,x1,y1,x2,y2,color,lw,dash){
+  ctx.strokeStyle=color;ctx.lineWidth=lw||2;ctx.setLineDash(dash||[]);
+  ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.setLineDash([]);
+}
+function curve(ctx,fn,t0,t1,N,cx,cy,s,color,lw){
+  ctx.strokeStyle=color;ctx.lineWidth=lw||2;ctx.beginPath();
+  let first=true;
+  for(let i=0;i<=N;i++){
+    const t=t0+(t1-t0)*i/N;
+    const [mx,my]=fn(t);
+    const px=cx+mx*s,py=cy-my*s;
+    if(!isFinite(px)||!isFinite(py)||px<-10||px>cx*2+10||py<-10||py>cy*2+10){
+      first=true;ctx.stroke();ctx.beginPath();continue;
+    }
+    if(first){ctx.moveTo(px,py);first=false;}else ctx.lineTo(px,py);
+  }
+  ctx.stroke();
+}
+
+/* ─ T1E1 · strip -2≤x≤2, y>1 ─ */
+function draw11(){
+  const g=getCtx('g11');if(!g)return;
+  const {ctx,W,H}=g;
+  const cx=W/2,cy=H/2+30,s=55;
+  bg(ctx,W,H);
+  // shade domain
+  const imgD=ctx.getImageData(0,0,W,H);const d=imgD.data;
+  for(let py=0;py<H;py++) for(let px=0;px<W;px++){
+    const mx=(px-cx)/s,my=(cy-py)/s;
+    const inX=(mx>=-2&&mx<=2),inY=(my>1);
+    const i=(py*W+px)*4;
+    if(inX&&inY){d[i]=80;d[i+1]=56;d[i+2]=8;d[i+3]=255;}
+    else{d[i]=10;d[i+1]=10;d[i+2]=20;d[i+3]=255;}
+  }
+  ctx.putImageData(imgD,0,0);
+  grid(ctx,cx,cy,W,H,s);axes(ctx,cx,cy,W,H);
+  // vertical borders x=±2 (solid = included)
+  line(ctx,cx-2*s,0,cx-2*s,H,'#e8a920',2);
+  line(ctx,cx+2*s,0,cx+2*s,H,'#e8a920',2);
+  // horizontal border y=1 (dashed = excluded)
+  line(ctx,0,cy-1*s,W,cy-1*s,'#f48771',1.5,[6,4]);
+  lbl(ctx,'x=−2',cx-2*s-36,18,'#e8a920',11);
+  lbl(ctx,'x=2',cx+2*s+6,18,'#e8a920',11);
+  lbl(ctx,'y=1 (excluido)',cx+8,cy-s-6,'#f48771',11);
+  lbl(ctx,'Dom(f)',cx-20,cy-2*s+10,'#f5c84a',13);
+}
+
+/* ─ T1E2 · annulus 2<r≤4 ─ */
+function draw12(){
+  const g=getCtx('g12');if(!g)return;
+  const {ctx,W,H}=g;
+  const cx=W/2,cy=H/2,s=40;
+  bg(ctx,W,H);
+  const imgD=ctx.getImageData(0,0,W,H);const d=imgD.data;
+  for(let py=0;py<H;py++) for(let px=0;px<W;px++){
+    const mx=(px-cx)/s,my=(cy-py)/s;
+    const r2=mx*mx+my*my;
+    const i=(py*W+px)*4;
+    if(r2>4&&r2<=16){d[i]=80;d[i+1]=56;d[i+2]=8;d[i+3]=255;}
+    else{d[i]=10;d[i+1]=10;d[i+2]=20;d[i+3]=255;}
+  }
+  ctx.putImageData(imgD,0,0);
+  grid(ctx,cx,cy,W,H,s);axes(ctx,cx,cy,W,H);
+  circle(ctx,cx,cy,2*s,'#f48771',2,[5,4]);  // inner excluded
+  circle(ctx,cx,cy,4*s,'#e8a920',2.5);       // outer included
+  lbl(ctx,'r=2 (excluido)',cx+2*s+8,cy-8,'#f48771',11);
+  lbl(ctx,'r=4 (incluido)',cx+4*s+6,cy-8,'#e8a920',11);
+  lbl(ctx,'Dom(f)',cx-22,cy-3*s+16,'#f5c84a',13);
+}
+
+/* ─ T1E3 · open disk r<2 ─ */
+function draw13(){
+  const g=getCtx('g13');if(!g)return;
+  const {ctx,W,H}=g;
+  const cx=W/2,cy=H/2,s=75;
+  bg(ctx,W,H);
+  const imgD=ctx.getImageData(0,0,W,H);const d=imgD.data;
+  for(let py=0;py<H;py++) for(let px=0;px<W;px++){
+    const mx=(px-cx)/s,my=(cy-py)/s;
+    const r2=mx*mx+my*my;
+    const i=(py*W+px)*4;
+    if(r2<4){d[i]=10;d[i+1]=68;d[i+2]=56;d[i+3]=255;}
+    else{d[i]=10;d[i+1]=10;d[i+2]=20;d[i+3]=255;}
+  }
+  ctx.putImageData(imgD,0,0);
+  grid(ctx,cx,cy,W,H,s);axes(ctx,cx,cy,W,H);
+  circle(ctx,cx,cy,2*s,'#f48771',2,[5,4]);  // excluded boundary
+  dot(ctx,cx,cy,5,'#e8a920'); // origin included
+  lbl(ctx,'x²+y²=4 (excluido)',cx+2*s*0.65+8,cy-2*s*0.65-8,'#f48771',11);
+  lbl(ctx,'origen ∈ Dom',cx+8,cy-12,'#e8a920',11);
+  lbl(ctx,'Dom(f)',cx-20,cy-s,'#4ec9b0',13);
+}
+
+/* ─ T2E1 · parallel lines ─ */
+function draw21(){
+  const g=getCtx('g21');if(!g)return;
+  const {ctx,W,H}=g;
+  const cx=W/2,cy=H/2,s=52;
+  bg(ctx,W,H);grid(ctx,cx,cy,W,H,s);axes(ctx,cx,cy,W,H);
+  // f=c → y=x/2-(c-3)/2 → screen_y = cy - (x/2-(c-3)/2)*s
+  // for x from -5 to 5
+  const colors=['#e8a920','#4ec9b0','#4f83cc'];
+  const cvs=[0,3,6];
+  cvs.forEach((c,i)=>{
+    const b=(3-c)/2; // y=x/2+b → in math coords
+    curve(ctx,t=>([t,t/2+b]),-5.5,5.5,100,cx,cy,s,colors[i],2.5);
+    // label at right side
+    const mx=4.5;const my=mx/2+b;
+    lbl(ctx,`c=${c}`,cx+mx*s-22,cy-my*s-6,colors[i],11);
+  });
+  lbl(ctx,'pendiente = 1/2',20,20,'#5a5a80',11);
+}
+
+/* ─ T2E2 · ellipses ─ */
+function draw22(){
+  const g=getCtx('g22');if(!g)return;
+  const {ctx,W,H}=g;
+  const cx=W/2,cy=H/2,s=52;
+  bg(ctx,W,H);grid(ctx,cx,cy,W,H,s);axes(ctx,cx,cy,W,H);
+  // c=0: dot at origin
+  dot(ctx,cx,cy,6,'#e8a920');
+  lbl(ctx,'c=0 (origen)',cx+8,cy-10,'#e8a920',11);
+  // c=1: x²/4+y²=1 → a=2,b=1
+  curve(ctx,t=>([2*Math.cos(t),Math.sin(t)]),0,2*Math.PI+.02,200,cx,cy,s,'#4f83cc',2.5);
+  lbl(ctx,'c=1: a=2,b=1',cx+2*s+8,cy-s*0.5,'#4f83cc',11);
+  // c=4: x²/16+y²/4=1 → a=4,b=2
+  curve(ctx,t=>([4*Math.cos(t),2*Math.sin(t)]),0,2*Math.PI+.02,200,cx,cy,s,'#f48771',2.5);
+  lbl(ctx,'c=4: a=4,b=2',cx+4*s+5,cy-2*s-8,'#f48771',11);
+}
+
+/* ─ T2E3 · hyperbolas y²-x²=c ─ */
+function draw23(){
+  const g=getCtx('g23');if(!g)return;
+  const {ctx,W,H}=g;
+  const cx=W/2,cy=H/2,s=52;
+  bg(ctx,W,H);grid(ctx,cx,cy,W,H,s);axes(ctx,cx,cy,W,H);
+  // asymptotes y=±x (c=0)
+  line(ctx,0,H,W,0,'rgba(78,201,176,.7)',1.5,[5,4]);
+  line(ctx,0,0,W,H,'rgba(78,201,176,.7)',1.5,[5,4]);
+  lbl(ctx,'c=0: y=±x',cx+s+4,cy-s-6,'#4ec9b0',11);
+  // c=4: y²/4-x²/4=1 → vertical
+  const a=2;
+  for(const br of [1,-1]){
+    curve(ctx,t=>([a*Math.sinh(t),br*a*Math.cosh(t)]),-2.5,2.5,200,cx,cy,s,'#e8a920',2.5);
+  }
+  lbl(ctx,'c=4 (vertical)',cx+s*1.5,cy-s*2.6,'#e8a920',11);
+  // c=-4: x²/4-y²/4=1 → horizontal
+  for(const br of [1,-1]){
+    curve(ctx,t=>([br*a*Math.cosh(t),a*Math.sinh(t)]),-2.5,2.5,200,cx,cy,s,'#4f83cc',2.5);
+  }
+  lbl(ctx,'c=−4 (horizontal)',cx+s*2.2,cy+s*0.5,'#4f83cc',11);
+}
+
+/* ─ T3E1 · paraboloid z=x²+y² ─ */
+function draw31(){
+  const g=getCtx('g31');if(!g)return;
+  const {ctx,W,H}=g;
+  bg(ctx,W,H);
+  const cx=W/2,cy=H-50;
+  function proj(x,y,z){
+    const az=Math.PI*.28,el=Math.PI*.22;
+    const x1=x*Math.cos(az)-y*Math.sin(az);
+    const y1=x*Math.sin(az)+y*Math.cos(az);
+    return [cx+x1*50,cy-y1*Math.sin(el)*46-z*Math.cos(el)*24];
+  }
+  function zcolor(z){
+    const t=Math.min(1,z/8);
+    return `rgb(${Math.round(20+t*220)},${Math.round(60+t*30)},${Math.round(180-t*160)})`;
+  }
+  const step=.3,r=2.6;
+  const fn=(x,y)=>x*x+y*y;
+  for(let y=-r;y<=r;y+=step){
+    ctx.beginPath();let first=true;
+    for(let x=-r;x<=r;x+=.05){
+      const z=fn(x,y);
+      const [px,py]=proj(x,y,z);
+      ctx.strokeStyle=zcolor(z);ctx.lineWidth=.9;
+      if(first){ctx.moveTo(px,py);first=false;ctx.beginPath();ctx.moveTo(px,py);}
+      else ctx.lineTo(px,py);
+    }
+    ctx.stroke();
+  }
+  for(let x=-r;x<=r;x+=step){
+    ctx.beginPath();let first=true;
+    for(let y=-r;y<=r;y+=.05){
+      const z=fn(x,y);
+      const [px,py]=proj(x,y,z);
+      ctx.strokeStyle=zcolor(z);ctx.lineWidth=.9;
+      if(first){ctx.moveTo(px,py);first=false;ctx.beginPath();ctx.moveTo(px,py);}
+      else ctx.lineTo(px,py);
+    }
+    ctx.stroke();
+  }
+  // vertex dot
+  const [vx,vy]=proj(0,0,0);
+  dot(ctx,vx,vy,5,'#e8a920');
+  lbl(ctx,'z=x²+y²',12,20,'#e8a920',13);
+  lbl(ctx,'Paraboloide',12,36,'rgba(100,100,160,.8)',11);
+}
+
+/* ─ T4E3 · colormap (x²-y²)/(x²+y²) ─ */
+function draw43(){
+  const g=getCtx('g43');if(!g)return;
+  const {ctx,W,H}=g;
+  const cx=W/2,cy=H/2,s=68;
+  const imgD=ctx.getImageData(0,0,W,H);const d=imgD.data;
+  for(let py=0;py<H;py++) for(let px=0;px<W;px++){
+    const mx=(px-cx)/s,my=(cy-py)/s;
+    const r2=mx*mx+my*my;
+    const i=(py*W+px)*4;
+    if(r2<0.001){d[i]=30;d[i+1]=30;d[i+2]=50;d[i+3]=255;continue;}
+    const val=(mx*mx-my*my)/r2; // cos(2θ)
+    const t=(val+1)/2; // 0=blue, 1=gold
+    d[i]=Math.round(10+t*222);
+    d[i+1]=Math.round(10+t*159);
+    d[i+2]=Math.round(160-t*128);
+    d[i+3]=255;
+  }
+  ctx.putImageData(imgD,0,0);
+  grid(ctx,cx,cy,W,H,s);axes(ctx,cx,cy,W,H);
+  // two paths
+  line(ctx,0,cy,W,cy,'rgba(232,169,32,.7)',2.5);  // y=0, f=+1
+  line(ctx,cx,0,cx,H,'rgba(79,131,204,.7)',2.5);  // x=0, f=-1
+  // labels
+  lbl(ctx,'y=0 → f=+1',W/2+cx/2+8,cy-12,'#e8a920',12);
+  lbl(ctx,'x=0 → f=−1',cx+8,cy/2-10,'#4f83cc',12);
+  dot(ctx,cx,cy,7,'#fff');
+  lbl(ctx,'(0,0)',cx+8,cy-10,'#fff',11);
+}
+
+/* ─ T8E1 · circles around (2,-3) ─ */
+function draw81(){
+  const g=getCtx('g81');if(!g)return;
+  const {ctx,W,H}=g;
+  // center (2,-3) in screen
+  const s=36,cx=W/2-2*s,cy=H/2+3*s;
+  bg(ctx,W,H);
+  // draw circles
+  const cols=['#e8a920','#4f83cc','#4ec9b0','rgba(244,135,113,.8)'];
+  const radii=[0.8,1.6,2.4,3.2];
+  radii.forEach((r,i)=>{
+    circle(ctx,cx,cy,r*s,cols[i],1.5);
+    lbl(ctx,`f=${(r*s/s*r*s/s).toFixed(1)}`,cx+r*s+5,cy-5,cols[i],10);
+  });
+  dot(ctx,cx,cy,7,'#e8a920');
+  // draw axes manually since center is offset
+  line(ctx,10,cy,W-10,cy,'#35354d',1);
+  line(ctx,cx,10,cx,H-10,'#35354d',1);
+  lbl(ctx,'(2,−3) Mínimo f=0',cx+10,cy+22,'#e8a920',12);
+  lbl(ctx,'x',W-18,cy-8,'#5a5a7a',12);
+  lbl(ctx,'y',cx+8,14,'#5a5a7a',12);
+  // axis ticks
+  ctx.fillStyle='#33334a';ctx.font='10px monospace';ctx.textAlign='center';
+  for(let i=-3;i<=6;i++){
+    if(cx+i*s>8&&cx+i*s<W-8)ctx.fillText(i,cx+i*s,cy+14);
+  }
+  ctx.textAlign='right';
+  for(let i=-3;i<=6;i++){
+    const yy=cy-i*s;if(yy>8&&yy<H-8)ctx.fillText(i,cx-4,yy+4);
+  }
+}
+
+/* ─ T8E3 · 9 critical points contour ─ */
+function draw83(){
+  const g=getCtx('g83');if(!g)return;
+  const {ctx,W,H}=g;
+  const cx=W/2,cy=H/2,s=72;
+  bg(ctx,W,H);
+  const f=(x,y)=>x*x*x*x+y*y*y*y-2*x*x-2*y*y+1;
+  // pixel contour bands
+  const lvls=[
+    {c:-1,color:[232,169,32]},
+    {c:-.5,color:[180,120,20]},
+    {c:0,color:[78,201,176]},
+    {c:.5,color:[79,131,204]},
+    {c:1,color:[200,200,80]},
+  ];
+  const imgD=ctx.getImageData(0,0,W,H);const d=imgD.data;
+  for(let py=0;py<H;py++) for(let px=0;px<W;px++){
+    const mx=(px-cx)/s,my=(cy-py)/s;
+    const val=f(mx,my);
+    const i=(py*W+px)*4;
+    d[i]=12;d[i+1]=12;d[i+2]=22;d[i+3]=255;
+    for(const lv of lvls){
+      if(Math.abs(val-lv.c)<.06+Math.abs(val)*.01){
+        const a=Math.max(0,1-Math.abs(val-lv.c)/.07);
+        d[i]=lv.color[0];d[i+1]=lv.color[1];d[i+2]=lv.color[2];d[i+3]=Math.round(a*255);
+        break;
+      }
+    }
+  }
+  ctx.putImageData(imgD,0,0);
+  grid(ctx,cx,cy,W,H,s);axes(ctx,cx,cy,W,H);
+
+  // plot 9 critical points
+  // max (0,0)
+  dot(ctx,cx,cy,7,'#e8a920');
+  lbl(ctx,'●f=1',cx+9,cy-9,'#e8a920',10);
+  // saddles (±1,0),(0,±1)
+  [[1,0],[-1,0],[0,1],[0,-1]].forEach(([x,y])=>{
+    const px=cx+x*s,py=cy-y*s;
+    ctx.strokeStyle='#f48771';ctx.lineWidth=2;
+    ctx.beginPath();ctx.moveTo(px-6,py-6);ctx.lineTo(px+6,py+6);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(px+6,py-6);ctx.lineTo(px-6,py+6);ctx.stroke();
+    lbl(ctx,'✕f=0',px+8,py+4,'#f48771',10);
+  });
+  // minima (±1,±1)
+  [[1,1],[1,-1],[-1,1],[-1,-1]].forEach(([x,y])=>{
+    const px=cx+x*s,py=cy-y*s;
+    ctx.strokeStyle='#4f83cc';ctx.lineWidth=2;
+    ctx.strokeRect(px-5,py-5,10,10);
+    lbl(ctx,'■f=−1',px+8,py+4,'#4f83cc',10);
+  });
+}
+
+/* ─ T9E1 · circle with gradient lines ─ */
+function draw91(){
+  const g=getCtx('g91');if(!g)return;
+  const {ctx,W,H}=g;
+  const cx=W/2+10,cy=H/2,s=36;
+  bg(ctx,W,H);grid(ctx,cx,cy,W,H,s);axes(ctx,cx,cy,W,H);
+
+  // Level lines of f=3x+4y (perpendicular to (3,4))
+  // f=c: y=(-3x+c)/4 → slope -3/4
+  const lColors=['rgba(232,169,32,.25)','rgba(232,169,32,.4)','rgba(232,169,32,.25)'];
+  [0,25,-25].forEach((c,i)=>{
+    const slope=-3/4;
+    const b=(c/4)/s; // y intercept in math units
+    curve(ctx,t=>([t,slope*t+b]),-7,7,100,cx,cy,s,lColors[i],1.5);
+  });
+  lbl(ctx,'niveles de f=3x+4y',18,20,'rgba(232,169,32,.6)',10);
+
+  // Circle
+  circle(ctx,cx,cy,5*s,'rgba(78,201,176,.8)',2.5);
+
+  // Max point (3,4), min (-3,-4)
+  const mx3=cx+3*s,my4=cy-4*s;
+  const mxn=cx-3*s,myn=cy+4*s;
+  dot(ctx,mx3,my4,8,'#e8a920');
+  lbl(ctx,'MAX (3,4) f=25',mx3+10,my4-6,'#e8a920',12);
+  dot(ctx,mxn,myn,8,'#4f83cc');
+  lbl(ctx,'MIN (−3,−4) f=−25',mxn-140,myn+18,'#4f83cc',12);
+
+  // Gradient vector at max point
+  const gx=3/5,gy=4/5; // unit direction
+  const len=50;
+  ctx.strokeStyle='#f5c84a';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(mx3,my4);ctx.lineTo(mx3+gx*len,my4-gy*len);ctx.stroke();
+  ctx.fillStyle='#f5c84a';
+  const ang=Math.atan2(-(gy*len),gx*len);
+  ctx.save();ctx.translate(mx3+gx*len,my4-gy*len);ctx.rotate(-Math.atan2(gy,gx));
+  ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(-10,-4);ctx.lineTo(-10,4);ctx.fill();
+  ctx.restore();
+  lbl(ctx,'∇f',mx3+gx*len+5,my4-gy*len-5,'#f5c84a',11);
+};
+
+window.addEventListener('load',()=>{
+  draw11();draw12();draw13();
+  draw21();draw22();draw23();
+  draw31();
+  draw43();
+  draw81();draw83();
+  draw91();
+});
+})();
+</script>
+</body>
+</html>
+
