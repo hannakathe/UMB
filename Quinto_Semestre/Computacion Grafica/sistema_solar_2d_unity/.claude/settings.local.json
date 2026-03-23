@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find '/c/Users/Usuario/Proyectos/Universidad/Repositories_U/UMB/Quinto_Semestre/Computacion Grafica/sistema_solar_2d_unity' -name *)"
+    ]
+  }
+}
