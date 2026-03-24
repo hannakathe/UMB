@@ -1,17 +1,33 @@
 # Sistema Solar 2D — Unity
 
-Simulacion del sistema solar en Unity 2D con datos astronomicos reales (escala acelerada).
+Simulacion interactiva del sistema solar en Unity 2D con datos astronomicos reales (escala visual acelerada).
 Proyecto de Computacion Grafica — 5to Semestre UMB.
 
 ---
 
 ## Requisitos previos
 
-| Herramienta | Version minima |
-|-------------|---------------|
-| Unity Hub   | cualquiera    |
-| Unity Editor| 2022.3 LTS o superior |
-| TextMeshPro | incluido en el proyecto |
+| Herramienta        | Version                        |
+|--------------------|-------------------------------|
+| Unity Hub          | cualquiera                    |
+| Unity Editor       | **6000.4.0f1 (Unity 6)** o superior |
+| Universal RP (URP) | incluido en el proyecto        |
+| TextMeshPro        | incluido en el proyecto        |
+
+---
+
+## Caracteristicas
+
+- Sol con shader procedural de corona y granulacion solar
+- 8 planetas con iluminacion esferica Phong (efecto 3D)
+- Lunas reales por planeta (nombres, periodos y colores correctos)
+- Anillos de Saturno con bandas de Cassini procedurales
+- Cinturon de asteroides con 500 asteroides
+- 12 constelaciones del zodiaco con estrellas y etiquetas
+- Fondo estelar procedural con nebulosas, cumulos y 3500+ estrellas
+- Panel de informacion por planeta (datos orbitales, lunas, descripcion)
+- Control de velocidad (1 — 10 000 dias/seg) y pausa
+- Camara con zoom, paneo libre y reinicio al Sol
 
 ---
 
@@ -19,178 +35,186 @@ Proyecto de Computacion Grafica — 5to Semestre UMB.
 
 ```
 Assets/
+├── Resources/
+│   └── Sprites/
+│       └── stars_bg.png           — Imagen de fondo opcional (no usada actualmente)
 └── Scripts/
-    ├── TimeManager.cs         — Singleton: escala y pausa de tiempo
-    ├── Planet.cs              — Traslacion, rotacion, generacion de lunas
-    ├── Moon.cs                — Orbita de luna alrededor del planeta
-    ├── SolarSystemManager.cs  — Crea todos los planetas con datos reales
-    ├── CameraController.cs    — Zoom, paneo, seguimiento de planetas
-    ├── StarfieldBackground.cs — Estrellas, particulas y fondo de galaxia
-    ├── UIController.cs        — Slider, pausa, dropdown de planetas, info
-    ├── SpriteGenerator.cs     — Sprites circulares procedurales
-    └── SceneSetupHelper.cs    — Menu editor para configurar la escena
+    ├── TimeManager.cs             — Singleton: escala y pausa del tiempo
+    ├── Planet.cs                  — Traslacion orbital, lunas, interaccion mouse
+    ├── Moon.cs                    — Orbita de luna alrededor del planeta
+    ├── SolarSystemManager.cs      — Instancia Sol, planetas, asteroides, zodiaco
+    ├── CameraController.cs        — Zoom suavizado, paneo, seguimiento
+    ├── StarfieldBackground.cs     — Nebulosa procedural, cumulos, estrellas, particulas
+    ├── UIController.cs            — Slider velocidad, pausa, panel de informacion
+    ├── SpriteGenerator.cs         — Sprites circulares procedurales (planetas, sol, anillos)
+    └── SceneSetupHelper.cs        — Menu editor: configura toda la escena en un clic
 ```
 
 ---
 
 ## Configuracion paso a paso
 
-### Paso 1 — Crear el proyecto en Unity Hub
+### Paso 1 — Abrir el proyecto en Unity
 
-1. Abre Unity Hub
-2. Clic en New Project
-3. Selecciona template 2D Core
-4. Nombre: sistema_solar_2d_unity
-5. Ubicacion: apunta a la carpeta padre donde esta este repositorio
-6. Clic en Create Project
+**Opcion A (recomendada):** clonar el repositorio y abrirlo desde Unity Hub → Open → seleccionar la carpeta `sistema_solar_2d_unity`.
 
-> Alternativa: si Unity ya detecta la carpeta con Assets/, abrela desde Unity Hub → Open.
+**Opcion B:** crear proyecto nuevo en Unity Hub:
+1. New Project → template **Universal 2D**
+2. Nombre: `sistema_solar_2d_unity`
+3. Copiar la carpeta `Assets/` del repositorio al nuevo proyecto
 
 ---
 
 ### Paso 2 — Instalar TextMeshPro
 
-Si Unity pide importar TMP:
-1. Window → TextMeshPro → Import TMP Essential Resources
-2. Clic en Import
+Si Unity muestra el aviso de TMP al abrir la escena:
+1. `Window → TextMeshPro → Import TMP Essential Resources`
+2. Clic en **Import**
 
 ---
 
-### Paso 3 — Configurar la escena automaticamente (recomendado)
+### Paso 3 — Configurar la escena (automatico, recomendado)
 
-Una vez compilados los scripts sin errores:
+Una vez que los scripts compilaron sin errores:
 
-1. En la barra de menu de Unity aparecera Solar System
-2. Clic en: Solar System → 1. Setup Complete Scene
-3. Unity configurara automaticamente:
-   - Camara 2D ortografica
-   - TimeManager (Singleton)
-   - SolarSystemManager con prefabs de circulo
-   - StarfieldBackground (estrellas + particulas)
+1. En la barra de menu de Unity aparece **Solar System**
+2. Clic en: **Solar System → 1. Setup Complete Scene**
+3. Unity construye automaticamente:
+   - Camara 2D ortografica (size 27)
+   - TimeManager singleton
+   - SolarSystemManager con los 8 planetas y sus lunas
+   - Fondo estelar procedural (nebulosas + cumulos + 3500 estrellas)
    - CameraController
-   - Canvas con UI completa
-4. Aparecera un dialogo de confirmacion
-5. Presiona Play
+   - Canvas UI completo (panel de control + panel de informacion)
+4. Aparece dialogo de confirmacion → clic **Entendido**
+5. Presiona **▶ Play**
 
 ---
 
 ### Paso 4 — Configurar la escena manualmente (alternativa)
 
-#### 4.1 Crear prefabs de circulo
+Si prefieres armar la escena a mano:
 
-1. Hierarchy → clic derecho → Create Empty
-2. Agregar componente: SpriteRenderer
-3. Agregar componente: CircleSpriteAutoAssign  (genera el circulo en runtime)
-4. Arrastrar al panel Project → carpeta Assets/Prefabs/
-5. Nombrar: SunPrefab
-6. Repetir para PlanetPrefab y MoonPrefab
+#### 4.1 Crear prefabs base
+
+1. Hierarchy → clic derecho → **Create Empty**
+2. Agregar componentes: `SpriteRenderer` + `CircleSpriteAutoAssign`
+3. Arrastrar al Project → `Assets/Prefabs/`
+4. Nombrar `SunPrefab`. Repetir para `PlanetPrefab` y `MoonPrefab`
 
 #### 4.2 GameObjects de escena
 
-| Nombre | Componentes |
-|--------|-------------|
-| TimeManager | TimeManager |
-| SolarSystem | SolarSystemManager |
-| Starfield | StarfieldBackground |
-| UIController | UIController |
-| Main Camera | Camera (ortografica) + CameraController |
+| Nombre          | Componentes necesarios                      |
+|-----------------|---------------------------------------------|
+| TimeManager     | TimeManager                                 |
+| SolarSystem     | SolarSystemManager                          |
+| Starfield       | StarfieldBackground                         |
+| UIController    | UIController                                |
+| Main Camera     | Camera (Orthographic, Size 27) + CameraController |
 
 #### 4.3 SolarSystemManager — Inspector
 
-- Sun Prefab → SunPrefab
-- Planet Prefab → PlanetPrefab
-- Moon Prefab → MoonPrefab
-- Use Log Scale: activado
-- Log Base: 1.8
-- Distance Scale: 4
+| Campo          | Valor  |
+|----------------|--------|
+| Sun Prefab     | SunPrefab |
+| Planet Prefab  | PlanetPrefab |
+| Moon Prefab    | MoonPrefab |
+| Distance Scale | 1.0    |
+| Use Log Scale  | false  |
 
-#### 4.4 Camara — Inspector
+#### 4.4 UIController — Inspector
 
-- Projection: Orthographic
-- Size: 35
-- Background: negro
-- Clear Flags: Solid Color
-
-#### 4.5 UIController — Inspector
-
-Asignar cada referencia de UI (Slider, Buttons, Dropdown, TextMeshPro).
-
----
-
-### Paso 5 — Agregar imagen de galaxia (opcional)
-
-1. Arrastra tu imagen PNG a Assets/Resources/Sprites/
-2. Inspector → Texture Type: Sprite (2D and UI) → Apply
-3. Seleccionar el GameObject Starfield
-4. StarfieldBackground → Galaxy Sprite → arrastra el sprite
-5. Ajustar Galaxy Opacity (0.2 – 0.5 recomendado)
+Asignar cada referencia de UI:
+- `TimeScaleSlider`, `TimeScaleLabel`
+- `PauseButton`, `PauseButtonText`
+- `ResetCameraButton`, `ClosePanelButton`
+- `InfoPanel`, `PlanetNameText`, `PlanetDetailsText`
+- `SolarSystemManager`, `CameraController`
 
 ---
 
 ## Controles en runtime
 
-| Accion | Control |
-|--------|---------|
-| Pausar / Reanudar | Boton UI o Espacio |
-| Ajustar velocidad | Slider |
-| Zoom in/out | Rueda del raton |
-| Paneo | Clic central o derecho + arrastrar |
-| Seguir un planeta | Dropdown de planetas |
-| Ver todo | Boton Ver todo |
+| Accion                        | Control                          |
+|-------------------------------|----------------------------------|
+| Pausar / Reanudar             | Boton **Pausar** o tecla `Espacio` |
+| Ajustar velocidad             | Slider (1 — 10 000 dias/seg)     |
+| Zoom in / out                 | Rueda del raton                  |
+| Paneo libre                   | Clic central o derecho + arrastrar |
+| Ver info de un planeta        | Clic sobre el planeta            |
+| Cerrar panel de informacion   | Boton **X** (esquina del panel)  |
+| Reiniciar camara al Sol       | Boton **Reiniciar Camara**       |
+| Ver nombre del planeta        | Pasar el mouse por encima        |
 
 ---
 
 ## Datos astronomicos incluidos
 
-| Planeta  | Distancia (UA) | Traslacion   | Rotacion  | Lunas |
-|----------|---------------|--------------|-----------|-------|
-| Mercurio | 0.39          | 87.97 dias   | 1407.6 h  | 0     |
-| Venus    | 0.72          | 224.70 dias  | 5832.5 h  | 0     |
-| Tierra   | 1.00          | 365.25 dias  | 23.93 h   | 1     |
-| Marte    | 1.52          | 686.97 dias  | 24.62 h   | 2     |
-| Jupiter  | 5.20          | 11.86 anios  | 9.93 h    | 10    |
-| Saturno  | 9.58          | 29.46 anios  | 10.66 h   | 10    |
-| Urano    | 19.22         | 84.02 anios  | 17.24 h   | 5     |
-| Neptuno  | 30.05         | 164.79 anios | 16.11 h   | 5     |
+### Planetas
 
-Lunas con nombres reales:
-- Tierra: Luna
-- Marte: Fobos, Deimos
-- Jupiter: Io, Europa, Ganimedes, Calisto + 6 mas
-- Saturno: Mimas, Encelado, Tetis, Dione, Rea, Titan + 4 mas
-- Urano: Miranda, Ariel, Umbriel, Titania, Oberon
-- Neptuno: Naiade, Talasa, Galatea, Larisa, Triton
+| Planeta  | Radio orbita (visual) | Periodo traslacion | Lunas simuladas |
+|----------|-----------------------|--------------------|-----------------|
+| Mercurio | 3.5 u                 | 87.97 dias         | 0               |
+| Venus    | 5.5 u                 | 224.70 dias        | 0               |
+| Tierra   | 7.5 u                 | 365.25 dias        | 1               |
+| Marte    | 9.5 u                 | 686.97 dias        | 2               |
+| Jupiter  | 14.0 u                | 11.86 anios        | 4               |
+| Saturno  | 17.5 u                | 29.46 anios        | 2               |
+| Urano    | 21.0 u                | 84.02 anios        | 2               |
+| Neptuno  | 24.5 u                | 164.79 anios       | 1               |
 
----
+### Lunas con nombre real
 
-## Ajuste de parametros
-
-### Velocidad de simulacion (TimeManager)
-```
-timeScale = 10000   → 1 seg real = 10,000 dias simulados (predeterminado)
-timeScale = 365     → 1 seg real = 1 anio simulado (lento)
-timeScale = 100000  → 1 seg real = ~274 anios simulados (rapido)
-```
-
-### Escala de distancias (SolarSystemManager)
-```
-useLogScale = true   → Escala logaritmica (recomendado)
-useLogScale = false  → Escala lineal (Neptuno queda muy lejos)
-logBase = 1.8        → Mayor = mas comprimido
-distanceScale = 4    → Factor final de escala
-```
+| Planeta  | Lunas                                  |
+|----------|----------------------------------------|
+| Tierra   | Luna                                   |
+| Marte    | Fobos, Deimos                          |
+| Jupiter  | Io, Europa, Ganimedes, Calisto         |
+| Saturno  | Rea, Titan                             |
+| Urano    | Titania, Oberon                        |
+| Neptuno  | Triton                                 |
 
 ---
 
-## Posibles errores
+## Fondo estelar procedural
 
-| Error | Solucion |
-|-------|----------|
-| TMPro not found | Window → TextMeshPro → Import TMP Essential Resources |
-| NullReference en SolarSystemManager | Asignar los 3 prefabs en el Inspector |
-| Planetas no visibles | Camara → Projection: Orthographic |
-| UI no aparece | Canvas → Render Mode: Screen Space Overlay |
-| Lunas no orbitan | MoonPrefab debe tener el componente Moon |
+El fondo se genera en tiempo de ejecucion con `StarfieldBackground`:
+
+| Elemento             | Descripcion                                                  |
+|----------------------|--------------------------------------------------------------|
+| Nebulosa principal   | Banda diagonal violeta-azul (Perlin noise multicapa)         |
+| Nube azulada         | Region de formacion estelar (fria)                           |
+| Nube rojiza          | Region de hidrogeno ionizado (calida)                        |
+| Estrellas estaticas  | 3 500 estrellas en 3 capas con paralaje                      |
+| Cumulos estelares    | 8 cumulos de ~100 estrellas (distribucion gaussiana)         |
+| Polvo estelar        | 600 particulas parpadeantes dinamicas                        |
+
+---
+
+## Velocidad de simulacion
+
+```
+timeScale = 1       → 1 dia simulado cada segundo real (muy lento)
+timeScale = 100     → 100 dias/seg  (valor por defecto)
+timeScale = 365     → ~1 anio simulado por segundo
+timeScale = 10 000  → ~27 anios simulados por segundo (maximo)
+```
+
+El slider de la UI cubre el rango completo 1 — 10 000.
+
+---
+
+## Posibles errores y soluciones
+
+| Error                                    | Solucion                                                    |
+|------------------------------------------|-------------------------------------------------------------|
+| `TMPro not found`                        | Window → TextMeshPro → Import TMP Essential Resources       |
+| `NullReference` en SolarSystemManager   | Asignar los 3 prefabs en el Inspector                       |
+| Planetas no visibles                     | Camara → Projection: Orthographic, Size: 27                 |
+| UI no aparece                            | Canvas → Render Mode: Screen Space Overlay                  |
+| Lunas no orbitan                         | MoonPrefab debe tener el componente `Moon`                  |
+| Fondo negro sin estrellas                | Verificar que el GameObject Starfield tiene `StarfieldBackground` |
+| Panel de info no aparece al hacer clic  | Verificar que los planetas tienen `CircleCollider2D`        |
 
 ---
 

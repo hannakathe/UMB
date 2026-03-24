@@ -51,8 +51,16 @@ Thumbs.db
 # Rider / Visual Studio / VS Code
 .idea/
 .vs/
+.vscode/
 *.csproj
 *.sln
+*.slnx
 *.suo
 *.user
 *.userprefs
+
+# Packages lock (regenerado automáticamente por Unity)
+Packages/packages-lock.json
+
+# Claude Code (configuración local del asistente)
+.claude/
