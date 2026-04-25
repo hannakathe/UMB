@@ -4,6 +4,7 @@ import { enviosApi } from '../../api/envios';
 import { repartidoresApi } from '../../api/repartidores';
 import StatusBadge from '../../components/StatusBadge';
 import StatusTimeline from '../../components/StatusTimeline';
+import MapView from '../../components/MapView';
 
 const STATUS_OPTIONS = [
   { value: 'en_bodega',  label: 'En bodega' },
@@ -91,6 +92,25 @@ export default function EnvioDetailPage() {
 
       {success && <div className="alert alert-success">{success}</div>}
       {error && <div className="alert alert-error">{error}</div>}
+
+      {/* ── Mapa ─────────────────────────────────────────────────────────────── */}
+      <div className="card" style={{ marginBottom: 16 }}>
+        <div style={{ fontWeight: 700, marginBottom: 12 }}>Mapa del recorrido</div>
+        <MapView
+          origin={{
+            name:    envio.sender_name,
+            city:    envio.sender_city,
+            address: envio.sender_address,
+          }}
+          destination={{
+            name:    envio.recipient_name,
+            city:    envio.recipient_city,
+            address: envio.recipient_address,
+          }}
+          status={envio.status}
+          height={260}
+        />
+      </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
         {/* Datos del envío */}

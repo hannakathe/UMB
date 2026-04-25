@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import logo from '../assets/logo.png';
 
 export default function TrackingPage() {
   const [query, setQuery] = useState('');
@@ -20,14 +21,7 @@ export default function TrackingPage() {
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '0 24px', height: 60, zIndex: 10,
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontWeight: 700 }}>
-          <div style={{
-            background: 'var(--rr-red)', color: '#fff', width: 32, height: 32,
-            borderRadius: 6, display: 'flex', alignItems: 'center',
-            justifyContent: 'center', fontWeight: 900, fontSize: 13,
-          }}>RR</div>
-          Repartos Rápidos
-        </div>
+        <img src={logo} alt="Repartos Rápidos S.A.S" style={{ height: 44, objectFit: 'contain' }} />
         <div style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: 13 }}>
           <a href="tel:018000RAPIDO" style={{ color: 'var(--rr-gray-700)' }}>
             📞 01-8000-RAPIDO

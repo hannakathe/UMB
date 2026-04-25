@@ -1,22 +1,32 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --rr-red: #e53935;
-  --rr-red-dark: #b71c1c;
-  --rr-blue: #1565c0;
-  --rr-green: #2e7d32;
+  /* ── Colores de marca ──────────────────────────── */
+  --rr-red:       #d32f2f;   /* rojo principal del logo */
+  --rr-red-dark:  #b71c1c;   /* hover / activo */
+  --rr-navy:      #1a237e;   /* azul marino del logo (texto "REPARTOS") */
+  --rr-navy-dark: #0d1550;   /* hover navy */
+
+  /* ── Utilidades heredadas ──────────────────────── */
+  --rr-blue:   #1565c0;
+  --rr-green:  #2e7d32;
   --rr-orange: #e65100;
-  --rr-gray-50: #fafafa;
+
+  /* ── Escala de grises ──────────────────────────── */
+  --rr-gray-50:  #fafafa;
   --rr-gray-100: #f5f5f5;
   --rr-gray-200: #eeeeee;
   --rr-gray-300: #e0e0e0;
   --rr-gray-500: #9e9e9e;
+  --rr-gray-600: #757575;
   --rr-gray-700: #616161;
   --rr-gray-900: #212121;
+
+  /* ── Layout ────────────────────────────────────── */
   --sidebar-w: 220px;
-  --header-h: 60px;
-  --radius: 8px;
-  --shadow: 0 1px 4px rgba(0,0,0,.12);
+  --header-h:  64px;
+  --radius:    8px;
+  --shadow:    0 1px 4px rgba(0,0,0,.12);
   --shadow-md: 0 4px 12px rgba(0,0,0,.15);
 }
 
@@ -71,19 +81,14 @@ input:focus, select:focus, textarea:focus { border-color: var(--rr-red); }
   height: var(--header-h);
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 0 16px;
+  justify-content: center;
+  padding: 0 12px;
   border-bottom: 1px solid var(--rr-gray-200);
-  font-weight: 700;
-  font-size: 15px;
 }
-.sidebar__logo-badge {
-  background: var(--rr-red);
-  color: #fff;
-  width: 32px; height: 32px;
-  border-radius: 6px;
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 900; font-size: 13px; flex-shrink: 0;
+.sidebar__logo img {
+  height: 44px;
+  object-fit: contain;
+  max-width: 100%;
 }
 .sidebar__nav { padding: 12px 0; flex: 1; }
 .sidebar__link {
@@ -318,25 +323,19 @@ tr:hover td { background: var(--rr-gray-50); }
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #b71c1c 0%, #e53935 100%);
+  background: linear-gradient(135deg, var(--rr-navy) 0%, var(--rr-red-dark) 60%, var(--rr-red) 100%);
 }
 .login-card {
   background: #fff;
   border-radius: 12px;
   padding: 40px;
   width: 100%;
-  max-width: 380px;
-  box-shadow: var(--shadow-md);
+  max-width: 400px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.25);
 }
-.login-card__logo { text-align: center; margin-bottom: 28px; }
-.login-card__badge {
-  width: 52px; height: 52px; border-radius: 12px;
-  background: var(--rr-red); color: #fff;
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 900; font-size: 20px; margin: 0 auto 10px;
-}
-.login-card__title { font-size: 20px; font-weight: 700; text-align: center; margin-bottom: 4px; }
-.login-card__sub { font-size: 13px; color: var(--rr-gray-500); text-align: center; margin-bottom: 24px; }
+.login-card__logo { text-align: center; margin-bottom: 24px; }
+.login-card__logo img { height: 96px; object-fit: contain; }
+.login-card__sub { font-size: 13px; color: var(--rr-gray-500); text-align: center; margin-bottom: 24px; margin-top: 6px; }
 .login-form { display: flex; flex-direction: column; gap: 14px; }
 .login-error { background: #ffebee; color: #b71c1c; padding: 10px 14px; border-radius: var(--radius); font-size: 13px; }
 

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import logo from '../assets/logo.png';
 
 export default function LoginPage() {
   const { user, login } = useAuth();
@@ -35,9 +36,8 @@ export default function LoginPage() {
     <div className="login-page">
       <div className="login-card">
         <div className="login-card__logo">
-          <div className="login-card__badge">RR</div>
-          <div className="login-card__title">Repartos Rápidos</div>
-          <div className="login-card__sub">Acceso al panel de operadores</div>
+          <img src={logo} alt="Repartos Rápidos S.A.S" />
+          <div className="login-card__sub">Panel de gestión de envíos</div>
         </div>
 
         {error && <div className="login-error">{error}</div>}

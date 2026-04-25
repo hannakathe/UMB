@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { enviosApi } from '../api/envios';
 import StatusTimeline from '../components/StatusTimeline';
+import MapView from '../components/MapView';
+import logo from '../assets/logo.png';
 
 function Stars({ rating }) {
   const full = Math.round(rating);
@@ -39,13 +41,8 @@ export default function TrackingResultPage() {
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '0 24px', height: 60,
       }}>
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 10, fontWeight: 700 }}>
-          <div style={{
-            background: 'var(--rr-red)', color: '#fff', width: 32, height: 32,
-            borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontWeight: 900, fontSize: 13,
-          }}>RR</div>
-          Repartos Rápidos
+        <Link to="/">
+          <img src={logo} alt="Repartos Rápidos S.A.S" style={{ height: 44, objectFit: 'contain' }} />
         </Link>
         <a href="/login" className="btn btn-outline btn-sm">Iniciar sesión</a>
       </header>
@@ -112,21 +109,26 @@ export default function TrackingResultPage() {
               )}
             </div>
 
-            {/* Columna derecha — Mapa placeholder */}
+            {/* Columna derecha — Mapa Leaflet */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div className="card" style={{ flex: 1 }}>
-                <div style={{ fontWeight: 700, marginBottom: 12, display: 'flex', justifyContent: 'space-between' }}>
-                  <span>Ubicación en vivo</span>
-                  <span style={{ fontSize: 11, color: 'var(--rr-gray-500)' }}>↺ actualiza cada 30s</span>
+                <div style={{ fontWeight: 700, marginBottom: 12 }}>
+                  Mapa del recorrido
                 </div>
-                <div className="map-placeholder" style={{ minHeight: 280 }}>
-                  <span style={{ fontSize: 32 }}>🗺️</span>
-                  <span>Mapa en tiempo real</span>
-                  <span style={{ fontSize: 11 }}>(requiere integración con Google Maps API)</span>
-                  <div style={{ marginTop: 8, fontSize: 11 }}>
-                    🔴 repartidor · 🟢 entrega · — ruta
-                  </div>
-                </div>
+                <MapView
+                  origin={{
+                    name:    envio.sender_name,
+                    city:    envio.sender_city,
+                    address: envio.sender_address,
+                  }}
+                  destination={{
+                    name:    envio.recipient_name,
+                    city:    envio.recipient_city,
+                    address: envio.recipient_address,
+                  }}
+                  status={envio.status}
+                  height={300}
+                />
               </div>
             </div>
           </div>

@@ -1,5 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import logo from '../assets/logo.png';
 
 // Navegación según rol
 const ADMIN_LINKS = [
@@ -31,8 +32,7 @@ export default function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="sidebar__logo">
-        <div className="sidebar__logo-badge">RR</div>
-        <span>Repartos Rápidos</span>
+        <img src={logo} alt="Repartos Rápidos S.A.S" />
       </div>
 
       {/* Rol badge */}
