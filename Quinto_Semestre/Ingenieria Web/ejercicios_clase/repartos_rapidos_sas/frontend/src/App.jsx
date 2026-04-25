@@ -15,6 +15,9 @@ import NewEnvioPage from './pages/admin/NewEnvioPage';
 import EnvioDetailPage from './pages/admin/EnvioDetailPage';
 import RepartidoresPage from './pages/admin/RepartidoresPage';
 import ReportesPage from './pages/admin/ReportesPage';
+// Páginas operador
+import MisEnviosPage from './pages/admin/MisEnviosPage';
+import BorradoresPage from './pages/admin/BorradoresPage';
 
 export default function App() {
   return (
@@ -35,6 +38,8 @@ export default function App() {
               <Route path="/admin/envios/:id" element={<EnvioDetailPage />} />
               <Route path="/admin/repartidores" element={<RepartidoresPage />} />
               <Route path="/admin/reportes" element={<ReportesPage />} />
+              <Route path="/admin/mis-envios" element={<MisEnviosPage />} />
+              <Route path="/admin/borradores" element={<BorradoresPage />} />
             </Route>
           </Route>
 

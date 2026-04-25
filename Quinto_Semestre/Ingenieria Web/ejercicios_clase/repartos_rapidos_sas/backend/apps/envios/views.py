@@ -18,7 +18,11 @@ class EnvioViewSet(viewsets.ModelViewSet):
     ordering_fields = ('created_at', 'updated_at', 'status')
 
     def get_queryset(self):
-        return Envio.objects.select_related('repartidor', 'operator').prefetch_related('historial')
+        qs = Envio.objects.select_related('repartidor', 'operator').prefetch_related('historial')
+        # El operador solo ve sus propios envíos; el admin ve todos
+        if not self.request.user.is_admin_role:
+            qs = qs.filter(operator=self.request.user)
+        return qs
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -39,6 +43,15 @@ class EnvioViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'], url_path='borradores')
     def borradores(self, request):
         qs = self.get_queryset().filter(is_draft=True)
+        serializer = EnvioListSerializer(qs, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['get'], url_path='mis-envios')
+    def mis_envios(self, request):
+        """Historial personal del operador autenticado (ignora rol admin)."""
+        qs = Envio.objects.filter(
+            operator=request.user, is_draft=False
+        ).select_related('repartidor').order_by('-created_at')
         serializer = EnvioListSerializer(qs, many=True)
         return Response(serializer.data)
 

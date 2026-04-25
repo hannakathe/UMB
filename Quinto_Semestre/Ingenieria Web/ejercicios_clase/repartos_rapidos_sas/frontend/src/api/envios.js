@@ -23,6 +23,9 @@ export const enviosApi = {
   cambiarEstado: (id, status, notes = '') =>
     client.post(`/envios/${id}/cambiar-estado/`, { status, notes }),
 
+  // ── Mis envíos (historial personal del operador) ─────────────────────────
+  misEnvios: () => client.get('/envios/mis-envios/'),
+
   // ── Borradores ────────────────────────────────────────────────────────────
   borradores: () => client.get('/envios/borradores/'),
 
