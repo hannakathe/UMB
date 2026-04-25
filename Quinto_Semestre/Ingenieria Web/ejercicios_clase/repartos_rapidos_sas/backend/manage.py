@@ -2,6 +2,10 @@
 import os
 import sys
 
+# PyMySQL como reemplazo de mysqlclient (no requiere compiladores C++)
+import pymysql
+pymysql.install_as_MySQLdb()
+
 
 def main():
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
