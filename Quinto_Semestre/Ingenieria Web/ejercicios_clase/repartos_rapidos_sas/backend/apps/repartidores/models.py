@@ -9,9 +9,9 @@ class Repartidor(models.Model):
         CARRO = 'carro', 'Carro'
 
     name = models.CharField(max_length=150, verbose_name='Nombre completo')
-    phone = models.CharField(max_length=20, verbose_name='Teléfono')
+    phone = models.CharField(max_length=20, unique=True, verbose_name='Teléfono')
     vehicle = models.CharField(max_length=20, choices=Vehicle.choices, default=Vehicle.MOTO)
-    plate = models.CharField(max_length=10, verbose_name='Placa')
+    plate = models.CharField(max_length=10, unique=True, verbose_name='Placa')
     rating = models.DecimalField(
         max_digits=3, decimal_places=1,
         default=5.0,
