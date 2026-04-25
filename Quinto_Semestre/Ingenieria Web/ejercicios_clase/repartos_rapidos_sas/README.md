@@ -12,13 +12,14 @@ Sistema fullstack para la gestión, asignación y rastreo público de envíos de
 4. [Requisitos previos](#4-requisitos-previos)
 5. [Instalación y configuración](#5-instalación-y-configuración)
 6. [Variables de entorno](#6-variables-de-entorno)
-7. [Estructura del proyecto](#7-estructura-del-proyecto)
-8. [Modelo de datos](#8-modelo-de-datos)
-9. [API REST — Referencia completa](#9-api-rest--referencia-completa)
-10. [Rutas del frontend](#10-rutas-del-frontend)
-11. [Funcionalidades implementadas](#11-funcionalidades-implementadas)
-12. [Decisiones técnicas](#12-decisiones-técnicas)
-13. [Flujo de desarrollo](#13-flujo-de-desarrollo)
+7. [Datos de prueba](#7-datos-de-prueba)
+8. [Estructura del proyecto](#8-estructura-del-proyecto)
+9. [Modelo de datos](#9-modelo-de-datos)
+10. [API REST — Referencia completa](#10-api-rest--referencia-completa)
+11. [Rutas del frontend](#11-rutas-del-frontend)
+12. [Funcionalidades implementadas](#12-funcionalidades-implementadas)
+13. [Decisiones técnicas](#13-decisiones-técnicas)
+14. [Flujo de desarrollo](#14-flujo-de-desarrollo)
 
 ---
 
@@ -225,7 +226,134 @@ CORS_ALLOWED_ORIGINS=http://localhost:5173
 
 ---
 
-## 7. Estructura del proyecto
+## 7. Datos de prueba
+
+Al ejecutar `python manage.py seed` se crean automáticamente los siguientes registros. Son suficientes para probar todas las pantallas y funcionalidades del sistema.
+
+---
+
+### 👤 Usuarios
+
+| Usuario | Contraseña | Rol | Nombre | Email |
+|---------|-----------|-----|--------|-------|
+| `admin` | `admin1234` | Administrador | María González | admin@repartosrapidos.co |
+| `operador` | `operador1234` | Operador | Carlos Ramírez | operador@repartosrapidos.co |
+
+> El usuario `admin` también tiene acceso al panel Django en `http://localhost:8000/admin`.
+
+---
+
+### 🏍 Repartidores
+
+| Nombre | Teléfono | Vehículo | Placa | Calificación |
+|--------|---------|---------|-------|-------------|
+| Carlos M. | 311 000 0001 | Moto | ABC123 | ⭐ 4.8 |
+| Diana R. | 312 000 0002 | Moto | DEF456 | ⭐ 4.5 |
+| Luis F. | 313 000 0003 | Bicicleta | GHI789 | ⭐ 4.9 |
+| Empresa X. | 314 000 0004 | Carro | JKL012 | ⭐ 4.2 |
+| Pedro G. | 315 000 0005 | Moto | MNO345 | ⭐ 3.9 |
+
+---
+
+### 📦 Envíos
+
+Se crean 5 envíos, cada uno en un estado diferente para poder probar todo el flujo:
+
+| # | Remitente | Destinatario | Ruta | Repartidor | Servicio | Estado |
+|---|-----------|-------------|------|-----------|---------|--------|
+| 1 | Juan P. (Bogotá) | Ana L. (Medellín) | Bogotá → Medellín | Carlos M. | Express | 🟢 En entrega |
+| 2 | Lucía F. (Bogotá) | Diana K. (Cali) | Bogotá → Cali | Diana R. | Prioritario | 🔵 En bodega |
+| 3 | Empresa X. (Bogotá) | Luis F. (Bogotá) | Bogotá → Bogotá | Luis F. | Standard | 🟣 Recibido |
+| 4 | Pedro G. (Bogotá) | Carlos M. (Manizales) | Bogotá → Manizales | Empresa X. | Standard | 🔴 Incidencia |
+| 5 | María L. (Bogotá) | Sofía R. (Cali) | Bogotá → Cali | Pedro G. | Prioritario | 🟡 En ruta |
+
+#### Detalle de cada envío
+
+**Envío 1 — En entrega** (el más avanzado, ideal para probar rastreo)
+```
+Remitente:    Juan P. · 310 555 0101 · Cra 13 #93-45, Bogotá
+Destinatario: Ana L.  · 300 555 0202 · Cl 80 #11-22, Medellín
+Paquete:      Caja con accesorios electrónicos · 2.4 kg · 20×30×15 cm
+Valor seguro: $500.000 COP
+Servicio:     Express
+Repartidor:   Carlos M. (moto · ABC123 · ⭐ 4.8)
+Historial:    En bodega → En ruta → En entrega ✓
+```
+
+**Envío 2 — En bodega** (recién ingresado)
+```
+Remitente:    Lucía F. · 311 555 0303 · Av. El Dorado #68-95, Bogotá
+Destinatario: Diana K. · 320 555 0404 · Carrera 45 #18-30, Cali
+Paquete:      Documentos legales · 0.3 kg · 5×22×30 cm
+Valor seguro: $0
+Servicio:     Prioritario
+Repartidor:   Diana R. (moto · DEF456 · ⭐ 4.5)
+Historial:    En bodega
+```
+
+**Envío 3 — Recibido** (ciclo completo)
+```
+Remitente:    Empresa X. · 314 555 0505 · Zona Industrial Chía, Bogotá
+Destinatario: Luis F.    · 313 555 0606 · Calle 50 #30-15, Bogotá
+Paquete:      Piezas de repuesto · 8.5 kg · 40×50×30 cm
+Valor seguro: $1.200.000 COP
+Servicio:     Standard
+Repartidor:   Luis F. (bicicleta · GHI789 · ⭐ 4.9)
+Historial:    En bodega → En ruta → En entrega → Recibido ✓
+```
+
+**Envío 4 — Incidencia** (para probar alertas en dashboard)
+```
+Remitente:    Pedro G.  · 315 555 0707 · Cra 7 #45-10, Bogotá
+Destinatario: Carlos M. · 311 555 0808 · Av. Santander #20-50, Manizales
+Paquete:      Ropa y calzado · 3.1 kg · 35×45×25 cm
+Valor seguro: $250.000 COP
+Servicio:     Standard
+Repartidor:   Empresa X. (carro · JKL012 · ⭐ 4.2)
+Historial:    En bodega → En ruta → Incidencia ⚠
+Nota:         "Paquete dañado en tránsito"
+```
+
+**Envío 5 — En ruta**
+```
+Remitente:    María L. · 316 555 0909 · Cl 26 #85-20, Bogotá
+Destinatario: Sofía R. · 321 555 1010 · Cra 27 #55-10, Cali
+Paquete:      Cosméticos · 1.2 kg · 18×20×12 cm
+Valor seguro: $350.000 COP
+Servicio:     Prioritario
+Repartidor:   Pedro G. (moto · MNO345 · ⭐ 3.9)
+Historial:    En bodega → En ruta
+```
+
+---
+
+### 🔍 Cómo probar el rastreo público
+
+El número de guía se genera aleatoriamente con el formato `RPD-2026-XXXXXX`. Para obtener los números reales después de correr el seed, tienes dos opciones:
+
+**Opción A — Desde el dashboard** (recomendada)
+1. Inicia sesión en `http://localhost:5173/login` con `admin` / `admin1234`
+2. En el Dashboard verás la tabla con todos los envíos y sus números de guía
+3. Copia cualquier número y pruébalo en `http://localhost:5173/`
+
+**Opción B — Desde la API**
+```bash
+# Obtener todos los números de guía
+curl http://localhost:8000/api/envios/ \
+  -H "Authorization: Bearer <tu_token>" \
+  | python -m json.tool
+```
+
+**Opción C — Desde MySQL**
+```sql
+SELECT tracking_number, status, sender_name, recipient_name
+FROM envios
+ORDER BY created_at DESC;
+```
+
+---
+
+## 8. Estructura del proyecto
 
 ```
 repartos_rapidos_sas/
@@ -316,7 +444,7 @@ repartos_rapidos_sas/
 
 ---
 
-## 8. Modelo de datos
+## 9. Modelo de datos
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
@@ -393,7 +521,7 @@ repartos_rapidos_sas/
 
 ---
 
-## 9. API REST — Referencia completa
+## 10. API REST — Referencia completa
 
 La URL base es `http://localhost:8000/api`. Todos los endpoints privados requieren el header:
 
@@ -714,7 +842,7 @@ Datos agregados para gráficas.
 
 ---
 
-## 10. Rutas del frontend
+## 11. Rutas del frontend
 
 | Ruta | Componente | Auth | Descripción |
 |------|-----------|------|-------------|
@@ -732,7 +860,7 @@ Las rutas `/admin/*` están protegidas por `<ProtectedRoute>`. Si no hay sesión
 
 ---
 
-## 11. Funcionalidades implementadas
+## 12. Funcionalidades implementadas
 
 ### Página pública de rastreo
 - Formulario de búsqueda por número de guía (`RPD-YYYY-XXXXXX`)
@@ -779,7 +907,7 @@ Las rutas `/admin/*` están protegidas por `<ProtectedRoute>`. Si no hay sesión
 
 ---
 
-## 12. Decisiones técnicas
+## 13. Decisiones técnicas
 
 | Decisión | Justificación |
 |----------|--------------|
@@ -794,7 +922,7 @@ Las rutas `/admin/*` están protegidas por `<ProtectedRoute>`. Si no hay sesión
 
 ---
 
-## 13. Flujo de desarrollo
+## 14. Flujo de desarrollo
 
 ### Comandos útiles
 
