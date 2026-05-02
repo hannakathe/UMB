@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Galería de fotos — Productos y local de Provisión de la Sabana." />
+  <title>Galería | Provisión de la Sabana</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+
+<!-- ═══════════════════ HEADER ═══════════════════ -->
+<header>
+  <div class="container">
+    <a href="index.html" class="logo" aria-label="Inicio">
+      <div class="logo-mark"><i class="fa-solid fa-drumstick-bite"></i></div>
+      <div class="logo-text">
+        <strong>Provisión de la Sabana</strong>
+        <span>Cárnicos &amp; Abarrotes</span>
+      </div>
+    </a>
+    <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav>
+      <ul class="nav-menu" role="list">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="productos.html">Productos</a></li>
+        <li><a href="galeria.html" class="active">Galería</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- ═══════════════════ PAGE HERO ═══════════════════ -->
+<section class="page-hero">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Ruta">
+      <a href="index.html">Inicio</a>
+      <i class="fa-solid fa-chevron-right" style="font-size:.65rem;"></i>
+      <span>Galería</span>
+    </nav>
+    <h1>Nuestra Galería</h1>
+    <p>Imágenes de nuestros cortes, aves, abarrotes y el local donde operamos con orgullo cada día.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════ FILTROS ═══════════════════ -->
+<div class="gal-filter">
+  <div class="container">
+    <div class="filter-btns" role="group" aria-label="Filtrar galería">
+      <button class="filter-btn active" data-cat="all">
+        <i class="fa-solid fa-border-all"></i> Todos
+      </button>
+      <button class="filter-btn" data-cat="carnes">
+        <i class="fa-solid fa-cow"></i> Carnes Rojas
+      </button>
+      <button class="filter-btn" data-cat="aves">
+        <i class="fa-solid fa-feather"></i> Aves
+      </button>
+      <button class="filter-btn" data-cat="abarrotes">
+        <i class="fa-solid fa-box-open"></i> Abarrotes
+      </button>
+      <button class="filter-btn" data-cat="pescados">
+        <i class="fa-solid fa-fish"></i> Pescados
+      </button>
+      <button class="filter-btn" data-cat="local">
+        <i class="fa-solid fa-store"></i> Nuestro Local
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ GALERÍA MASONRY ═══════════════════ -->
+<section class="gal-section">
+  <div class="container">
+    <div class="masonry" id="gallery">
+
+      <!-- CARNES -->
+      <div class="masonry-item" data-cat="carnes">
+        <img src="img/gal-lomo-fino.jpg" alt="Lomo fino de res en tabla de madera" loading="lazy" />
+        <div class="masonry-overlay"><span>Lomo Fino de Res</span></div>
+      </div>
+
+      <div class="masonry-item" data-cat="local">
+        <img src="img/gal-vitrina.jpg" alt="Vitrina de carnes del local" loading="lazy" />
+        <div class="masonry-overlay"><span>Vitrina Principal</span></div>
+      </div>
+
+      <div class="masonry-item" data-cat="aves">
+        <img src="img/gal-pollos-dia.jpg" alt="Pollos frescos exhibidos" loading="lazy" />
+        <div class="masonry-overlay"><span>Pollos Frescos del Día</span></div>
+      </div>
+
+      <div class="masonry-item" data-cat="abarrotes">
+        <img src="img/gal-granos.jpg" alt="Estante de granos y legumbres" loading="lazy" />
+        <div class="masonry-overlay"><span>Granos Seleccionados</span></div>
+      </div>
+
+      <div class="masonry-item" data-cat="carnes">
+        <img src="img/gal-ribeye.jpg" alt="Ribeye con marmoleo perfecto" loading="lazy" />
+        <div class="masonry-overlay"><span>Ribeye Premium</span></div>
+      </div>
+
+      <div class="masonry-item" data-cat="local">
+        <img src="img/gal-equipo.jpg" alt="Equipo de trabajo en el local" loading="lazy" />
+        <div class="masonry-overlay"><span>Nuestro Equipo</span></div>
+      </div>
+
+      <div class="masonry-item" data-cat="carnes">
+        <img src="img/gal-costillas.jpg" alt="Costillas de res en tabla" loading="lazy" />
+        <div class="masonry-overlay"><span>Costillas de Res</span></div>
+      </div>
+
+      <div class="masonry-item" data-cat="aves">
+        <img src="img/gal-pechugas.jpg" alt="Pechugas de pollo limpias" loading="lazy" />
+        <div class="masonry-overlay"><span>Pechugas sin Hueso</span></div>
+      </div>
+
+      <div class="masonry-item" data-cat="abarrotes">
+        <img src="img/gal-aceites.jpg" alt="Aceites y condimentos en estante" loading="lazy" />
+        <div class="masonry-overlay"><span>Aceites Premium</span></div>
+      </div>
+
+      <div class="masonry-item" data-cat="local">
+        <img src="img/gal-interior.jpg" alt="Interior de la carnicería" loading="lazy" />
+        <div class="masonry-overlay"><span>Interior del Local</span></div>
+      </div>
+
+      <div class="masonry-item" data-cat="carnes">
+        <img src="img/gal-carne-molida.jpg" alt="Carne molida fresca empacada" loading="lazy" />
+        <div class="masonry-overlay"><span>Carne Molida Fresca</span></div>
+      </div>
+
+      <div class="masonry-item" data-cat="aves">
+        <img src="img/gal-alas-pollo.jpg" alt="Alas de pollo preparadas" loading="lazy" />
+        <div class="masonry-overlay"><span>Alas de Pollo</span></div>
+      </div>
+
+      <div class="masonry-item" data-cat="abarrotes">
+        <img src="img/gal-arroz.jpg" alt="Bultos de arroz apilados" loading="lazy" />
+        <div class="masonry-overlay"><span>Arroz al por Mayor</span></div>
+      </div>
+
+      <div class="masonry-item" data-cat="carnes">
+        <img src="img/gal-churrasco.jpg" alt="Churrasco a la plancha" loading="lazy" />
+        <div class="masonry-overlay"><span>Churrasco a la Plancha</span></div>
+      </div>
+
+      <div class="masonry-item" data-cat="local">
+        <img src="img/gal-fachada.jpg" alt="Fachada del local" loading="lazy" />
+        <div class="masonry-overlay"><span>Nuestra Fachada</span></div>
+      </div>
+
+      <div class="masonry-item" data-cat="aves">
+        <img src="img/gal-pollo-despacho.jpg" alt="Pollo entero listo para despacho" loading="lazy" />
+        <div class="masonry-overlay"><span>Pollo Listo para Despacho</span></div>
+      </div>
+
+      <div class="masonry-item" data-cat="abarrotes">
+        <img src="img/gal-pasta.jpg" alt="Pastas y cereales en estante" loading="lazy" />
+        <div class="masonry-overlay"><span>Pastas y Cereales</span></div>
+      </div>
+
+      <div class="masonry-item" data-cat="carnes">
+        <img src="img/gal-visceras.jpg" alt="Cortes de vísceras frescas" loading="lazy" />
+        <div class="masonry-overlay"><span>Vísceras Frescas</span></div>
+      </div>
+
+      <div class="masonry-item" data-cat="local">
+        <img src="img/gal-entrega.jpg" alt="Camión de entregas de la empresa" loading="lazy" />
+        <div class="masonry-overlay"><span>Servicio de Entrega</span></div>
+      </div>
+
+      <div class="masonry-item" data-cat="carnes">
+        <img src="img/gal-pecho-res.jpg" alt="Pecho de res preparado" loading="lazy" />
+        <div class="masonry-overlay"><span>Pecho de Res</span></div>
+      </div>
+
+      <!-- PESCADOS -->
+      <div class="masonry-item" data-cat="pescados">
+        <img src="img/gal-salmon.jpg" alt="Filete de salmón fresco sobre hielo" loading="lazy" />
+        <div class="masonry-overlay"><span>Salmón Fresco en Filete</span></div>
+      </div>
+
+      <div class="masonry-item" data-cat="pescados">
+        <img src="img/gal-trucha.jpg" alt="Truchas arcoíris enteras" loading="lazy" />
+        <div class="masonry-overlay"><span>Truchas Arcoíris del Día</span></div>
+      </div>
+
+      <div class="masonry-item" data-cat="pescados">
+        <img src="img/gal-camaron.jpg" alt="Camarones frescos crudos" loading="lazy" />
+        <div class="masonry-overlay"><span>Camarones Frescos</span></div>
+      </div>
+
+      <div class="masonry-item" data-cat="pescados">
+        <img src="img/gal-tilapia.jpg" alt="Tilapias enteras sobre hielo" loading="lazy" />
+        <div class="masonry-overlay"><span>Tilapia Roja Fresca</span></div>
+      </div>
+
+      <div class="masonry-item" data-cat="pescados">
+        <img src="img/gal-atun.jpg" alt="Filete de atún sellado" loading="lazy" />
+        <div class="masonry-overlay"><span>Atún Aleta Amarilla</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ CTA ═══════════════════ -->
+<section class="cta-banner" style="padding:3.5rem 0;">
+  <div class="container">
+    <h2>¿Le gusta lo que ve?</h2>
+    <p>Visítenos en nuestro local o solicite un pedido a domicilio. Atención personalizada de lunes a sábado.</p>
+    <div class="btn-group">
+      <a href="contacto.html" class="btn btn-outline">
+        <i class="fa-solid fa-location-dot"></i> Cómo llegar
+      </a>
+      <a href="productos.html" class="btn btn-outline" style="border-color:rgba(255,255,255,.5);">
+        <i class="fa-solid fa-basket-shopping"></i> Ver catálogo
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="f-logo">
+          <div class="f-logo-mark"><i class="fa-solid fa-drumstick-bite"></i></div>
+          <strong>Provisión de la Sabana</strong>
+        </div>
+        <p>Su aliado de confianza en cárnicos frescos y abarrotes premium. Calidad garantizada desde hace más de 20 años en la región.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navegación</h4>
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="productos.html">Productos</a></li>
+          <li><a href="galeria.html">Galería</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Categorías</h4>
+        <ul>
+          <li><a href="productos.html#carnes">Carnes Rojas</a></li>
+          <li><a href="productos.html#aves">Aves</a></li>
+          <li><a href="productos.html#abarrotes">Abarrotes Premium</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contacto</h4>
+        <p>
+          <i class="fa-solid fa-location-dot" style="color:var(--burgundy-light);margin-right:.4rem;"></i>
+          Cra. 45 #12-30, Zipaquirá<br><br>
+          <i class="fa-solid fa-phone" style="color:var(--burgundy-light);margin-right:.4rem;"></i>
+          (601) 854-2200
+        </p>
+        <div class="social">
+          <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 Provisión de la Sabana. Todos los derechos reservados.</p>
+      <p>Diseño y desarrollo web — Ingeniería Web UMB</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Lightbox -->
+<div class="lightbox" role="dialog" aria-modal="true" aria-label="Imagen ampliada">
+  <button class="lb-close" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+  <img src="" alt="" />
+  <div class="lb-caption"></div>
+</div>
+
+<button class="scroll-top" aria-label="Volver arriba">
+  <i class="fa-solid fa-chevron-up"></i>
+</button>
+
+<script src="js/main.js"></script>
+</body>
+</html>
