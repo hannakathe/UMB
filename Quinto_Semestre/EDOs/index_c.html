@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cálculo Vectorial — Guía de Estudio</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/contrib/auto-render.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #070b14;
+    --surface: #0e1525;
+    --surface2: #141c2e;
+    --border: #1e2d4a;
+    --gold: #f0b429;
+    --gold-dim: rgba(240,180,41,0.12);
+    --teal: #34d399;
+    --teal-dim: rgba(52,211,153,0.08);
+    --red: #f87171;
+    --red-dim: rgba(248,113,113,0.08);
+    --blue: #60a5fa;
+    --blue-dim: rgba(96,165,250,0.08);
+    --text: #dde4f0;
+    --muted: #6e7f99;
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: 'DM Sans', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.7;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ── SIDEBAR ── */
+  #sidebar {
+    width: 260px;
+    min-width: 260px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 24px 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebar-header {
+    padding: 0 20px 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 12px;
+  }
+
+  .sidebar-header h1 {
+    font-family: var(--serif);
+    font-size: 17px;
+    color: var(--gold);
+    line-height: 1.3;
+  }
+
+  .sidebar-header p {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .nav-item {
+    padding: 9px 20px;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: all 0.18s;
+    font-size: 13px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .nav-item:hover { background: var(--surface2); color: var(--text); }
+
+  .nav-item.active {
+    border-left-color: var(--gold);
+    background: var(--gold-dim);
+    color: var(--gold);
+    font-weight: 500;
+  }
+
+  .nav-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    min-width: 20px;
+  }
+
+  .nav-item.active .nav-num { color: var(--gold); opacity: 0.6; }
+
+  /* ── MAIN ── */
+  #main {
+    flex: 1;
+    padding: 40px 48px;
+    max-width: 860px;
+    overflow-y: auto;
+  }
+
+  .topic-header {
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .topic-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
+  }
+
+  .topic-title {
+    font-family: var(--serif);
+    font-size: 32px;
+    color: var(--text);
+    line-height: 1.2;
+  }
+
+  .topic-title span { color: var(--gold); }
+
+  /* ── THEORY ── */
+  .theory-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 28px;
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .label-teoria { color: var(--blue); }
+  .label-facil { color: var(--teal); }
+  .label-dificil { color: var(--red); }
+
+  .theory-box p { margin-bottom: 12px; color: var(--text); }
+  .theory-box p:last-child { margin-bottom: 0; }
+
+  .formula-block {
+    background: var(--surface2);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 6px 6px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+    overflow-x: auto;
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  .info-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+
+  .info-card strong {
+    display: block;
+    color: var(--gold);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 5px;
+  }
+
+  /* ── EXAMPLES ── */
+  .example-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+
+  .example-box.facil { border-top: 3px solid var(--teal); }
+  .example-box.dificil { border-top: 3px solid var(--red); }
+
+  .example-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 18px;
+    line-height: 1.5;
+    padding: 10px 14px;
+    border-radius: 6px;
+  }
+
+  .example-box.facil .example-title {
+    background: var(--teal-dim);
+    color: var(--teal);
+  }
+
+  .example-box.dificil .example-title {
+    background: var(--red-dim);
+    color: var(--red);
+  }
+
+  .steps { list-style: none; }
+
+  .steps li {
+    display: flex;
+    gap: 14px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    align-items: flex-start;
+  }
+
+  .steps li:last-child { border-bottom: none; }
+
+  .step-num {
+    min-width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .facil .step-num {
+    background: var(--teal-dim);
+    color: var(--teal);
+    border: 1px solid rgba(52,211,153,0.25);
+  }
+
+  .dificil .step-num {
+    background: var(--red-dim);
+    color: var(--red);
+    border: 1px solid rgba(248,113,113,0.25);
+  }
+
+  .step-content { flex: 1; }
+  .step-content strong { color: var(--gold); }
+
+  .result-badge {
+    display: inline-block;
+    background: var(--gold-dim);
+    border: 1px solid rgba(240,180,41,0.3);
+    color: var(--gold);
+    border-radius: 5px;
+    padding: 3px 10px;
+    font-size: 12px;
+    font-family: var(--mono);
+    margin-top: 4px;
+  }
+
+  /* ── TABLE ── */
+  .tipo-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 12px 0;
+  }
+
+  .tipo-table th {
+    background: var(--surface2);
+    color: var(--gold);
+    text-align: left;
+    padding: 8px 12px;
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 500;
+  }
+
+  .tipo-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .tipo-table tr:last-child td { border-bottom: none; }
+
+  /* ── KaTeX overrides ── */
+  .katex { font-size: 1em; }
+  .katex-display { overflow-x: auto; }
+
+  /* ── SCROLLBARS ── */
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  em { color: var(--blue); font-style: normal; font-weight: 500; }
+
+  .highlight { color: var(--gold); font-weight: 600; }
+
+  .warn-box {
+    background: rgba(251,191,36,0.07);
+    border: 1px solid rgba(251,191,36,0.2);
+    border-radius: 7px;
+    padding: 12px 16px;
+    font-size: 13px;
+    margin-top: 12px;
+  }
+
+  .warn-box strong { color: var(--gold); }
+
+  @media (max-width: 720px) {
+    #sidebar { width: 200px; min-width: 200px; }
+    #main { padding: 24px 20px; }
+    .info-grid { grid-template-columns: 1fr; }
+    .topic-title { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <h1>Cálculo Vectorial</h1>
+    <p>Guía de Estudio Completa</p>
+  </div>
+  <div id="nav-items"></div>
+</nav>
+
+<main id="main">
+  <div id="content"></div>
+</main>
+
+<script>
+const topics = [
+  {
+    title: "Funciones Multivariables",
+    teoria: `
+      <p>Una función normal <em>f(x)</em> toma UN número y devuelve UN número. Una función multivariable toma <strong>dos o más números</strong> y devuelve un resultado.</p>
+      <div class="formula-block">$$f(x, y) = x^2 + y^2 \\qquad \\text{(toma }x\\text{ e }y\\text{, devuelve un número)}$$</div>
+      <p>La diferencia clave: el dominio ya no es un intervalo en la recta. Ahora es una <strong>región en el plano</strong> (si hay dos entradas) o en el espacio 3D (si hay tres entradas). La gráfica de $z = f(x,y)$ es una <strong>superficie</strong> en 3D.</p>
+      <div class="formula-block">$$f : \\mathbb{R}^2 \\to \\mathbb{R} \\quad \\text{(entra un par, sale un escalar)}$$</div>
+      <p><strong>Dominio:</strong> todos los pares $(x, y)$ donde la función <em>tiene sentido</em> (sin dividir entre cero, sin raíz negativa, sin logaritmo de número no positivo).<br><strong>Rango:</strong> todos los valores que puede devolver $f$.</p>
+    `,
+    facil: {
+      titulo: "Encontrar dominio y rango de $f(x,y) = \\sqrt{4 - x^2 - y^2}$",
+      pasos: [
+        ["¿Qué restricción hay?", "La raíz cuadrada necesita que lo de adentro sea $\\geq 0$. Entonces: $\\quad 4 - x^2 - y^2 \\geq 0$"],
+        ["Despeja la condición", "$x^2 + y^2 \\leq 4$ — esto es la ecuación de un <em>disco de radio 2</em> centrado en el origen, incluyendo su borde."],
+        ["Escribe el dominio", "$D = \\{(x,y) \\in \\mathbb{R}^2 : x^2 + y^2 \\leq 4\\}$"],
+        ["Calcula el rango", "El valor mínimo ocurre en el borde ($x^2+y^2=4$): $\\sqrt{4-4} = 0$. El máximo ocurre en el centro $(0,0)$: $\\sqrt{4} = 2$."],
+        ["Rango final", "$\\text{Rango} = [0,\\, 2]$"],
+      ]
+    },
+    dificil: {
+      titulo: "[Aplicado] Diseño de zona segura — $T(x,y) = \\ln(y - x^2)$ modela temperatura. Encontrar dominio e interpretar la frontera.",
+      pasos: [
+        ["Restricción del logaritmo", "El logaritmo exige argumento estrictamente positivo: $\\quad y - x^2 > 0$"],
+        ["Reescribe la condición", "$y > x^2$ — la región está <em>estrictamente encima</em> de la parábola $y = x^2$. El borde (la parábola misma) NO está incluido."],
+        ["Dominio", "$D = \\{(x,y) \\in \\mathbb{R}^2 : y > x^2\\}$ — región abierta (sin incluir la frontera)"],
+        ["Rango — analiza el extremo inferior", "Cuando $(x,y)$ se acerca a la parábola desde arriba, $y - x^2 \\to 0^+$, entonces $\\ln(y-x^2) \\to -\\infty$."],
+        ["Rango — extremo superior", "Cuando $y \\to +\\infty$ con $x$ fijo, $y - x^2 \\to +\\infty$, entonces $\\ln(y-x^2) \\to +\\infty$."],
+        ["Rango final", "$\\text{Rango} = \\mathbb{R}$ — la función toma todos los valores reales."],
+        ["Interpretación física", "La frontera $y = x^2$ es una <em>zona de peligro</em>: la temperatura se vuelve $-\\infty$ al acercarse a ella. Lejos de la parábola (hacia arriba), la temperatura sube sin límite."],
+      ]
+    }
+  },
+
+  {
+    title: "Curvas de Nivel",
+    teoria: `
+      <p>Imagina que $f(x,y)$ describe la altitud de una montaña. Si "cortas" esa montaña con un plano horizontal a altura $k$, la intersección es una curva en el plano $xy$. Eso es una <strong>curva de nivel</strong>.</p>
+      <div class="formula-block">$$\\text{Curva de nivel } k:\\quad f(x,y) = k \\quad (k = \\text{constante})$$</div>
+      <p><strong>Cómo leerlas:</strong> Curvas <em>juntas</em> = la función cambia rápido (pendiente fuerte). Curvas <em>separadas</em> = cambia suave. Son exactamente las líneas en un mapa topográfico.</p>
+      <p>Para graficar varias curvas: elige valores fijos de $k$, sustituyes en $f(x,y) = k$ y graficas la curva resultante en el plano.</p>
+    `,
+    facil: {
+      titulo: "Dibujar curvas de nivel de $f(x,y) = x^2 + y^2$ para $k = 0, 1, 4, 9$",
+      pasos: [
+        ["Sustituye cada k", "Para cada valor: $x^2 + y^2 = k$"],
+        ["k = 0", "$x^2 + y^2 = 0$ → solo el punto $(0,0)$. El \"fondo\" del paraboloide."],
+        ["k = 1", "$x^2 + y^2 = 1$ → círculo de radio $1$."],
+        ["k = 4", "$x^2 + y^2 = 4$ → círculo de radio $2$."],
+        ["k = 9", "$x^2 + y^2 = 9$ → círculo de radio $3$."],
+        ["Interpretación", "Las curvas son <em>círculos concéntricos</em> que se agrandan. Están igualmente espaciadas en valor de $k$ pero los radios crecen más lento ($r = \\sqrt{k}$), lo que indica que la función crece cada vez más rápido al alejarse del origen."],
+      ]
+    },
+    dificil: {
+      titulo: "[Aplicado] Una placa metálica tiene temperatura $T(x,y) = 100 - 2x^2 - y^2$. Encontrar isotermas (curvas de igual temperatura) para $T = 100, 75, 50$ e interpretar.",
+      pasos: [
+        ["Qué es una isoterma", "Es una curva de nivel de $T$: todos los puntos de la placa con la misma temperatura."],
+        ["T = 100", "$100 - 2x^2 - y^2 = 100 \\Rightarrow 2x^2 + y^2 = 0 \\Rightarrow$ solo el punto $(0,0)$. El punto más caliente."],
+        ["T = 75", "$100 - 2x^2 - y^2 = 75 \\Rightarrow 2x^2 + y^2 = 25 \\Rightarrow \\dfrac{x^2}{25/2} + \\dfrac{y^2}{25} = 1$"],
+        ["Identifica la curva", "Es una <em>elipse</em> con semieje horizontal $a = \\sqrt{25/2} \\approx 3.54$ y semieje vertical $b = 5$."],
+        ["T = 50", "$2x^2 + y^2 = 50 \\Rightarrow \\dfrac{x^2}{25} + \\dfrac{y^2}{50} = 1$ — elipse más grande: $a=5$, $b=\\sqrt{50}\\approx 7.07$"],
+        ["Interpretación", "Las isotermas son <em>elipses</em> centradas en $(0,0)$. La temperatura cae más rápido en dirección $x$ que en $y$ (porque el coeficiente de $x^2$ es mayor: $2$ vs $1$). La placa se enfría más \"achatada\" en horizontal."],
+        ["Patrón general", "La distancia entre isotermas consecutivas aumenta → la temperatura cae más rápido cerca del centro y se aplana lejos."],
+      ]
+    }
+  },
+
+  {
+    title: "Superficies Cuadráticas",
+    teoria: `
+      <p>Son las superficies 3D más importantes. Están definidas por ecuaciones de <strong>segundo grado</strong> en $x$, $y$ y $z$. Son la versión 3D de las cónicas (elipse, hipérbola, parábola).</p>
+      <p><strong>Truco para identificarlas:</strong> mira los signos de los términos cuadráticos y cuál variable aparece de forma lineal.</p>
+      <table class="tipo-table">
+        <tr><th>Nombre</th><th>Ecuación típica</th><th>Pista visual</th></tr>
+        <tr><td>Paraboloide elíptico</td><td>$z = ax^2 + by^2$</td><td>Tazón hacia arriba/abajo</td></tr>
+        <tr><td>Paraboloide hiperbólico</td><td>$z = ax^2 - by^2$</td><td>Silla de montar / Pringles</td></tr>
+        <tr><td>Elipsoide</td><td>$\\frac{x^2}{a^2}+\\frac{y^2}{b^2}+\\frac{z^2}{c^2}=1$</td><td>Pelota aplastada o alargada</td></tr>
+        <tr><td>Hiperboloide 1 hoja</td><td>$\\frac{x^2}{a^2}+\\frac{y^2}{b^2}-\\frac{z^2}{c^2}=1$</td><td>Torre de enfriamiento</td></tr>
+        <tr><td>Cono</td><td>$z^2 = x^2 + y^2$</td><td>Dos conos juntos por el vértice</td></tr>
+      </table>
+      <p>Para graficarlas: obtén los <strong>cortes transversales</strong> con planos $z=k$, $y=0$, $x=0$. Cada corte te da una cónica 2D.</p>
+    `,
+    facil: {
+      titulo: "Identificar y analizar $z = x^2 + 4y^2$",
+      pasos: [
+        ["Identifica el tipo", "Solo $z$ aparece de forma lineal (al primer grado). Ambos términos positivos → <em>paraboloide elíptico</em> (tazón hacia arriba)."],
+        ["Corte z = 0", "$x^2 + 4y^2 = 0 \\Rightarrow$ solo el punto $(0,0,0)$ — el vértice del paraboloide."],
+        ["Corte z = 4", "$x^2 + 4y^2 = 4 \\Rightarrow \\frac{x^2}{4} + y^2 = 1$ — elipse con $a=2$ (en $x$), $b=1$ (en $y$)."],
+        ["Corte z = 16", "$x^2 + 4y^2 = 16 \\Rightarrow \\frac{x^2}{16} + \\frac{y^2}{4} = 1$ — elipse más grande."],
+        ["Corte y = 0", "$z = x^2$ — parábola en el plano $xz$."],
+        ["Conclusión", "Es un paraboloide con base elíptica. Sube más rápido en la dirección $y$ (coeficiente 4) que en $x$ (coeficiente 1)."],
+      ]
+    },
+    dificil: {
+      titulo: "[Aplicado] Un recipiente tiene forma de paraboloide $z = x^2 + y^2$ (metros). Se llena de agua hasta $z = 4\\text{ m}$. ¿Cuál es el radio del agua en la superficie y cuántos $\\text{m}^3$ contiene?",
+      pasos: [
+        ["Radio en la superficie", "En $z = 4$: $\\quad 4 = x^2 + y^2 \\Rightarrow r = 2$ m. El círculo de agua tiene radio $2$ m."],
+        ["Preparar el volumen", "Para calcular el volumen de agua, en cada altura $z$ el corte horizontal es el círculo $x^2 + y^2 = z$, con radio $r(z) = \\sqrt{z}$."],
+        ["Área de cada corte", "$A(z) = \\pi r^2 = \\pi z$"],
+        ["Integral del volumen", "$V = \\int_0^4 A(z)\\,dz = \\int_0^4 \\pi z\\,dz$"],
+        ["Calcula la integral", "$V = \\pi \\left[\\frac{z^2}{2}\\right]_0^4 = \\pi \\cdot \\frac{16}{2} = 8\\pi \\approx 25.13\\text{ m}^3$"],
+        ["Verificación de sentido", "Un cilindro de radio 2 y altura 4 tendría $V_{cil} = \\pi(4)(4) = 16\\pi$. El paraboloide tiene la mitad: $8\\pi$. ✓ (siempre ocupa exactamente la mitad del cilindro circunscrito)"],
+      ]
+    }
+  },
+
+  {
+    title: "Dominio y Rango",
+    teoria: `
+      <p><strong>Dominio:</strong> el conjunto de todos los pares $(x, y)$ donde la función está definida. Es una región en el plano $\\mathbb{R}^2$.</p>
+      <p><strong>Rango (o imagen):</strong> todos los valores de $z$ que la función puede producir. Es un subconjunto de $\\mathbb{R}$.</p>
+      <p><strong>Cosas que rompen el dominio:</strong></p>
+      <div class="info-grid">
+        <div class="info-card"><strong>Raíz par</strong>Lo de adentro $\\geq 0$</div>
+        <div class="info-card"><strong>Logaritmo</strong>Argumento $> 0$</div>
+        <div class="info-card"><strong>División</strong>Denominador $\\neq 0$</div>
+        <div class="info-card"><strong>Arcoseno/Arcocoseno</strong>Argumento $\\in [-1,1]$</div>
+      </div>
+      <p style="margin-top:14px">Para el rango: analiza los valores extremos que puede tomar $f$ dentro del dominio (a veces requiere análisis de máximos/mínimos o casos límite).</p>
+    `,
+    facil: {
+      titulo: "Dominio y rango de $f(x,y) = \\dfrac{1}{\\sqrt{x^2 + y^2 - 9}}$",
+      pasos: [
+        ["Identificar las restricciones", "Hay dos: (1) la raíz necesita argumento $\\geq 0$, y (2) hay un denominador que no puede ser cero."],
+        ["Raíz en denominador", "Combinando: necesitamos que $x^2 + y^2 - 9 > 0$ (estrictamente mayor, por la división)."],
+        ["Reescribe", "$x^2 + y^2 > 9$ — esto es la región <em>fuera</em> del círculo de radio 3."],
+        ["Dominio", "$D = \\{(x,y) : x^2 + y^2 > 9\\}$ — el exterior del círculo de radio 3, sin incluir el círculo."],
+        ["Rango — analiza valores", "Cuando $(x,y)$ se aleja mucho, $x^2+y^2 \\to \\infty$, entonces $\\sqrt{x^2+y^2-9} \\to \\infty$ y $f \\to 0^+$."],
+        ["Rango — cerca del borde", "Cuando $x^2+y^2 \\to 9^+$, el denominador $\\to 0^+$ y $f \\to +\\infty$."],
+        ["Rango final", "$\\text{Rango} = (0, +\\infty)$ — la función toma valores positivos arbitrariamente grandes pero nunca llega a 0."],
+      ]
+    },
+    dificil: {
+      titulo: "[Aplicado] Una empresa produce dos artículos. La función de ganancia es $G(x,y) = \\ln\\left(\\frac{x}{y-x}\\right)$. Encontrar el dominio e interpretar las restricciones de producción.",
+      pasos: [
+        ["Restricciones del logaritmo", "Necesitamos $\\dfrac{x}{y-x} > 0$."],
+        ["Analiza el signo de la fracción", "Una fracción es positiva si ambos son del mismo signo: $(x > 0$ y $y-x > 0)$ o $(x < 0$ y $y-x < 0)$."],
+        ["Caso 1: ambos positivos", "$x > 0$ y $y > x$ — la producción $x$ es positiva y $y$ supera a $x$."],
+        ["Caso 2: ambos negativos", "$x < 0$ y $y < x$ — no tiene sentido en producción (cantidades negativas). Se descarta."],
+        ["Dominio económico", "$D = \\{(x,y) : x > 0,\\; y > x\\}$ — región triangular en el primer cuadrante por encima de $y = x$."],
+        ["Interpretación", "Para que la empresa tenga ganancia real (logaritmo positivo), el artículo 2 debe producirse en mayor cantidad que el artículo 1. La línea $y = x$ es el <em>umbral de rentabilidad</em>."],
+        ["Rango", "Como el argumento del $\\ln$ puede ser cualquier positivo (desde $0^+$ hasta $+\\infty$), el rango es $(-\\infty, +\\infty) = \\mathbb{R}$."],
+      ]
+    }
+  },
+
+  {
+    title: "Límites y Continuidad",
+    teoria: `
+      <p>El límite de $f(x,y)$ cuando $(x,y) \\to (a,b)$ es $L$ si sin importar <strong>por qué camino te acerques</strong> a $(a,b)$, la función siempre se acerca al mismo valor $L$.</p>
+      <div class="formula-block">$$\\lim_{(x,y)\\to(a,b)} f(x,y) = L$$</div>
+      <p><strong>La trampa del cálculo multivariable:</strong> en una variable solo hay dos caminos (izquierda y derecha). En dos variables hay <em>infinitos</em> caminos. Si por dos caminos distintos obtienes resultados diferentes, el límite <strong>no existe</strong>.</p>
+      <p><strong>¿Cómo demostrar que el límite NO existe?</strong> Prueba dos caminos diferentes y verifica que dan valores distintos.</p>
+      <p><strong>Continuidad:</strong> $f$ es continua en $(a,b)$ si: (1) $f(a,b)$ existe, (2) el límite existe, y (3) el límite $=$ $f(a,b)$.</p>
+      <div class="warn-box"><strong>Atención:</strong> Que el límite sea igual por $y=0$ y por $x=0$ NO garantiza que el límite exista. Hay que revisar otros caminos como $y=mx$ o $y=x^2$.</div>
+    `,
+    facil: {
+      titulo: "Evaluar $\\lim_{(x,y)\\to(0,0)} \\dfrac{x^2 + y^2}{1 + x^2 + y^2}$",
+      pasos: [
+        ["¿Hay problema en (0,0)?", "$f(0,0) = \\frac{0}{1+0} = 0$ — la función está bien definida. No hay división por cero."],
+        ["Intenta sustituir directamente", "Como la función es continua (cociente de polinomios con denominador $\\neq 0$), podemos sustituir directamente."],
+        ["Sustituye", "$\\lim_{(x,y)\\to(0,0)} \\frac{x^2+y^2}{1+x^2+y^2} = \\frac{0+0}{1+0+0} = \\frac{0}{1} = 0$"],
+        ["Resultado", "El límite existe y vale $0$."],
+        ["Verificación de continuidad", "Como el límite $= f(0,0) = 0$, la función <em>es continua</em> en $(0,0)$."],
+      ]
+    },
+    dificil: {
+      titulo: "[Demostración] Probar que $\\lim_{(x,y)\\to(0,0)} \\dfrac{xy}{x^2+y^2}$ no existe",
+      pasos: [
+        ["Camino 1: por el eje x", "Sea $y = 0$, con $x \\to 0$: $\\quad f(x,0) = \\dfrac{x \\cdot 0}{x^2 + 0} = \\dfrac{0}{x^2} = 0 \\to 0$"],
+        ["Camino 2: por la diagonal", "Sea $y = x$, con $x \\to 0$: $\\quad f(x,x) = \\dfrac{x \\cdot x}{x^2+x^2} = \\dfrac{x^2}{2x^2} = \\dfrac{1}{2} \\to \\dfrac{1}{2}$"],
+        ["Conclusión parcial", "El camino 1 da $0$, el camino 2 da $\\frac{1}{2}$. Son valores distintos, por lo tanto el límite <strong>no existe</strong>."],
+        ["Generalizar (camino por y=mx)", "Por $y = mx$: $\\displaystyle f(x,mx) = \\frac{x \\cdot mx}{x^2+m^2x^2} = \\frac{m}{1+m^2}$"],
+        ["Interpretación", "El resultado depende de la pendiente $m$ del camino. Cada camino recto da un valor diferente $\\frac{m}{1+m^2}$. No hay un límite único."],
+        ["Conclusión final", "$\\displaystyle\\lim_{(x,y)\\to(0,0)} \\frac{xy}{x^2+y^2}$ no existe. La función tiene una discontinuidad en el origen que no se puede eliminar."],
+      ]
+    }
+  },
+
+  {
+    title: "Derivadas Parciales",
+    teoria: `
+      <p>Imagina que estás parado en una colina. Si caminas solo en dirección $x$ (manteniendo $y$ fijo), ¿qué tan inclinado está el terreno? Eso es la derivada parcial respecto a $x$.</p>
+      <div class="formula-block">$$\\frac{\\partial f}{\\partial x} = \\lim_{h\\to 0}\\frac{f(x+h,\\,y)-f(x,\\,y)}{h} \\qquad \\text{(y es constante)}$$</div>
+      <p><strong>La mecánica es simple:</strong></p>
+      <div class="info-grid">
+        <div class="info-card"><strong>Para ∂f/∂x</strong>Deriva respecto a $x$, trata $y$ como número fijo</div>
+        <div class="info-card"><strong>Para ∂f/∂y</strong>Deriva respecto a $y$, trata $x$ como número fijo</div>
+      </div>
+      <p style="margin-top:14px">Las reglas de derivación son exactamente las mismas que en cálculo de una variable. Solo cambia que la otra variable es "congelada".</p>
+    `,
+    facil: {
+      titulo: "Calcular $\\partial f/\\partial x$ y $\\partial f/\\partial y$ para $f(x,y) = x^3 + 2x^2y - y^3$",
+      pasos: [
+        ["Derivada respecto a x", "Trata $y$ como constante. Deriva término por término:"],
+        ["x³", "$\\frac{\\partial}{\\partial x}(x^3) = 3x^2$ ✓"],
+        ["2x²y", "$\\frac{\\partial}{\\partial x}(2x^2 y) = 2y \\cdot 2x = 4xy$ ($y$ es constante, sale al frente)"],
+        ["−y³", "$\\frac{\\partial}{\\partial x}(-y^3) = 0$ (no hay $x$, es constante pura)"],
+        ["Resultado ∂f/∂x", "$\\dfrac{\\partial f}{\\partial x} = 3x^2 + 4xy$"],
+        ["Derivada respecto a y", "Ahora trata $x$ como constante:"],
+        ["x³ → 0; 2x²y → 2x²; −y³ → −3y²", "$\\dfrac{\\partial f}{\\partial y} = 2x^2 - 3y^2$"],
+      ]
+    },
+    dificil: {
+      titulo: "[Aplicado] La presión en un fluido es $P(x,y) = e^{x^2y} \\cdot \\sin(xy)$. Hallar ambas derivadas parciales y evaluar en $(1,0)$.",
+      pasos: [
+        ["Preparación — regla del producto", "$P$ es un producto de dos funciones. Usaremos: $(uv)' = u'v + uv'$"],
+        ["∂P/∂x — derivada de cada factor respecto a x", "$\\frac{\\partial}{\\partial x}[e^{x^2y}] = e^{x^2y} \\cdot 2xy$ (regla de la cadena, $y$ constante)"],
+        ["", "$\\frac{\\partial}{\\partial x}[\\sin(xy)] = \\cos(xy) \\cdot y$"],
+        ["Regla del producto para ∂P/∂x", "$\\dfrac{\\partial P}{\\partial x} = e^{x^2y}\\cdot 2xy \\cdot \\sin(xy) + e^{x^2y}\\cdot y\\cos(xy)$"],
+        ["Factoriza", "$\\dfrac{\\partial P}{\\partial x} = ye^{x^2y}\\left[2x\\sin(xy) + \\cos(xy)\\right]$"],
+        ["∂P/∂y — derivada de cada factor respecto a y", "$\\frac{\\partial}{\\partial y}[e^{x^2y}] = x^2 e^{x^2y}$  y  $\\frac{\\partial}{\\partial y}[\\sin(xy)] = x\\cos(xy)$"],
+        ["Regla del producto para ∂P/∂y", "$\\dfrac{\\partial P}{\\partial y} = x^2 e^{x^2y}\\sin(xy) + xe^{x^2y}\\cos(xy) = xe^{x^2y}\\left[x\\sin(xy)+\\cos(xy)\\right]$"],
+        ["Evaluar en (1, 0)", "$e^{1\\cdot0}=1$, $\\sin(0)=0$, $\\cos(0)=1$"],
+        ["Resultados en (1,0)", "$\\left.\\frac{\\partial P}{\\partial x}\\right|_{(1,0)} = 0\\cdot e^0[\\ldots] = 0$ ✓ y $\\left.\\frac{\\partial P}{\\partial y}\\right|_{(1,0)} = 1\\cdot 1[0+1] = 1$"],
+      ]
+    }
+  },
+
+  {
+    title: "Gradiente",
+    teoria: `
+      <p>El <strong>gradiente</strong> de $f$ es un <em>vector</em> formado por las derivadas parciales. Te dice <strong>en qué dirección sube más rápido</strong> la función.</p>
+      <div class="formula-block">$$\\nabla f(x,y) = \\left(\\frac{\\partial f}{\\partial x},\\; \\frac{\\partial f}{\\partial y}\\right)$$</div>
+      <p><strong>Propiedades clave del gradiente:</strong></p>
+      <div class="info-grid">
+        <div class="info-card"><strong>Dirección del ∇f</strong>Apunta donde $f$ crece más rápido desde ese punto</div>
+        <div class="info-card"><strong>Magnitud |∇f|</strong>Qué tan rápido sube ($=$ tasa de cambio máxima)</div>
+        <div class="info-card"><strong>−∇f</strong>Dirección de máximo descenso</div>
+        <div class="info-card"><strong>⊥ curvas de nivel</strong>El gradiente es siempre perpendicular a ellas</div>
+      </div>
+      <p style="margin-top:14px"><strong>Derivada direccional:</strong> la tasa de cambio en una dirección $\\hat{u}$ cualquiera es $D_{\\hat{u}}f = \\nabla f \\cdot \\hat{u}$ (producto punto).</p>
+    `,
+    facil: {
+      titulo: "Gradiente de $f(x,y) = x^2 + 2y^2$ en $(1,2)$. ¿En qué dirección sube más rápido?",
+      pasos: [
+        ["Calcular las derivadas parciales", "$\\frac{\\partial f}{\\partial x} = 2x \\qquad \\frac{\\partial f}{\\partial y} = 4y$"],
+        ["Gradiente general", "$\\nabla f = (2x,\\; 4y)$"],
+        ["Evaluar en (1, 2)", "$\\nabla f(1,2) = (2\\cdot1,\\; 4\\cdot2) = (2,\\; 8)$"],
+        ["Dirección de máximo crecimiento", "El gradiente $(2, 8)$ mismo — pero normalizado: $|\\nabla f| = \\sqrt{4+64} = \\sqrt{68} = 2\\sqrt{17}$"],
+        ["Dirección unitaria", "$\\hat{u}_{\\max} = \\dfrac{(2,8)}{2\\sqrt{17}} = \\left(\\dfrac{1}{\\sqrt{17}},\\; \\dfrac{4}{\\sqrt{17}}\\right)$"],
+        ["Tasa de cambio máxima", "$|\\nabla f(1,2)| = 2\\sqrt{17} \\approx 8.25$ (unidades de $f$ por unidad de distancia)"],
+      ]
+    },
+    dificil: {
+      titulo: "[Aplicado] Temperatura $T(x,y) = 100e^{-x^2/4 - y^2/9}$. Desde el punto $(1,3)$: (a) ¿en qué dirección se calienta más rápido? (b) ¿cuánto cambia la temperatura en esa dirección?",
+      pasos: [
+        ["Calcular ∂T/∂x (regla de la cadena)", "$\\dfrac{\\partial T}{\\partial x} = 100e^{-x^2/4-y^2/9}\\cdot\\left(-\\dfrac{x}{2}\\right) = -50x\\,e^{-x^2/4-y^2/9}$"],
+        ["Calcular ∂T/∂y", "$\\dfrac{\\partial T}{\\partial y} = 100e^{-x^2/4-y^2/9}\\cdot\\left(-\\dfrac{2y}{9}\\right) = -\\dfrac{200y}{9}\\,e^{-x^2/4-y^2/9}$"],
+        ["Evaluar en (1, 3)", "Primero: $e^{-1/4 - 9/9} = e^{-1/4-1} = e^{-5/4}$"],
+        ["∂T/∂x en (1,3)", "$-50\\cdot1\\cdot e^{-5/4} = -50e^{-5/4}$"],
+        ["∂T/∂y en (1,3)", "$-\\frac{200\\cdot3}{9}\\cdot e^{-5/4} = -\\frac{200}{3}e^{-5/4}$"],
+        ["Gradiente en (1,3)", "$\\nabla T(1,3) = e^{-5/4}\\left(-50,\\; -\\tfrac{200}{3}\\right) \\approx 0.2865\\cdot(-50,\\; -66.67)$"],
+        ["Interpretación", "El gradiente apunta en dirección $(-50, -200/3)$: hacia el suroeste. Pero la temperatura <em>disminuye</em> más rápido en esa dirección (gradiente negativo = nos alejamos del máximo que está en el origen). Para calentarnos más rápido, debemos ir en dirección $-\\nabla T = (50, 200/3)$, es decir, <em>hacia el origen</em>."],
+        ["Tasa máxima de calentamiento", "$|\\nabla T(1,3)| = e^{-5/4}\\sqrt{2500+40000/9} \\approx 0.2865\\cdot\\sqrt{6944.4} \\approx 23.87$ °C por metro"],
+      ]
+    }
+  },
+
+  {
+    title: "Derivadas de Orden Superior",
+    teoria: `
+      <p>Después de derivar una vez, puedes volver a derivar. Las más importantes son las de <strong>segundo orden</strong>:</p>
+      <div class="formula-block">$$f_{xx} = \\frac{\\partial^2 f}{\\partial x^2} \\qquad f_{yy} = \\frac{\\partial^2 f}{\\partial y^2} \\qquad f_{xy} = \\frac{\\partial^2 f}{\\partial y\\,\\partial x} \\qquad f_{yx} = \\frac{\\partial^2 f}{\\partial x\\,\\partial y}$$</div>
+      <p><strong>Teorema de Clairaut (clave):</strong> si las derivadas mixtas son continuas (que casi siempre lo son), entonces son iguales:</p>
+      <div class="formula-block">$$f_{xy} = f_{yx}$$</div>
+      <p>Esto significa que no importa el orden en que derives (primero $x$ luego $y$, o viceversa), obtienes lo mismo.</p>
+      <div class="warn-box"><strong>Nota para el Hessiano:</strong> La matriz de segundas derivadas es $H = \\begin{pmatrix}f_{xx}&f_{xy}\\\\f_{yx}&f_{yy}\\end{pmatrix}$ y aparece en el criterio de máximos y mínimos.</div>
+    `,
+    facil: {
+      titulo: "Todas las derivadas de segundo orden de $f(x,y) = x^3y^2 + 4x^2 - y^3$",
+      pasos: [
+        ["Primeras derivadas", "$f_x = 3x^2y^2 + 8x \\qquad f_y = 2x^3y - 3y^2$"],
+        ["fₓₓ — deriva fₓ respecto a x", "$f_{xx} = \\frac{\\partial}{\\partial x}(3x^2y^2 + 8x) = 6xy^2 + 8$"],
+        ["fyy — deriva fy respecto a y", "$f_{yy} = \\frac{\\partial}{\\partial y}(2x^3y - 3y^2) = 2x^3 - 6y$"],
+        ["fxy — deriva fₓ respecto a y", "$f_{xy} = \\frac{\\partial}{\\partial y}(3x^2y^2 + 8x) = 6x^2y$"],
+        ["fyx — deriva fy respecto a x", "$f_{yx} = \\frac{\\partial}{\\partial x}(2x^3y - 3y^2) = 6x^2y$"],
+        ["Verificación del teorema de Clairaut", "$f_{xy} = f_{yx} = 6x^2y$ ✓ (son iguales, como se esperaba)"],
+      ]
+    },
+    dificil: {
+      titulo: "[Aplicado] Una viga tiene deflexión $w(x,t) = \\sin(\\pi x)\\cos(\\omega t)$. Verificar que satisface la ecuación de onda $w_{tt} = -\\omega^2 w_{xx}$ (relación estructural).",
+      pasos: [
+        ["Calcular wₜₜ — segunda derivada respecto a t", "$w_t = \\sin(\\pi x)\\cdot(-\\omega\\sin(\\omega t))$"],
+        ["", "$w_{tt} = \\sin(\\pi x)\\cdot(-\\omega^2\\cos(\\omega t))= -\\omega^2\\sin(\\pi x)\\cos(\\omega t)$"],
+        ["Calcular wₓₓ — segunda derivada respecto a x", "$w_x = \\pi\\cos(\\pi x)\\cos(\\omega t)$"],
+        ["", "$w_{xx} = -\\pi^2\\sin(\\pi x)\\cos(\\omega t)$"],
+        ["Sustituir en la ecuación", "$w_{tt} = -\\omega^2 w_{xx}$?$\\quad$ Lado izquierdo: $-\\omega^2\\sin(\\pi x)\\cos(\\omega t)$"],
+        ["Lado derecho", "$-\\omega^2 \\cdot (-\\pi^2\\sin(\\pi x)\\cos(\\omega t)) = \\omega^2\\pi^2\\sin(\\pi x)\\cos(\\omega t)$"],
+        ["Comparación", "Para que sean iguales: $-\\omega^2 = \\omega^2\\pi^2 \\Rightarrow$ no funciona en general. La ecuación de onda correcta de la viga es $w_{tt} = c^2 w_{xx}$ donde $c^2 = \\omega^2/\\pi^2$. ✓"],
+        ["Conclusión", "Las derivadas de orden superior nos permiten verificar si una función satisface una ecuación diferencial, que es fundamental en ingeniería y física."],
+      ]
+    }
+  },
+
+  {
+    title: "Máximos y Mínimos",
+    teoria: `
+      <p>Queremos encontrar los puntos donde $f(x,y)$ alcanza su valor más alto o más bajo. El proceso tiene dos partes:</p>
+      <p><strong>1. Encontrar puntos críticos</strong> — donde el gradiente es cero (la función es "plana"):</p>
+      <div class="formula-block">$$\\nabla f = \\vec{0} \\quad \\Rightarrow \\quad \\frac{\\partial f}{\\partial x} = 0 \\quad \\text{y} \\quad \\frac{\\partial f}{\\partial y} = 0$$</div>
+      <p><strong>2. Clasificar con el Hessiano</strong> — calcula $D = f_{xx}\\cdot f_{yy} - (f_{xy})^2$:</p>
+      <table class="tipo-table">
+        <tr><th>Condición</th><th>Conclusión</th></tr>
+        <tr><td>$D > 0$ y $f_{xx} > 0$</td><td>Mínimo local</td></tr>
+        <tr><td>$D > 0$ y $f_{xx} < 0$</td><td>Máximo local</td></tr>
+        <tr><td>$D < 0$</td><td>Punto silla (ni máx ni mín)</td></tr>
+        <tr><td>$D = 0$</td><td>No concluyente</td></tr>
+      </table>
+      <p style="margin-top:12px"><strong>Conjuntos cerrados y acotados:</strong> el máximo/mínimo absoluto siempre existe y puede estar en el interior (puntos críticos) <em>o en la frontera</em> (hay que revisar ambas zonas).</p>
+    `,
+    facil: {
+      titulo: "Máximos y mínimos de $f(x,y) = x^2 + y^2 - 4x - 6y + 13$",
+      pasos: [
+        ["Calcular las derivadas parciales e igualar a cero", "$f_x = 2x - 4 = 0 \\Rightarrow x = 2$"],
+        ["", "$f_y = 2y - 6 = 0 \\Rightarrow y = 3$"],
+        ["Punto crítico", "$(2, 3)$ — solo hay uno."],
+        ["Calcular segundas derivadas", "$f_{xx} = 2 \\qquad f_{yy} = 2 \\qquad f_{xy} = 0$"],
+        ["Calcular D", "$D = f_{xx}\\cdot f_{yy} - (f_{xy})^2 = 2\\cdot2 - 0^2 = 4 > 0$"],
+        ["Clasificar", "$D > 0$ y $f_{xx} = 2 > 0$ → <em>mínimo local</em> en $(2,3)$."],
+        ["Valor mínimo", "$f(2,3) = 4+9-8-18+13 = 0$ — El mínimo vale $0$."],
+        ["Verificación intuitiva", "Completando el cuadrado: $f = (x-2)^2 + (y-3)^2 \\geq 0$ siempre. ✓ El mínimo es $0$ en $(2,3)$."],
+      ]
+    },
+    dificil: {
+      titulo: "[Aplicado] Una empresa fabrica cajas sin tapa con volumen $V = 4\\,\\text{m}^3$. Minimizar el material (área superficial) $A = xy + 2xz + 2yz$ sujeto a $xyz = 4$.",
+      pasos: [
+        ["Eliminar z usando la restricción", "De $xyz = 4$: $z = \\dfrac{4}{xy}$. Sustituir en $A$:"],
+        ["", "$A(x,y) = xy + 2x\\cdot\\dfrac{4}{xy} + 2y\\cdot\\dfrac{4}{xy} = xy + \\dfrac{8}{y} + \\dfrac{8}{x}$"],
+        ["Encontrar punto crítico — ∂A/∂x = 0", "$\\dfrac{\\partial A}{\\partial x} = y - \\dfrac{8}{x^2} = 0 \\Rightarrow x^2y = 8$"],
+        ["∂A/∂y = 0", "$\\dfrac{\\partial A}{\\partial y} = x - \\dfrac{8}{y^2} = 0 \\Rightarrow xy^2 = 8$"],
+        ["Dividir las dos ecuaciones", "$\\dfrac{x^2y}{xy^2} = \\dfrac{8}{8} \\Rightarrow \\dfrac{x}{y} = 1 \\Rightarrow x = y$"],
+        ["Sustituir x = y en x²y = 8", "$x^3 = 8 \\Rightarrow x = 2$ y por tanto $y = 2$."],
+        ["Calcular z", "$z = \\dfrac{4}{2\\cdot2} = 1$"],
+        ["Verificar que es mínimo", "Calcula $A_{xx} = 16/x^3 > 0$ y el Hessiano $D > 0$. Es mínimo. ✓"],
+        ["Área mínima", "$A(2,2) = 4 + 4 + 4 = 12\\,\\text{m}^2$ — La caja óptima es $2\\times2\\times1$ m."],
+      ]
+    }
+  },
+
+  {
+    title: "Multiplicadores de Lagrange",
+    teoria: `
+      <p>¿Cómo optimizas una función $f(x,y)$ cuando no puedes moverte libremente, sino que debes quedarte sobre una curva $g(x,y) = c$?</p>
+      <p><strong>La idea geométrica:</strong> el máximo/mínimo ocurre cuando las curvas de nivel de $f$ son <em>tangentes</em> a la curva de restricción. Eso pasa exactamente cuando sus gradientes son paralelos:</p>
+      <div class="formula-block">$$\\nabla f = \\lambda\\, \\nabla g \\qquad \\text{(con }\\lambda\\text{ = multiplicador de Lagrange)}$$</div>
+      <p><strong>El sistema a resolver:</strong></p>
+      <div class="formula-block">$$\\frac{\\partial f}{\\partial x} = \\lambda\\,\\frac{\\partial g}{\\partial x} \\qquad \\frac{\\partial f}{\\partial y} = \\lambda\\,\\frac{\\partial g}{\\partial y} \\qquad g(x,y) = c$$</div>
+      <p>Son 3 ecuaciones con 3 incógnitas ($x$, $y$, $\\lambda$). Resuelves, obtienes candidatos y evalúas $f$ en ellos para ver cuál es máximo y cuál mínimo.</p>
+      <div class="warn-box"><strong>El valor de λ en sí</strong> tiene un significado: indica cuánto cambiaría el óptimo si relajas un poco la restricción. Pero usualmente solo necesitas $x$ e $y$.</div>
+    `,
+    facil: {
+      titulo: "Maximizar $f(x,y) = xy$ sujeto a $x + y = 10$ (con $x,y > 0$)",
+      pasos: [
+        ["Define g", "$g(x,y) = x + y = 10$, entonces $c = 10$."],
+        ["Calcula los gradientes", "$\\nabla f = (y, x) \\qquad \\nabla g = (1, 1)$"],
+        ["Plantea ∇f = λ∇g", "$y = \\lambda\\cdot 1 \\Rightarrow y = \\lambda$ $\\qquad$ $x = \\lambda\\cdot 1 \\Rightarrow x = \\lambda$"],
+        ["Combinando", "$x = \\lambda$ y $y = \\lambda \\Rightarrow x = y$"],
+        ["Usa la restricción", "$x + y = 10$ con $x = y$: $\\quad 2x = 10 \\Rightarrow x = 5,\\; y = 5$"],
+        ["Valor máximo", "$f(5,5) = 5\\cdot5 = 25$"],
+        ["Verificación", "$f(6,4) = 24 < 25$ ✓ y $f(7,3) = 21 < 25$ ✓ — el punto $(5,5)$ da el máximo."],
+        ["Conclusión", "De todos los pares $(x,y)$ con $x+y=10$, el producto $xy$ se maximiza cuando $x = y = 5$. (Esto es la desigualdad AM-GM en acción)."],
+      ]
+    },
+    dificil: {
+      titulo: "[Aplicado] Minimizar costo de producción $C(x,y) = 4x^2 + y^2$ sujeto a la restricción de producción $x + y = 100$.",
+      pasos: [
+        ["Define f y g", "$f(x,y) = C(x,y) = 4x^2 + y^2$ (a minimizar) $\\quad$ y $\\quad$ $g(x,y) = x + y - 100 = 0$"],
+        ["Gradientes", "$\\nabla f = (8x,\\; 2y) \\qquad \\nabla g = (1,\\; 1)$"],
+        ["Sistema Lagrangiano", "$8x = \\lambda$ (ecuación 1) $\\qquad$ $2y = \\lambda$ (ecuación 2) $\\qquad$ $x + y = 100$ (ecuación 3)"],
+        ["Iguala las dos primeras", "De (1) y (2): $8x = 2y \\Rightarrow y = 4x$"],
+        ["Sustituye en la restricción", "$x + 4x = 100 \\Rightarrow 5x = 100 \\Rightarrow x = 20$"],
+        ["Calcula y y λ", "$y = 4\\cdot20 = 80 \\qquad \\lambda = 8\\cdot20 = 160$"],
+        ["Costo mínimo", "$C(20,80) = 4(400) + (6400) = 1600 + 6400 = 8000$"],
+        ["Interpretación de λ", "$\\lambda = 160$: si la restricción cambiara a $x+y=101$, el costo mínimo subiría aproximadamente en $160$ unidades."],
+        ["Verificar que es mínimo", "Prueba $C(50,50) = 4(2500)+2500 = 12500 > 8000$ ✓. La solución $(20,80)$ es efectivamente mejor."],
+        ["Conclusión de negocio", "Es más barato producir más del insumo $y$ (cuadrático con coeficiente 1) que del insumo $x$ (coeficiente 4). El óptimo carga el trabajo al insumo más barato."],
+      ]
+    }
+  }
+];
+
+// ── RENDER ──────────────────────────────────────────────────────
+let current = 0;
+
+function buildNav() {
+  const container = document.getElementById('nav-items');
+  topics.forEach((t, i) => {
+    const el = document.createElement('div');
+    el.className = 'nav-item' + (i === 0 ? ' active' : '');
+    el.innerHTML = `<span class="nav-num">0${i+1}</span>${t.title}`;
+    el.onclick = () => select(i);
+    container.appendChild(el);
+  });
+}
+
+function select(i) {
+  current = i;
+  document.querySelectorAll('.nav-item').forEach((el, j) => {
+    el.classList.toggle('active', j === i);
+  });
+  render(i);
+  document.getElementById('main').scrollTop = 0;
+}
+
+function stepsHTML(steps, tipo) {
+  return steps.map((s, i) => {
+    const label = Array.isArray(s) ? s[0] : '';
+    const body  = Array.isArray(s) ? s[1] : s;
+    return `
+      <li>
+        <div class="step-num">${String(i+1).padStart(2,'0')}</div>
+        <div class="step-content">
+          ${label ? `<strong>${label}</strong><br>` : ''}
+          ${body}
+        </div>
+      </li>`;
+  }).join('');
+}
+
+function render(i) {
+  const t = topics[i];
+  document.getElementById('content').innerHTML = `
+    <div class="topic-header">
+      <div class="topic-num">Tema ${String(i+1).padStart(2,'0')} / ${topics.length}</div>
+      <h2 class="topic-title">${t.title}</h2>
+    </div>
+
+    <div class="theory-box">
+      <div class="section-label label-teoria">Base Teórica</div>
+      ${t.teoria}
+    </div>
+
+    <div class="example-box facil">
+      <div class="section-label label-facil">Ejemplo Fácil</div>
+      <div class="example-title">📗 ${t.facil.titulo}</div>
+      <ol class="steps">${stepsHTML(t.facil.pasos, 'facil')}</ol>
+    </div>
+
+    <div class="example-box dificil">
+      <div class="section-label label-dificil">Ejemplo Difícil (Aplicado)</div>
+      <div class="example-title">📕 ${t.dificil.titulo}</div>
+      <ol class="steps">${stepsHTML(t.dificil.pasos, 'dificil')}</ol>
+    </div>
+  `;
+
+  renderMathInElement(document.getElementById('content'), {
+    delimiters: [
+      { left: '$$', right: '$$', display: true },
+      { left: '$', right: '$', display: false }
+    ],
+    throwOnError: false,
+    strict: false
+  });
+}
+
+buildNav();
+render(0);
+</script>
+</body>
+</html>

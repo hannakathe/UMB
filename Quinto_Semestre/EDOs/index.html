@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía de Ecuaciones Diferenciales</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Serif+4:ital,wght@0,300;0,400;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f0e0c;
+  --bg2: #181612;
+  --bg3: #201e1a;
+  --card: #252220;
+  --border: #2e2b27;
+  --gold: #c9a84c;
+  --gold2: #e8c87a;
+  --amber: #d4820a;
+  --text: #e8e0d0;
+  --muted: #8a8070;
+  --green: #5a8c6a;
+  --red: #9c4a4a;
+  --blue: #4a6a8c;
+  --teal: #4a8c7a;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Source Serif 4', serif;
+  font-weight: 300;
+  min-height: 100vh;
+}
+
+/* LAYOUT */
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 260px;
+  min-height: 100vh;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: fixed;
+  top: 0; left: 0;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.sidebar-title {
+  font-family: 'Playfair Display', serif;
+  color: var(--gold);
+  font-size: 1rem;
+  padding: 0 20px 16px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.sidebar-title span {
+  display: block;
+  font-size: 0.65rem;
+  font-family: 'Source Serif 4', serif;
+  color: var(--muted);
+  font-style: italic;
+  margin-top: 4px;
+}
+
+.nav-item {
+  display: block;
+  padding: 9px 20px;
+  color: var(--muted);
+  cursor: pointer;
+  border-left: 2px solid transparent;
+  transition: all 0.2s;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  text-decoration: none;
+}
+
+.nav-item:hover {
+  color: var(--gold2);
+  background: rgba(201,168,76,0.05);
+}
+
+.nav-item.active {
+  color: var(--gold);
+  border-left-color: var(--gold);
+  background: rgba(201,168,76,0.08);
+}
+
+.nav-num {
+  display: inline-block;
+  width: 18px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--amber);
+  margin-right: 6px;
+}
+
+/* MAIN CONTENT */
+.main {
+  margin-left: 260px;
+  flex: 1;
+  padding: 48px 52px;
+  max-width: calc(100% - 260px);
+}
+
+/* HERO */
+.hero {
+  margin-bottom: 56px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--border);
+}
+
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.4rem;
+  color: var(--gold2);
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+
+.hero p {
+  color: var(--muted);
+  font-style: italic;
+  font-size: 0.95rem;
+}
+
+/* SECTION */
+.section {
+  margin-bottom: 64px;
+  scroll-margin-top: 24px;
+}
+
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.section-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--amber);
+  background: rgba(212,130,10,0.1);
+  border: 1px solid rgba(212,130,10,0.3);
+  padding: 4px 8px;
+  border-radius: 3px;
+  margin-top: 6px;
+  white-space: nowrap;
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.7rem;
+  color: var(--gold2);
+  line-height: 1.2;
+}
+
+/* THEORY BOX */
+.theory {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 28px;
+  margin-bottom: 28px;
+}
+
+.theory h3 {
+  font-family: 'Playfair Display', serif;
+  color: var(--gold);
+  font-size: 1rem;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.theory h3::before {
+  content: '◆';
+  font-size: 0.5rem;
+  color: var(--amber);
+}
+
+.theory p {
+  line-height: 1.8;
+  margin-bottom: 12px;
+  font-size: 0.93rem;
+  color: #cfc8b8;
+}
+
+.theory p:last-child { margin-bottom: 0; }
+
+.theory ul, .theory ol {
+  padding-left: 20px;
+  margin-bottom: 12px;
+}
+
+.theory li {
+  line-height: 1.8;
+  font-size: 0.93rem;
+  color: #cfc8b8;
+  margin-bottom: 4px;
+}
+
+/* FORMULA BOX */
+.formula {
+  background: var(--bg3);
+  border: 1px solid rgba(201,168,76,0.2);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 6px 6px 0;
+  padding: 16px 20px;
+  margin: 16px 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--gold2);
+  line-height: 1.8;
+  overflow-x: auto;
+}
+
+.formula .label {
+  font-family: 'Source Serif 4', serif;
+  font-size: 0.75rem;
+  color: var(--muted);
+  display: block;
+  margin-bottom: 6px;
+  font-style: italic;
+}
+
+/* KEY IDEA */
+.key-idea {
+  background: rgba(90,140,106,0.08);
+  border: 1px solid rgba(90,140,106,0.25);
+  border-radius: 6px;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: 0.88rem;
+  color: #a8c8b0;
+  font-style: italic;
+  line-height: 1.7;
+}
+
+.key-idea::before {
+  content: '💡 ';
+}
+
+/* WARNING */
+.warning {
+  background: rgba(156,74,74,0.08);
+  border: 1px solid rgba(156,74,74,0.25);
+  border-radius: 6px;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: 0.88rem;
+  color: #c89898;
+  line-height: 1.7;
+}
+
+.warning::before {
+  content: '⚠ ';
+  color: var(--red);
+}
+
+/* EXERCISE CARDS */
+.exercises {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 0;
+}
+
+@media (max-width: 900px) {
+  .exercises { grid-template-columns: 1fr; }
+}
+
+.exercise-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.exercise-header {
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s;
+}
+
+.exercise-header:hover {
+  background: rgba(255,255,255,0.02);
+}
+
+.ex-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.ex-badge.facil {
+  background: rgba(74,140,122,0.15);
+  color: var(--teal);
+  border: 1px solid rgba(74,140,122,0.3);
+}
+
+.ex-badge.dificil {
+  background: rgba(201,168,76,0.1);
+  color: var(--gold);
+  border: 1px solid rgba(201,168,76,0.25);
+}
+
+.ex-title {
+  font-size: 0.88rem;
+  color: var(--text);
+  flex: 1;
+  line-height: 1.4;
+}
+
+.ex-toggle {
+  color: var(--muted);
+  font-size: 0.7rem;
+  transition: transform 0.3s;
+}
+
+.exercise-card.open .ex-toggle {
+  transform: rotate(180deg);
+}
+
+.exercise-body {
+  display: none;
+  padding: 0 20px 20px;
+  border-top: 1px solid var(--border);
+}
+
+.exercise-card.open .exercise-body {
+  display: block;
+}
+
+.ex-problem {
+  margin: 16px 0;
+  padding: 12px 16px;
+  background: var(--bg3);
+  border-radius: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  color: var(--gold2);
+  line-height: 1.7;
+}
+
+.step {
+  margin: 12px 0;
+}
+
+.step-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--amber);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.step p {
+  font-size: 0.87rem;
+  color: #cfc8b8;
+  line-height: 1.7;
+  margin-bottom: 6px;
+}
+
+.step .math {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  color: var(--gold2);
+  background: var(--bg3);
+  padding: 8px 14px;
+  border-radius: 4px;
+  display: block;
+  margin: 6px 0;
+  line-height: 1.7;
+}
+
+.answer {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: rgba(74,140,122,0.08);
+  border: 1px solid rgba(74,140,122,0.25);
+  border-radius: 6px;
+}
+
+.answer-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--teal);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.answer .math {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: #a8d4b8;
+  line-height: 1.7;
+}
+
+/* DIVIDER */
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 48px 0;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg2); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .main { margin-left: 0; padding: 24px 20px; max-width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-title">
+    Ecuaciones Diferenciales
+    <span>Guía de estudio completa</span>
+  </div>
+  <a class="nav-item active" href="#s1" onclick="setActive(this)">
+    <span class="nav-num">01</span>¿Qué es una EDO?
+  </a>
+  <a class="nav-item" href="#s2" onclick="setActive(this)">
+    <span class="nav-num">02</span>Orden y Grado
+  </a>
+  <a class="nav-item" href="#s3" onclick="setActive(this)">
+    <span class="nav-num">03</span>EDOs Lineales de 1er Orden
+  </a>
+  <a class="nav-item" href="#s4" onclick="setActive(this)">
+    <span class="nav-num">04</span>Crecimiento Poblacional I
+  </a>
+  <a class="nav-item" href="#s5" onclick="setActive(this)">
+    <span class="nav-num">05</span>Ecuaciones Exactas
+  </a>
+  <a class="nav-item" href="#s6" onclick="setActive(this)">
+    <span class="nav-num">06</span>Crecimiento Poblacional II
+  </a>
+  <a class="nav-item" href="#s7" onclick="setActive(this)">
+    <span class="nav-num">07</span>Mezclas
+  </a>
+  <a class="nav-item" href="#s8" onclick="setActive(this)">
+    <span class="nav-num">08</span>Ecuaciones Homogéneas
+  </a>
+  <a class="nav-item" href="#s9" onclick="setActive(this)">
+    <span class="nav-num">09</span>Ecuaciones de 2do Orden
+  </a>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+  <div class="hero">
+    <h1>Ecuaciones Diferenciales</h1>
+    <p>Base teórica + ejercicios paso a paso — lenguaje simple, sin rodeos</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- SECCIÓN 1: ¿QUÉ ES UNA EDO? -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <section class="section" id="s1">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2 class="section-title">¿Qué es una EDO y cómo se resuelve?</h2>
+    </div>
+
+    <div class="theory">
+      <h3>La idea central</h3>
+      <p>Una <strong style="color:var(--gold2)">ecuación diferencial ordinaria (EDO)</strong> es una ecuación donde la incógnita no es un número, sino una <em>función</em>, y la ecuación involucra esa función y sus derivadas.</p>
+      <p>Ejemplo cotidiano: si sabes que algo crece a una velocidad proporcional a su tamaño, eso es una EDO. No sabes cuánto hay en cada momento (eso es lo que quieres encontrar), pero sí sabes cómo cambia.</p>
+      
+      <div class="formula">
+        <span class="label">Forma general de una EDO</span>
+        F(x, y, y', y'', ..., y⁽ⁿ⁾) = 0
+      </div>
+
+      <p>Donde <code style="color:var(--gold2);background:var(--bg3);padding:2px 5px;border-radius:3px;">y</code> es la función que buscas, y los primos son sus derivadas.</p>
+
+      <h3 style="margin-top:20px;">Métodos principales</h3>
+      <ul>
+        <li><strong style="color:var(--gold2)">Separación de variables</strong> — separas todo lo de y a un lado y todo lo de x al otro, e integras.</li>
+        <li><strong style="color:var(--gold2)">Factor integrante</strong> — para EDOs lineales de primer orden.</li>
+        <li><strong style="color:var(--gold2)">Ecuaciones exactas</strong> — cuando la EDO es derivada de una función potencial.</li>
+        <li><strong style="color:var(--gold2)">Sustitución homogénea</strong> — cambias variable con y = vx.</li>
+        <li><strong style="color:var(--gold2)">Ecuación característica</strong> — para EDOs de segundo orden con coeficientes constantes.</li>
+      </ul>
+
+      <div class="key-idea">La solución de una EDO no es un número, es una función (o familia de funciones). La constante C que siempre aparece representa la familia completa.</div>
+    </div>
+
+    <div class="exercises">
+      <!-- FÁCIL -->
+      <div class="exercise-card" id="ex1a">
+        <div class="exercise-header" onclick="toggle('ex1a')">
+          <span class="ex-badge facil">FÁCIL</span>
+          <span class="ex-title">Separación de variables básica</span>
+          <span class="ex-toggle">▼</span>
+        </div>
+        <div class="exercise-body">
+          <div class="ex-problem">Resolver: dy/dx = 2x</div>
+
+          <div class="step">
+            <div class="step-label">Paso 1 — Identificar el método</div>
+            <p>La ecuación ya está separada: el lado derecho solo tiene x. Simplemente integramos ambos lados.</p>
+          </div>
+
+          <div class="step">
+            <div class="step-label">Paso 2 — Separar e integrar</div>
+            <span class="math">dy = 2x dx</span>
+            <span class="math">∫ dy = ∫ 2x dx</span>
+            <span class="math">y = x² + C</span>
+          </div>
+
+          <div class="step">
+            <div class="step-label">Paso 3 — Verificar</div>
+            <p>Derivamos la solución: si y = x² + C, entonces dy/dx = 2x ✓</p>
+          </div>
+
+          <div class="answer">
+            <div class="answer-label">Solución general</div>
+            <div class="math">y = x² + C</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DIFÍCIL -->
+      <div class="exercise-card" id="ex1b">
+        <div class="exercise-header" onclick="toggle('ex1b')">
+          <span class="ex-badge dificil">DIFÍCIL</span>
+          <span class="ex-title">Separación con condición inicial</span>
+          <span class="ex-toggle">▼</span>
+        </div>
+        <div class="exercise-body">
+          <div class="ex-problem">Resolver: dy/dx = (x·y²)/(1+x²), con y(0) = 1</div>
+
+          <div class="step">
+            <div class="step-label">Paso 1 — Separar variables</div>
+            <p>Movemos y al lado izquierdo y x al derecho.</p>
+            <span class="math">dy/y² = x dx / (1+x²)</span>
+            <span class="math">y⁻² dy = x/(1+x²) dx</span>
+          </div>
+
+          <div class="step">
+            <div class="step-label">Paso 2 — Integrar ambos lados</div>
+            <p>Izquierda: integral de y⁻² = -y⁻¹</p>
+            <p>Derecha: usamos sustitución u = 1+x², du = 2x dx</p>
+            <span class="math">∫ y⁻² dy = ∫ x/(1+x²) dx</span>
+            <span class="math">-1/y = (1/2)ln|1+x²| + C</span>
+          </div>
+
+          <div class="step">
+            <div class="step-label">Paso 3 — Aplicar condición inicial y(0)=1</div>
+            <span class="math">-1/1 = (1/2)ln(1+0) + C</span>
+            <span class="math">-1 = (1/2)(0) + C  →  C = -1</span>
+          </div>
+
+          <div class="step">
+            <div class="step-label">Paso 4 — Despejar y</div>
+            <span class="math">-1/y = (1/2)ln(1+x²) - 1</span>
+            <span class="math">1/y = 1 - (1/2)ln(1+x²)</span>
+            <span class="math">y = 1 / [1 - (1/2)ln(1+x²)]</span>
+          </div>
+
+          <div class="answer">
+            <div class="answer-label">Solución particular</div>
+            <div class="math">y = 2 / [2 - ln(1+x²)]</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- SECCIÓN 2: ORDEN Y GRADO -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <section class="section" id="s2">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Orden y Grado de una EDO</h2>
+    </div>
+
+    <div class="theory">
+      <h3>Orden</h3>
+      <p>El <strong style="color:var(--gold2)">orden</strong> de una EDO es el número de la derivada más alta que aparece.</p>
+      <ul>
+        <li>y' + 3y = 0 → <strong style="color:var(--gold)">orden 1</strong> (solo aparece y')</li>
+        <li>y'' - 5y' + 6y = 0 → <strong style="color:var(--gold)">orden 2</strong> (la más alta es y'')</li>
+        <li>y''' + y = x → <strong style="color:var(--gold)">orden 3</strong></li>
+      </ul>
+
+      <h3 style="margin-top:20px;">Grado</h3>
+      <p>El <strong style="color:var(--gold2)">grado</strong> es el exponente al que está elevada esa derivada de mayor orden, <em>después de despejarla y eliminar raíces</em>.</p>
+      <ul>
+        <li>(y'')² + y = x → grado 2 (y'' está al cuadrado)</li>
+        <li>y''' + y' = 0 → grado 1 (y''' está a la 1)</li>
+        <li>√(y'') = x → hay que elevar al cuadrado → y'' = x² → grado 1</li>
+      </ul>
+
+      <div class="warning">Si la derivada está dentro de una función como sin(y'') o eʸ'', el grado no está definido (no se puede aislar polinomialmente).</div>
+
+      <h3 style="margin-top:20px;">Lineal vs No lineal</h3>
+      <p>Una EDO es <strong style="color:var(--gold2)">lineal</strong> si y y todas sus derivadas aparecen solo a la 1era potencia, sin multiplicarse entre sí, y sin estar dentro de funciones.</p>
+      <ul>
+        <li>y'' + 3y' - 2y = cos(x) → <strong style="color:var(--green)">lineal</strong></li>
+        <li>y·y' = x → <strong style="color:#c89898;">no lineal</strong> (y multiplicada por y')</li>
+        <li>(y')² + y = 0 → <strong style="color:#c89898">no lineal</strong> (y' al cuadrado)</li>
+      </ul>
+    </div>
+
+    <div class="exercises">
+      <div class="exercise-card" id="ex2a">
+        <div class="exercise-header" onclick="toggle('ex2a')">
+          <span class="ex-badge facil">FÁCIL</span>
+          <span class="ex-title">Clasificar una EDO simple</span>
+          <span class="ex-toggle">▼</span>
+        </div>
+        <div class="exercise-body">
+          <div class="ex-problem">Clasificar: 3y'' + xy' - y = sin(x)</div>
+          <div class="step">
+            <div class="step-label">Orden</div>
+            <p>La derivada más alta es y'' → <strong style="color:var(--gold)">orden 2</strong></p>
+          </div>
+          <div class="step">
+            <div class="step-label">Grado</div>
+            <p>y'' aparece a la potencia 1, sin raíces → <strong style="color:var(--gold)">grado 1</strong></p>
+          </div>
+          <div class="step">
+            <div class="step-label">¿Lineal?</div>
+            <p>y'', y', y aparecen solo a la 1ra potencia, sin multiplicarse entre sí. El sin(x) está del lado derecho (no afecta la linealidad). → <strong style="color:var(--teal)">Sí es lineal</strong></p>
+          </div>
+          <div class="answer">
+            <div class="answer-label">Clasificación</div>
+            <div class="math">Orden 2 · Grado 1 · Lineal</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="exercise-card" id="ex2b">
+        <div class="exercise-header" onclick="toggle('ex2b')">
+          <span class="ex-badge dificil">DIFÍCIL</span>
+          <span class="ex-title">Clasificar una EDO con raíz</span>
+          <span class="ex-toggle">▼</span>
+        </div>
+        <div class="exercise-body">
+          <div class="ex-problem">Clasificar: √(1 + (y'')³) = x·y</div>
+          <div class="step">
+            <div class="step-label">Paso 1 — Eliminar la raíz</div>
+            <p>Elevamos ambos lados al cuadrado para poder identificar el grado.</p>
+            <span class="math">1 + (y'')³ = x²y²</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Orden</div>
+            <p>La derivada más alta es y'' → <strong style="color:var(--gold)">orden 2</strong></p>
+          </div>
+          <div class="step">
+            <div class="step-label">Grado</div>
+            <p>Después de elevar al cuadrado, y'' está elevada a la 3ra potencia → <strong style="color:var(--gold)">grado 3</strong></p>
+          </div>
+          <div class="step">
+            <div class="step-label">¿Lineal?</div>
+            <p>y'' está al cubo, y y están multiplicadas → <strong style="color:#c89898">No es lineal</strong></p>
+          </div>
+          <div class="answer">
+            <div class="answer-label">Clasificación</div>
+            <div class="math">Orden 2 · Grado 3 · No lineal</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- SECCIÓN 3: EDOs LINEALES DE PRIMER ORDEN -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <section class="section" id="s3">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2 class="section-title">EDOs Lineales de Primer Orden</h2>
+    </div>
+
+    <div class="theory">
+      <h3>Forma estándar</h3>
+      <p>Una EDO lineal de primer orden siempre se puede escribir como:</p>
+      <div class="formula">y' + P(x)·y = Q(x)</div>
+      <p>Donde P(x) y Q(x) son funciones conocidas. El truco para resolver esto se llama <strong style="color:var(--gold2)">factor integrante</strong>.</p>
+
+      <h3 style="margin-top:20px;">¿Qué es el factor integrante?</h3>
+      <p>Es una función μ(x) que, cuando multiplicas toda la ecuación por ella, el lado izquierdo se convierte en la derivada de un producto. Eso te permite integrar directamente.</p>
+
+      <div class="formula">
+        <span class="label">Factor integrante</span>
+        μ(x) = e^(∫P(x) dx)
+      </div>
+
+      <h3 style="margin-top:20px;">Algoritmo completo</h3>
+      <ol>
+        <li>Pon la ecuación en forma estándar: y' + P(x)y = Q(x)</li>
+        <li>Calcula μ = e^(∫P dx)</li>
+        <li>Multiplica toda la ecuación por μ</li>
+        <li>El lado izquierdo se convierte en d/dx[μy]</li>
+        <li>Integra ambos lados: μy = ∫μQ dx + C</li>
+        <li>Despeja y</li>
+      </ol>
+
+      <div class="key-idea">El lado izquierdo siempre se convierte en (μy)' = μQ. Esto es lo mágico del factor integrante — no tienes que verificarlo, siempre funciona.</div>
+    </div>
+
+    <div class="exercises">
+      <div class="exercise-card" id="ex3a">
+        <div class="exercise-header" onclick="toggle('ex3a')">
+          <span class="ex-badge facil">FÁCIL</span>
+          <span class="ex-title">Factor integrante con P constante</span>
+          <span class="ex-toggle">▼</span>
+        </div>
+        <div class="exercise-body">
+          <div class="ex-problem">Resolver: y' + 2y = 4</div>
+          <div class="step">
+            <div class="step-label">Paso 1 — Identificar P y Q</div>
+            <span class="math">P(x) = 2,  Q(x) = 4</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 2 — Factor integrante</div>
+            <span class="math">μ = e^(∫2 dx) = e^(2x)</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 3 — Multiplicar por μ</div>
+            <span class="math">e^(2x) y' + 2e^(2x) y = 4e^(2x)</span>
+            <span class="math">(e^(2x) y)' = 4e^(2x)</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 4 — Integrar</div>
+            <span class="math">e^(2x) y = ∫4e^(2x) dx = 2e^(2x) + C</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 5 — Despejar y</div>
+            <span class="math">y = 2 + Ce^(-2x)</span>
+          </div>
+          <div class="answer">
+            <div class="answer-label">Solución general</div>
+            <div class="math">y = 2 + Ce^(-2x)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="exercise-card" id="ex3b">
+        <div class="exercise-header" onclick="toggle('ex3b')">
+          <span class="ex-badge dificil">DIFÍCIL</span>
+          <span class="ex-title">Factor integrante con P(x) variable</span>
+          <span class="ex-toggle">▼</span>
+        </div>
+        <div class="exercise-body">
+          <div class="ex-problem">Resolver: xy' - y = x²·e^x, con y(1) = 0</div>
+          <div class="step">
+            <div class="step-label">Paso 1 — Forma estándar (dividir todo por x)</div>
+            <span class="math">y' - (1/x)y = x·e^x</span>
+            <p>P(x) = -1/x, Q(x) = xe^x</p>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 2 — Factor integrante</div>
+            <span class="math">μ = e^(∫-1/x dx) = e^(-ln|x|) = 1/x</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 3 — Multiplicar por 1/x</div>
+            <span class="math">(1/x)y' - (1/x²)y = e^x</span>
+            <span class="math">(y/x)' = e^x</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 4 — Integrar</div>
+            <span class="math">y/x = ∫e^x dx = e^x + C</span>
+            <span class="math">y = xe^x + Cx</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 5 — Condición inicial y(1)=0</div>
+            <span class="math">0 = 1·e¹ + C·1  →  C = -e</span>
+          </div>
+          <div class="answer">
+            <div class="answer-label">Solución particular</div>
+            <div class="math">y = xe^x - ex  =  x(e^x - e)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- SECCIÓN 4: CRECIMIENTO POBLACIONAL I -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <section class="section" id="s4">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Crecimiento Poblacional I — Modelo Exponencial</h2>
+    </div>
+
+    <div class="theory">
+      <h3>La idea</h3>
+      <p>Si una población crece a una tasa proporcional a su tamaño actual (más gente → más nacimientos), la EDO es:</p>
+      <div class="formula">dP/dt = k·P</div>
+      <p>Donde k es la tasa de crecimiento (positivo = crece, negativo = decrece). Se resuelve por separación de variables.</p>
+
+      <h3 style="margin-top:20px;">Solución</h3>
+      <div class="formula">P(t) = P₀ · e^(kt)</div>
+      <p>P₀ es la población inicial (en t=0), k se determina con otro dato del problema.</p>
+
+      <div class="key-idea">También modela: enfriamiento/calentamiento de objetos (Ley de Newton), desintegración radiactiva, crecimiento de bacterias, interés compuesto continuo.</div>
+
+      <h3 style="margin-top:20px;">Cómo encontrar k</h3>
+      <p>Si te dan la población en dos momentos, usas el segundo para encontrar k:</p>
+      <div class="formula">
+        P(t₁) = valor₁  →  P₀·e^(k·t₁) = valor₁  →  k = ln(valor₁/P₀)/t₁
+      </div>
+    </div>
+
+    <div class="exercises">
+      <div class="exercise-card" id="ex4a">
+        <div class="exercise-header" onclick="toggle('ex4a')">
+          <span class="ex-badge facil">FÁCIL · APLICADO</span>
+          <span class="ex-title">Bacterias duplicándose</span>
+          <span class="ex-toggle">▼</span>
+        </div>
+        <div class="exercise-body">
+          <div class="ex-problem">Una colonia de bacterias tiene 500 al inicio. Se duplica cada 3 horas. ¿Cuántas hay a las 9 horas?</div>
+          <div class="step">
+            <div class="step-label">Paso 1 — Plantear la EDO</div>
+            <span class="math">dP/dt = kP,  P(0) = 500</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 2 — Encontrar k (se duplica en t=3)</div>
+            <span class="math">1000 = 500·e^(3k)</span>
+            <span class="math">2 = e^(3k)  →  k = ln(2)/3 ≈ 0.231</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 3 — Evaluar en t=9</div>
+            <span class="math">P(9) = 500·e^(0.231·9) = 500·e^(2.079)</span>
+            <span class="math">P(9) = 500·8 = 4000 bacterias</span>
+            <p style="color:var(--muted);font-size:0.82rem;font-style:italic;">Verificación lógica: en 9h se duplica 3 veces → 500→1000→2000→4000 ✓</p>
+          </div>
+          <div class="answer">
+            <div class="answer-label">Respuesta</div>
+            <div class="math">P(9) = 4000 bacterias</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="exercise-card" id="ex4b">
+        <div class="exercise-header" onclick="toggle('ex4b')">
+          <span class="ex-badge dificil">DIFÍCIL · APLICADO</span>
+          <span class="ex-title">Enfriamiento de Newton con tiempo desconocido</span>
+          <span class="ex-toggle">▼</span>
+        </div>
+        <div class="exercise-body">
+          <div class="ex-problem">Un cuerpo muerto se encuentra a 27°C en un cuarto a 20°C. Una hora después mide 25°C. La temperatura normal del cuerpo era 37°C. ¿Hace cuánto murió?</div>
+          <div class="step">
+            <div class="step-label">Paso 1 — Ley de enfriamiento de Newton</div>
+            <p>La temperatura T cambia proporcional a la diferencia con el ambiente (20°C).</p>
+            <span class="math">dT/dt = k(T - 20)</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 2 — Hacer sustitución u = T - 20</div>
+            <span class="math">du/dt = ku  →  u = u₀·e^(kt)</span>
+            <span class="math">T - 20 = (T₀ - 20)·e^(kt)</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 3 — Punto de referencia t=0: T=27°C</div>
+            <p>Cuando se descubre el cuerpo (t=0 para nosotros), T=27.</p>
+            <span class="math">T - 20 = 7·e^(kt)</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 4 — Encontrar k con T(1)=25</div>
+            <span class="math">25 - 20 = 7·e^(k·1)</span>
+            <span class="math">5 = 7·e^k  →  e^k = 5/7  →  k = ln(5/7) ≈ -0.3365</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 5 — Encontrar cuándo T era 37°C (hora de muerte)</div>
+            <p>Necesitamos el tiempo t* antes de t=0 (negativo):</p>
+            <span class="math">37 - 20 = 7·e^(-0.3365·t*)</span>
+            <span class="math">17 = 7·e^(-0.3365·t*)</span>
+            <span class="math">e^(-0.3365·t*) = 17/7</span>
+            <span class="math">-0.3365·t* = ln(17/7) ≈ 0.887</span>
+            <span class="math">t* ≈ -2.63 horas</span>
+          </div>
+          <div class="answer">
+            <div class="answer-label">Respuesta</div>
+            <div class="math">La persona murió aproximadamente 2.6 horas antes de ser encontrada</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- SECCIÓN 5: ECUACIONES EXACTAS -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <section class="section" id="s5">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2 class="section-title">Ecuaciones Diferenciales Exactas</h2>
+    </div>
+
+    <div class="theory">
+      <h3>¿Cuándo una EDO es exacta?</h3>
+      <p>Si tienes una EDO de la forma M dx + N dy = 0, es exacta si:</p>
+      <div class="formula">∂M/∂y = ∂N/∂x</div>
+      <p>Esto significa que M y N son derivadas parciales de una misma función F(x,y). La solución es encontrar esa función F.</p>
+
+      <h3 style="margin-top:20px;">Algoritmo</h3>
+      <ol>
+        <li>Verifica que ∂M/∂y = ∂N/∂x</li>
+        <li>Integra M respecto a x: F = ∫M dx + g(y)</li>
+        <li>Deriva F respecto a y: ∂F/∂y = (algo) + g'(y)</li>
+        <li>Iguala a N: (algo) + g'(y) = N → despeja g'(y)</li>
+        <li>Integra para obtener g(y)</li>
+        <li>La solución es F(x,y) = C</li>
+      </ol>
+
+      <div class="key-idea">Piénsalo así: estás buscando una función F tal que dF = M dx + N dy. La solución es el conjunto de curvas donde F vale una constante.</div>
+
+      <div class="warning">Si ∂M/∂y ≠ ∂N/∂x, la ecuación NO es exacta. Puede intentarse un factor integrante especial, pero eso es más avanzado.</div>
+    </div>
+
+    <div class="exercises">
+      <div class="exercise-card" id="ex5a">
+        <div class="exercise-header" onclick="toggle('ex5a')">
+          <span class="ex-badge facil">FÁCIL</span>
+          <span class="ex-title">Ecuación exacta directa</span>
+          <span class="ex-toggle">▼</span>
+        </div>
+        <div class="exercise-body">
+          <div class="ex-problem">(2x + y) dx + (x + 2y) dy = 0</div>
+          <div class="step">
+            <div class="step-label">Paso 1 — Verificar exactitud</div>
+            <span class="math">M = 2x + y  →  ∂M/∂y = 1</span>
+            <span class="math">N = x + 2y  →  ∂N/∂x = 1</span>
+            <p>Son iguales → ✓ Es exacta</p>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 2 — Integrar M respecto a x</div>
+            <span class="math">F = ∫(2x + y) dx = x² + xy + g(y)</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 3 — Derivar F respecto a y e igualar a N</div>
+            <span class="math">∂F/∂y = x + g'(y) = N = x + 2y</span>
+            <span class="math">g'(y) = 2y  →  g(y) = y²</span>
+          </div>
+          <div class="answer">
+            <div class="answer-label">Solución</div>
+            <div class="math">x² + xy + y² = C</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="exercise-card" id="ex5b">
+        <div class="exercise-header" onclick="toggle('ex5b')">
+          <span class="ex-badge dificil">DIFÍCIL</span>
+          <span class="ex-title">Exacta con funciones trigonométricas</span>
+          <span class="ex-toggle">▼</span>
+        </div>
+        <div class="exercise-body">
+          <div class="ex-problem">(e^x sin y - 2y sin x) dx + (e^x cos y + 2 cos x) dy = 0</div>
+          <div class="step">
+            <div class="step-label">Paso 1 — Verificar exactitud</div>
+            <span class="math">M = e^x sin y - 2y sin x</span>
+            <span class="math">∂M/∂y = e^x cos y - 2 sin x</span>
+            <span class="math">N = e^x cos y + 2 cos x</span>
+            <span class="math">∂N/∂x = e^x cos y - 2 sin x  ✓  Es exacta</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 2 — Integrar M respecto a x</div>
+            <span class="math">F = ∫(e^x sin y - 2y sin x) dx</span>
+            <span class="math">F = e^x sin y + 2y cos x + g(y)</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 3 — Derivar F respecto a y e igualar a N</div>
+            <span class="math">∂F/∂y = e^x cos y + 2 cos x + g'(y) = N</span>
+            <span class="math">e^x cos y + 2 cos x + g'(y) = e^x cos y + 2 cos x</span>
+            <span class="math">g'(y) = 0  →  g(y) = 0</span>
+          </div>
+          <div class="answer">
+            <div class="answer-label">Solución</div>
+            <div class="math">e^x sin y + 2y cos x = C</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- SECCIÓN 6: CRECIMIENTO POBLACIONAL II -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <section class="section" id="s6">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <h2 class="section-title">Crecimiento Poblacional II — Modelo Logístico</h2>
+    </div>
+
+    <div class="theory">
+      <h3>El problema del modelo exponencial</h3>
+      <p>El modelo dP/dt = kP dice que la población crece infinitamente, lo cual no es real. En la naturaleza existe una <strong style="color:var(--gold2)">capacidad de carga M</strong> (el máximo que el ambiente puede sostener).</p>
+
+      <h3 style="margin-top:16px;">Modelo logístico</h3>
+      <div class="formula">dP/dt = kP(1 - P/M)</div>
+      <p>Cuando P es pequeña, (1 - P/M) ≈ 1, así que crece casi exponencial. Cuando P se acerca a M, el factor se hace casi 0 y el crecimiento se frena. Si P > M, ¡la población baja!</p>
+
+      <h3 style="margin-top:16px;">Solución</h3>
+      <p>Se resuelve por fracciones parciales. El resultado es:</p>
+      <div class="formula">P(t) = M / (1 + A·e^(-kt))</div>
+      <div class="formula">donde A = (M - P₀) / P₀</div>
+
+      <div class="key-idea">Comportamiento: P siempre se acerca a M sin sobrepasarlo (si empezó por debajo). La curva tiene forma de S (sigmoide).</div>
+    </div>
+
+    <div class="exercises">
+      <div class="exercise-card" id="ex6a">
+        <div class="exercise-header" onclick="toggle('ex6a')">
+          <span class="ex-badge facil">FÁCIL · APLICADO</span>
+          <span class="ex-title">Población con límite ambiental</span>
+          <span class="ex-toggle">▼</span>
+        </div>
+        <div class="exercise-body">
+          <div class="ex-problem">Una isla puede sostener máximo 1000 conejos. Inicialmente hay 100. La tasa es k=0.5 /año. ¿Cuántos hay en 2 años?</div>
+          <div class="step">
+            <div class="step-label">Paso 1 — Datos</div>
+            <span class="math">M = 1000,  P₀ = 100,  k = 0.5</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 2 — Calcular A</div>
+            <span class="math">A = (1000 - 100)/100 = 900/100 = 9</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 3 — Aplicar fórmula en t=2</div>
+            <span class="math">P(2) = 1000 / (1 + 9·e^(-0.5·2))</span>
+            <span class="math">P(2) = 1000 / (1 + 9·e^(-1))</span>
+            <span class="math">P(2) = 1000 / (1 + 9·0.3679)</span>
+            <span class="math">P(2) = 1000 / (1 + 3.311) = 1000/4.311 ≈ 232</span>
+          </div>
+          <div class="answer">
+            <div class="answer-label">Respuesta</div>
+            <div class="math">P(2) ≈ 232 conejos</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="exercise-card" id="ex6b">
+        <div class="exercise-header" onclick="toggle('ex6b')">
+          <span class="ex-badge dificil">DIFÍCIL · APLICADO</span>
+          <span class="ex-title">Encontrar k con datos de dos tiempos</span>
+          <span class="ex-toggle">▼</span>
+        </div>
+        <div class="exercise-body">
+          <div class="ex-problem">Un lago tiene capacidad para 500 peces. Al año 0 hay 50, al año 3 hay 200. Encuentra k y predice cuántos hay al año 10.</div>
+          <div class="step">
+            <div class="step-label">Paso 1 — Calcular A</div>
+            <span class="math">A = (500 - 50)/50 = 450/50 = 9</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 2 — Usar P(3)=200 para encontrar k</div>
+            <span class="math">200 = 500 / (1 + 9·e^(-3k))</span>
+            <span class="math">1 + 9e^(-3k) = 500/200 = 2.5</span>
+            <span class="math">9e^(-3k) = 1.5  →  e^(-3k) = 1/6</span>
+            <span class="math">-3k = ln(1/6) = -ln 6  →  k = ln(6)/3 ≈ 0.5973</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 3 — Predecir P(10)</div>
+            <span class="math">P(10) = 500 / (1 + 9·e^(-0.5973·10))</span>
+            <span class="math">e^(-5.973) ≈ 0.00254</span>
+            <span class="math">P(10) = 500 / (1 + 9·0.00254) = 500/1.0229 ≈ 489</span>
+          </div>
+          <div class="answer">
+            <div class="answer-label">Respuesta</div>
+            <div class="math">k ≈ 0.597/año  |  P(10) ≈ 489 peces</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- SECCIÓN 7: MEZCLAS -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <section class="section" id="s7">
+    <div class="section-header">
+      <span class="section-num">07</span>
+      <h2 class="section-title">Problemas de Mezclas</h2>
+    </div>
+
+    <div class="theory">
+      <h3>El concepto</h3>
+      <p>Tienes un tanque con una solución. Entra líquido, sale líquido. Quieres saber cuánta cantidad de alguna sustancia (sal, químico, etc.) hay en el tanque en cada momento.</p>
+
+      <div class="formula">
+        <span class="label">Ley fundamental de mezclas</span>
+        dQ/dt = (tasa de entrada) - (tasa de salida)
+      </div>
+
+      <div class="formula">
+        <span class="label">Expandiendo</span>
+        dQ/dt = (concentración_entrada × flujo_entrada) - (Q/V_actual × flujo_salida)
+      </div>
+
+      <h3 style="margin-top:16px;">Caso especial: flujos iguales</h3>
+      <p>Si el flujo que entra = flujo que sale, el volumen V permanece constante. Eso simplifica mucho.</p>
+      <p>Si los flujos son distintos, V cambia con el tiempo: V(t) = V₀ + (flujo_entrada - flujo_salida)·t</p>
+
+      <div class="key-idea">Q siempre representa la CANTIDAD total (no la concentración). La concentración en cada momento es Q/V.</div>
+    </div>
+
+    <div class="exercises">
+      <div class="exercise-card" id="ex7a">
+        <div class="exercise-header" onclick="toggle('ex7a')">
+          <span class="ex-badge facil">FÁCIL · APLICADO</span>
+          <span class="ex-title">Tanque con flujos iguales</span>
+          <span class="ex-toggle">▼</span>
+        </div>
+        <div class="exercise-body">
+          <div class="ex-problem">Un tanque tiene 100 L con 10 kg de sal. Entra agua con 0.3 kg/L a 5 L/min y sale a la misma tasa. ¿Cuánta sal hay en t minutos?</div>
+          <div class="step">
+            <div class="step-label">Paso 1 — Plantear la EDO</div>
+            <p>Volumen constante = 100 L. Q(t) = kg de sal.</p>
+            <span class="math">dQ/dt = 0.3 × 5 - (Q/100) × 5</span>
+            <span class="math">dQ/dt = 1.5 - Q/20</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 2 — Forma estándar (lineal de 1er orden)</div>
+            <span class="math">dQ/dt + Q/20 = 1.5</span>
+            <p>P = 1/20, Q_func = 1.5. Factor integrante: μ = e^(t/20)</p>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 3 — Resolver</div>
+            <span class="math">(e^(t/20) Q)' = 1.5·e^(t/20)</span>
+            <span class="math">e^(t/20) Q = 30·e^(t/20) + C</span>
+            <span class="math">Q = 30 + Ce^(-t/20)</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 4 — Condición inicial Q(0)=10</div>
+            <span class="math">10 = 30 + C  →  C = -20</span>
+          </div>
+          <div class="answer">
+            <div class="answer-label">Solución</div>
+            <div class="math">Q(t) = 30 - 20e^(-t/20) kg</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="exercise-card" id="ex7b">
+        <div class="exercise-header" onclick="toggle('ex7b')">
+          <span class="ex-badge dificil">DIFÍCIL · APLICADO</span>
+          <span class="ex-title">Tanque con volumen variable</span>
+          <span class="ex-toggle">▼</span>
+        </div>
+        <div class="exercise-body">
+          <div class="ex-problem">Tanque con 200 L y 5 kg de sal. Entra solución 0.02 kg/L a 3 L/min, sale a 1 L/min. ¿Cuánta sal hay en t=50 min?</div>
+          <div class="step">
+            <div class="step-label">Paso 1 — Volumen variable</div>
+            <p>Entra 3 L/min, sale 1 L/min → el volumen crece 2 L/min.</p>
+            <span class="math">V(t) = 200 + 2t</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 2 — Plantear la EDO</div>
+            <span class="math">dQ/dt = 0.02 × 3 - Q/(200+2t) × 1</span>
+            <span class="math">dQ/dt = 0.06 - Q/(200+2t)</span>
+            <span class="math">dQ/dt + Q/(200+2t) = 0.06</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 3 — Factor integrante</div>
+            <span class="math">P(t) = 1/(200+2t)</span>
+            <span class="math">∫P dt = ∫1/(200+2t) dt = (1/2)ln(200+2t)</span>
+            <span class="math">μ = e^((1/2)ln(200+2t)) = √(200+2t)</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 4 — Multiplicar y resolver</div>
+            <span class="math">(Q·√(200+2t))' = 0.06·√(200+2t)</span>
+            <span class="math">Q·√(200+2t) = ∫0.06·(200+2t)^(1/2) dt</span>
+            <span class="math">= 0.06 · (1/3)(200+2t)^(3/2) + C = 0.02(200+2t)^(3/2) + C</span>
+            <span class="math">Q = 0.02(200+2t) + C/(200+2t)^(1/2)</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 5 — Condición Q(0)=5</div>
+            <span class="math">5 = 0.02(200) + C/√200 = 4 + C/14.14</span>
+            <span class="math">C = (5-4)·14.14 = 14.14</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 6 — Evaluar Q(50)</div>
+            <span class="math">Q(50) = 0.02(300) + 14.14/√300</span>
+            <span class="math">Q(50) = 6 + 14.14/17.32 ≈ 6 + 0.816 ≈ 6.82 kg</span>
+          </div>
+          <div class="answer">
+            <div class="answer-label">Respuesta</div>
+            <div class="math">Q(50) ≈ 6.82 kg de sal</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- SECCIÓN 8: ECUACIONES HOMOGÉNEAS -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <section class="section" id="s8">
+    <div class="section-header">
+      <span class="section-num">08</span>
+      <h2 class="section-title">Ecuaciones Homogéneas</h2>
+    </div>
+
+    <div class="theory">
+      <h3>¿Cuándo es homogénea?</h3>
+      <p>Una EDO M dx + N dy = 0 es homogénea si M y N son <strong style="color:var(--gold2)">funciones homogéneas del mismo grado</strong>. Una función es homogénea de grado n si:</p>
+      <div class="formula">f(tx, ty) = tⁿ · f(x, y)</div>
+      <p>En la práctica: si puedes escribir la EDO como dy/dx = f(y/x), entonces es homogénea.</p>
+
+      <h3 style="margin-top:16px;">Método de sustitución</h3>
+      <p>La clave es hacer la sustitución <strong style="color:var(--gold2)">y = vx</strong>, donde v es una nueva función de x.</p>
+      <div class="formula">
+        y = vx  →  dy = v dx + x dv
+      </div>
+      <p>Al sustituir, la ecuación se vuelve separable (en v y x). Luego integras y vuelves a y al final.</p>
+
+      <ol>
+        <li>Verifica que la EDO es homogénea</li>
+        <li>Sustituye y = vx, dy = v dx + x dv</li>
+        <li>Simplifica (x debería cancelarse, quedando solo v y x)</li>
+        <li>Separa variables en v y x</li>
+        <li>Integra</li>
+        <li>Devuelve v = y/x</li>
+      </ol>
+    </div>
+
+    <div class="exercises">
+      <div class="exercise-card" id="ex8a">
+        <div class="exercise-header" onclick="toggle('ex8a')">
+          <span class="ex-badge facil">FÁCIL</span>
+          <span class="ex-title">Homogénea de grado 1</span>
+          <span class="ex-toggle">▼</span>
+        </div>
+        <div class="exercise-body">
+          <div class="ex-problem">Resolver: (x - y) dx + x dy = 0</div>
+          <div class="step">
+            <div class="step-label">Paso 1 — Verificar homogeneidad</div>
+            <p>M = x - y (grado 1), N = x (grado 1) → homogénea de grado 1 ✓</p>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 2 — Sustituir y = vx</div>
+            <span class="math">dy = v dx + x dv</span>
+            <span class="math">(x - vx)dx + x(v dx + x dv) = 0</span>
+            <span class="math">x(1-v)dx + vx dx + x² dv = 0</span>
+            <span class="math">x dx - vx dx + vx dx + x² dv = 0</span>
+            <span class="math">x dx + x² dv = 0</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 3 — Separar variables</div>
+            <span class="math">dx/x + dv = 0</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 4 — Integrar</div>
+            <span class="math">ln|x| + v = C</span>
+            <span class="math">v = C - ln|x|</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 5 — Volver a y (v = y/x)</div>
+            <span class="math">y/x = C - ln|x|</span>
+          </div>
+          <div class="answer">
+            <div class="answer-label">Solución general</div>
+            <div class="math">y = x(C - ln|x|)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="exercise-card" id="ex8b">
+        <div class="exercise-header" onclick="toggle('ex8b')">
+          <span class="ex-badge dificil">DIFÍCIL</span>
+          <span class="ex-title">Homogénea con integración compleja</span>
+          <span class="ex-toggle">▼</span>
+        </div>
+        <div class="exercise-body">
+          <div class="ex-problem">Resolver: (x² + y²) dx - 2xy dy = 0</div>
+          <div class="step">
+            <div class="step-label">Paso 1 — Verificar homogeneidad</div>
+            <p>M = x² + y² (grado 2), N = -2xy (grado 2) → homogénea ✓</p>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 2 — Sustituir y = vx</div>
+            <span class="math">(x² + v²x²)dx - 2x(vx)(v dx + x dv) = 0</span>
+            <span class="math">x²(1+v²)dx - 2vx²(v dx + x dv) = 0</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 3 — Dividir por x² y expandir</div>
+            <span class="math">(1+v²)dx - 2v(v dx + x dv) = 0</span>
+            <span class="math">(1+v²)dx - 2v² dx - 2vx dv = 0</span>
+            <span class="math">(1 - v²)dx = 2vx dv</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 4 — Separar variables</div>
+            <span class="math">dx/x = 2v/(1-v²) dv</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 5 — Integrar (fracciones parciales en la derecha)</div>
+            <p>La integral de 2v/(1-v²) dv: sea u = 1-v², du = -2v dv</p>
+            <span class="math">∫2v/(1-v²) dv = -∫du/u = -ln|1-v²|</span>
+            <span class="math">ln|x| = -ln|1-v²| + C</span>
+            <span class="math">ln|x| + ln|1-v²| = C</span>
+            <span class="math">ln|x(1-v²)| = C  →  x(1-v²) = K</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 6 — Sustituir v = y/x</div>
+            <span class="math">x(1 - y²/x²) = K</span>
+            <span class="math">x - y²/x = K</span>
+          </div>
+          <div class="answer">
+            <div class="answer-label">Solución general</div>
+            <div class="math">x² - y² = Kx</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- SECCIÓN 9: ECUACIONES DE SEGUNDO ORDEN -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <section class="section" id="s9">
+    <div class="section-header">
+      <span class="section-num">09</span>
+      <h2 class="section-title">Ecuaciones de Segundo Orden</h2>
+    </div>
+
+    <div class="theory">
+      <h3>Forma general (coeficientes constantes)</h3>
+      <div class="formula">ay'' + by' + cy = f(x)</div>
+      <p>Si f(x) = 0 → se llama <strong style="color:var(--gold2)">homogénea</strong>. Si f(x) ≠ 0 → <strong style="color:var(--gold2)">no homogénea</strong>.</p>
+
+      <h3 style="margin-top:16px;">Paso 1 — Resolver la parte homogénea</h3>
+      <p>Propones y = e^(rx) y buscas los valores de r. Eso te da la <strong style="color:var(--gold2)">ecuación característica</strong>:</p>
+      <div class="formula">ar² + br + c = 0</div>
+      <p>Hay 3 casos según el discriminante Δ = b² - 4ac:</p>
+      <ul>
+        <li><strong style="color:var(--gold2)">Δ > 0</strong>: dos raíces reales distintas r₁, r₂ → y_h = C₁e^(r₁x) + C₂e^(r₂x)</li>
+        <li><strong style="color:var(--gold2)">Δ = 0</strong>: raíz repetida r → y_h = (C₁ + C₂x)e^(rx)</li>
+        <li><strong style="color:var(--gold2)">Δ &lt; 0</strong>: raíces complejas α ± βi → y_h = e^(αx)(C₁cos βx + C₂sin βx)</li>
+      </ul>
+
+      <h3 style="margin-top:16px;">Paso 2 — Si es no homogénea: encontrar y_p</h3>
+      <p>La solución completa es y = y_h + y_p. Para encontrar y_p se usa <strong style="color:var(--gold2)">coeficientes indeterminados</strong>:</p>
+      <ul>
+        <li>f(x) = eᵃˣ → propón y_p = Aeᵃˣ</li>
+        <li>f(x) = polinomio de grado n → propón y_p = polinomio de grado n</li>
+        <li>f(x) = sin/cos → propón y_p = A cos + B sin</li>
+        <li>Si la propuesta ya está en y_h, multiplica por x</li>
+      </ul>
+
+      <div class="key-idea">La ecuación característica convierte un problema de ecuaciones diferenciales en un problema de álgebra. Es el truco más poderoso de las EDOs de 2do orden.</div>
+    </div>
+
+    <div class="exercises">
+      <div class="exercise-card" id="ex9a">
+        <div class="exercise-header" onclick="toggle('ex9a')">
+          <span class="ex-badge facil">FÁCIL</span>
+          <span class="ex-title">Raíces complejas (homogénea)</span>
+          <span class="ex-toggle">▼</span>
+        </div>
+        <div class="exercise-body">
+          <div class="ex-problem">Resolver: y'' + 4y' + 5y = 0</div>
+          <div class="step">
+            <div class="step-label">Paso 1 — Ecuación característica</div>
+            <span class="math">r² + 4r + 5 = 0</span>
+            <span class="math">r = (-4 ± √(16-20))/2 = (-4 ± √(-4))/2</span>
+            <span class="math">r = (-4 ± 2i)/2 = -2 ± i</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 2 — Identificar α y β</div>
+            <p>α = -2 (parte real), β = 1 (parte imaginaria)</p>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 3 — Escribir solución</div>
+            <span class="math">y = e^(-2x)(C₁ cos x + C₂ sin x)</span>
+          </div>
+          <div class="answer">
+            <div class="answer-label">Solución general</div>
+            <div class="math">y = e^(-2x)(C₁ cos x + C₂ sin x)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="exercise-card" id="ex9b">
+        <div class="exercise-header" onclick="toggle('ex9b')">
+          <span class="ex-badge dificil">DIFÍCIL</span>
+          <span class="ex-title">No homogénea con condiciones iniciales</span>
+          <span class="ex-toggle">▼</span>
+        </div>
+        <div class="exercise-body">
+          <div class="ex-problem">Resolver: y'' - 3y' + 2y = e^(3x), y(0)=0, y'(0)=1</div>
+          <div class="step">
+            <div class="step-label">Paso 1 — Resolver parte homogénea</div>
+            <span class="math">r² - 3r + 2 = 0  →  (r-1)(r-2) = 0</span>
+            <span class="math">r₁ = 1, r₂ = 2  (raíces reales distintas)</span>
+            <span class="math">y_h = C₁e^x + C₂e^(2x)</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 2 — Proponer y_p para e^(3x)</div>
+            <p>f(x) = e^(3x). Como r=3 no es raíz característica, propón:</p>
+            <span class="math">y_p = Ae^(3x)</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 3 — Sustituir y_p en la EDO</div>
+            <span class="math">y_p' = 3Ae^(3x),  y_p'' = 9Ae^(3x)</span>
+            <span class="math">9Ae^(3x) - 9Ae^(3x) + 2Ae^(3x) = e^(3x)</span>
+            <span class="math">2Ae^(3x) = e^(3x)  →  A = 1/2</span>
+            <span class="math">y_p = (1/2)e^(3x)</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 4 — Solución general</div>
+            <span class="math">y = C₁e^x + C₂e^(2x) + (1/2)e^(3x)</span>
+          </div>
+          <div class="step">
+            <div class="step-label">Paso 5 — Aplicar condiciones iniciales</div>
+            <span class="math">y(0)=0: C₁ + C₂ + 1/2 = 0  → C₁ + C₂ = -1/2  ...(i)</span>
+            <span class="math">y'= C₁e^x + 2C₂e^(2x) + (3/2)e^(3x)</span>
+            <span class="math">y'(0)=1: C₁ + 2C₂ + 3/2 = 1  → C₁ + 2C₂ = -1/2  ...(ii)</span>
+            <p>De (ii)-(i): C₂ = 0. Luego C₁ = -1/2.</p>
+          </div>
+          <div class="answer">
+            <div class="answer-label">Solución particular</div>
+            <div class="math">y = -(1/2)e^x + (1/2)e^(3x)</div>
+            <div class="math">y = (e^(3x) - e^x) / 2</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+</div>
+
+<script>
+function toggle(id) {
+  const card = document.getElementById(id);
+  card.classList.toggle('open');
+}
+
+function setActive(el) {
+  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// Highlight active section on scroll
+const sections = document.querySelectorAll('.section');
+const navItems = document.querySelectorAll('.nav-item');
+
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 80) current = s.id;
+  });
+  navItems.forEach(n => {
+    n.classList.remove('active');
+    if (n.getAttribute('href') === '#' + current) n.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
