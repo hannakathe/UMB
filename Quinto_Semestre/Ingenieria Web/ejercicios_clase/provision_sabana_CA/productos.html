@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Catálogo de productos — Carnes Rojas, Aves y Abarrotes Premium de Provisión de la Sabana." />
+  <title>Catálogo de Productos | Provisión de la Sabana</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+
+<!-- ═══════════════════ HEADER ═══════════════════ -->
+<header>
+  <div class="container">
+    <a href="index.html" class="logo" aria-label="Inicio">
+      <div class="logo-mark"><i class="fa-solid fa-drumstick-bite"></i></div>
+      <div class="logo-text">
+        <strong>Provisión de la Sabana</strong>
+        <span>Cárnicos &amp; Abarrotes</span>
+      </div>
+    </a>
+    <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav>
+      <ul class="nav-menu" role="list">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="productos.html" class="active">Productos</a></li>
+        <li><a href="galeria.html">Galería</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- ═══════════════════ PAGE HERO ═══════════════════ -->
+<section class="page-hero">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Ruta">
+      <a href="index.html">Inicio</a>
+      <i class="fa-solid fa-chevron-right" style="font-size:.65rem;"></i>
+      <span>Productos</span>
+    </nav>
+    <h1>Nuestro Catálogo</h1>
+    <p>Cortes frescos, aves seleccionadas y abarrotes premium para su hogar y negocio.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════ TABS ═══════════════════ -->
+<div class="cat-tabs" role="tablist" aria-label="Categorías de producto">
+  <div class="container">
+    <div class="tabs-scroll">
+      <button class="tab-btn active" data-target="all" role="tab" aria-selected="true">
+        <i class="fa-solid fa-border-all"></i> Todos
+      </button>
+      <button class="tab-btn" data-target="carnes" role="tab" aria-selected="false">
+        <i class="fa-solid fa-cow"></i> Carnes Rojas
+      </button>
+      <button class="tab-btn" data-target="aves" role="tab" aria-selected="false">
+        <i class="fa-solid fa-feather"></i> Aves
+      </button>
+      <button class="tab-btn" data-target="abarrotes" role="tab" aria-selected="false">
+        <i class="fa-solid fa-box-open"></i> Abarrotes Premium
+      </button>
+      <button class="tab-btn" data-target="pescados" role="tab" aria-selected="false">
+        <i class="fa-solid fa-fish"></i> Pescados y Mariscos
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ CARNES ROJAS ═══════════════════ -->
+<section class="cat-section" id="carnes">
+  <div class="container">
+    <div class="cat-head">
+      <div class="cat-ico-lg"><i class="fa-solid fa-cow"></i></div>
+      <div class="cat-head-text">
+        <h2>Carnes Rojas</h2>
+        <p>Cortes de res frescos, seleccionados diariamente del frigorífico local.</p>
+      </div>
+    </div>
+
+    <div class="catalog-grid">
+
+      <article class="product-card">
+        <div class="card-img">
+          <img src="img/lomo-fino.jpg" alt="Lomo fino de res" loading="lazy" />
+          <span class="card-badge">Destacado</span>
+        </div>
+        <div class="card-body">
+          <p class="card-cat">Carnes Rojas</p>
+          <h3>Lomo Fino</h3>
+          <p>El corte más tierno de la res. Bajo en grasa, perfecto a la plancha o en medallones.</p>
+          <div class="card-foot">
+            <span class="price">$42.000 <sub>/ kg</sub></span>
+            <span style="font-size:.78rem;color:var(--gray-mid);">Min. 500g</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="card-img">
+          <img src="img/ribeye.jpg" alt="Lomo ancho ribeye" loading="lazy" />
+          <span class="card-badge">Destacado</span>
+        </div>
+        <div class="card-body">
+          <p class="card-cat">Carnes Rojas</p>
+          <h3>Lomo Ancho (Ribeye)</h3>
+          <p>Corte premium con infiltración de grasa, jugoso e ideal para parrilla y asado.</p>
+          <div class="card-foot">
+            <span class="price">$32.500 <sub>/ kg</sub></span>
+            <span style="font-size:.78rem;color:var(--gray-mid);">Min. 500g</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="card-img">
+          <img src="img/costilla-res.jpg" alt="Costilla de res" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <p class="card-cat">Carnes Rojas</p>
+          <h3>Costilla de Res</h3>
+          <p>Con hueso para caldo rico en colágeno. Perfecta para sancocho, sudado y sopas.</p>
+          <div class="card-foot">
+            <span class="price">$18.200 <sub>/ kg</sub></span>
+            <span style="font-size:.78rem;color:var(--gray-mid);">Und.</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="card-img">
+          <img src="img/carne-molida.jpg" alt="Carne molida de res" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <p class="card-cat">Carnes Rojas</p>
+          <h3>Carne Molida</h3>
+          <p>Molida al momento, con porcentaje de grasa a su elección. Ideal para hamburguesas y guisos.</p>
+          <div class="card-foot">
+            <span class="price">$16.500 <sub>/ kg</sub></span>
+            <span style="font-size:.78rem;color:var(--gray-mid);">Min. 250g</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="card-img">
+          <img src="img/churrasco.jpg" alt="Churrasco de res" loading="lazy" />
+          <span class="card-badge nuevo">Popular</span>
+        </div>
+        <div class="card-body">
+          <p class="card-cat">Carnes Rojas</p>
+          <h3>Churrasco</h3>
+          <p>Corte delgado y suave, excelente para freír en sartén o sellar en plancha caliente.</p>
+          <div class="card-foot">
+            <span class="price">$22.000 <sub>/ kg</sub></span>
+            <span style="font-size:.78rem;color:var(--gray-mid);">Min. 300g</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="card-img">
+          <img src="img/pecho-res.jpg" alt="Pecho de res" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <p class="card-cat">Carnes Rojas</p>
+          <h3>Pecho / Falda</h3>
+          <p>Corte económico y sabroso para estofados, rumba de res y preparaciones largas.</p>
+          <div class="card-foot">
+            <span class="price">$14.800 <sub>/ kg</sub></span>
+            <span style="font-size:.78rem;color:var(--gray-mid);">Min. 500g</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="card-img">
+          <img src="img/lengua-res.jpg" alt="Lengua de res" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <p class="card-cat">Carnes Rojas</p>
+          <h3>Lengua de Res</h3>
+          <p>Suave y sabrosa después de cocción lenta. Muy solicitada para sancocho y guisos típicos.</p>
+          <div class="card-foot">
+            <span class="price">$19.500 <sub>/ kg</sub></span>
+            <span style="font-size:.78rem;color:var(--gray-mid);">Und.</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="card-img">
+          <img src="img/higado-res.jpg" alt="Hígado de res" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <p class="card-cat">Carnes Rojas</p>
+          <h3>Hígado de Res</h3>
+          <p>Rico en hierro y proteína. Fresco del día, ideal encebollado o en bistec.</p>
+          <div class="card-foot">
+            <span class="price">$11.000 <sub>/ kg</sub></span>
+            <span style="font-size:.78rem;color:var(--gray-mid);">Min. 500g</span>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ AVES ═══════════════════ -->
+<section class="cat-section" id="aves">
+  <div class="container">
+    <div class="cat-head">
+      <div class="cat-ico-lg"><i class="fa-solid fa-feather"></i></div>
+      <div class="cat-head-text">
+        <h2>Aves de Corral</h2>
+        <p>Pollo fresco de engorde, libre de hormonas, entregado diariamente.</p>
+      </div>
+    </div>
+
+    <div class="catalog-grid">
+
+      <article class="product-card">
+        <div class="card-img">
+          <img src="img/pollo-entero.jpg" alt="Pollo entero fresco" loading="lazy" />
+          <span class="card-badge">Fresco</span>
+        </div>
+        <div class="card-body">
+          <p class="card-cat">Aves</p>
+          <h3>Pollo Entero</h3>
+          <p>Pollo de engorde entre 1.8 y 2.2 kg, limpio y listo para cualquier preparación.</p>
+          <div class="card-foot">
+            <span class="price">$9.200 <sub>/ kg</sub></span>
+            <span style="font-size:.78rem;color:var(--gray-mid);">Und.</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="card-img">
+          <img src="img/pechuga-pollo.jpg" alt="Pechuga de pollo sin hueso" loading="lazy" />
+          <span class="card-badge nuevo">Popular</span>
+        </div>
+        <div class="card-body">
+          <p class="card-cat">Aves</p>
+          <h3>Pechuga sin Hueso</h3>
+          <p>Filetes limpios, sin grasa. Alta en proteína y versátil para cualquier dieta.</p>
+          <div class="card-foot">
+            <span class="price">$10.800 <sub>/ kg</sub></span>
+            <span style="font-size:.78rem;color:var(--gray-mid);">Min. 500g</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="card-img">
+          <img src="img/pierna-pernil.jpg" alt="Pierna pernil de pollo" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <p class="card-cat">Aves</p>
+          <h3>Pierna Pernil</h3>
+          <p>Con hueso y piel, jugosa al horno o en caldo. Porción perfecta para un plato individual.</p>
+          <div class="card-foot">
+            <span class="price">$9.500 <sub>/ kg</sub></span>
+            <span style="font-size:.78rem;color:var(--gray-mid);">Min. 4 und.</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="card-img">
+          <img src="img/alas-pollo.jpg" alt="Alas de pollo" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <p class="card-cat">Aves</p>
+          <h3>Alas de Pollo</h3>
+          <p>Perfectas fritas, al horno o en salsa BBQ. El favorito de restaurantes y eventos.</p>
+          <div class="card-foot">
+            <span class="price">$7.800 <sub>/ kg</sub></span>
+            <span style="font-size:.78rem;color:var(--gray-mid);">Min. 1 kg</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="card-img">
+          <img src="img/mollejas.jpg" alt="Mollejas de pollo" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <p class="card-cat">Aves</p>
+          <h3>Mollejas</h3>
+          <p>Víscera limpia y lista para cocinar, muy apetecida en frituras y guisos típicos colombianos.</p>
+          <div class="card-foot">
+            <span class="price">$6.500 <sub>/ kg</sub></span>
+            <span style="font-size:.78rem;color:var(--gray-mid);">Min. 500g</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="card-img">
+          <img src="img/pollo-molido.jpg" alt="Pollo molido fresco" loading="lazy" />
+          <span class="card-badge nuevo">Nuevo</span>
+        </div>
+        <div class="card-body">
+          <p class="card-cat">Aves</p>
+          <h3>Pollo Molido</h3>
+          <p>Alternativa magra a la carne de res. Ideal para albóndigas, rellenos y dietas proteicas.</p>
+          <div class="card-foot">
+            <span class="price">$8.900 <sub>/ kg</sub></span>
+            <span style="font-size:.78rem;color:var(--gray-mid);">Min. 500g</span>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ ABARROTES ═══════════════════ -->
+<section class="cat-section" id="abarrotes">
+  <div class="container">
+    <div class="cat-head">
+      <div class="cat-ico-lg"><i class="fa-solid fa-box-open"></i></div>
+      <div class="cat-head-text">
+        <h2>Abarrotes Premium</h2>
+        <p>Granos, aceites, condimentos y productos de despensa de marcas seleccionadas.</p>
+      </div>
+    </div>
+
+    <div class="catalog-grid">
+
+      <article class="product-card">
+        <div class="card-img">
+          <img src="img/arroz-bulto.jpg" alt="Arroz Diana x 5kg" loading="lazy" />
+          <span class="card-badge">Mayoreo</span>
+        </div>
+        <div class="card-body">
+          <p class="card-cat">Granos</p>
+          <h3>Arroz Blanco x 5 kg</h3>
+          <p>Arroz de grano largo, seleccionado y enriquecido. Rendimiento garantizado para cocinas de alto volumen.</p>
+          <div class="card-foot">
+            <span class="price">$18.500 <sub>/ bulto</sub></span>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="card-img">
+          <img src="img/frijol-bolo.jpg" alt="Frijol bolo x 500g" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <p class="card-cat">Granos</p>
+          <h3>Fríjol Bolo x 500g</h3>
+          <p>Fríjol de color rojo oscuro, textura cremosa al cocinarse. El clásico de la cocina colombiana.</p>
+          <div class="card-foot">
+            <span class="price">$4.200 <sub>/ und.</sub></span>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="card-img">
+          <img src="img/lenteja.jpg" alt="Lenteja x 500g" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <p class="card-cat">Granos</p>
+          <h3>Lenteja x 500g</h3>
+          <p>Fuente de proteína vegetal. Cocción rápida, ideal para sopas y ensaladas nutritivas.</p>
+          <div class="card-foot">
+            <span class="price">$3.800 <sub>/ und.</sub></span>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="card-img">
+          <img src="img/aceite.jpg" alt="Aceite girasol x 3L" loading="lazy" />
+          <span class="card-badge nuevo">Oferta</span>
+        </div>
+        <div class="card-body">
+          <p class="card-cat">Aceites</p>
+          <h3>Aceite Girasol x 3L</h3>
+          <p>Alto en omega 6, ideal para freír y saltear. Botella resistente para cocinas profesionales.</p>
+          <div class="card-foot">
+            <span class="price">$22.000 <sub>/ und.</sub></span>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="card-img">
+          <img src="img/pasta.jpg" alt="Pasta espagueti x 500g" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <p class="card-cat">Pastas</p>
+          <h3>Espagueti x 500g</h3>
+          <p>Pasta de sémola de trigo duro, cocción perfecta al dente. Ideal para restaurantes.</p>
+          <div class="card-foot">
+            <span class="price">$3.500 <sub>/ und.</sub></span>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="card-img">
+          <img src="img/azucar.jpg" alt="Azúcar blanca x 2.5kg" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <p class="card-cat">Endulzantes</p>
+          <h3>Azúcar Blanca x 2.5kg</h3>
+          <p>Azúcar refinada de alta pureza, empacada al vacío para conservar frescura y calidad.</p>
+          <div class="card-foot">
+            <span class="price">$9.800 <sub>/ und.</sub></span>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="card-img">
+          <img src="img/sal.jpg" alt="Sal marina premium" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <p class="card-cat">Condimentos</p>
+          <h3>Sal Marina x 1kg</h3>
+          <p>Sal de grano fino sin aditivos, enriquecida con yodo. Esencial en toda despensa.</p>
+          <div class="card-foot">
+            <span class="price">$2.900 <sub>/ und.</sub></span>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="card-img">
+          <img src="img/garbanzo.jpg" alt="Garbanzo x 500g" loading="lazy" />
+          <span class="card-badge nuevo">Nuevo</span>
+        </div>
+        <div class="card-body">
+          <p class="card-cat">Granos</p>
+          <h3>Garbanzo x 500g</h3>
+          <p>Grano seleccionado, libre de impurezas. Base de hummus, ensaladas y guisos mediterráneos.</p>
+          <div class="card-foot">
+            <span class="price">$5.100 <sub>/ und.</sub></span>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ PESCADOS Y MARISCOS ═══════════════════ -->
+<section class="cat-section" id="pescados">
+  <div class="container">
+    <div class="cat-head">
+      <div class="cat-ico-lg"><i class="fa-solid fa-fish"></i></div>
+      <div class="cat-head-text">
+        <h2>Pescados y Mariscos</h2>
+        <p>Producto marino fresco, transportado en cadena de frío desde el puerto hasta su mesa.</p>
+      </div>
+    </div>
+
+    <div class="catalog-grid">
+
+      <article class="product-card">
+        <div class="card-img">
+          <img src="img/salmon-fillet.jpg" alt="Filete de salmón fresco" loading="lazy" />
+          <span class="card-badge">Destacado</span>
+        </div>
+        <div class="card-body">
+          <p class="card-cat"><i class="fa-solid fa-fish"></i> Pescados</p>
+          <h3>Salmón en Filete</h3>
+          <p>Salmón atlántico fresco, rico en Omega-3. Ideal a la plancha, al horno o en ceviche gourmet.</p>
+          <div class="card-foot">
+            <span class="price">$48.000 <sub>/ kg</sub></span>
+            <span style="font-size:.78rem;color:var(--gray-mid);">Min. 500g</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="card-img">
+          <img src="img/tilapia-entera.jpg" alt="Tilapia entera fresca" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <p class="card-cat"><i class="fa-solid fa-fish"></i> Pescados</p>
+          <h3>Tilapia Entera</h3>
+          <p>Tilapia roja de cultivo, limpia y eviscerada. Sabor suave, perfecta frita o en sudado.</p>
+          <div class="card-foot">
+            <span class="price">$14.500 <sub>/ kg</sub></span>
+            <span style="font-size:.78rem;color:var(--gray-mid);">Und.</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="card-img">
+          <img src="img/trucha-arcoiris.jpg" alt="Trucha arcoíris entera" loading="lazy" />
+          <span class="card-badge nuevo">Popular</span>
+        </div>
+        <div class="card-body">
+          <p class="card-cat"><i class="fa-solid fa-fish"></i> Pescados</p>
+          <h3>Trucha Arcoíris</h3>
+          <p>De criadero colombiano, fresca del día. Carne rosada, textura firme y bajo contenido graso.</p>
+          <div class="card-foot">
+            <span class="price">$22.000 <sub>/ kg</sub></span>
+            <span style="font-size:.78rem;color:var(--gray-mid);">Und.</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="card-img">
+          <img src="img/mojarra.jpg" alt="Mojarra fresca" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <p class="card-cat"><i class="fa-solid fa-fish"></i> Pescados</p>
+          <h3>Mojarra</h3>
+          <p>Pescado blanco de agua dulce, muy consumido en Colombia. Deliciosa frita con patacones.</p>
+          <div class="card-foot">
+            <span class="price">$12.800 <sub>/ kg</sub></span>
+            <span style="font-size:.78rem;color:var(--gray-mid);">Und.</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="card-img">
+          <img src="img/bagre.jpg" alt="Bagre fresco entero" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <p class="card-cat"><i class="fa-solid fa-fish"></i> Pescados</p>
+          <h3>Bagre</h3>
+          <p>Pez de río de carne blanca y firme. Muy apetecido en sancochos y frituras de río.</p>
+          <div class="card-foot">
+            <span class="price">$16.000 <sub>/ kg</sub></span>
+            <span style="font-size:.78rem;color:var(--gray-mid);">Und.</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="card-img">
+          <img src="img/atun-filete.jpg" alt="Filete de atún fresco" loading="lazy" />
+          <span class="card-badge">Fresco</span>
+        </div>
+        <div class="card-body">
+          <p class="card-cat"><i class="fa-solid fa-fish"></i> Pescados</p>
+          <h3>Atún en Filete</h3>
+          <p>Atún aleta amarilla fresco, corte grueso. Excepcional sellado en plancha o en tataki.</p>
+          <div class="card-foot">
+            <span class="price">$38.000 <sub>/ kg</sub></span>
+            <span style="font-size:.78rem;color:var(--gray-mid);">Min. 300g</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="card-img">
+          <img src="img/camaron.jpg" alt="Camarones frescos crudos" loading="lazy" />
+          <span class="card-badge nuevo">Nuevo</span>
+        </div>
+        <div class="card-body">
+          <p class="card-cat"><i class="fa-solid fa-shrimp"></i> Mariscos</p>
+          <h3>Camarones Frescos</h3>
+          <p>Camarón tigre mediano, pelado y desvenado. Listo para cóctel, arroz o pasta marina.</p>
+          <div class="card-foot">
+            <span class="price">$52.000 <sub>/ kg</sub></span>
+            <span style="font-size:.78rem;color:var(--gray-mid);">Min. 500g</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="card-img">
+          <img src="img/robalo.jpg" alt="Róbalo en filete fresco" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <p class="card-cat"><i class="fa-solid fa-fish"></i> Pescados</p>
+          <h3>Róbalo en Filete</h3>
+          <p>Pescado de mar de carne blanca y delicada. El preferido de los chefs para platos de autor.</p>
+          <div class="card-foot">
+            <span class="price">$44.000 <sub>/ kg</sub></span>
+            <span style="font-size:.78rem;color:var(--gray-mid);">Min. 400g</span>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ CTA MAYORISTAS ═══════════════════ -->
+<section class="cta-banner" style="padding:3.5rem 0;">
+  <div class="container">
+    <h2>¿Necesita cotizar en cantidad?</h2>
+    <p>Escribanos y le enviamos nuestra lista de precios mayoristas con descuentos por volumen.</p>
+    <div class="btn-group">
+      <a href="contacto.html" class="btn btn-outline">
+        <i class="fa-brands fa-whatsapp"></i> WhatsApp
+      </a>
+      <a href="contacto.html" class="btn btn-outline" style="border-color:rgba(255,255,255,.5);">
+        <i class="fa-solid fa-envelope"></i> Formulario de contacto
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="f-logo">
+          <div class="f-logo-mark"><i class="fa-solid fa-drumstick-bite"></i></div>
+          <strong>Provisión de la Sabana</strong>
+        </div>
+        <p>Su aliado de confianza en cárnicos frescos y abarrotes premium. Calidad garantizada desde hace más de 20 años en la región.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navegación</h4>
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="productos.html">Productos</a></li>
+          <li><a href="galeria.html">Galería</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Categorías</h4>
+        <ul>
+          <li><a href="#carnes">Carnes Rojas</a></li>
+          <li><a href="#aves">Aves</a></li>
+          <li><a href="#abarrotes">Abarrotes Premium</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contacto</h4>
+        <p>
+          <i class="fa-solid fa-location-dot" style="color:var(--burgundy-light);margin-right:.4rem;"></i>
+          Cra. 45 #12-30, Zipaquirá<br><br>
+          <i class="fa-solid fa-phone" style="color:var(--burgundy-light);margin-right:.4rem;"></i>
+          (601) 854-2200
+        </p>
+        <div class="social">
+          <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 Provisión de la Sabana. Todos los derechos reservados.</p>
+      <p>Diseño y desarrollo web — Ingeniería Web UMB</p>
+    </div>
+  </div>
+</footer>
+
+<button class="scroll-top" aria-label="Volver arriba">
+  <i class="fa-solid fa-chevron-up"></i>
+</button>
+
+<script src="js/main.js"></script>
+</body>
+</html>

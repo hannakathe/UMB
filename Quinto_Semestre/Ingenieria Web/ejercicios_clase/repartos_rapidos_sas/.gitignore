@@ -1,0 +1,101 @@
+# ─────────────────────────────────────────────
+#  Repartos Rápidos S.A.S — .gitignore
+# ─────────────────────────────────────────────
+
+# ── Python / Django ───────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Entornos virtuales
+venv/
+.venv/
+env/
+.env/
+
+# Variables de entorno (nunca al repo)
+.env
+.env.local
+.env.production
+# .env.example  ← este SÍ se sube (plantilla sin secretos)
+
+# Base de datos SQLite (si alguna vez se usa en dev)
+*.sqlite3
+db.sqlite3
+
+# Archivos de medios subidos por usuarios
+backend/media/
+
+# Archivos estáticos recolectados
+backend/staticfiles/
+
+# Logs de Django
+*.log
+logs/
+
+# Migraciones generadas (el equipo las genera con makemigrations)
+# Descomenta la siguiente línea SOLO si decides no versionar migraciones:
+# backend/apps/**/migrations/
+
+# ── Node.js / React ───────────────────────────
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Cache de Vite
+frontend/.cache/
+
+# ── Archivos de sistema operativo ────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ── IDEs y editores ───────────────────────────
+.idea/
+*.iml
+*.iws
+*.ipr
+.fleet/
+
+# VS Code (se sube solo si el equipo lo decide explícitamente)
+.vscode/
+# Si quieres compartir configuración de VS Code, comenta la línea anterior
+# y descomenta las siguientes:
+# !.vscode/settings.json
+# !.vscode/extensions.json
+# !.vscode/launch.json
+
+# Vim / Emacs
+*.swp
+*.swo
+*~
+\#*\#
+
+# ── Herramientas del proyecto ─────────────────
+# Configuración interna de Claude Code (no relevante para el repo)
+.claude/
+
+# Archivos de wireframes / documentos de referencia grandes
+# (se documentan en el README; no hace falta versionar los binarios)
+*.pdf
+*.html
+!frontend/index.html
+
+# Archivos temporales
+*.tmp
+*.temp
+.pytest_cache/
+.coverage
+htmlcov/
