@@ -6,11 +6,11 @@ app = Flask(__name__)
 # ---------------------------------------------------------------------------
 # Ejercicio 1 — GET /productos con paginacion
 # ---------------------------------------------------------------------------
+#crear DB de productos simulada
 productos_db = [
     {"id": i, "nombre": f"Producto {i}", "precio": round(i * 3.5, 2)}
     for i in range(1, 26)
-]
-
+] 
 
 @app.route("/productos", methods=["GET"])
 def listar_productos():
