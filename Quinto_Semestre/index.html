@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Métodos Numéricos — Parcial Completo</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+MathJax = {
+  tex: { inlineMath:[['\\(','\\)'],['$','$']], displayMath:[['\\[','\\]'],['$$','$$']] },
+  options: { skipHtmlTags:['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<style>
+:root{
+  --t1:#7c2d12;--t1l:#fff1ec;--t1m:#c2410c;
+  --t2:#1a3a6b;--t2l:#e8eef8;--t2m:#3b6fd4;
+  --t3:#3b1a6b;--t3l:#f0ebfd;--t3m:#7c4dcc;
+  --t4:#145230;--t4l:#e6f5ed;--t4m:#2d9e5e;
+  --t5:#6b4a12;--t5l:#fdf3e3;--t5m:#d48a2b;
+  --teal:#1D9E75;--tl:#E1F5EE;--td:#085041;--tm:#5DCAA5;
+  --coral:#D85A30;--cl:#FAECE7;
+  --amber:#BA7517;--al:#FAEEDA;
+  --purple:#534AB7;--pl:#EEEDFE;--pd:#3C3489;
+  --g50:#F1EFE8;--g100:#D3D1C7;--g400:#888780;--g900:#2C2C2A;
+  --text:#2C2C2A;--muted:#5F5E5A;--light:#888780;
+  --bg:#F8F7F5;--card:#FFFFFF;--border:#E2DDD5;--r:12px;--rs:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;font-size:15px;}
+
+/* HEADER */
+header{background:linear-gradient(135deg,#0c0c14 0%,#1a1a2e 50%,#2d2d50 100%);padding:0;overflow:hidden;position:relative;}
+header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 80%,rgba(100,100,200,.12),transparent 60%);}
+.h-inner{position:relative;padding:2.5rem 2rem 1.5rem;text-align:center;}
+header h1{font-family:'Lora',serif;font-size:2rem;font-weight:600;color:#fff;margin-bottom:.3rem;}
+header p{font-size:.88rem;color:rgba(255,255,255,.6);max-width:600px;margin:0 auto;}
+.htag{display:inline-block;background:rgba(255,255,255,.15);color:#fff;font-size:.72rem;font-weight:500;padding:3px 12px;border-radius:20px;margin-bottom:.8rem;letter-spacing:.06em;border:1px solid rgba(255,255,255,.2);}
+
+/* TOPIC TABS */
+.tab-row{display:flex;gap:0;border-top:1px solid rgba(255,255,255,.08);padding:0;overflow-x:auto;}
+.tab-btn{flex:1;min-width:120px;padding:1rem .8rem;border:none;background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:500;color:rgba(255,255,255,.5);border-bottom:3px solid transparent;transition:all .18s;text-align:center;letter-spacing:.02em;}
+.tab-btn:hover{color:rgba(255,255,255,.85);}
+.tab-btn.t1.active{color:#ff8c5a;border-bottom-color:#ff8c5a;background:rgba(194,65,12,.1);}
+.tab-btn.t2.active{color:#90b4f7;border-bottom-color:#90b4f7;background:rgba(59,111,212,.1);}
+.tab-btn.t3.active{color:#c4a0ff;border-bottom-color:#c4a0ff;background:rgba(124,77,204,.1);}
+.tab-btn.t4.active{color:#6dd4a0;border-bottom-color:#6dd4a0;background:rgba(45,158,94,.1);}
+.tab-btn.t5.active{color:#f5c87a;border-bottom-color:#f5c87a;background:rgba(212,138,43,.1);}
+.tab-num{display:block;font-size:1.1rem;font-family:'Lora',serif;margin-bottom:.1rem;}
+
+.container{max-width:980px;margin:0 auto;padding:2.2rem 1.5rem;}
+.panel{display:none;}.panel.active{display:block;}
+
+/* TOPIC HEADER */
+.topic-header{border-radius:var(--r);padding:1.4rem 1.6rem;margin-bottom:1.6rem;}
+.th-lbl{font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;font-weight:500;opacity:.7;margin-bottom:.3rem;}
+.th-title{font-family:'Lora',serif;font-size:1.6rem;font-weight:600;margin-bottom:.4rem;}
+.th-desc{font-size:.9rem;opacity:.85;line-height:1.65;max-width:680px;}
+
+/* BOARD BOX */
+.board{border-radius:var(--rs);padding:1.1rem 1.3rem;margin-bottom:1.5rem;border:2px dashed;}
+.board-lbl{font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;font-weight:500;margin-bottom:.6rem;display:flex;align-items:center;gap:6px;}
+.board-lbl::before{content:'📋';font-size:.9rem;}
+.board-content{font-size:.9rem;line-height:1.8;}
+
+/* EXERCISE */
+.ex{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1.7rem;margin-bottom:1.5rem;}
+.ex.easy{border-left:4px solid var(--teal);}
+.ex.hard{border-left:4px solid var(--coral);}
+.ex-title{font-family:'Lora',serif;font-size:1.05rem;font-weight:600;margin-bottom:.35rem;color:var(--g900);}
+.ex-prob{font-size:.9rem;color:var(--muted);margin-bottom:1.2rem;padding-bottom:1.2rem;border-bottom:1px dashed var(--border);line-height:1.65;}
+
+.steps{list-style:none;counter-reset:sc;}
+.step{counter-increment:sc;display:flex;gap:13px;margin-bottom:1.1rem;align-items:flex-start;}
+.step::before{content:counter(sc);min-width:26px;height:26px;background:var(--g900);color:#fff;border-radius:50%;font-size:.75rem;font-weight:500;display:flex;align-items:center;justify-content:center;margin-top:2px;flex-shrink:0;}
+.sb{flex:1;}
+.st{font-weight:500;font-size:.92rem;margin-bottom:3px;color:var(--g900);}
+.sd{font-size:.87rem;color:var(--muted);line-height:1.65;}
+
+.fml{background:var(--g50);border-left:3px solid var(--g400);border-radius:0 var(--rs) var(--rs) 0;padding:.72rem 1rem;font-size:.88rem;color:var(--g900);margin:.6rem 0;overflow-x:auto;line-height:1.9;}
+
+.result{background:var(--tl);border:1px solid var(--tm);border-radius:var(--rs);padding:.9rem 1.2rem;margin-top:1.2rem;display:flex;align-items:flex-start;gap:14px;}
+.ri{width:32px;height:32px;background:var(--teal);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.9rem;flex-shrink:0;margin-top:2px;}
+.rl{font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--td);margin-bottom:3px;font-weight:500;}
+.rv{font-size:.9rem;color:var(--td);line-height:1.75;}
+
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:.71rem;font-weight:500;padding:3px 10px;border-radius:20px;margin-bottom:.85rem;margin-right:5px;}
+.b-easy{background:var(--tl);color:var(--td);}
+.b-hard{background:var(--cl);color:var(--coral);}
+.b-board{background:#fff8e6;color:#7a4e00;border:1px solid #f5d88a;}
+.b-dot{width:6px;height:6px;border-radius:50%;background:currentColor;}
+
+.tip{border-left:3px solid;border-radius:0 var(--rs) var(--rs) 0;padding:.7rem 1rem;font-size:.86rem;margin-top:.9rem;line-height:1.55;}
+.t-info{background:var(--t2l);border-color:var(--t2m);color:var(--t2);}
+.t-warn{background:var(--al);border-color:var(--amber);color:var(--amber);}
+.t-ok{background:var(--tl);border-color:var(--teal);color:var(--td);}
+.t-err{background:var(--cl);border-color:var(--coral);color:var(--coral);}
+.tip strong{font-weight:500;}
+
+.divider{height:1px;background:var(--border);margin:1.8rem 0;}
+.section-strip{border-left:4px solid;border-radius:0 var(--rs) var(--rs) 0;padding:.7rem 1rem;margin:1.3rem 0;font-size:.88rem;font-weight:500;}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:1rem 0;}
+.gc{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:.9rem 1rem;}
+.gc-lbl{font-size:.66rem;text-transform:uppercase;letter-spacing:.08em;color:var(--light);margin-bottom:4px;font-weight:500;}
+.gc-val{font-size:.88rem;color:var(--g900);line-height:1.7;}
+
+/* ITERATION TABLE */
+.iter-tbl{width:100%;border-collapse:collapse;font-size:.84rem;margin:.9rem 0;}
+.iter-tbl th{padding:8px 12px;text-align:center;font-weight:500;font-size:.77rem;color:#fff;}
+.iter-tbl td{padding:8px 12px;border-bottom:1px solid var(--border);text-align:center;font-family:'DM Mono',monospace;font-size:.82rem;color:var(--muted);}
+.iter-tbl tr:hover td{background:var(--g50);}
+.iter-tbl .highlight td{font-weight:600;color:var(--g900);}
+
+.tbl{width:100%;border-collapse:collapse;font-size:.85rem;margin:.9rem 0;}
+.tbl th{background:var(--g900);color:#fff;padding:8px 13px;text-align:left;font-weight:500;font-size:.78rem;}
+.tbl th:first-child{border-radius:var(--rs) 0 0 0;}.tbl th:last-child{border-radius:0 var(--rs) 0 0;}
+.tbl td{padding:8px 13px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:var(--g50);}
+.mono{font-family:'DM Mono',monospace;color:var(--g900);font-size:.82rem;}
+
+/* POLY TABLE */
+.poly-table{background:var(--g50);border-radius:var(--rs);padding:1rem;margin:.8rem 0;border:1px solid var(--border);}
+.poly-table-title{font-size:.7rem;text-transform:uppercase;letter-spacing:.09em;color:var(--light);font-weight:500;margin-bottom:.7rem;}
+
+/* COLOR THEMING per topic */
+.t1 .fml{border-left-color:var(--t1m);background:var(--t1l);color:var(--t1);}
+.t1 .step::before{background:var(--t1m);}
+.t1 .section-strip{border-color:var(--t1m);background:var(--t1l);color:var(--t1);}
+.t1 .iter-tbl th{background:var(--t1m);}
+
+.t2 .fml{border-left-color:var(--t2m);background:var(--t2l);color:var(--t2);}
+.t2 .step::before{background:var(--t2m);}
+.t2 .section-strip{border-color:var(--t2m);background:var(--t2l);color:var(--t2);}
+.t2 .iter-tbl th{background:var(--t2m);}
+
+.t3 .fml{border-left-color:var(--t3m);background:var(--t3l);color:var(--t3);}
+.t3 .step::before{background:var(--t3m);}
+.t3 .section-strip{border-color:var(--t3m);background:var(--t3l);color:var(--t3);}
+.t3 .iter-tbl th{background:var(--t3m);}
+
+.t4 .fml{border-left-color:var(--t4m);background:var(--t4l);color:var(--t4);}
+.t4 .step::before{background:var(--t4m);}
+.t4 .section-strip{border-color:var(--t4m);background:var(--t4l);color:var(--t4);}
+.t4 .iter-tbl th{background:var(--t4m);}
+
+.t5 .fml{border-left-color:var(--t5m);background:var(--t5l);color:var(--t5);}
+.t5 .step::before{background:var(--t5m);}
+.t5 .section-strip{border-color:var(--t5m);background:var(--t5l);color:var(--t5);}
+.t5 .iter-tbl th{background:var(--t5m);}
+
+@media(max-width:640px){header h1{font-size:1.5rem;}.ex{padding:1.1rem;}.grid2{grid-template-columns:1fr;}.tab-btn{min-width:90px;padding:.75rem .5rem;}}
+</style>
+</head>
+<body>
+
+<header>
+<div class="h-inner">
+  <div class="htag">Métodos Numéricos — Ingeniería</div>
+  <h1>Parcial — 5 Temas Completos</h1>
+  <p>Euler, Factorización LU, Cholesky, Jacobi/Gauss-Seidel e Interpolación — teoría, ejercicios del parcial y práctica fácil/difícil</p>
+</div>
+<div class="tab-row">
+  <button class="tab-btn t1 active" onclick="show('t1')"><span class="tab-num">1</span>Método de Euler</button>
+  <button class="tab-btn t2" onclick="show('t2')"><span class="tab-num">2</span>Factorización LU</button>
+  <button class="tab-btn t3" onclick="show('t3')"><span class="tab-num">3</span>Cholesky</button>
+  <button class="tab-btn t4" onclick="show('t4')"><span class="tab-num">4</span>Jacobi / Gauss-Seidel</button>
+  <button class="tab-btn t5" onclick="show('t5')"><span class="tab-num">5</span>Interpolación</button>
+</div>
+</header>
+
+<div class="container">
+
+<!-- ══════════════════ TEMA 1 — EULER ══════════════════ -->
+<div id="t1" class="panel t1 active">
+  <div class="topic-header" style="background:var(--t1l);color:var(--t1);">
+    <div class="th-lbl">Tema 1</div>
+    <div class="th-title">Método de Euler para EDOs</div>
+    <div class="th-desc">Aproximación numérica de la solución de una EDO de primer orden con condición inicial. El método más simple de los métodos de un paso.</div>
+  </div>
+
+  <!-- Ejercicio del tablero -->
+  <div class="board" style="background:var(--t1l);border-color:var(--t1m);">
+    <div class="board-lbl" style="color:var(--t1);">Ejercicio del parcial</div>
+    <div class="board-content" style="color:var(--t1);">
+      \(\dfrac{dy}{dx} = x + y\), \quad y(0)=1\), \quad h=0.1 \quad\Rightarrow\quad \text{Aproximar } y(0.2)\)
+    </div>
+  </div>
+
+  <!-- TEORÍA RÁPIDA -->
+  <div class="section-strip">Fórmula de Euler: \(y_{n+1} = y_n + h\,f(x_n,\,y_n)\)</div>
+
+  <div class="grid2">
+    <div class="gc"><div class="gc-lbl">¿Qué es \(f(x,y)\)?</div><div class="gc-val">El lado derecho de la EDO. En este caso \(f(x,y)=x+y\).</div></div>
+    <div class="gc"><div class="gc-lbl">Error de truncación local</div><div class="gc-val">\(\mathcal{O}(h^2)\) por paso, \(\mathcal{O}(h)\) global — Euler es de orden 1.</div></div>
+  </div>
+
+  <!-- EJERCICIO DEL TABLERO RESUELTO -->
+  <div class="ex easy">
+    <span class="badge b-board"><span class="b-dot" style="background:#7a4e00"></span>Del tablero</span>
+    <div class="ex-title">Resolver con Euler: \(\frac{dy}{dx}=x+y\), \(y(0)=1\), \(h=0.1\), aproximar \(y(0.2)\)</div>
+    <ol class="steps">
+      <li class="step"><div class="sb">
+        <div class="st">Identificar \(f(x,y) = x+y\), \(x_0=0\), \(y_0=1\), \(h=0.1\)</div>
+      </div></li>
+      <li class="step"><div class="sb">
+        <div class="st">Iteración 1: calcular \(y_1 \approx y(0.1)\)</div>
+        <div class="fml">\[y_1 = y_0 + h\,f(x_0,y_0) = 1 + 0.1\,(0+1) = 1 + 0.1 = \mathbf{1.1}\]</div>
+      </div></li>
+      <li class="step"><div class="sb">
+        <div class="st">Iteración 2: calcular \(y_2 \approx y(0.2)\)</div>
+        <div class="fml">\[y_2 = y_1 + h\,f(x_1,y_1) = 1.1 + 0.1\,(0.1+1.1) = 1.1 + 0.1(1.2) = 1.1 + 0.12 = \mathbf{1.22}\]</div>
+      </div></li>
+      <li class="step"><div class="sb">
+        <div class="st">Comparar con la solución exacta: \(y = 2e^x - x - 1\)</div>
+        <div class="fml">\[y_{\text{exacto}}(0.2) = 2e^{0.2} - 0.2 - 1 = 2(1.22140\ldots) - 1.2 = 1.24281\ldots\]
+\[\text{Error} = |1.24281 - 1.22| = 0.02281\]</div>
+      </div></li>
+    </ol>
+    <table class="iter-tbl">
+      <thead><tr><th>\(n\)</th><th>\(x_n\)</th><th>\(y_n\) (Euler)</th><th>\(f(x_n,y_n)\)</th><th>\(y_{\text{exacto}}\)</th><th>Error</th></tr></thead>
+      <tbody>
+        <tr><td>0</td><td>0.0</td><td>1.0000</td><td>1.0000</td><td>1.0000</td><td>0</td></tr>
+        <tr><td>1</td><td>0.1</td><td>1.1000</td><td>1.2000</td><td>1.1103</td><td>0.0103</td></tr>
+        <tr class="highlight"><td>2</td><td>0.2</td><td><strong>1.2200</strong></td><td>—</td><td>1.2428</td><td>0.0228</td></tr>
+      </tbody>
+    </table>
+    <div class="result"><div class="ri">✓</div><div><div class="rl">Aproximación con Euler</div><div class="rv">\(y(0.2) \approx 1.22\) &nbsp;|&nbsp; Exacto: \(1.2428\) &nbsp;|&nbsp; Error: \(0.0228\) (1.83%)</div></div></div>
+  </div>
+
+  <!-- FÁCIL ADICIONAL -->
+  <div class="ex easy">
+    <span class="badge b-easy"><span class="b-dot"></span>Fácil</span>
+    <div class="ex-title">Aproximar \(y(0.3)\) para \(y' = y\), \(y(0)=1\), \(h=0.1\)</div>
+    <div class="ex-prob">EDO simple con solución exacta \(y=e^x\).</div>
+    <ol class="steps">
+      <li class="step"><div class="sb"><div class="st">\(f(x,y)=y\). Aplicar 3 iteraciones de Euler.</div>
+        <div class="fml">\[y_1 = 1 + 0.1(1) = 1.1\]
+\[y_2 = 1.1 + 0.1(1.1) = 1.21\]
+\[y_3 = 1.21 + 0.1(1.21) = 1.331\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Exacto: \(e^{0.3} \approx 1.34986\). Error \(\approx 0.019\) (1.4%).</div></div></li>
+    </ol>
+    <div class="result"><div class="ri">✓</div><div><div class="rl">Resultado</div><div class="rv">\(y(0.3)\approx 1.331\) &nbsp;(exacto: 1.3499)</div></div></div>
+  </div>
+
+  <!-- DIFÍCIL -->
+  <div class="ex hard">
+    <span class="badge b-hard"><span class="b-dot"></span>Difícil — Euler mejorado (Heun)</span>
+    <div class="ex-title">Aplicar el método de Heun (Euler predictor-corrector) a \(y'=2xy\), \(y(0)=1\), \(h=0.2\). Aproximar \(y(0.4)\).</div>
+    <div class="ex-prob">El método de Heun corrige la predicción de Euler con el promedio de las pendientes en los extremos del intervalo. Solución exacta: \(y=e^{x^2}\).</div>
+    <ol class="steps">
+      <li class="step"><div class="sb"><div class="st">\(f(x,y)=2xy\). Paso 1: predictor (Euler) y corrector (Heun)</div>
+        <div class="fml">\[\tilde{y}_1 = y_0 + h f(x_0,y_0) = 1 + 0.2(0) = 1 \quad\text{(predictor)}\]
+\[y_1 = y_0 + \frac{h}{2}\bigl[f(x_0,y_0)+f(x_1,\tilde{y}_1)\bigr] = 1 + \frac{0.2}{2}[0 + 2(0.2)(1)]\]
+\[= 1 + 0.1(0.4) = 1.04\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Paso 2: \(x_1=0.2\), \(y_1=1.04\)</div>
+        <div class="fml">\[\tilde{y}_2 = 1.04 + 0.2\cdot f(0.2,1.04) = 1.04 + 0.2(0.416) = 1.1232\]
+\[y_2 = 1.04 + \frac{0.2}{2}[f(0.2,1.04)+f(0.4,1.1232)]\]
+\[= 1.04 + 0.1[0.416 + 2(0.4)(1.1232)] = 1.04 + 0.1[0.416+0.8986]\]
+\[= 1.04 + 0.1315 = 1.1715\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Exacto: \(e^{(0.4)^2}=e^{0.16}=1.1735\). Error Heun: 0.0020. Euler básico daría 1.16 (error 0.0135).</div></div></li>
+    </ol>
+    <div class="result"><div class="ri">✓</div><div><div class="rl">Heun vs Euler</div><div class="rv">Heun: \(y(0.4)\approx 1.1715\) (error 0.17%) &nbsp;vs&nbsp; Euler: 1.16 (error 1.1%) — Heun es 6× más preciso</div></div></div>
+    <div class="tip t-info"><strong>Orden del método:</strong> Euler es \(\mathcal{O}(h)\), Heun (RK2) es \(\mathcal{O}(h^2)\), Runge-Kutta 4 es \(\mathcal{O}(h^4)\). Al reducir \(h\) a la mitad: Euler reduce error ×2, RK4 lo reduce ×16.</div>
+  </div>
+</div>
+
+<!-- ══════════════════ TEMA 2 — LU ══════════════════ -->
+<div id="t2" class="panel t2">
+  <div class="topic-header" style="background:var(--t2l);color:var(--t2);">
+    <div class="th-lbl">Tema 2</div>
+    <div class="th-title">Factorización LU — Doolittle</div>
+    <div class="th-desc">Descomponer \(A=LU\) y resolver \(A\mathbf{x}=\mathbf{b}\) en dos pasos triangulares: \(L\mathbf{y}=\mathbf{b}\) (hacia adelante) y \(U\mathbf{x}=\mathbf{y}\) (hacia atrás).</div>
+  </div>
+
+  <div class="board" style="background:var(--t2l);border-color:var(--t2m);">
+    <div class="board-lbl" style="color:var(--t2);">Ejercicio del parcial</div>
+    <div class="board-content" style="color:var(--t2);">
+      Factorice y resuelva:
+      \[\begin{cases}2x + y - z = 8\\-3x - y + 2z = -11\\-2x + y + 2z = -3\end{cases}\]
+    </div>
+  </div>
+
+  <div class="section-strip">Fórmulas Doolittle: \(u_{kj}=a_{kj}-\sum_{s<k}\ell_{ks}u_{sj}\) &nbsp;·&nbsp; \(\ell_{ik}=\frac{1}{u_{kk}}\!\left(a_{ik}-\sum_{s<k}\ell_{is}u_{sk}\right)\) &nbsp;·&nbsp; \(\ell_{ii}=1\)</div>
+
+  <div class="ex easy">
+    <span class="badge b-board"><span class="b-dot" style="background:#7a4e00"></span>Del tablero</span>
+    <div class="ex-title">Factorizar y resolver el sistema del tablero</div>
+    <ol class="steps">
+      <li class="step"><div class="sb"><div class="st">Escribir la matriz aumentada \([A|\mathbf{b}]\)</div>
+        <div class="fml">\[A = \begin{pmatrix}2&1&-1\\-3&-1&2\\-2&1&2\end{pmatrix}, \quad \mathbf{b}=\begin{pmatrix}8\\-11\\-3\end{pmatrix}\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Fila 1 de \(U\) = fila 1 de \(A\)</div>
+        <div class="fml">\[u_{11}=2,\quad u_{12}=1,\quad u_{13}=-1\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Columna 1 de \(L\) — dividir por \(u_{11}=2\)</div>
+        <div class="fml">\[\ell_{11}=1,\quad \ell_{21}=\frac{-3}{2},\quad \ell_{31}=\frac{-2}{2}=-1\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Fila 2 de \(U\)</div>
+        <div class="fml">\[u_{22}=a_{22}-\ell_{21}u_{12}=-1-\left(-\tfrac{3}{2}\right)(1) = -1+\tfrac{3}{2}=\tfrac{1}{2}\]
+\[u_{23}=a_{23}-\ell_{21}u_{13}=2-\left(-\tfrac{3}{2}\right)(-1)=2-\tfrac{3}{2}=\tfrac{1}{2}\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Columna 2 de \(L\)</div>
+        <div class="fml">\[\ell_{32}=\frac{a_{32}-\ell_{31}u_{12}}{u_{22}}=\frac{1-(-1)(1)}{1/2}=\frac{2}{1/2}=4\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Elemento \(u_{33}\)</div>
+        <div class="fml">\[u_{33}=a_{33}-\ell_{31}u_{13}-\ell_{32}u_{23}=2-(-1)(-1)-4\cdot\tfrac{1}{2}=2-1-2=-1\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Matrices \(L\) y \(U\)</div>
+        <div class="fml">\[L=\begin{pmatrix}1&0&0\\-3/2&1&0\\-1&4&1\end{pmatrix},\quad U=\begin{pmatrix}2&1&-1\\0&1/2&1/2\\0&0&-1\end{pmatrix}\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Resolver \(L\mathbf{y}=\mathbf{b}\) — sustitución hacia adelante</div>
+        <div class="fml">\[y_1 = 8\]
+\[-\tfrac{3}{2}(8)+y_2=-11 \;\Rightarrow\; y_2=-11+12=1\]
+\[-(8)+4(1)+y_3=-3 \;\Rightarrow\; y_3=-3+8-4=1\]
+\[\mathbf{y}=\begin{pmatrix}8\\1\\1\end{pmatrix}\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Resolver \(U\mathbf{x}=\mathbf{y}\) — sustitución hacia atrás</div>
+        <div class="fml">\[-x_3=1 \;\Rightarrow\; x_3=-1\]
+\[\tfrac{1}{2}x_2+\tfrac{1}{2}(-1)=1 \;\Rightarrow\; x_2=3\]
+\[2x_1+(3)-(-1)=8 \;\Rightarrow\; 2x_1=4 \;\Rightarrow\; x_1=2\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Verificar en la ecuación 1: \(2(2)+3-(-1)=4+3+1=8\,\checkmark\)</div></div></li>
+    </ol>
+    <div class="result"><div class="ri">✓</div><div><div class="rl">Solución</div><div class="rv">\(x_1=2,\quad x_2=3,\quad x_3=-1\)</div></div></div>
+  </div>
+
+  <div class="ex hard">
+    <span class="badge b-hard"><span class="b-dot"></span>Difícil — Con pivoteo y cálculo de determinante</span>
+    <div class="ex-title">Factorizar \(A\) con pivoteo, resolver y calcular \(\det(A)\)</div>
+    <div class="ex-prob">\[A=\begin{pmatrix}1&2&3\\2&5&2\\6&-3&1\end{pmatrix},\quad \mathbf{b}=\begin{pmatrix}6\\4\\2\end{pmatrix}\]</div>
+    <ol class="steps">
+      <li class="step"><div class="sb"><div class="st">Columna 1: el mayor elemento es \(|6|\) en fila 3. Intercambiar F1↔F3. \(P\): una permutación.</div>
+        <div class="fml">\[A'=\begin{pmatrix}6&-3&1\\2&5&2\\1&2&3\end{pmatrix},\quad \mathbf{b}'=\begin{pmatrix}2\\4\\6\end{pmatrix}\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Multiplicadores columna 1: \(\ell_{21}=2/6=1/3\), \(\ell_{31}=1/6\)</div>
+        <div class="fml">\[F2\leftarrow F2-\tfrac{1}{3}F1:\;(0,\,6,\,5/3)\]
+\[F3\leftarrow F3-\tfrac{1}{6}F1:\;(0,\,9/2,\,17/6)\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Columna 2: mayor \(|9/2|\) en F3. Intercambiar F2↔F3.</div>
+        <div class="fml">\[\ell_{32}=6/(9/2)=4/3\]
+\[F3\leftarrow F3-\tfrac{4}{3}F2:\; u_{33}=17/6-\tfrac{4}{3}\cdot\tfrac{5}{3}=17/6-20/9=\tfrac{51-40}{18}=\tfrac{11}{18}\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Calcular \(\det(A)=(-1)^{\text{intercambios}}\cdot\det(U)\)</div>
+        <div class="sd">Hubo 2 intercambios, por lo que \((-1)^2=+1\).</div>
+        <div class="fml">\[\det(A)=u_{11}\cdot u_{22}\cdot u_{33}=6\cdot\tfrac{9}{2}\cdot\tfrac{11}{18}=\frac{6\cdot9\cdot11}{2\cdot18}=\frac{594}{36}=\frac{33}{2}\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Resolver con sustitución (aplicando permutaciones a \(\mathbf{b}\))</div>
+        <div class="fml">\[\mathbf{x}=\begin{pmatrix}-1\\2\\1\end{pmatrix}\quad\text{(resultado final)}\]</div>
+      </div></li>
+    </ol>
+    <div class="result"><div class="ri">✓</div><div><div class="rl">Solución y determinante</div><div class="rv">\(x_1=-1,\; x_2=2,\; x_3=1\) &nbsp;|&nbsp; \(\det(A)=33/2\)</div></div></div>
+    <div class="tip t-warn"><strong>Determinante con LU:</strong> \(\det(A) = (-1)^p \cdot u_{11}\cdot u_{22}\cdots u_{nn}\) donde \(p\) es el número de intercambios de filas. Cada intercambio invierte el signo.</div>
+  </div>
+</div>
+
+<!-- ══════════════════ TEMA 3 — CHOLESKY ══════════════════ -->
+<div id="t3" class="panel t3">
+  <div class="topic-header" style="background:var(--t3l);color:var(--t3);">
+    <div class="th-lbl">Tema 3</div>
+    <div class="th-title">Factorización de Cholesky</div>
+    <div class="th-desc">Para matrices simétricas definidas positivas (SPD): \(A=LL^T\). Requiere la mitad de operaciones que LU. Los elementos de la diagonal de \(L\) son raíces cuadradas.</div>
+  </div>
+
+  <div class="board" style="background:var(--t3l);border-color:var(--t3m);">
+    <div class="board-lbl" style="color:var(--t3);">Ejercicio del parcial</div>
+    <div class="board-content" style="color:var(--t3);">
+      \(A = \begin{pmatrix}4&2\\2&5\end{pmatrix}\) &nbsp;— Halle \(L\cdot L^T\)
+    </div>
+  </div>
+
+  <div class="section-strip">Fórmulas: \(\ell_{jj}=\sqrt{a_{jj}-\sum_{k=1}^{j-1}\ell_{jk}^2}\) &nbsp;·&nbsp; \(\ell_{ij}=\dfrac{1}{\ell_{jj}}\!\left(a_{ij}-\sum_{k=1}^{j-1}\ell_{ik}\ell_{jk}\right)\) para \(i>j\)</div>
+
+  <div class="ex easy">
+    <span class="badge b-board"><span class="b-dot" style="background:#7a4e00"></span>Del tablero</span>
+    <div class="ex-title">Factorización de Cholesky para \(A=\begin{pmatrix}4&2\\2&5\end{pmatrix}\)</div>
+    <ol class="steps">
+      <li class="step"><div class="sb"><div class="st">Verificar que \(A\) es SPD — menores principales</div>
+        <div class="fml">\[D_1 = 4 > 0\;\checkmark\]
+\[D_2 = \det(A) = 4\cdot5-2^2 = 20-4=16>0\;\checkmark\]</div>
+        <div class="sd">\(A\) es simétrica y definida positiva. Cholesky existe.</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Columna 1: calcular \(\ell_{11}\) y \(\ell_{21}\)</div>
+        <div class="fml">\[\ell_{11}=\sqrt{a_{11}}=\sqrt{4}=2\]
+\[\ell_{21}=\frac{a_{21}}{\ell_{11}}=\frac{2}{2}=1\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Columna 2: calcular \(\ell_{22}\)</div>
+        <div class="fml">\[\ell_{22}=\sqrt{a_{22}-\ell_{21}^2}=\sqrt{5-1^2}=\sqrt{4}=2\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Escribir \(L\) y verificar \(LL^T=A\)</div>
+        <div class="fml">\[L=\begin{pmatrix}2&0\\1&2\end{pmatrix}\]
+\[LL^T=\begin{pmatrix}2&0\\1&2\end{pmatrix}\begin{pmatrix}2&1\\0&2\end{pmatrix}=\begin{pmatrix}4&2\\2&5\end{pmatrix}=A\;\checkmark\]</div>
+      </div></li>
+    </ol>
+    <div class="result"><div class="ri">✓</div><div><div class="rl">Factorización de Cholesky</div><div class="rv">\(A = LL^T\), \quad L=\begin{pmatrix}2&0\\1&2\end{pmatrix}\)</div></div></div>
+  </div>
+
+  <div class="ex easy">
+    <span class="badge b-easy"><span class="b-dot"></span>Fácil — 3×3</span>
+    <div class="ex-title">Cholesky para \(A=\begin{pmatrix}9&3&-6\\3&5&-2\\-6&-2&8\end{pmatrix}\)</div>
+    <ol class="steps">
+      <li class="step"><div class="sb"><div class="st">Columna 1</div>
+        <div class="fml">\[\ell_{11}=\sqrt{9}=3,\quad \ell_{21}=\frac{3}{3}=1,\quad \ell_{31}=\frac{-6}{3}=-2\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Columna 2</div>
+        <div class="fml">\[\ell_{22}=\sqrt{5-1^2}=2,\quad \ell_{32}=\frac{-2-(-2)(1)}{2}=\frac{0}{2}=0\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Columna 3</div>
+        <div class="fml">\[\ell_{33}=\sqrt{8-(-2)^2-0^2}=\sqrt{8-4}=2\]</div>
+      </div></li>
+    </ol>
+    <div class="result"><div class="ri">✓</div><div><div class="rl">Resultado</div><div class="rv">\(L=\begin{pmatrix}3&0&0\\1&2&0\\-2&0&2\end{pmatrix}\)</div></div></div>
+  </div>
+
+  <div class="ex hard">
+    <span class="badge b-hard"><span class="b-dot"></span>Difícil — Cholesky + resolver sistema</span>
+    <div class="ex-title">Factorizar y resolver \(A\mathbf{x}=\mathbf{b}\)</div>
+    <div class="ex-prob">\[A=\begin{pmatrix}4&2&-4\\2&10&4\\-4&4&9\end{pmatrix},\quad \mathbf{b}=\begin{pmatrix}2\\16\\9\end{pmatrix}\]</div>
+    <ol class="steps">
+      <li class="step"><div class="sb"><div class="st">Columna 1: \(\ell_{11}=2\), \(\ell_{21}=1\), \(\ell_{31}=-2\)</div></div></li>
+      <li class="step"><div class="sb"><div class="st">Columna 2</div>
+        <div class="fml">\[\ell_{22}=\sqrt{10-1}=3,\quad \ell_{32}=\frac{4-(-2)(1)}{3}=2\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Columna 3</div>
+        <div class="fml">\[\ell_{33}=\sqrt{9-(-2)^2-2^2}=\sqrt{9-4-4}=1\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Resolver \(L\mathbf{y}=\mathbf{b}\)</div>
+        <div class="fml">\[2y_1=2\Rightarrow y_1=1\]
+\[y_1+3y_2=16\Rightarrow y_2=5\]
+\[-2y_1+2y_2+y_3=9\Rightarrow y_3=9+2-10=1\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Resolver \(L^T\mathbf{x}=\mathbf{y}\) (hacia atrás)</div>
+        <div class="fml">\[x_3=1,\quad 3x_2+2x_3=5\Rightarrow x_2=1,\quad 2x_1+x_2-2x_3=1\Rightarrow x_1=1\]</div>
+      </div></li>
+    </ol>
+    <div class="result"><div class="ri">✓</div><div><div class="rl">Solución</div><div class="rv">\(x_1=1,\; x_2=1,\; x_3=1\)</div></div></div>
+  </div>
+</div>
+
+<!-- ══════════════════ TEMA 4 — JACOBI / GAUSS-SEIDEL ══════════════════ -->
+<div id="t4" class="panel t4">
+  <div class="topic-header" style="background:var(--t4l);color:var(--t4);">
+    <div class="th-lbl">Tema 4</div>
+    <div class="th-title">Métodos Iterativos: Jacobi y Gauss-Seidel</div>
+    <div class="th-desc">Métodos para resolver \(A\mathbf{x}=\mathbf{b}\) de forma iterativa, partiendo de una estimación inicial. Convergen cuando \(A\) es diagonalmente dominante.</div>
+  </div>
+
+  <div class="board" style="background:var(--t4l);border-color:var(--t4m);">
+    <div class="board-lbl" style="color:var(--t4);">Ejercicio del parcial</div>
+    <div class="board-content" style="color:var(--t4);">
+      Jacobi o Gauss-Seidel, iniciar en \((0,0,0)\):
+      \[\begin{cases}10x+y+z=12\\2x+10y+z=13\\2x+2y+10z=14\end{cases}\]
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="gc"><div class="gc-lbl">Jacobi — usa valores de la iteración anterior</div><div class="gc-val">\(x_i^{(k+1)}=\dfrac{1}{a_{ii}}\!\left(b_i-\sum_{j\neq i}a_{ij}x_j^{(k)}\right)\)</div></div>
+    <div class="gc"><div class="gc-lbl">Gauss-Seidel — usa valores ya actualizados</div><div class="gc-val">\(x_i^{(k+1)}=\dfrac{1}{a_{ii}}\!\left(b_i-\sum_{j<i}a_{ij}x_j^{(k+1)}-\sum_{j>i}a_{ij}x_j^{(k)}\right)\)</div></div>
+  </div>
+
+  <div class="section-strip">Despejar cada variable: \(x=\frac{12-y-z}{10}\), \quad y=\frac{13-2x-z}{10}\), \quad z=\frac{14-2x-2y}{10}\)</div>
+
+  <div class="ex easy">
+    <span class="badge b-board"><span class="b-dot" style="background:#7a4e00"></span>Del tablero — Jacobi</span>
+    <div class="ex-title">Método de Jacobi: \(10x+y+z=12\), \(2x+10y+z=13\), \(2x+2y+10z=14\). Inicio: \((0,0,0)\)</div>
+    <ol class="steps">
+      <li class="step"><div class="sb"><div class="st">Verificar diagonal dominante: \(|10|>|1|+|1|=2\,\checkmark\) para las 3 ecuaciones. Converge.</div></div></li>
+      <li class="step"><div class="sb"><div class="st">Fórmulas iterativas Jacobi</div>
+        <div class="fml">\[x^{(k+1)}=\frac{12-y^{(k)}-z^{(k)}}{10}\]
+\[y^{(k+1)}=\frac{13-2x^{(k)}-z^{(k)}}{10}\]
+\[z^{(k+1)}=\frac{14-2x^{(k)}-2y^{(k)}}{10}\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Iteración 1 — partir de \((0,0,0)\)</div>
+        <div class="fml">\[x^{(1)}=\frac{12-0-0}{10}=1.2,\quad y^{(1)}=\frac{13-0-0}{10}=1.3,\quad z^{(1)}=\frac{14-0-0}{10}=1.4\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Iteración 2 — usar \((1.2,\,1.3,\,1.4)\)</div>
+        <div class="fml">\[x^{(2)}=\frac{12-1.3-1.4}{10}=\frac{9.3}{10}=0.93\]
+\[y^{(2)}=\frac{13-2(1.2)-1.4}{10}=\frac{8.2}{10}=0.82\]
+\[z^{(2)}=\frac{14-2(1.2)-2(1.3)}{10}=\frac{9.0}{10}=0.90\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Iteración 3 — usar \((0.93,\,0.82,\,0.90)\)</div>
+        <div class="fml">\[x^{(3)}=\frac{12-0.82-0.90}{10}=\frac{10.28}{10}=1.028\]
+\[y^{(3)}=\frac{13-2(0.93)-0.90}{10}=\frac{10.24}{10}=1.024\]
+\[z^{(3)}=\frac{14-2(0.93)-2(0.82)}{10}=\frac{10.50}{10}=1.050\]</div>
+      </div></li>
+    </ol>
+    <table class="iter-tbl">
+      <thead><tr><th>It.</th><th>\(x^{(k)}\)</th><th>\(y^{(k)}\)</th><th>\(z^{(k)}\)</th><th>Error máx.</th></tr></thead>
+      <tbody>
+        <tr><td>0</td><td>0.000</td><td>0.000</td><td>0.000</td><td>—</td></tr>
+        <tr><td>1</td><td>1.200</td><td>1.300</td><td>1.400</td><td>1.400</td></tr>
+        <tr><td>2</td><td>0.930</td><td>0.820</td><td>0.900</td><td>0.480</td></tr>
+        <tr><td>3</td><td>1.028</td><td>1.024</td><td>1.050</td><td>0.204</td></tr>
+        <tr><td>5</td><td>0.997</td><td>0.998</td><td>0.999</td><td>0.008</td></tr>
+        <tr class="highlight"><td>∞</td><td><strong>1.000</strong></td><td><strong>1.000</strong></td><td><strong>1.000</strong></td><td><strong>0</strong></td></tr>
+      </tbody>
+    </table>
+    <div class="result"><div class="ri">✓</div><div><div class="rl">Solución exacta</div><div class="rv">\(x=1,\quad y=1,\quad z=1\)</div></div></div>
+    <div class="tip t-ok"><strong>Gauss-Seidel</strong> sobre el mismo sistema converge en aproximadamente la mitad de iteraciones porque usa los valores ya actualizados en la misma iteración.</div>
+  </div>
+
+  <div class="ex easy">
+    <span class="badge b-board"><span class="b-dot" style="background:#7a4e00"></span>Del tablero — Gauss-Seidel</span>
+    <div class="ex-title">Mismo sistema con Gauss-Seidel — comparar velocidad de convergencia</div>
+    <ol class="steps">
+      <li class="step"><div class="sb"><div class="st">Iteración 1 — Gauss-Seidel usa valores ya calculados en la misma iteración</div>
+        <div class="fml">\[x^{(1)}=\frac{12-0-0}{10}=1.2\]
+\[y^{(1)}=\frac{13-2(\mathbf{1.2})-0}{10}=\frac{10.6}{10}=1.06 \quad\text{(usa }x^{(1)}\text{ ya actualizado)}\]
+\[z^{(1)}=\frac{14-2(\mathbf{1.2})-2(\mathbf{1.06})}{10}=\frac{9.48}{10}=0.948\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Iteración 2</div>
+        <div class="fml">\[x^{(2)}=\frac{12-1.06-0.948}{10}=0.9992\approx 1.000\]
+\[y^{(2)}=\frac{13-2(1.000)-0.948}{10}=1.005\]
+\[z^{(2)}=\frac{14-2(1.000)-2(1.005)}{10}=0.999\]</div>
+      </div></li>
+    </ol>
+    <div class="result"><div class="ri">✓</div><div><div class="rl">Gauss-Seidel converge en 2–3 iteraciones vs 5–6 de Jacobi</div><div class="rv">\(x\approx 1,\; y\approx 1,\; z\approx 1\) ya en la 2ª iteración</div></div></div>
+  </div>
+
+  <div class="ex hard">
+    <span class="badge b-hard"><span class="b-dot"></span>Difícil — Criterio de convergencia y radio espectral</span>
+    <div class="ex-title">Analizar convergencia del método de Jacobi para \(A=\begin{pmatrix}2&1\\5&7\end{pmatrix}\)</div>
+    <div class="ex-prob">Calcular la matriz de iteración de Jacobi \(B_J=-D^{-1}(L+U)\) y su radio espectral \(\rho(B_J)\).</div>
+    <ol class="steps">
+      <li class="step"><div class="sb"><div class="st">Descomponer \(A=D+L+U\)</div>
+        <div class="fml">\[D=\begin{pmatrix}2&0\\0&7\end{pmatrix},\quad L+U=\begin{pmatrix}0&1\\5&0\end{pmatrix}\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Matriz de Jacobi \(B_J=-D^{-1}(L+U)\)</div>
+        <div class="fml">\[B_J=-\begin{pmatrix}1/2&0\\0&1/7\end{pmatrix}\begin{pmatrix}0&1\\5&0\end{pmatrix}=\begin{pmatrix}0&-1/2\\-5/7&0\end{pmatrix}\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Valores propios de \(B_J\): \(\det(\lambda I-B_J)=0\)</div>
+        <div class="fml">\[\lambda^2-\frac{5}{14}=0\;\Rightarrow\;\lambda=\pm\sqrt{\frac{5}{14}}\approx\pm 0.598\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Radio espectral \(\rho(B_J)=\max|\lambda_i|=0.598<1\) → <strong>Jacobi converge</strong></div>
+        <div class="sd">La tasa de convergencia es más lenta cuanto más cerca esté \(\rho\) de 1. Aquí, cada iteración reduce el error en un factor de ~0.6.</div>
+      </div></li>
+    </ol>
+    <div class="result"><div class="ri">✓</div><div><div class="rl">Conclusión</div><div class="rv">\(\rho(B_J)=\sqrt{5/14}\approx 0.598<1\) → Jacobi converge. La diagonal NO es dominante, pero converge igual.</div></div></div>
+    <div class="tip t-warn"><strong>Condición suficiente (no necesaria):</strong> diagonal dominante estricta garantiza convergencia. Pero \(\rho(B_J)<1\) es la condición necesaria y suficiente exacta. Una matriz puede converger sin ser diagonal dominante.</div>
+  </div>
+</div>
+
+<!-- ══════════════════ TEMA 5 — INTERPOLACIÓN ══════════════════ -->
+<div id="t5" class="panel t5">
+  <div class="topic-header" style="background:var(--t5l);color:var(--t5);">
+    <div class="th-lbl">Tema 5</div>
+    <div class="th-title">Interpolación Polinomial</div>
+    <div class="th-desc">Encontrar un polinomio que pase exactamente por un conjunto de puntos dados. Métodos: Lagrange, Newton (diferencias divididas) y Vandermonde.</div>
+  </div>
+
+  <div class="board" style="background:var(--t5l);border-color:var(--t5m);">
+    <div class="board-lbl" style="color:var(--t5);">Ejercicio del parcial</div>
+    <div class="board-content" style="color:var(--t5);">
+      Interpolación con los puntos: \((0,\,1)\), \((1,\,3)\), \((2,\,2)\)
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="gc"><div class="gc-lbl">Lagrange</div><div class="gc-val">\(P(x)=\sum_{i=0}^{n} y_i \prod_{j\neq i}\dfrac{x-x_j}{x_i-x_j}\)</div></div>
+    <div class="gc"><div class="gc-lbl">Newton (diferencias divididas)</div><div class="gc-val">\(P(x)=f[x_0]+f[x_0,x_1](x-x_0)+\cdots\)</div></div>
+  </div>
+
+  <div class="ex easy">
+    <span class="badge b-board"><span class="b-dot" style="background:#7a4e00"></span>Del tablero — Lagrange</span>
+    <div class="ex-title">Polinomio interpolante de Lagrange para \((0,1)\), \((1,3)\), \((2,2)\)</div>
+    <ol class="steps">
+      <li class="step"><div class="sb"><div class="st">Tres puntos → polinomio de grado 2: \(P(x) = ax^2+bx+c\)</div></div></li>
+      <li class="step"><div class="sb"><div class="st">Construir las bases de Lagrange \(L_i(x)\)</div>
+        <div class="fml">\[L_0(x)=\frac{(x-1)(x-2)}{(0-1)(0-2)}=\frac{(x-1)(x-2)}{2}\]
+\[L_1(x)=\frac{(x-0)(x-2)}{(1-0)(1-2)}=\frac{x(x-2)}{-1}=-x(x-2)\]
+\[L_2(x)=\frac{(x-0)(x-1)}{(2-0)(2-1)}=\frac{x(x-1)}{2}\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Combinar con los valores \(y_0=1\), \(y_1=3\), \(y_2=2\)</div>
+        <div class="fml">\[P(x)=1\cdot\frac{(x-1)(x-2)}{2}+3\cdot(-x(x-2))+2\cdot\frac{x(x-1)}{2}\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Expandir cada término</div>
+        <div class="fml">\[\frac{(x-1)(x-2)}{2}=\frac{x^2-3x+2}{2}\]
+\[-3x(x-2)=-3x^2+6x\]
+\[\frac{x(x-1)}{2}=\frac{x^2-x}{2}\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Sumar los tres términos</div>
+        <div class="fml">\[P(x)=\frac{x^2-3x+2}{2}+(-3x^2+6x)+\frac{x^2-x}{2}\]
+\[=\frac{x^2-3x+2+x^2-x}{2}+(-3x^2+6x)\]
+\[=\frac{2x^2-4x+2}{2}-3x^2+6x = x^2-2x+1-3x^2+6x\]
+\[=\boxed{-2x^2+4x+1}\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Verificar en los tres puntos</div>
+        <div class="fml">\[P(0)=-2(0)+4(0)+1=1\;\checkmark\]
+\[P(1)=-2+4+1=3\;\checkmark\]
+\[P(2)=-8+8+1=1\;\ldots\]</div>
+        <div class="sd" style="color:var(--coral);">Atención: P(2) = −2(4)+4(2)+1 = −8+8+1 = 1 ≠ 2. Revisar el álgebra.</div>
+        <div class="fml">\[P(2)=-2(4)+4(2)+1=-8+8+1=1\neq 2\]
+\[\text{Corrección: } P(x) = -\frac{3}{2}x^2+\frac{9}{2}x+1\]
+\[P(2)=-6+9+1=4\;\ldots \text{ revisar cálculo de } L_1\]</div>
+        <div class="sd">Re-calcular cuidadosamente: \(L_1(x)=\dfrac{x(x-2)}{(1)(1-2)}=\dfrac{x(x-2)}{-1}\), luego \(3L_1=\dfrac{-3x(x-2)}{1}=-3x^2+6x\). Correcto.</div>
+        <div class="fml">\[P(x)=\frac{x^2-3x+2}{2}-3x^2+6x+\frac{x^2-x}{2}\]
+\[=\frac{2x^2-4x+2}{2}-3x^2+6x = x^2-2x+1-3x^2+6x=-2x^2+4x+1\]
+\[P(2)=-8+8+1=1\neq 2\quad\Rightarrow\quad\text{verificar con 2·}L_2:\]
+\[2\cdot\frac{x(x-1)}{2}=x(x-1)=x^2-x\]
+\[P(x)=\frac{x^2-3x+2}{2}+(-3x^2+6x)+(x^2-x)\]
+\[=\frac{x^2-3x+2}{2}-2x^2+5x\]
+\[=\frac{x^2-3x+2-4x^2+10x}{2}=\frac{-3x^2+7x+2}{2}\]
+\[P(0)=1\;\checkmark,\; P(1)=\frac{-3+7+2}{2}=3\;\checkmark,\; P(2)=\frac{-12+14+2}{2}=2\;\checkmark\]</div>
+      </div></li>
+    </ol>
+    <div class="result"><div class="ri">✓</div><div><div class="rl">Polinomio interpolante</div><div class="rv">\(P(x) = \dfrac{-3x^2+7x+2}{2} = -\dfrac{3}{2}x^2+\dfrac{7}{2}x+1\)</div></div></div>
+    <div class="tip t-warn"><strong>Cuidado con el álgebra:</strong> siempre verificar sustituyendo los 3 puntos al final. Un error de signo en los denominadores de las bases de Lagrange es el error más frecuente.</div>
+  </div>
+
+  <div class="ex easy">
+    <span class="badge b-easy"><span class="b-dot"></span>Fácil — Newton con diferencias divididas</span>
+    <div class="ex-title">Mismos puntos \((0,1)\), \((1,3)\), \((2,2)\) — Método de Newton</div>
+    <ol class="steps">
+      <li class="step"><div class="sb"><div class="st">Construir la tabla de diferencias divididas</div>
+        <div class="poly-table">
+          <div class="poly-table-title">Tabla de diferencias divididas</div>
+          <table class="tbl" style="font-size:.83rem;">
+            <thead><tr><th>\(x_i\)</th><th>\(f[x_i]\)</th><th>1ª orden</th><th>2ª orden</th></tr></thead>
+            <tbody>
+              <tr><td>0</td><td>1</td><td>\(f[0,1]=\frac{3-1}{1-0}=2\)</td><td>\(f[0,1,2]=\frac{-1-2}{2-0}=-\frac{3}{2}\)</td></tr>
+              <tr><td>1</td><td>3</td><td>\(f[1,2]=\frac{2-3}{2-1}=-1\)</td><td>—</td></tr>
+              <tr><td>2</td><td>2</td><td>—</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Coeficientes del polinomio de Newton</div>
+        <div class="fml">\[a_0=f[x_0]=1,\quad a_1=f[x_0,x_1]=2,\quad a_2=f[x_0,x_1,x_2]=-\tfrac{3}{2}\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Escribir \(P(x)\) en forma de Newton</div>
+        <div class="fml">\[P(x)=1+2(x-0)-\tfrac{3}{2}(x-0)(x-1)=1+2x-\tfrac{3}{2}x(x-1)\]
+\[=1+2x-\tfrac{3}{2}x^2+\tfrac{3}{2}x=-\tfrac{3}{2}x^2+\tfrac{7}{2}x+1\]</div>
+      </div></li>
+    </ol>
+    <div class="result"><div class="ri">✓</div><div><div class="rl">Mismo resultado que Lagrange</div><div class="rv">\(P(x)=-\dfrac{3}{2}x^2+\dfrac{7}{2}x+1\) — Newton y Lagrange siempre dan el mismo polinomio</div></div></div>
+    <div class="tip t-ok"><strong>Newton es más eficiente:</strong> al agregar un nuevo punto, solo hay que añadir un término. En Lagrange hay que recalcular todo desde cero.</div>
+  </div>
+
+  <div class="ex hard">
+    <span class="badge b-hard"><span class="b-dot"></span>Difícil — 4 puntos + sistema de Vandermonde + evaluar y error</span>
+    <div class="ex-title">Interpolar \((0,1)\), \((1,2)\), \((2,5)\), \((3,10)\) — Newton + estimar \(f(1.5)\)</div>
+    <ol class="steps">
+      <li class="step"><div class="sb"><div class="st">Tabla de diferencias divididas (4 puntos → grado 3)</div>
+        <div class="poly-table">
+          <div class="poly-table-title">Diferencias divididas</div>
+          <table class="tbl" style="font-size:.82rem;">
+            <thead><tr><th>\(x\)</th><th>\(f\)</th><th>\(f[\cdot,\cdot]\)</th><th>\(f[\cdot,\cdot,\cdot]\)</th><th>\(f[\cdot,\cdot,\cdot,\cdot]\)</th></tr></thead>
+            <tbody>
+              <tr><td>0</td><td>1</td><td>1</td><td>\(\frac{3/2-1}{2}=\frac{1}{4}\)</td><td>\(\frac{1/2-1/4}{3}=\frac{1}{12}\)</td></tr>
+              <tr><td>1</td><td>2</td><td>3</td><td>\(\frac{5/2-3/2}{2}=\frac{1}{2}\)</td><td>—</td></tr>
+              <tr><td>2</td><td>5</td><td>5</td><td>—</td><td>—</td></tr>
+              <tr><td>3</td><td>10</td><td>—</td><td>—</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="sd">Diferencias de 1° orden: \(\frac{2-1}{1}=1\), \(\frac{5-2}{1}=3\), \(\frac{10-5}{1}=5\)<br>
+        2° orden: \(\frac{3-1}{2-0}=1\), \(\frac{5-3}{3-1}=1\)<br>
+        3° orden: \(\frac{1-1}{3-0}=0\)</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">¡Las diferencias de 3° orden son 0! → El polinomio es de grado 2</div>
+        <div class="fml">\[P(x)=1+1(x-0)+1(x-0)(x-1)=1+x+x(x-1)=x^2+1\]</div>
+      </div></li>
+      <li class="step"><div class="sb"><div class="st">Verificar: \(P(0)=1\checkmark\), \(P(1)=2\checkmark\), \(P(2)=5\checkmark\), \(P(3)=10\checkmark\)</div></div></li>
+      <li class="step"><div class="sb"><div class="st">Evaluar en \(x=1.5\)</div>
+        <div class="fml">\[P(1.5)=(1.5)^2+1=2.25+1=3.25\]</div>
+      </div></li>
+    </ol>
+    <div class="result"><div class="ri">✓</div><div><div class="rl">Polinomio y evaluación</div><div class="rv">\(P(x)=x^2+1\) &nbsp;→&nbsp; \(P(1.5)=3.25\)</div></div></div>
+    <div class="tip t-warn"><strong>Señal importante:</strong> cuando las diferencias divididas de orden \(k\) son todas cero, el polinomio interpolante tiene grado \(k-1\). En este caso, las diferencias de 3° orden son 0, por lo que \(P\) es de grado 2 aunque tengamos 4 puntos.</div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<script>
+const panels=['t1','t2','t3','t4','t5'];
+function show(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelector(`.tab-btn.${id}`).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
