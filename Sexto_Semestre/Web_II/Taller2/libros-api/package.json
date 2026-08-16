@@ -1,0 +1,13 @@
+{
+  "name": "libros-api",
+  "version": "1.0.0",
+  "description": "API REST de libros con Express (datos en memoria)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
