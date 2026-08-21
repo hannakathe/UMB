@@ -1,0 +1,53 @@
+@startuml modelo_logico_relacional
+skinparam classAttributeIconSize 0
+hide circle
+
+class Cliente {
+  +id_cliente : INT <<PK>>
+  nombre : VARCHAR(100)
+  correo : VARCHAR(100)
+  telefono : VARCHAR(20)
+}
+
+class Empleado {
+  +id_empleado : INT <<PK>>
+  nombre : VARCHAR(100)
+  cargo : VARCHAR(50)
+}
+
+class Categoria {
+  +id_categoria : INT <<PK>>
+  nombre : VARCHAR(50)
+}
+
+class Producto {
+  +id_producto : INT <<PK>>
+  nombre : VARCHAR(100)
+  precio : DECIMAL(10,2)
+  cantidad_disponible : INT
+  #id_categoria : INT <<FK>>
+}
+
+class Venta {
+  +id_venta : INT <<PK>>
+  fecha : DATE
+  valor_total : DECIMAL(10,2)
+  #id_cliente : INT <<FK>>
+  #id_empleado : INT <<FK>>
+}
+
+class DetalleVenta {
+  +id_detalle : INT <<PK>>
+  #id_venta : INT <<FK>>
+  #id_producto : INT <<FK>>
+  cantidad : INT
+  precio_unitario : DECIMAL(10,2)
+}
+
+Cliente "1" -- "0..*" Venta : realiza >
+Empleado "1" -- "0..*" Venta : registra >
+Categoria "1" -- "0..*" Producto : clasifica >
+Venta "1" -- "1..*" DetalleVenta : contiene >
+Producto "1" -- "0..*" DetalleVenta : incluido_en >
+
+@enduml

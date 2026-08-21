@@ -1,0 +1,59 @@
+@startuml diagrama_entidad_relacion
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+
+entity Cliente {
+  * id_cliente : INT <<PK>>
+  --
+  nombre : VARCHAR(100)
+  correo : VARCHAR(100)
+  telefono : VARCHAR(20)
+}
+
+entity Empleado {
+  * id_empleado : INT <<PK>>
+  --
+  nombre : VARCHAR(100)
+  cargo : VARCHAR(50)
+}
+
+entity Categoria {
+  * id_categoria : INT <<PK>>
+  --
+  nombre : VARCHAR(50)
+}
+
+entity Producto {
+  * id_producto : INT <<PK>>
+  --
+  nombre : VARCHAR(100)
+  precio : DECIMAL(10,2)
+  cantidad_disponible : INT
+  id_categoria : INT <<FK>>
+}
+
+entity Venta {
+  * id_venta : INT <<PK>>
+  --
+  fecha : DATE
+  valor_total : DECIMAL(10,2)
+  id_cliente : INT <<FK>>
+  id_empleado : INT <<FK>>
+}
+
+entity DetalleVenta {
+  * id_detalle : INT <<PK>>
+  --
+  id_venta : INT <<FK>>
+  id_producto : INT <<FK>>
+  cantidad : INT
+  precio_unitario : DECIMAL(10,2)
+}
+
+Cliente ||--o{ Venta : "realiza"
+Empleado ||--o{ Venta : "registra"
+Categoria ||--o{ Producto : "clasifica"
+Venta ||--|{ DetalleVenta : "contiene"
+Producto ||--o{ DetalleVenta : "aparece en"
+
+@enduml
