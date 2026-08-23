@@ -16,6 +16,12 @@ npm start
 
 El servidor queda escuchando en `http://localhost:3000`.
 
+## CORS
+
+El servidor solo acepta peticiones cross-origin desde `http://localhost:5173` (el frontend
+de [Taller3](../../Taller3)), configurable con la variable de entorno `FRONTEND_ORIGIN`.
+Ver detalles de verificación en [Taller3/README.md](../../Taller3/README.md).
+
 ## API Key
 
 El endpoint `POST /api/libros` requiere el header `x-api-key`. La clave por defecto es:
