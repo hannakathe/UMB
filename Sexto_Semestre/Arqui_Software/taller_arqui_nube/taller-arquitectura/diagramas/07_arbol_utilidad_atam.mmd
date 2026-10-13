@@ -1,0 +1,15 @@
+flowchart LR
+    U((Utilidad)) --> E[Escalabilidad] & R[Rendimiento] & D[Disponibilidad] & S[Seguridad] & M[Mantenibilidad] & Us[Usabilidad]
+    E --> E1["(A,A) 10.000 usuarios en 1 min, error < 1%"]
+    E --> E2["(A,M) 1.000 a 100.000 concurrentes con réplicas"]
+    R --> R1["(A,A) Disponibilidad p95 <= 200 ms"]
+    R --> R2["(A,A) Último asiento F-12: cero sobreventa"]
+    D --> D1["(A,M) Falla instancia: retirada < 5 s, 99,99%"]
+    S --> S1["(A,M) Tokenización PCI DSS"]
+    S --> S2["(A,M) QR duplicado rechazado 100%"]
+    S --> S3["(M,B) RBAC: 403 a eventos ajenos"]
+    M --> M1["(M,M) Stripe a PayU solo en adaptador"]
+    M --> M2["(M,M) Kafka a RabbitMQ"]
+    Us --> U1["(M,B) 50 eventos por CSV < 10 min"]
+    classDef aa fill:#f8cecc,stroke:#cc0000,stroke-width:2px
+    class E1,R1,R2 aa

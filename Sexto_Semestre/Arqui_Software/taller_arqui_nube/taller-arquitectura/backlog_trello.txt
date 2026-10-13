@@ -1,0 +1,71 @@
+=====================================================================
+BLOQUE 1 — PEGAR COMPLETO EN "Añadir tarjeta" DE LA LISTA "Backlog"
+(Trello detecta varias líneas y ofrece "Crear 10 tarjetas")
+=====================================================================
+HU-01 Como comprador, quiero ver la lista de eventos disponibles para poder elegir uno.
+HU-02 Como comprador, quiero ver el detalle de un evento (fecha, lugar, precio y entradas restantes) para decidir si compro.
+HU-03 Como comprador, quiero seleccionar la cantidad de entradas y reservarlas temporalmente para que nadie me las quite mientras pago.
+HU-04 Como comprador, quiero pagar mi orden con tarjeta de forma segura para obtener mis entradas.
+HU-05 Como comprador, quiero recibir mis entradas con un código QR único por correo para poder ingresar al evento.
+HU-06 Como organizador, quiero ver las ventas de mis eventos en tiempo real para tomar decisiones de promoción.
+HU-07 Como promotor frecuente, quiero cargar muchos eventos con una plantilla CSV para no crearlos uno por uno.
+HU-08 Como administrador, quiero ver y gestionar todos los eventos de la plataforma para garantizar que cumplen las políticas.
+HU-09 Como comprador, quiero registrarme e iniciar sesión con mi cuenta de Google para no crear otra contraseña.
+HU-10 Como personal de acceso al evento, quiero escanear el QR de la entrada para validar que es auténtica y no ha sido usada.
+
+=====================================================================
+BLOQUE 2 — DETALLE SOLO DE LAS HISTORIAS DEL SPRINT 1
+(copiar cada una en la DESCRIPCIÓN de su tarjeta y moverla a "Sprint 1")
+Las demás historias se quedan sin detallar en el Backlog: solo se
+detallan las que se desarrollarán en el primer Sprint.
+=====================================================================
+
+HU-01 — Ver lista de eventos disponibles            Prioridad: Alta | Estimación: 3 pts
+Valor de negocio: es la puerta de entrada al embudo de ventas; sin catálogo visible no hay compra.
+Criterios de aceptación:
+- Dado que hay eventos publicados, cuando el comprador entra a "Eventos", entonces ve nombre, fecha, lugar y precio "desde" de cada uno.
+- Los eventos agotados aparecen marcados como "Agotado" y sin botón de compra.
+- La lista se carga en menos de 1 s (p95) y se pagina de 20 en 20.
+- Si no hay eventos, se muestra el mensaje "No hay eventos disponibles por ahora".
+
+HU-02 — Ver detalle de un evento                    Prioridad: Alta | Estimación: 2 pts
+Valor de negocio: da la información para decidir y reduce consultas al soporte.
+Criterios de aceptación:
+- Muestra fecha, hora, lugar, descripción, precio y entradas restantes (puede tener hasta 30 s de desfase).
+- Tiene migas de pan "Inicio › Eventos › <nombre>" y un botón "Volver a eventos".
+- El botón primario dice "Comprar entrada" con el mismo estilo que en la lista (consistencia).
+
+HU-03 — Seleccionar cantidad y reservar             Prioridad: Alta | Estimación: 5 pts
+Valor de negocio: protege el inventario (Dominio Core) y evita la sobreventa.
+Criterios de aceptación:
+- El campo cantidad es numérico, mínimo 1 y máximo 6; no permite escribir texto.
+- Al pulsar "Comprar entrada" se muestra "Reservando tu entrada…" y el botón se deshabilita.
+- La reserva dura 10 minutos y se muestra un contador; al expirar, las entradas se liberan.
+- Si dos usuarios piden la última entrada a la vez, solo uno la obtiene; el otro ve "Lo sentimos, alguien acaba de reservar la última entrada".
+- Existe un botón "Cancelar reserva" que libera las entradas de inmediato.
+
+HU-04 — Pagar orden de forma segura                 Prioridad: Alta | Estimación: 8 pts
+Valor de negocio: convierte la reserva en ingreso; es la historia que genera dinero.
+Criterios de aceptación:
+- Los datos de la tarjeta se envían directamente a la pasarela (tokenización); EventFlow nunca los almacena.
+- Cada intento de pago lleva una Idempotency-Key: reintentar no cobra dos veces.
+- Si un campo falta (p. ej. fecha de vencimiento), se marca en rojo ese campo y se conservan los demás datos.
+- Al aprobarse el pago, Servicio-Pagos publica el evento "PagoAprobado" y la orden pasa a "Pagada".
+- Si la pasarela no responde en 5 s, la orden queda "Pago en verificación" y se informa al usuario sin perder la reserva.
+
+HU-05 — Recibir entradas con QR único               Prioridad: Media | Estimación: 3 pts
+Valor de negocio: entrega el producto comprado y previene la falsificación.
+Criterios de aceptación:
+- Al recibir "PagoAprobado", Servicio-Entradas genera un QR firmado por cada entrada.
+- El comprador recibe un correo en menos de 2 minutos con las entradas en PDF.
+- El QR contiene el ID de la entrada y una firma digital; no contiene datos personales.
+
+=====================================================================
+LISTAS DEL TABLERO "EventFlow — Backlog" (de izquierda a derecha)
+=====================================================================
+Backlog  |  Sprint 1  |  En progreso  |  Hecho
+- Backlog: las 10 historias (HU-06 a HU-10 quedan aquí sin detalle).
+- Sprint 1: HU-01 a HU-05 con descripción y criterios de aceptación (checklist).
+- En progreso: mover HU-01 para simular que se está desarrollando.
+- Hecho: vacía (o mover una historia trivial para mostrar el flujo).
+Etiquetas sugeridas: verde = Dominio Core, gris = Subdominio genérico, rojo = Seguridad.

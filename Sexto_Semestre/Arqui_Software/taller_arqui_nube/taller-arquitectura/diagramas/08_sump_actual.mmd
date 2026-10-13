@@ -1,0 +1,14 @@
+flowchart LR
+    EST["20.000 estudiantes"] --> JSP
+    subgraph ONP["On-Premise"]
+      JSP[Vistas JSP] --> INS[Controlador Inscripciones] --> PGW[Controlador PaymentGateway]
+      INS --> ORA[("Oracle centralizada - ACID estricto")]
+    end
+    subgraph AWS["AWS"]
+      NODE["Microservicio Pagos Node.js"] --> DBP[(BD pagos)]
+    end
+    PGW == "REST SÍNCRONO por VPN inestable, sin timeout" ==> NODE
+    NODE --> PAS["Pasarela actual"]
+    classDef risk fill:#f8cecc,stroke:#cc0000,stroke-width:3px
+    class PGW risk
+    linkStyle 3 stroke:#cc0000,stroke-width:4px

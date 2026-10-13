@@ -1,0 +1,7 @@
+flowchart TB
+    E(("EventFlow"))
+    U["Usuario comprador<br/>'Que la app sea rápida y fácil de usar'<br/>Usabilidad - Rendimiento"] --- E
+    F["Finanzas<br/>'Que los pagos no fallen'<br/>Fiabilidad - Seguridad"] --- E
+    D["Desarrollador<br/>'Que sea fácil de mantener'<br/>Mantenibilidad"] --- E
+    O["Organizador<br/>'Ver mis ventas y cargar eventos rápido'<br/>Usabilidad - Seguridad RBAC"] --- E
+    A["Administrador<br/>'Siempre en línea y auditable'<br/>Disponibilidad - Seguridad"] --- E

@@ -1,0 +1,13 @@
+flowchart TB
+    N["Navegador / App"] -->|HTTP/REST| GW["API Gateway"]
+    GW --> SU[Servicio-Usuarios] --> DU[(DB_Usr)]
+    GW --> SE[Servicio-Eventos] --> DE[(DB_Evt)]
+    GW --> SP["Servicio-Pedidos x50"] --> DO[(DB_Ord)]
+    GW --> SN[Servicio-Entradas] --> DN[(DB_Ent)]
+    GW --> SG[Servicio-Pagos] --> DG[(DB_Pay)]
+    SG -. "publica PagoAprobado" .-> BUS{{"Bus de eventos Kafka / RabbitMQ"}}
+    BUS -- "se suscribe" --> SP
+    BUS -- "se suscribe" --> SN
+    SG --> PX["Pasarela externa"]
+    classDef core fill:#d5e8d4,stroke:#2d7600
+    class SE,SP,SN core

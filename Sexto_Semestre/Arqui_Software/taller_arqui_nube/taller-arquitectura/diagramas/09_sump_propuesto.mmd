@@ -1,0 +1,12 @@
+flowchart LR
+    EST[Estudiantes] --> LB["CDN + WAF + Balanceador"] --> INS["Monolito Java N réplicas - Inscripciones"]
+    INS --> REDIS[("Caché Redis")]
+    INS --> ORA[("Oracle + tabla OUTBOX")]
+    ORA --> RELAY["Relay Outbox / CDC"] --> Q{{"Cola RabbitMQ / SQS"}}
+    Q --> PAG["Servicio Pagos idempotente"] --> DBP[(BD Pagos)]
+    PAG -. PagoConfirmado .-> Q
+    Q --> CONS["Consumidor PagoConfirmado"]
+    PAG --> PORT["Puerto PasarelaPago - anticorrupción"]
+    PORT --> A1[Adaptador pasarela actual] --> E1[Pasarela actual]
+    PORT --> A2[Adaptador recaudo gubernamental] --> E2[Sistema gubernamental]
+    CB["Circuit breaker + timeout 2 s"] -.-> INS

@@ -1,0 +1,160 @@
+openapi: 3.0.3
+info:
+  title: EventFlow - API de Eventos y Pedidos
+  description: |
+    API mínima de EventFlow (Taller de Arquitectura de Software - UMB).
+    Expone el Servicio-Eventos (catálogo y disponibilidad) y el Servicio-Pedidos
+    (creación de órdenes con idempotencia). El pago se procesa de forma asíncrona:
+    el Servicio-Pagos publica el evento `PagoAprobado` en el bus y Pedidos reacciona.
+  version: 1.0.0
+  contact:
+    name: Hanna Katherine Abril Gongora
+servers:
+  - url: https://api.eventflow.example/v1
+    description: Servidor de ejemplo (ficticio)
+tags:
+  - name: Eventos
+    description: Servicio-Eventos (catálogo, disponibilidad)
+  - name: Pedidos
+    description: Servicio-Pedidos (órdenes de compra)
+paths:
+  /eventos:
+    get:
+      tags: [Eventos]
+      summary: Listar eventos disponibles
+      description: "Historia de usuario: Como comprador, quiero ver la lista de eventos disponibles para poder elegir uno."
+      parameters:
+        - in: query
+          name: ciudad
+          schema: { type: string }
+        - in: query
+          name: page
+          schema: { type: integer, minimum: 1, default: 1 }
+      responses:
+        "200":
+          description: Lista paginada de eventos
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Evento" }
+  /eventos/{eventoId}:
+    get:
+      tags: [Eventos]
+      summary: Detalle de un evento
+      parameters:
+        - $ref: "#/components/parameters/EventoId"
+      responses:
+        "200":
+          description: Evento encontrado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Evento" }
+        "404": { $ref: "#/components/responses/NoEncontrado" }
+  /eventos/{eventoId}/disponibilidad:
+    get:
+      tags: [Eventos]
+      summary: Consultar entradas disponibles (respuesta cacheada, consistencia eventual)
+      description: Objetivo de rendimiento p95 <= 200 ms durante picos de venta.
+      parameters:
+        - $ref: "#/components/parameters/EventoId"
+      responses:
+        "200":
+          description: Disponibilidad aproximada
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Disponibilidad" }
+  /pedidos:
+    post:
+      tags: [Pedidos]
+      summary: Crear una orden (reserva temporal de entradas)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          required: true
+          description: UUID generado por el cliente para evitar órdenes duplicadas por reintentos.
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/NuevaOrden" }
+      responses:
+        "201":
+          description: Orden creada en estado PENDIENTE_PAGO (reserva válida 10 minutos)
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Orden" }
+        "409":
+          description: No hay entradas suficientes (otro usuario las reservó primero)
+        "422":
+          description: Datos inválidos (p. ej. cantidad fuera de rango 1-6)
+  /pedidos/{ordenId}:
+    get:
+      tags: [Pedidos]
+      summary: Consultar estado de una orden
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: ordenId
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        "200":
+          description: Estado actual de la orden
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Orden" }
+        "404": { $ref: "#/components/responses/NoEncontrado" }
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    EventoId:
+      in: path
+      name: eventoId
+      required: true
+      schema: { type: string }
+  responses:
+    NoEncontrado:
+      description: Recurso no encontrado
+  schemas:
+    Evento:
+      type: object
+      required: [id, nombre, fecha, precio]
+      properties:
+        id: { type: string, example: "EVT-ROCK-2026" }
+        nombre: { type: string, example: "Concierto de Rock" }
+        fecha: { type: string, format: date-time }
+        lugar: { type: string, example: "Movistar Arena, Bogotá" }
+        precio: { type: number, format: double, example: 180000 }
+        organizadorId: { type: string }
+    Disponibilidad:
+      type: object
+      properties:
+        eventoId: { type: string }
+        entradasRestantes: { type: integer, example: 1250 }
+        actualizadoEn: { type: string, format: date-time }
+    NuevaOrden:
+      type: object
+      required: [eventoId, cantidad]
+      properties:
+        eventoId: { type: string }
+        cantidad: { type: integer, minimum: 1, maximum: 6, example: 2 }
+    Orden:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        eventoId: { type: string }
+        cantidad: { type: integer }
+        total: { type: number, format: double }
+        estado:
+          type: string
+          enum: [PENDIENTE_PAGO, PAGADA, CANCELADA, EXPIRADA]
+        expiraEn: { type: string, format: date-time }

@@ -1,0 +1,20 @@
+sequenceDiagram
+    actor C as Comprador
+    participant PE as Servicio-Pedidos
+    participant PA as Servicio-Pagos
+    participant PS as Pasarela
+    participant B as Bus de Eventos
+    participant EN as Servicio-Entradas
+    C->>PE: 1. POST /pedidos (Idempotency-Key)
+    PE-->>C: 2. 201 Orden PENDIENTE_PAGO
+    C->>PA: 3. Pagar orden (token)
+    PA->>PS: 4. Autorizar cargo
+    PS-->>PA: 5. Aprobado
+    PA->>B: 6. publish PagoAprobado {ordenId, monto}
+    PA-->>C: 7. 202 Pago en verificación
+    B->>PE: 8. entrega PagoAprobado
+    PE->>PE: 9. Orden a PAGADA
+    B->>EN: 10. entrega PagoAprobado
+    EN->>EN: 11. Emitir QR firmado
+    EN->>B: 12. publish EntradasEmitidas
+    Note over PA,EN: Invocación implícita: Pagos no conoce a sus suscriptores

@@ -1,0 +1,16 @@
+flowchart TB
+    subgraph S1["Escenario 1: Kafka a RabbitMQ (EventFlow)"]
+      GW[API Gateway]:::ok --> SU[Usuarios]:::ok & SE[Eventos]:::ok & SP[Pedidos]:::hit & SN[Entradas]:::hit & SG[Pagos]:::hit
+      SP & SN & SG --- BUS[Bus Kafka a RabbitMQ]:::hit
+    end
+    subgraph S2["Escenario 2: nueva pasarela (SUMP)"]
+      UI[Interfaz web]:::hit
+      MON[Monolito Java]:::hit
+      NODE[Microservicio Node]:::hit
+      ORA[Oracle]:::hit
+      VPN[VPN / red]:::maybe
+      REP[Reportes contables]:::maybe
+    end
+    classDef hit fill:#f8cecc,stroke:#cc0000,stroke-width:2px
+    classDef maybe fill:#ffe6cc,stroke:#d79b00
+    classDef ok fill:#d5e8d4,stroke:#2d7600

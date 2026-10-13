@@ -1,0 +1,15 @@
+flowchart TB
+    N["Navegador del usuario"] --> P
+    subgraph M["Monolito EventFlow"]
+      P["Presentación: index.html, CSS, JavaScript"]
+      subgraph L["Lógica de negocio"]
+        US[UserService] --- ES[EventService] --- OS["OrderService 99% CPU"] --- PS[PaymentService]
+      end
+      subgraph DAL["Acceso a datos"]
+        UD[UserDAO] --- ED[EventDAO] --- OD[OrderDAO] --- PD[PaymentDAO]
+      end
+      P --> L --> DAL
+    end
+    DAL --> DB[("BD única SQL: Users, Events, Orders, Payments")]
+    classDef hot fill:#f8cecc,stroke:#cc0000,stroke-width:3px
+    class OS hot

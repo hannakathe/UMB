@@ -1,0 +1,22 @@
+mindmap
+  root((EventFlow NFR))
+    Escalabilidad
+      10.000 usuarios en 1 minuto al abrir la venta
+      De 1.000 a 100.000 concurrentes sin cambiar código
+    Seguridad
+      Datos de pago 100% seguros - tokenización PCI DSS
+      RBAC organizador vs administrador
+      QR firmado de un solo uso
+    Rendimiento
+      Disponibilidad de asientos p95 <= 200 ms
+      Confirmación de compra <= 2 s
+    Disponibilidad
+      99,99% del flujo de compra
+      Orden pendiente + reintento si cae Pagos
+    Mantenibilidad
+      Cambiar pasarela tocando solo un adaptador
+      Despliegue independiente < 15 min
+    Usabilidad
+      Compra en <= 3 pasos
+      Feedback Reservando tu entrada...
+      Carga masiva por CSV
