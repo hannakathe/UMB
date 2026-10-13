@@ -1,0 +1,645 @@
+SAAM (Software Architecture Analysis Method)
+Es uno de los primeros métodos formales creados por el SEI (Software Engineering Institute) para evaluar arquitecturas de software. Nació en los años 90 con un enfoque principal: evaluar la modificabilidad de un sistema.
+
+¿Cómo funciona? Se basa puramente en escenarios. Los stakeholders (desarrolladores, usuarios, administradores) proponen situaciones hipotéticas de cambio (ej. "¿Qué pasa si cambiamos la base de datos de Oracle a PostgreSQL?").
+
+El Proceso: Se toma la arquitectura propuesta y se "simula" el impacto de cada escenario. Se cuentan cuántos componentes tendrían que modificarse para lograr el cambio.
+
+El Veredicto: Si un escenario requiere cambios masivos en todo el sistema, la arquitectura es rígida. Si el impacto está aislado en un solo módulo, la arquitectura tiene alta modificabilidad.
+
+Limitación: SAAM es excelente para la modificabilidad, pero se queda corto cuando hay que analizar el rendimiento o la seguridad al mismo tiempo.
+
+ATAM (Architecture Tradeoff Analysis Method)
+ATAM es la evolución directa de SAAM, también desarrollado por el SEI. Es el estándar de oro en la industria porque comprende que en la arquitectura moderna no se puede tener todo perfecto al mismo tiempo. Mejorar un atributo (ej. máxima seguridad con encriptación pesada) casi siempre empeora otro (ej. el rendimiento bajará).
+
+¿Cómo funciona? Evalúa las decisiones arquitectónicas frente a múltiples atributos de calidad (Rendimiento, Disponibilidad, Seguridad, Modificabilidad) y busca los Trade-offs (puntos de compromiso o sacrificio).
+
+Artefactos clave:
+
+Árbol de Utilidad (Utility Tree): Una estructura jerárquica donde se priorizan los atributos de calidad más críticos para el negocio.
+
+Puntos de Sensibilidad: Decisiones arquitectónicas que afectan drásticamente a un atributo (ej. "Usar un balanceador de carga mejora la disponibilidad").
+
+Puntos de Trade-off: Decisiones que afectan a más de un atributo, mejorando uno pero perjudicando otro (ej. "Aumentar el nivel de loggeo mejora la auditabilidad, pero reduce el rendimiento").
+
+Riesgos: Decisiones que podrían causar que el sistema no cumpla con sus requerimientos.
+
+ATAM no te dice si una arquitectura es "buena" o "mala". Te dice si la arquitectura es adecuada para los objetivos de negocio específicos de ese proyecto, basándose en los sacrificios que estás dispuesto a hacer.
+
+Heurísticas de Nielsen (Evaluación Heurística)
+Mientras ATAM evalúa el código y los servidores, Jakob Nielsen (el padre de la usabilidad web) creó en 1994 un conjunto de 10 principios generales para el diseño de interacción. Son "heurísticas" porque son reglas generales basadas en la experiencia, no leyes matemáticas rígidas. Sirven para evaluar la Usabilidad de una interfaz sin necesidad de hacer costosas pruebas con usuarios reales de inmediato. Las 10 reglas son:
+
+Visibilidad del estado del sistema: El usuario siempre debe saber qué está pasando (ej. Barras de carga).
+
+Relación entre el sistema y el mundo real: Usar lenguaje y conceptos familiares para el usuario, no jerga técnica (ej. El ícono de un bote de basura para eliminar).
+
+Control y libertad del usuario: Ofrecer siempre una "salida de emergencia" (ej. Botón de "Deshacer" o "Cancelar").
+
+Consistencia y estándares: No obligar al usuario a adivinar si diferentes palabras o acciones significan lo mismo.
+
+Prevención de errores: Es mejor un diseño que impida el error antes de que ocurra (ej. Deshabilitar el botón "Enviar" hasta que todos los campos obligatorios estén llenos).
+
+Reconocer antes que recordar: Hacer visibles los objetos, acciones y opciones (ej. Autocompletado en un buscador).
+
+Flexibilidad y eficiencia de uso: Atajos para usuarios expertos que no estorben a los novatos (ej. Comandos de teclado como Ctrl+C).
+
+Diseño estético y minimalista: Los diálogos no deben contener información irrelevante que compita con la importante.
+
+Ayudar a los usuarios a reconocer, diagnosticar y recuperarse de errores: Mensajes de error en lenguaje claro, indicando el problema y la solución constructiva.
+
+Ayuda y documentación: Aunque el sistema debe ser intuitivo, a veces es necesaria documentación fácil de buscar y enfocada en las tareas del usuario.
+
+Síntesis Comparativa en un Proyecto de Software
+Metodología	¿Qué evalúa?	¿Qué busca encontrar?	¿Quién lo utiliza principalmente?
+SAAM	Modificabilidad interna	Cuánto cuesta (en esfuerzo) cambiar un módulo.	Arquitectos de Software
+ATAM	Múltiples Atributos de Calidad	Riesgos y sacrificios (trade-offs) entre rendimiento, seguridad, etc.	Arquitectos y Líderes Técnicos
+Nielsen	Usabilidad externa (UX/UI)	Fricciones, confusión o bloqueos en la interfaz gráfica.	Diseñadores UX y Desarrolladores Frontend
+SIN EXCEPCIONES: QUIEN NO ENTREGUE ESTE TALLER, POR ESTE MEDIO Y EN EL PLAZO ESTIPULADO (antes de la media noche del 14 de abril de 2026) LA NOTA LE QUEDA EN CERO.
+
+EJERCICIO PRÁCTICO 1:
+
+"EventFlow". Diseñaremos un sistema (muy) simple para la venta de entradas a eventos.
+
+Herramientas (100% Online y Gratuitas):
+
+Gestión Ágil: Trello
+
+Modelado y Diagramación: Miro (o diagrams.net)
+
+Diseño y Evaluación UX: Figma
+
+Gestión de Código y CI/CD: GitHub
+
+Análisis de Deuda Técnica: SonarCloud
+
+Infraestructura como Código (IaC): Google Cloud Shell
+
+Diseño de APIs: Swagger Hub
+
+Fundamentos
+¿Qué es Arquitectura? "la estructura, comprendida por los elementos de software, las propiedades visibles de esos elementos y las relaciones entre ellos".
+
+Identificar NFR para "EventFlow". En un tablero de Miro, hacer una lluvia de ideas sobre los Atributos de Calidad (NFR).
+
+Ejemplo: "El sistema debe manejar 10,000 usuarios en 1 minuto cuando las entradas de un gran concierto salen a la venta". (Relacionar esto con Escalabilidad).
+
+Ejemplo: "Los datos de pago deben ser 100% seguros". (Relacionar con Seguridad).
+
+Identificar Stakeholders. Crear un mapa simple de "Stakeholders" (Interesados) y qué "perspectiva" le importa a cada uno.
+
+Usuario: "Que la app sea rápida y fácil de usar".
+
+Finanzas: "Que los pagos no fallen".
+
+Desarrollador: "Que sea fácil de mantener".
+
+El Dominio y el Backlog
+Conceptos: User Stories (Agile), Modelo de Dominio, DDD (Domain-Driven Design). Definir "EventFlow"
+
+Herramienta: Trello y Miro.
+
+Paso 1: Crear el Backlog. En un tablero de Trello, crear "User Stories".
+
+Crear una tarjeta: "Como comprador, quiero ver la lista de eventos disponibles para poder elegir uno". ¿Cuál es el valor de esta historia para el negocio? ¿Necesitamos detallar todas las historias ahora? No, "solo aquellas que se desarrollarán en el primer Sprint".
+
+Paso 2: Modelar el Dominio. En Miro, crear un Modelo de Dominio simple.
+
+Identificar entidades: Usuario, Evento, Entrada, Orden.
+
+¿Cuál es el "Dominio Core" (el que da la ventaja de mercado)?16. Probablemente sea "Gestión de Inventario de Entradas" y no "Login de Usuario" (que es un subdominio genérico). EXPLIQUE...
+
+Monolito vs. Microservicios
+Diseñar la Arquitectura (Dos Veces)
+
+Herramienta: Miro o diagrams.net.
+
+Paso 1: diseñe "EventFlow" como un Monolito en Capas.
+
+Diagramar las 3 capas clásicas (Presentación, Lógica de Negocio, Datos).
+
+Explique por qué separar la lógica de negocio de la presentación "Facilita la reutilización del código".
+
+¿Qué pasa con nuestro NFR de "10,000 usuarios"? Afecta críticamente la Escalabilidad? EXPLIQUE
+
+Paso 2: Diseñe "EventFlow" como Microservicios.
+
+Diagramar servicios: Servicio-Eventos, Servicio-Usuarios, Servicio-Pagos.
+
+¿Cómo logramos la escalabilidad horizontal? "Dividiendo la aplicación en componentes más pequeños y autónomos". EXPLIQUE.
+
+Discutir la práctica de mantenibilidad: "Diseñar servicios con alta cohesión y bajo acoplamiento". EXPLIQUE...
+
+Refutar el mito: ¿Son fáciles de hacer? No. La afirmación "Son fáciles de diseñar y desarrollar como una aplicación monolítica" es incorrecta. EXPLIQUE...
+
+Paso 3: Arquitectura de Eventos. Cuando un pago es aprobado, ¿cómo se entera el servicio de 'Entradas'?
+
+Respuesta: El Servicio-Pagos publica un evento. El Servicio-Entradas se suscribe. Esto es "invocación implícita de una herramienta cuando se produce un evento". EXPLIQUE... Y DÉ UN EJEMPLO.
+
+1. Diagrama del Monolito: "El Bloque Unido"
+Patrón: Arquitectura en Capas (Layered Architecture).
+
+Cómo dibujarlo:
+
+Un rectángulo grande dividido en 3 franjas horizontales, todas sentadas sobre una base de datos.
+
+Capa de Presentación (UI)
+index.html, CSS, JavaScript.
+
+El navegador del usuario vive aquí.
+
+Capa de Lógica de Negocio (Business Logic)
+El "Cerebro". Aquí van las reglas:
+
+* UserService (Registrar, Login)
+
+* EventService (Listar eventos)
+
+* OrderService (Crear orden, comprar entrada)
+
+* PaymentService (Procesar pago)
+
+Capa de Acceso a Datos (DAL)
+El "Cartero". Habla con la base de datos.
+
+* UserDAO (CRUD de Usuarios)
+
+* EventDAO (CRUD de Eventos)
+
+* OrderDAO (CRUD de Órdenes)
+
+Base de Datos (Monolítica)
+Una sola base de datos SQL gigante con todas las tablas:
+
+Users, Events, Orders, Payments, etc.
+
+Beneficio: Estamos separando la lógica de negocio de la presentación, lo que "facilita la reutilización del código".
+
+Problema (El NFR): ¿Qué pasa cuando hay un pico de tráfico para comprar entradas? EXPLIQUE...
+
+La OrderService consume el 99% del CPU.
+
+Todo el monolito se vuelve lento: el login, la lista de eventos... todo.
+
+El Atributo Crítico Afectado: No podemos escalar solo la OrderService. Tenemos que escalar la aplicación entera. Esto afecta críticamente la Escalabilidad.
+
+2. Diagrama de Microservicios: "El Equipo de Especialistas"
+Patrón: Arquitectura de Microservicios + Arquitectura Orientada a Eventos.
+
+Cómo dibujarlo:
+
+Varios recuadros pequeños e independientes, cada uno con su propia base de datos (un cilindro pequeño), comunicándose a través de un Bus de Eventos y una API Gateway.
+
++----------------+
+|                |
+|  Navegador/App |
+|                |
++-------+--------+
+        | (HTTP/REST)
++-------v--------+
+|                |
+|  API GATEWAY   |
+| (El Portero)   |
++--+----+----^---+
+   |    |    |
+(Llama a los servicios)
+   |    |    |
+   v    v    v
++-------+  +-------+  +-------+  +-------+
+|Servicio| |Servicio| |Servicio| |Servicio|
+|Usuarios| |Eventos | |Pedidos | |Pagos   |
++---o---+  +---o---+  +---o---+  +---o---+
+    |          |          |          |
+  [DB_Usr]   [DB_Evt]   [DB_Ord]   [DB_Pay]
+
+        ^
+        | (Servicio Pedidos "escucha" un evento)
++-------+----------------------------------+
+|      BUS DE EVENTOS (Kafka, RabbitMQ...) |
++------------------------------------------+
+        ^
+        | (Servicio Pagos "publica" un evento: 'PagoAprobado')
+¿Cuál es nuestro "Dominio Core"? Probablemente Pedidos y Eventos. Usuarios es un subdominio genérico.
+
+Escalabilidad Horizontal: ¿Pico de tráfico? "Dividiendo la aplicación en componentes más pequeños y autónomos", podemos desplegar 50 copias del Servicio de Pedidos sin tocar los otros servicios.
+
+Mantenibilidad: Cada servicio tiene "alta cohesión y bajo acoplamiento". El equipo de Pagos puede hacer un despliegue sin avisarle al equipo de Usuarios.
+
+Comunicación (Eventos): ¿Cómo sabe Pedidos que un pago fue aprobado? EXPLIQUE...
+
+El Servicio de Pagos publica un evento ("PagoAprobado_123").
+
+El Servicio de Pedidos está suscrito a ese evento y reacciona.
+
+Esta es la "invocación implícita de una herramienta cuando se produce un evento".
+
+El Mito: ¿Fue fácil llegar aquí? No. Es mentira que "son fáciles de diseñar y desarrollar como una aplicación monolítica". La gestión de la comunicación, los datos distribuidos y el despliegue es mucho más compleja.
+
+DevOps, IaC y Deuda Técnica
+Conceptos: DevOps (Ciclo y Principios), Infraestructura como Código (IaC), Deuda Técnica (Malos Olores).
+
+Vamos a simular un Ciclo de Despliegue
+
+Paso 1: El Código (GitHub). Crear un repositorio simple de "EventFlow" en su propia cuenta de GitHub.
+
+Paso 2: Análisis de Deuda (SonarCloud).
+
+Iniciar sesión en SonarCloud (gratis con cuenta de GitHub) y lo conectan a su repositorio "forkeado".
+
+SonarCloud analizará el código. Los estudiantes verán un dashboard que muestra "Malos Olores" (que son "Deuda de código") y deuda técnica.
+
+Paso 3: El Ciclo DevOps (GitHub Actions).
+
+El repositorio ya tiene un archivo de GitHub Actions (un pipeline de CI/CD).
+
+Haga un cambio simple (ej. cambiar un texto) y haga "commit".
+
+Observe en la pestaña "Actions" de GitHub cómo se ejecuta el ciclo: Codifican -> (Commit) -> Se extrae el código -> Se ejecutan pruebas -> (Falla o Pasa). Esto visualiza el ciclo DevOps y el principio de "automatización... para crear procesos... repetitivos y fiables". EXPLIQUE...
+
+Paso 4: IaC (Google Cloud Shell).
+
+Abrir Google Cloud Shell (terminal en el navegador, no requiere instalación).
+
+Los estudiantes ejecutan terraform init y terraform plan.
+Están definiendo infraestructura (servidores, redes) como código. Esta es "una función principal de DevOps que permite... gestionar la escala y la velocidad a la que deben aprovisionarse... los entornos".
+
+Crear un nuevo repositorio en GitHub (llamado taller-arquitectura) y crear los siguientes archivos dentro de él.
+
+Aquí está el contenido listo para "copiar y pegar".
+
+1. El "Código" de la Aplicación (El Monolito)
+Este es el código "malo" que vamos a analizar y "desplegar".
+
+Crea un archivo llamado: index.html
+
+HTML
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>EventFlow - Venta de Entradas</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4; }
+        .container { max-width: 600px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        h1 { color: #333; }
+        button { background-color: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+        
+        <style>
+            .evento { border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px; }
+        </style>
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bienvenido a EventFlow</h1>
+        <p>Tu plataforma para comprar entradas a los mejores eventos.</p>
+
+        <div class="evento">
+            <h2>Concierto de Rock</h2>
+            <p>Fecha: 30 de Diciembre</p>
+            <button onclick="alert('¡Entrada comprada! (No realmente)')">Comprar Entrada</button>
+        </div>
+
+        <div class="evento">
+            <h2>Feria de Tecnología</h2>
+            <p>Fecha: 15 de Enero</p>
+            <button onclick="alert('¡Entrada comprada! (No realmente)')">Comprar Entrada</button>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 EventFlow. Todos los derechos reservados.</p>
+        </footer>
+    </div>
+</body>
+</html>
+Por qué este archivo:
+
+Para SonarCloud (Deuda Técnica): Tiene "Malos Olores" 1intencionales (CSS mezclado, JavaScript en línea) que SonarCloud detectará como "Deuda de código".
+
+Para GitHub Actions (CI/CD): Es el archivo que van a modificar (por ejemplo, cambiando el año del copyright a 2026) para activar el pipeline de CI/CD.
+
+2. El Pipeline de CI/CD (DevOps)
+Esto automatiza las pruebas. GitHub lo detecta automáticamente.
+
+Crea una carpeta llamada: .github
+
+Dentro de esa carpeta, crea otra llamada: workflows
+
+Dentro de workflows, crea un archivo llamado: ci.yml
+
+YAML
+# Archivo: .github/workflows/ci.yml
+
+name: Taller CI Pipeline # Nombre del pipeline
+
+on:
+  push: # Se activa con CADA push (commit)
+    branches: [ "main" ] # Solo en la rama principal
+  workflow_dispatch: # Permite iniciarlo manualmente
+
+jobs:
+  # 1. El trabajo de "Construcción" (Build)
+  build:
+    runs-on: ubuntu-latest # Se ejecuta en una máquina virtual de Linux
+
+    steps:
+      - name: 1. Checkout del código
+        uses: actions/checkout@v4 # Acción oficial para descargar el código del repo
+
+      - name: 2. Simular una construcción (Build)
+        run: echo "Construyendo el proyecto... (aquí iría 'npm run build', etc.)"
+
+      - name: 3. Simular guardado de artefacto
+        run: |
+          mkdir -p build
+          cp index.html build/
+          echo "Archivos 'construidos' movidos a la carpeta /build"
+
+  # 2. El trabajo de "Pruebas" (Test)
+  test:
+    needs: build # Este trabajo NO empieza hasta que 'build' termine
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 1. Checkout del código
+        uses: actions/checkout@v4
+
+      - name: 2. Simular pruebas (Linting)
+        run: |
+          echo "Ejecutando pruebas..."
+          # Simulación de una prueba que busca la palabra "Rock"
+          grep -q "Rock" index.html
+          echo "Prueba de 'Linting' pasada."
+
+      - name: 3. Simular pruebas de unidad (Unit Test)
+        run: |
+          echo "Ejecutando pruebas de unidad..."
+          # Simulación de una prueba que busca el copyright
+          grep -q "EventFlow" index.html
+          echo "Prueba de 'Copyright' pasada."
+          
+      - name: 4. ¡Despliegue simulado!
+        run: echo "¡Pruebas exitosas! Listo para desplegar."
+Por qué este archivo:
+
+Para DevOps: Visualiza perfectamente el "orden del funcionamiento de DevOps" (Codifican -> Se extrae el código [checkout] -> Se ejecutan pruebas -> Se implementa [simulado]) .
+
+Para Principios DevOps: Demuestra el "Despliegue con procesos fiables y repetitivos"a través de la "automatización".
+
+3. La Infraestructura como Código (IaC)
+Este archivo le dice a la nube qué "máquinas" queremos.
+
+Crea un archivo llamado: main.tf
+
+Terraform
+# Archivo: main.tf
+#
+# Configuración de Terraform para el Taller de Arquitectura
+# ¡OJO! Esto es solo para demostración en Cloud Shell.
+# No creará recursos reales a menos que se aplique (no lo haremos).
+
+terraform {
+  required_providers {
+    # Usaremos el proveedor de Google Cloud
+    google = {
+      source  = "hashicorp/google"
+      version = "5.10.0"
+    }
+  }
+}
+
+provider "google" {
+  project = "tu-proyecto-de-gcloud" # Esto es solo un placeholder
+  region  = "us-central1"
+  zone    = "us-central1-c"
+}
+
+# Definición de "infraestructura como código" [cite: 37, 100]
+# 1. Una red virtual para nuestra app
+resource "google_compute_network" "vpc_network" {
+  name = "taller-arquitectura-vpc"
+  auto_create_subnetworks = true
+}
+
+# 2. Una regla de firewall para permitir tráfico web (HTTP)
+resource "google_compute_firewall" "default" {
+  name    = "taller-firewall-allow-http"
+  network = google_compute_network.vpc_network.name
+  
+  allow {
+    protocol = "tcp"
+    ports    = ["80"] # Puerto HTTP
+  }
+  source_ranges = ["0.0.0.0/0"] # Permitir desde cualquier IP
+}
+
+# 3. Un servidor web (máquina virtual)
+resource "google_compute_instance" "web_server" {
+  name         = "eventflow-web-server"
+  machine_type = "e2-micro" # Una máquina pequeña y barata
+  zone         = "us-central1-c"
+
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-11"
+    }
+  }
+
+  network_interface {
+    network = google_compute_network.vpc_network.name
+    access_config {
+      # Asigna una IP pública (efímera)
+    }
+  }
+}
+
+Por qué este archivo:
+
+Para IaC (Terraform): Es el ejemplo perfecto de "Infraestructura como Código". Es código que define infraestructura (redes, firewalls, servidores).
+
+Para Google Cloud Shell: Los estudiantes pueden ejecutar terraform init y terraform plan en este archivo (sin aplicar) para ver cómo IaC planifica la creación de recursos antes de tocar nada en la nube.
+
+Con estos 3 archivos en un repositorio de GitHub, está todo listo para ejecutar el siguiente paso del taller.
+
+Evaluación de la Arquitectura y UX
+Conceptos: ATAM, SAAM, Heurísticas de Nielsen.
+
+Vamos a Auditar el Diseño
+
+Herramienta: Figma y Miro.
+
+Paso 1: Heurísticas de Nielsen.
+
+Abrir Figma. Carear un "wireframe" básico de la app "EventFlow" (un par de cajas y botones).
+
+Discusión: ¿Estamos violando alguna Heurística de Nielsen? ¿Mostramos visibilidad del estado del sistema?. (Ej. "Reservando tu entrada..."). EXPLIQUE...
+
+¿Hay "Coherencia y estándares"?
+
+¿"Agradar visualmente al usuario" o "Facilitar la navegación del usuario" son heurísticas? ¡No, no forman parte de las 10 originales de Nielsen! EXPLIQUE...
+
+Paso 2: Simular un ATAM.
+
+Volver a Miro. Recordar el NFR de "picos de tráfico". Este escenario es un driver de arquitectura (un "AC").
+
+El análisis de este escenario para ver si la arquitectura (Microservicios) lo soporta es la base del método ATAM, y el atributo de calidad que se analiza es la Escalabilidad.
+
+La Auditoría (UX y Arquitectura)
+Conceptos: Heurísticas de Nielsen, ATAM, SAAM, Análisis de Sensibilidad, Escalabilidad.
+
+Parte A: Auditoría de UX (Las Heurísticas de Nielsen)
+Herramienta: Figma.
+
+Diseñe un wireframe de "EventFlow" en Figma intencionalmente mal hecho.
+
+Auditar el wireframe:
+
+"El usuario hace clic en 'Comprar' y... no pasa nada. Ni un spinner, ni un mensaje de 'cargando'. ¿Qué heurística estamos violando? ¿Visibilidad del estado del sistema? EXPLIQUE....
+
+"En la página de 'Eventos', el botón de 'Comprar' es verde y dice 'Comprar'. En la página de 'Detalle', es azul y dice 'Adquirir'. ¿Violación?"Consistencia y Estándares? EXPLIQUE...
+
+"El campo 'Cantidad de entradas' me deja escribir 'dos' en lugar de '2' y luego da error. ¿Violación? ¿Prevención de errores?
+
+Parte B: Simulación de Evaluación de Arquitectura (ATAM y SAAM)
+Herramienta: Miro (con los diagramas de Monolito y Microservicios).
+
+Actividad: Simular una reunión de auditoría de arquitectura.
+
+Simulación 1: El ATAM
+
+Planteamiento del Escenario: "Soy el cliente y estamos 'discutiendo sobre la capacidad del sistema para manejar picos de tráfico durante eventos de ventas especiales'" ¿qué atributo de calidad estamos analizando? Escalabilidad?? EXPLIQUE...
+
+Análisis (Monolito): "Mire el diagrama del Monolito. ¿Cómo responde esta arquitectura a ese escenario de 'pico de tráfico'?"Mal?? Si la lógica de 'Comprar' (en la Capa de Negocio) consume el 99% del CPU, todo el sistema se cae (el login, la búsqueda, etc.). EXPLIQUE...
+
+Análisis (Microservicios): Mire el diagrama de Microservicios. ¿Cómo responde? Bien?? Escalamos horizontalmente solo el Servicio de Pedidos y el Servicio de Pagos. Los demás siguen funcionando.
+
+Conclusión: "Felicidades, acaban de hacer un ATAM (Architecture Tradeoff Analysis Method). Usaron un escenario de negocio para identificar un atributo de calidad (Escalabilidad) y analizar cómo los 'estilos arquitectónicos' (Monolito vs. Microservicio) responden a él."
+
+Simulación 2: El SAAM
+
+Planteamiento del Escenario: "Ahora soy el Arquitecto Jefe, y quiero 'evaluar cómo un cambio en el protocolo de comunicación afecta al sistema'".
+
+La Pregunta (El "What-if"): "Específicamente: ¿Qué tan sensible es nuestra arquitectura de microservicios si decidimos cambiar el Bus de Eventos de Kafka a RabbitMQ? ¿Qué estamos haciendo? Un Análisis de Sensibilidad?
+
+Análisis (Microservicios): "Mire el diagrama de Microservicios. ¿Qué componentes tenemos que modificar para hacer ese cambio? Solo los servicios que están acoplados al bus: el Servicio de Pagos (que publica el evento) y el Servicio de Pedidos (que lo escucha)? Los servicios de Usuarios y Eventos ni se enteran.
+
+Conclusión: "Eso es un SAAM (Software Architecture Analysis Method) en acción. Se han identificado los puntos de sensibilidad de la arquitectura frente a un cambio específico.
+
+ EJERCICIO PRÁCTICO 2:
+
+Diseñar el "Caso SUMP" (Sistema Único de Matrículas y Pagos). Mezclaremos una arquitectura Frankenstein (muy común cuando una empresa crece rápido y contrata a diferentes proveedores) con una interfaz de usuario diseñada sin ningún criterio de usabilidad.
+
+Aquí tienes el taller listo para ser entregado a tus estudiantes.
+
+Taller Práctico Avanzado: Auditoría Integral de Software
+Evaluación Arquitectónica (SAAM/ATAM) y Usabilidad (Heurísticas de Nielsen)
+
+Contexto del Proyecto: El "Frankenstein" Académico (Sistema SUMP)
+
+Ustedes han sido contratados como la nueva firma de consultoría de software para la Universidad Nacional de los Andes (ficticia). Su misión es auditar el SUMP, el sistema crítico mediante el cual los estudiantes registran sus asignaturas y pagan su matrícula. Actualmente, el sistema colapsa cada semestre durante la semana de inscripciones, el departamento de contabilidad reporta pagos perdidos, y el centro de ayuda recibe 5,000 llamadas diarias de estudiantes que no entienden cómo usar la plataforma. A continuación, se detalla la radiografía técnica y visual del sistema.
+
+Parte 1: El Backend y la Arquitectura (El Caos)
+El sistema actual es el resultado de 8 años de parches y malas decisiones.
+
+El Núcleo (Legacy): El registro de asignaturas es un monolito gigante escrito en Java 8 con Spring MVC, desplegado en un servidor físico anticuado (On-Premise). Este monolito se conecta directamente a una base de datos Oracle centralizada.
+
+El "Parche Moderno": Hace dos años, un practicante decidió que debían usar microservicios. Creó el "Módulo de Pagos" en Node.js, alojado en la nube (AWS).
+
+La Conexión: Para que el monolito (Java) sepa si un estudiante pagó, hace una petición HTTP sincrónica (REST) al microservicio en AWS a través de una VPN inestable. Si la VPN falla o AWS se demora, el hilo en Java se queda bloqueado esperando infinitamente.
+
+Los Requerimientos de Negocio (Stakeholders en conflicto):
+
+El Vicerrector Académico (Disponibilidad y Rendimiento): "Exijo que el sistema soporte a 20,000 estudiantes inscribiendo materias simultáneamente a las 8:00 a.m. del lunes, sin tiempos de carga superiores a 2 segundos".
+
+El Director Financiero (Seguridad y Consistencia): "No me importa si el sistema es lento. El pago debe tener validación de 5 pasos, confirmación criptográfica y bloqueo de base de datos estricto (ACID) para evitar fraudes. Si se pierde un peso, los demando".
+
+El Ministerio de Educación (Modificabilidad): "Acaba de salir una nueva ley. En exactamente 30 días, todo el sistema debe cambiar su pasarela de pagos actual e integrarse con un nuevo sistema gubernamental de recaudos".
+
+Parte 2: El Frontend y la Experiencia de Usuario (El Laberinto)
+Para inscribir una materia y pagar, un estudiante experimenta el siguiente flujo en la interfaz web:
+
+Al entrar, la pantalla principal tiene un carrusel de noticias de la universidad que se mueve rapidísimo. El botón para "Entrar al Sistema" es de color gris claro sobre fondo blanco y dice "Ejecutar procedimiento de autenticación".
+
+Para buscar la materia "Ingeniería de Software", el buscador no acepta el nombre. El estudiante debe digitar el código alfanumérico exacto de 9 dígitos (ej. ING-SOFT-402-A). Si se equivoca en un guion, la pantalla se pone en blanco sin ningún mensaje.
+
+Al darle clic en "Inscribir", el sistema tarda 45 segundos pensando. El cursor no cambia y no hay barra de carga. El estudiante, desesperado, le da clic 5 veces más.
+
+Al pasar a la pantalla de pago, si el estudiante se arrepiente y oprime el botón "Atrás" del navegador web, el sistema arroja un cuadro de texto rojo que dice: Excepción fatal: NullPointerException en el controlador PaymentGateway línea 402. Transacción huérfana.
+
+Si el estudiante olvida poner la fecha de vencimiento de su tarjeta de crédito y le da a "Pagar", el sistema borra todo el formulario y le hace volver a escribir todos sus datos personales, dirección y números desde cero.
+
+Misión de la Consultoría (Entregables del Estudiante)
+Deberán entregar un informe técnico estructurado resolviendo los siguientes puntos, argumentando cada decisión como verdaderos ingenieros de software:
+
+Módulo A: Aplicación de ATAM (Arquitectura)
+
+Identifiquen y describan claramente el Conflicto (Trade-off) principal que existe entre los requerimientos del Vicerrector Académico y el Director Financiero dada la arquitectura actual (Monolito + HTTP sincrónico).
+
+Señalen al menos un Punto de Sensibilidad y un Riesgo crítico en la arquitectura descrita.
+
+Propongan una solución arquitectónica (ej. cambio a comunicación asíncrona, colas de mensajería, caché) que mitigue este conflicto, explicando qué atributo de calidad mejora y cuál podría verse sacrificado.
+
+Módulo B: Aplicación de SAAM (Modificabilidad)
+
+Tomen el escenario del Ministerio de Educación (cambiar la pasarela de pagos en 30 días).
+
+Analicen el impacto de este escenario sobre la arquitectura actual. ¿Cuántos componentes creen que deben modificarse (Monolito, Microservicio, Base de datos) y por qué? ¿Es la arquitectura actual altamente modificable frente a este escenario?
+
+Módulo C: Auditoría UX (Heurísticas de Nielsen)
+
+Analicen el flujo del estudiante descrito en la Parte 2.
+
+Identifiquen al menos 5 violaciones claras a las Heurísticas de Nielsen. Para cada violación deben:
+
+Nombrar la Heurística exacta que se está violando (ej. Prevención de errores).
+
+Explicar por qué el evento descrito viola esa heurística.
+
+Proponer la solución de diseño (Frontend/UI) que arreglaría el problema. 
+
+CUESTIONARIO DEL TALLER (QUIZ):
+
+Rendimiento (Latencia): ¿Cómo definirías el requisito de rendimiento para "EventFlow" en términos medibles? Específicamente, ¿cuál debería ser el tiempo máximo de respuesta (en milisegundos) para la consulta de disponibilidad de asientos durante un lanzamiento de alta demanda (ej. un concierto popular)?
+
+Escalabilidad (Horizontal): Si "EventFlow" espera 1,000 usuarios concurrentes para un evento local, pero de repente necesita soportar 100,000 usuarios para un festival internacional, ¿qué estrategia de arquitectura (p.ej., microservicios, balanceo de carga) debería implementar para escalar horizontalmente de manera efectiva?
+
+Fiabilidad (Tolerancia a Fallos): Un usuario está en mitad de un pago (paso 3 de 4) cuando el microservicio de "Pagos" falla. Describe un mecanismo de fiabilidad (como un patrón de retry o circuit breaker) que "EventFlow" debería usar para asegurar que la transacción no se pierda ni se duplique.
+
+Seguridad (Autorización): Un organizador de eventos (Rol A) solo debe poder ver las ventas de sus eventos, mientras que un administrador de "EventFlow" (Rol B) debe poder ver todos los eventos. ¿Cómo implementarías la autorización basada en roles (RBAC) para hacer cumplir esta regla de negocio?
+
+Seguridad (Integridad de Datos): ¿Qué medida de seguridad específica debe implementar "EventFlow" para prevenir la "falsificación de boletos" o la reventa de un mismo boleto (mismo ID) varias veces?
+
+Usabilidad (Eficiencia): Un usuario frecuente de "EventFlow" (un promotor) necesita cargar 50 eventos nuevos cada semana. ¿Qué funcionalidad de usabilidad propondrías para hacer este proceso más eficiente, en lugar de que tenga que crear cada evento manualmente, uno por uno?
+
+Mantenibilidad (Modularidad): El equipo de desarrollo necesita cambiar el proveedor de pasarela de pagos (de Stripe a PayU). Si "EventFlow" tiene una alta mantenibilidad, ¿cómo debería estar diseñado el sistema para que este cambio tenga un impacto mínimo en el resto de la aplicación?
+
+Rendimiento (Concurrencia): Describe el principal desafío de concurrencia que enfrenta "EventFlow" cuando dos usuarios intentan comprar el mismo último asiento (Asiento F-12) al mismo tiempo. ¿Qué mecanismo (p.ej., bloqueo pesimista u optimista) usarías para manejar esta condición de carrera?
+
+Disponibilidad (Disponibilidad del 99.99%): Lograr una disponibilidad de "cuatro nueves" (menos de 1 hora de caída al año) es costoso. Justifica por qué "EventFlow" necesitaría este nivel de disponibilidad. ¿Qué componente del sistema sería el más crítico para mantener siempre en línea?
+
+Trade-Off (Rendimiento vs. Consistencia): Durante un pico de venta, "EventFlow" debe decidir: ¿Mostrar un conteo de boletos restantes ligeramente desactualizado pero muy rápido (Consistencia Eventual), o asegurar que el conteo sea 100% preciso en todo momento, aunque sea más lento (Consistencia Fuerte)? ¿Cuál elegirías y por qué?
+
+Si fueras el facilitador de la sesión ATAM para "EventFlow", ¿quiénes serían los tres stakeholders (interesados) clave que insistirías en tener en la sala? ¿Y cuál crees que sería el principal "impulsor de negocio" (business driver) de cada uno?
+
+Para un sistema como "EventFlow", los atributos de calidad compiten. Identifica los dos atributos de calidad (ej. Rendimiento, Fiabilidad, Seguridad) que, en tu opinión, deberían tener la prioridad más alta (Alta Importancia, Alta Dificultad) en el Árbol de Utilidad. Justifica tu elección.
+
+Tomando el Rendimiento como atributo clave, genera un escenario de calidad completo y medible (en formato Estímulo-Respuesta-Medida) que un stakeholder (ej. un fan) propondría para el lanzamiento de un evento masivo en "EventFlow".
+
+El arquitecto de "EventFlow" presenta su decisión de usar una arquitectura de microservicios (ej. "Servicio de Pagos", "Servicio de Asientos", "Servicio de Autenticación"). ¿Cómo le pedirías que "mapee" esa decisión para demostrar cómo soporta el escenario de Escalabilidad del Árbol de Utilidad?
+
+Durante el análisis de escenarios, el arquitecto de "EventFlow" explica que para evitar la sobreventa, el sistema pone un bloqueo en la base de datos en cuanto un usuario selecciona un asiento. ¿Qué riesgo clave para el Rendimiento (específicamente la concurrencia) identificarías inmediatamente?
+
+El equipo de "EventFlow" quiere implementar un cifrado de extremo a extremo muy robusto (que consume alta CPU) para todos los datos del usuario, para maximizar la Seguridad. ¿Qué punto de compromiso (tradeoff) se acaba de crear? ¿Qué otro atributo de calidad se verá afectado negativamente?
+
+¿Qué componente o decisión de diseño en la arquitectura de "EventFlow" considerarías un punto de sensibilidad crítico para el atributo de Mantenibilidad? (Es decir, ¿qué única parte del diseño, si está mal hecha, hace que todo el sistema sea difícil de actualizar o modificar?)
+
+Se presenta el escenario: "El proveedor de pasarela de pagos externo (ej. Stripe) se cae en medio de una transacción". ¿Qué preguntas específicas le harías al arquitecto de "EventFlow" durante el análisis de este escenario para evaluar la Fiabilidad y la Tolerancia a Fallos de la arquitectura?
+
+Desde la perspectiva de un Gerente de Proyecto (Project Manager) de "EventFlow", ¿cuál sería el hallazgo más valioso que esperas recibir en el informe final de ATAM (Fase 4)? ¿Un riesgo identificado, un no-riesgo (decisión validada), o un punto de compromiso (tradeoff) documentado? Justifica por qué.
+
+ENTREGA:
+
+El taller es individual.
+DEBE diseñarse un documento (Normas APA) en PDF con el paso a paso, incluyendo pantallazos de cada paso, y respondiendo TODAS las preguntas.
+El documento DEBE ser entregado por medio de esta plataforma, antes de la media noche del martes 13 de Octubre de 2026.
+En la clase del jueves 16 de octubre de 2026, se realizará un quiz (a mano) de sustentación, con 50 preguntas (F/V) de este taller.
