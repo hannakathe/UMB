@@ -3,70 +3,85 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>EventFlow — Wireframe MALO (intencional)</title>
+<title>EventFlow — Wireframe MALO (basado en index.html de la guía)</title>
 <style>
   * { box-sizing: border-box; }
-  body { margin: 0; font-family: "Comic Sans MS", "Segoe UI", sans-serif; background: #e9e9e9; color: #444; }
+  body { margin: 0; font-family: Arial, sans-serif; background: #e9e9e9; color: #333; }
   .tag { background: #222; color: #fff; padding: 10px 16px; font: bold 14px Arial, sans-serif; }
-  .screens { display: flex; flex-wrap: wrap; gap: 24px; padding: 24px; }
-  .screen { flex: 1 1 360px; background: #fafafa; border: 2px dashed #999; min-height: 560px; position: relative; }
+  .screens { display: flex; flex-wrap: wrap; gap: 24px; padding: 24px; align-items: flex-start; }
+  .screen { flex: 1 1 380px; border: 2px dashed #999; background: #f4f4f4; }
   .screen h6 { margin: 0; padding: 6px 10px; background: #ccc; font: bold 12px Arial; color: #333; }
-  .header { height: 54px; background: #bbb; display: flex; align-items: center; padding: 0 12px; font-size: 13px; }
-  .card { margin: 12px; border: 1px solid #bbb; background: #eee; padding: 10px; display: flex; gap: 10px; align-items: center; }
-  .img { width: 70px; height: 54px; background: repeating-linear-gradient(45deg,#ccc,#ccc 6px,#ddd 6px,#ddd 12px); flex: none; }
-  .card p { margin: 2px 0; font-size: 12px; }
-  .grow { flex: 1; }
-  /* Violación: botones distintos para la misma acción */
-  .btn-verde { background: #2e9e44; color: #fff; border: 0; padding: 6px 10px; font-size: 11px; }
-  .btn-azul { background: #1f5fd1; color: #fff; border: 0; padding: 14px 30px; border-radius: 20px; font-size: 15px; }
-  .detail { padding: 14px; font-size: 12px; }
-  .detail .big { height: 130px; background: repeating-linear-gradient(45deg,#ccc,#ccc 8px,#ddd 8px,#ddd 16px); margin-bottom: 10px; }
-  .detail input { width: 120px; padding: 6px; border: 1px solid #aaa; font-size: 13px; }
-  .err { color: #999; font-size: 10px; margin-top: 6px; }
-  .tiny { font-size: 9px; color: #aaa; }
-  .callout { position: absolute; background: #ffeb3b; border: 2px solid #c62828; color: #c62828; font: bold 12px Arial; border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; }
+  .page { padding: 20px; }
+  /* Estilos tomados del index.html de la guía */
+  .container { max-width: 600px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+  h1 { color: #333; margin-top: 0; }
+  h2 { color: #333; }
+  .evento { border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px; }
+  footer p { color: #555; }
+  /* Fallas añadidas a propósito (Parte A de la guía) */
+  .btn-verde { background-color: #28a745; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; }
+  .btn-azul { background-color: #007bff; color: white; padding: 14px 32px; border: none; border-radius: 24px; font-size: 16px; cursor: pointer; }
+  input.cant { width: 140px; padding: 6px; border: 1px solid #aaa; font-size: 14px; }
+  .err { color: #999; font-size: 11px; margin-top: 6px; }
+  .nota { font-size: 11px; color: #888; }
+  .mk { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; margin-left: 6px;
+        background: #ffeb3b; border: 2px solid #c62828; color: #c62828; font: bold 12px Arial; border-radius: 50%; vertical-align: middle; }
   .notes { margin: 0 24px 24px; background: #fff; border-left: 6px solid #c62828; padding: 12px 16px; font: 13px/1.5 Arial, sans-serif; color: #333; }
   .notes b { color: #c62828; }
 </style>
 </head>
 <body>
-<div class="tag">EventFlow · Wireframe “mal hecho” a propósito (para auditoría heurística de Nielsen)</div>
+<div class="tag">EventFlow · Wireframe “mal hecho” a propósito: index.html de la guía + 3 fallas de la Parte A</div>
 <div class="screens">
-  <section class="screen" id="eventos">
-    <h6>Pantalla 1 — Eventos</h6>
-    <div class="header">EVENTFLOW &nbsp;|&nbsp; inicio &gt; ??? </div>
-    <div class="card"><div class="img"></div><div class="grow"><p><b>Concierto de Rock</b></p><p>30/12 · Movistar Arena</p></div>
-      <button class="btn-verde" onclick="/* no pasa nada */">Comprar</button></div>
-    <div class="card"><div class="img"></div><div class="grow"><p><b>Feria de Tecnología</b></p><p>15/01 · Corferias</p></div>
-      <button class="btn-verde">Comprar</button></div>
-    <div class="card"><div class="img"></div><div class="grow"><p><b>Festival de Jazz</b></p><p>02/02 · Teatro Mayor</p></div>
-      <button class="btn-verde">Comprar</button></div>
-    <span class="callout" style="top:118px;right:4px">1</span>
-    <span class="callout" style="top:204px;right:4px">2</span>
+  <section class="screen">
+    <h6>Pantalla 1 — Eventos (index.html)</h6>
+    <div class="page">
+      <div class="container">
+        <h1>Bienvenido a EventFlow</h1>
+        <p>Tu plataforma para comprar entradas a los mejores eventos.</p>
+
+        <div class="evento">
+          <h2>Concierto de Rock</h2>
+          <p>Fecha: 30 de Diciembre</p>
+          <button class="btn-verde">Comprar</button><span class="mk">1</span><span class="mk">2</span>
+        </div>
+
+        <div class="evento">
+          <h2>Feria de Tecnología</h2>
+          <p>Fecha: 15 de Enero</p>
+          <button class="btn-verde">Comprar</button><span class="mk">1</span><span class="mk">2</span>
+        </div>
+
+        <footer>
+          <p>&copy; 2025 EventFlow. Todos los derechos reservados.</p>
+        </footer>
+      </div>
+    </div>
   </section>
 
-  <section class="screen" id="detalle">
+  <section class="screen">
     <h6>Pantalla 2 — Detalle del evento</h6>
-    <div class="header">EVENTFLOW</div>
-    <div class="detail">
-      <div class="big"></div>
-      <p><b>Concierto de Rock</b> — 30 de diciembre</p>
-      <p>Cantidad de entradas:</p>
-      <input type="text" value="dos">
-      <div class="err">ERR_QTY_NAN: valor inválido (código 0x1F)</div>
-      <p style="margin-top:18px"><button class="btn-azul">Adquirir</button></p>
-      <p class="tiny">Al hacer clic no se muestra ningún indicador. No hay botón para cancelar ni volver.</p>
+    <div class="page">
+      <div class="container">
+        <h2>Concierto de Rock</h2>
+        <p>Fecha: 30 de Diciembre</p>
+        <p>Cantidad de entradas:</p>
+        <input class="cant" type="text" value="dos"><span class="mk">3</span>
+        <div class="err">ERR_QTY_NAN: valor inválido (código 0×1F)</div>
+        <p style="margin-top:20px"><button class="btn-azul">Adquirir</button><span class="mk">1</span><span class="mk">2</span></p>
+        <p class="nota">Al hacer clic solo aparece alert('¡Entrada comprada! (No realmente)'): sin indicador de carga, sin cancelar ni volver.</p>
+        <footer>
+          <p>&copy; 2025 EventFlow. Todos los derechos reservados.</p>
+        </footer>
+      </div>
     </div>
-    <span class="callout" style="top:296px;left:150px">3</span>
-    <span class="callout" style="top:372px;left:142px">2</span>
-    <span class="callout" style="top:372px;left:174px">1</span>
   </section>
 </div>
 <div class="notes">
-  <b>① Visibilidad del estado del sistema:</b> el usuario hace clic en “Comprar”/“Adquirir” y no pasa nada: ni spinner ni mensaje.<br>
-  <b>② Consistencia y estándares:</b> en Eventos el botón es verde y dice “Comprar”; en Detalle es azul, redondo y dice “Adquirir”.<br>
-  <b>③ Prevención de errores:</b> el campo “Cantidad” es de texto y acepta “dos”; el error aparece después, en jerga técnica (ERR_QTY_NAN).<br>
-  Otras: sin “Cancelar” (control y libertad), migas de pan rotas “inicio &gt; ???” (reconocer antes que recordar).
+  <b>① Visibilidad del estado del sistema:</b> el usuario hace clic en “Comprar”/“Adquirir” y no hay spinner ni mensaje de carga; solo un alert.<br>
+  <b>② Consistencia y estándares:</b> en Eventos el botón es verde y dice “Comprar”; en Detalle es azul, redondeado y dice “Adquirir”.<br>
+  <b>③ Prevención de errores:</b> el campo “Cantidad de entradas” es de texto y acepta “dos”; el error aparece después, en jerga técnica (ERR_QTY_NAN).<br>
+  Otras: sin Cancelar/Volver (control y libertad) y sin migas de pan (reconocer antes que recordar).
 </div>
 </body>
 </html>
