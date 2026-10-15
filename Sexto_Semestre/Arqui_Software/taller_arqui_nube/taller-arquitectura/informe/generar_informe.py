@@ -335,13 +335,13 @@ def construir():
              "Terminal de Cloud Shell con “Terraform has been successfully initialized!” | Captura de pantalla de Google Cloud Shell.", expect_num=16)
     d.figure("capturas/fig17_cloudshell_terraform_plan.png", "Ejecución de terraform plan en Google Cloud Shell",
              "Salida de terraform plan con los 3 recursos y “Plan: 3 to add, 0 to change, 0 to destroy” | Captura de pantalla de Google Cloud Shell.", expect_num=17)
-    d.h3("Diseño de la API en Swagger Hub")
+    d.h3("Diseño de la API con OpenAPI y Swagger")
     d.p("Como complemento, describí en `openapi.yaml` (OpenAPI 3.0) una API mínima de los servicios de Eventos y Pedidos: "
         "`GET /eventos` (la HU-01), `GET /eventos/{id}/disponibilidad` con objetivo p95 ≤ 200 ms y `POST /pedidos` con la "
         "cabecera obligatoria `Idempotency-Key`, que evita órdenes duplicadas por reintentos (Figura 18). Diseñar el contrato "
         "primero (*API-first*) es lo que permite el bajo acoplamiento entre servicios discutido antes.")
-    d.figure("capturas/fig18_swagger_hub.png", "Especificación OpenAPI de EventFlow en Swagger Hub",
-             "Swagger Hub con openapi.yaml importado: endpoints de Eventos y Pedidos visibles | Captura de pantalla de Swagger Hub (opcional).", expect_num=18)
+    d.figure("capturas/fig18_swagger_hub.png", "Especificación OpenAPI de EventFlow (openapi.yaml) Renderizada con Swagger UI",
+             "Swagger UI con openapi.yaml: endpoints de Eventos y Pedidos | Captura de pantalla de la especificación openapi.yaml del repositorio renderizada con Swagger UI, el visor de documentación interactiva de la plataforma Swagger.", expect_num=18)
 
     # ---------------------------------------------------------------- Evaluación
     d.h2("Evaluación de la Arquitectura y de la Experiencia de Usuario")
