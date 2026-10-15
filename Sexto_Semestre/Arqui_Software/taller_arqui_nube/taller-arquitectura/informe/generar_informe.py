@@ -346,12 +346,16 @@ def construir():
     # ---------------------------------------------------------------- Evaluación
     d.h2("Evaluación de la Arquitectura y de la Experiencia de Usuario")
     d.h3("Auditoría UX con las Heurísticas de Nielsen")
-    d.p("Diseñé en Figma un wireframe de EventFlow intencionalmente mal hecho, en escala de grises, con dos pantallas: "
-        "*Eventos* y *Detalle* (Figuras 19 y 20). Los números en amarillo marcan las violaciones.")
+    d.p("El wireframe intencionalmente mal hecho parte del `index.html` de la guía, con el mismo contenido: el título "
+        "“Bienvenido a EventFlow”, el subtítulo, los eventos “Concierto de Rock” (30 de diciembre) y “Feria de Tecnología” "
+        "(15 de enero) y el pie “© 2025 EventFlow”. A propósito le añadí las tres fallas del ejemplo de la Parte A de la guía. "
+        "La pantalla *Eventos* usa un botón verde que dice “Comprar”. La pantalla *Detalle* agrega un campo de texto de "
+        "cantidad que acepta “dos” y un botón azul redondeado que dice “Adquirir”. En ninguna de las dos, al hacer clic, hay "
+        "otra respuesta que el `alert()` original (Figuras 19 y 20). Los números en amarillo marcan las violaciones.")
     d.figure("wireframes/eventflow_malo_escritorio.png", "Wireframe de EventFlow Intencionalmente Mal Diseñado",
              "Elaboración propia (`wireframes/eventflow_malo.html`, exportado a PNG; versión móvil en `eventflow_malo_movil.png`).")
     d.figure("capturas/fig20_figma_wireframe_malo.png", "Wireframe Mal Diseñado Recreado en Figma",
-             "Frame “EventFlow — Malo” en Figma con las pantallas Eventos y Detalle y los marcadores 1–3 | Captura de pantalla de Figma.", expect_num=20)
+             "Editor de Figma con el archivo “EventFlow — Wireframes (Taller Arquitectura)”: frame “EventFlow — Malo” con las pantallas Eventos y Detalle y los marcadores 1–3 | Captura de pantalla de Figma.", expect_num=20)
     d.p("**① “El usuario hace clic en ‘Comprar’ y no pasa nada”: viola la Visibilidad del estado del sistema.** Esta "
         "heurística exige que el sistema mantenga informado al usuario de lo que ocurre, con retroalimentación oportuna. Sin "
         "spinner ni mensaje, el usuario no sabe si el clic se registró, si la reserva está en curso o si falló, y reacciona "
@@ -375,13 +379,14 @@ def construir():
         "la vez —*reconocer antes que recordar* (opciones y ubicación visibles, como las migas de pan), *consistencia y "
         "estándares* y *control y libertad del usuario*—, no una regla en sí misma. Las dos heurísticas reales más cercanas son, "
         "por tanto, “diseño estético y minimalista” y “reconocer antes que recordar”.")
-    d.p("A partir de la auditoría construí el wireframe corregido (Figuras 21 y 22): botones consistentes, input numérico con "
-        "límites y total calculado, una tercera pantalla con el estado “Reservando tu entrada…” (spinner, barra de progreso, "
+    d.p("A partir de la auditoría construí el wireframe corregido, con el mismo contenido de la guía (Figuras 21 y 22). "
+        "Incluye un encabezado con migas de pan, el mismo botón “Comprar entrada” en todas las pantallas y un selector "
+        "numérico “– 2 +” limitado a entre 1 y 6 entradas. También agrega el botón “Volver a eventos” y una tercera pantalla con el estado “Reservando tu entrada…” (spinner, barra de progreso, "
         "temporizador de 10 minutos y botón deshabilitado) y la salida de emergencia “Cancelar reserva”.")
     d.figure("wireframes/eventflow_corregido_escritorio.png", "Wireframe de EventFlow Corregido con las Heurísticas de Nielsen",
              "Elaboración propia (`wireframes/eventflow_corregido.html`, exportado a PNG; versión móvil en `eventflow_corregido_movil.png`).")
     d.figure("capturas/fig22_figma_wireframe_corregido.png", "Wireframe Corregido Recreado en Figma",
-             "Frame “EventFlow — Corregido” en Figma con las 3 pantallas (Eventos, Detalle, Reservando…) | Captura de pantalla de Figma.", expect_num=22)
+             "Editor de Figma con el archivo “EventFlow — Wireframes (Taller Arquitectura)”: frame “EventFlow — Corregido” con las 3 pantallas (Eventos, Detalle, Reservando…) | Captura de pantalla de Figma.", expect_num=22)
 
     d.h3("Simulación 1: El ATAM")
     d.p("**Escenario.** “Soy el cliente y estamos discutiendo la capacidad del sistema para manejar picos de tráfico durante "

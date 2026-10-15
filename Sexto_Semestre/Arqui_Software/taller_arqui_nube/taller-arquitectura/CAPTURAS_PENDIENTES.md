@@ -14,10 +14,15 @@ GitHub Actions corrió 2 veces y ambas en verde ✅: ejecución #1 (commit inici
 Ya se capturaron automáticamente `fig10`, `fig13`, `fig14` y `fig15` (ítems 4, 7, 8 y 9 abajo).
 
 ## 🗓 Estado al 15/10/2026 — revisión para la entrega
-- ✅ **Portada APA 7:** se puso la asignatura “Arquitectura de Software”. La línea del docente se quitó porque decidiste no poner el nombre (si lo quieres, agrégalo en `generar_informe.py` debajo de la asignatura).
-- ✅ **Texto de SonarCloud** reescrito con redacción neutra (“entre los malos olores esperados están…”). Se aclara que son hallazgos de revisión manual y que la severidad y la deuda deben confirmarse en SonarCloud. Todavía **no existe** el proyecto `hannakathe_taller-arquitectura` en SonarCloud (la API responde 404), así que no se citan números ni se tomaron las capturas automáticas fig11/fig12.
-- ℹ️ **Figma (fig20/fig22):** no había archivos en `capturas/`, así que no se descartó nada. Deben ser capturas **del editor de Figma** (lienzo + panel de capas), no los PNG del HTML.
-- ℹ️ **Swagger (fig18):** no hay captura todavía. Si al final usas Swagger UI (editor.swagger.io) en lugar de SwaggerHub, cambia el pie de la Figura 18 en `generar_informe.py` a: “Especificación OpenAPI de EventFlow (openapi.yaml) renderizada con Swagger UI”.
+- ✅ **Wireframes rehechos sobre el `index.html` de la guía.**
+  - El malo tiene el mismo contenido de la guía más las 3 fallas de la Parte A: botón verde “Comprar”, botón azul “Adquirir” y un campo de texto que acepta “dos”.
+  - El corregido tiene 3 pantallas con el mismo contenido.
+  - Se eliminó todo lo inventado: Festival de Jazz, lugares, precios, “Total” y las migas “inicio > ???”.
+  - Los PNG de escritorio y móvil se volvieron a renderizar, y el texto de Nielsen del informe se actualizó.
+- ✅ **Portada APA 7** con la asignatura “Arquitectura de Software”. Sin línea de docente, por decisión tuya.
+- ✅ **Texto de SonarCloud** con redacción neutra: los malos olores son hallazgos de revisión manual. El proyecto `hannakathe_taller-arquitectura` **todavía no existe** en SonarCloud (la API responde 404), así que no se citan números ni se tomaron fig11/fig12.
+- ℹ️ **Figma (fig20/fig22):** no había archivos en `capturas/`, así que no se descartó nada. Deben ser capturas **del editor de Figma** del archivo *EventFlow — Wireframes (Taller Arquitectura)*: https://www.figma.com/design/BRTpl131fGup0vTbSM2YIu
+- ℹ️ **Swagger (fig18):** aún no hay captura. Si usas Swagger UI, el pie debe decir: “Especificación OpenAPI de EventFlow (openapi.yaml) renderizada con Swagger UI”.
 - 📸 **Siguen PENDIENTE 10 recuadros:** fig03, fig04, fig09, fig11, fig12, fig16, fig17, fig18 (opcional), fig20 y fig22.
 
 ## ✅ Checklist en el orden del informe
@@ -138,6 +143,7 @@ Ya se capturaron automáticamente `fig10`, `fig13`, `fig14` y `fig15` (ítems 4,
   `POST /pedidos` agrupados en *Eventos* y *Pedidos*.
 
 ### 13. `fig20_figma_wireframe_malo.png` — Figma: wireframe mal hecho
+> Archivo de Figma: **EventFlow — Wireframes (Taller Arquitectura)** — https://www.figma.com/design/BRTpl131fGup0vTbSM2YIu
 ### 14. `fig22_figma_wireframe_corregido.png` — Figma: wireframe corregido
 El taller pide Figma; los wireframes están hechos en HTML (`wireframes/*.html`) y renderizados a PNG. Dos formas de pasarlos:
 
