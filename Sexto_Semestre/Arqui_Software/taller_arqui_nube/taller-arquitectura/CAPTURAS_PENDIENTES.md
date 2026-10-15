@@ -13,6 +13,13 @@ Repositorio público: **https://github.com/hannakathe/taller-arquitectura** (cre
 GitHub Actions corrió 2 veces y ambas en verde ✅: ejecución #1 (commit inicial) y #2 (copyright 2026 + documentos).
 Ya se capturaron automáticamente `fig10`, `fig13`, `fig14` y `fig15` (ítems 4, 7, 8 y 9 abajo).
 
+## 🗓 Estado al 15/10/2026 — revisión para la entrega
+- ✅ **Portada APA 7:** se puso la asignatura “Arquitectura de Software”. La línea del docente se quitó porque decidiste no poner el nombre (si lo quieres, agrégalo en `generar_informe.py` debajo de la asignatura).
+- ✅ **Texto de SonarCloud** reescrito con redacción neutra (“entre los malos olores esperados están…”). Se aclara que son hallazgos de revisión manual y que la severidad y la deuda deben confirmarse en SonarCloud. Todavía **no existe** el proyecto `hannakathe_taller-arquitectura` en SonarCloud (la API responde 404), así que no se citan números ni se tomaron las capturas automáticas fig11/fig12.
+- ℹ️ **Figma (fig20/fig22):** no había archivos en `capturas/`, así que no se descartó nada. Deben ser capturas **del editor de Figma** (lienzo + panel de capas), no los PNG del HTML.
+- ℹ️ **Swagger (fig18):** no hay captura todavía. Si al final usas Swagger UI (editor.swagger.io) en lugar de SwaggerHub, cambia el pie de la Figura 18 en `generar_informe.py` a: “Especificación OpenAPI de EventFlow (openapi.yaml) renderizada con Swagger UI”.
+- 📸 **Siguen PENDIENTE 10 recuadros:** fig03, fig04, fig09, fig11, fig12, fig16, fig17, fig18 (opcional), fig20 y fig22.
+
 ## ✅ Checklist en el orden del informe
 
 ### 1. `fig03_trello_tablero.png` — Trello: tablero completo
@@ -49,7 +56,7 @@ Ya se capturaron automáticamente `fig10`, `fig13`, `fig14` y `fig15` (ítems 4,
 - **Qué debe verse:** la lista de archivos (`index.html`, `main.tf`, `.github/workflows`, `diagramas/`…),
   el último commit y el contador de commits.
 
-### 5. `fig11_sonarcloud_dashboard.png` — SonarCloud (SonarQube Cloud): dashboard
+### ⏳ PENDIENTE (proyecto aún no creado) — 5. `fig11_sonarcloud_dashboard.png` — SonarCloud (SonarQube Cloud): dashboard
 - **Herramienta:** https://sonarcloud.io
 - **Pasos:**
   1. **Log in → With GitHub** y autoriza.
@@ -62,6 +69,9 @@ Ya se capturaron automáticamente `fig10`, `fig13`, `fig14` y `fig15` (ítems 4,
   (minutos), *Reliability* y *Security*.
 - Si el análisis automático no detecta HTML/CSS, en *Administration → Analysis Method* confirma que está en
   "Automatic" y vuelve a hacer un push (cualquier cambio menor).
+- **Cuando exista el proyecto** (key esperada `hannakathe_taller-arquitectura`), avísame: consulto la API pública
+  (`/api/issues/search` y `/api/measures/component`). Con eso reescribo el párrafo con las reglas reales, su severidad
+  y los minutos de deuda, y tomo fig11/fig12 automáticamente con Playwright.
 
 ### 6. `fig12_sonarcloud_code_smells.png` — SonarCloud: lista de Code Smells
 - **Pasos:** pestaña **Issues** → filtro **Type: Code Smell** (o *Software quality: Maintainability*).
@@ -168,5 +178,6 @@ python informe/generar_informe.py
 ```
 
 Genera `informe/Informe_Taller_Arquitectura.docx` y `.pdf` (con Word), actualiza la tabla de contenido y lista
-en consola las capturas que aún falten. Antes de entregar, llena en amarillo **[ASIGNATURA]**, **[DOCENTE]** y
-(la URL del repo ya quedó puesta) (en `generar_informe.py` para que no se pierdan al regenerar).
+en consola las capturas que aún falten. La portada ya no tiene marcadores amarillos y la URL del repo ya está puesta.
+
+Las capturas que descartes guárdalas en `capturas/_descartadas/`; esa carpeta está en `.gitignore` y no se sube.

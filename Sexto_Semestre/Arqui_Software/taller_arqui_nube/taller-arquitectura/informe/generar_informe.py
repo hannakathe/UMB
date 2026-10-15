@@ -35,8 +35,7 @@ def construir():
     d.p("", indent=False)
     for line in ["Hanna Katherine Abril Gongora",
                  "Programa de Ingeniería de Software, Universidad Manuela Beltrán",
-                 "[[ASIGNATURA]]",
-                 "[[DOCENTE]]",
+                 "Arquitectura de Software",
                  "13 de octubre de 2026"]:
         d.p(line, indent=False, align="center")
     d.page_break()
@@ -263,14 +262,15 @@ def construir():
     d.figure("capturas/fig10_github_repo.png", "Repositorio taller-arquitectura en GitHub",
              "Página principal del repositorio con index.html, main.tf, .github/workflows y los 2 commits | Captura de pantalla de GitHub.", expect_num=10)
     d.h3("Paso 2: Análisis de Deuda Técnica con SonarCloud")
-    d.p("Inicié sesión en SonarCloud con la cuenta de GitHub, importé el repositorio y ejecuté el análisis automático "
-        "(Figuras 11 y 12). La deuda técnica es la metáfora de tomar atajos que funcionan hoy pero que generan “intereses”: "
+    d.p("El procedimiento consiste en iniciar sesión en SonarCloud con la cuenta de GitHub, importar el repositorio y "
+        "ejecutar el análisis automático (Figuras 11 y 12). La deuda técnica es la metáfora de tomar atajos que funcionan hoy pero que generan “intereses”: "
         "cada cambio futuro cuesta más hasta que se paga la deuda refactorizando. Los **malos olores** (*code smells*) son los "
         "síntomas visibles de esa deuda en el código: no rompen la funcionalidad, pero dificultan entenderlo y cambiarlo "
         "(Fowler, 2018). SonarCloud los clasifica en la dimensión de mantenibilidad, estima el tiempo de remediación y asigna "
         "una calificación de la A a la E (SonarSource, s.f.).")
-    d.p("Al revisar el `index.html` del taller, estos son los malos olores intencionales que el análisis pone en evidencia "
-        "(la lista exacta de reglas depende del perfil de calidad activo, por defecto “Sonar way”):")
+    d.p("A partir de la revisión manual del `index.html` del taller, entre los malos olores esperados están los siguientes. "
+        "Cuáles de ellos reporta SonarCloud como *code smells*, con qué severidad y cuántos minutos de deuda, depende del "
+        "perfil de calidad activo (por defecto, “Sonar way”) y debe confirmarse en el dashboard del proyecto:")
     d.bullets([
         "**`<style>` anidado dentro de otro `<style>` (líneas 6 a 16).** Es HTML/CSS inválido: el navegador interpreta el texto `<style>` interno como CSS basura, de modo que la regla `.evento` puede no aplicarse. Es un error latente y confuso para quien mantenga el archivo.",
         "**CSS mezclado con el HTML.** Los estilos embebidos impiden reutilizarlos en otras páginas y cachearlos; lo mantenible es una hoja `styles.css` externa.",

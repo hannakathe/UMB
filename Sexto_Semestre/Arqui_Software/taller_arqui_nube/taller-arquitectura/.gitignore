@@ -4,3 +4,4 @@
 .terraform.lock.hcl
 ~$*.docx
 __pycache__/
+capturas/_descartadas/
