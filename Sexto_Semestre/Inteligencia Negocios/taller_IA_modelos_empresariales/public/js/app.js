@@ -5,7 +5,7 @@ import { importView } from './views/import.js';
 import { editorView } from './views/editor.js';
 import { datasetsView } from './views/datasets.js';
 import { detailView } from './views/detail.js';
-import { dashboardView } from './views/dashboard.js';
+import { dashboardView, destroyCharts } from './views/dashboard.js';
 import { lastDatasetId } from './state.js';
 
 const ROUTES = [
@@ -38,6 +38,7 @@ async function route() {
   pageTitle.textContent = r.title;
   renderNav(r);
   sidebar.classList.remove('open');
+  destroyCharts(); // evita gráficas huérfanas al cambiar de vista
   try {
     await r.view(main, { id });
   } catch (e) {

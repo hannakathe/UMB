@@ -14,7 +14,7 @@
     "cli": "node scripts/cli.js",
     "seed": "node scripts/cli.js seed",
     "demo:generate": "node scripts/generate-demo.js",
-    "test": "node --test --test-concurrency=1 test/"
+    "test": "node --no-warnings --test --test-concurrency=1 \"test/**/*.test.js\""
   },
   "license": "MIT",
   "dependencies": {

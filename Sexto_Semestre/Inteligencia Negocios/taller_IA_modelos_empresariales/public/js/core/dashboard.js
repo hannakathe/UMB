@@ -347,7 +347,8 @@ export function computeKpi(prep, idx, spec, dateColumn) {
       out.spark = series.slice(-12).map(([, v]) => v);
       const [prevL, prev] = series[series.length - 2];
       const [lastL, last] = series[series.length - 1];
-      if (prev) {
+      // Solo se compara con el período inmediatamente anterior (sin huecos) para no presentar variaciones engañosas.
+      if (prev && nextPeriod(prevL, grain) === lastL) {
         const pct = (last - prev) / Math.abs(prev);
         out.delta = { pct, text: `${pct >= 0 ? '▲' : '▼'} ${fmtPct(Math.abs(pct))} ${lastL} vs ${prevL}` };
       }

@@ -14,7 +14,7 @@ import { recordsView } from './records.js';
 const TABS = { ...PAGES, registros: 'Registros', analisis: 'Análisis inteligente' };
 let charts = [];
 
-function destroyCharts() {
+export function destroyCharts() {
   for (const c of charts) c.destroy();
   charts = [];
 }
