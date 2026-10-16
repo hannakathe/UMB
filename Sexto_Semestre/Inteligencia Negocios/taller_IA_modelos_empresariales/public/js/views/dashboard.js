@@ -268,7 +268,7 @@ export async function dashboardView(main, params, { tab } = {}) {
       clear(bodyEl, h('div', { class: `chart-box${lead ? ' tall' : ''}` }, canvas));
       requestAnimationFrame(() => {
         if (!canvas.isConnected) return;
-        charts.push(renderChart(canvas, result, { onDrill: (filter, label) => { st.drill = { filter, label, title: result.title }; st.tab = 'registros'; renderTabs(); renderContent(); } }));
+        charts.push(renderChart(canvas, result, { onDrill: (filter, label) => { st.drill = { filter, label, title: result.title }; st.tab = 'registros'; renderTabs(); renderContent(); tabsEl.scrollIntoView({ behavior: 'smooth', block: 'start' }); } }));
       });
     }
     draw();

@@ -78,7 +78,7 @@ export function renderChart(canvas, result, { onDrill } = {}) {
       borderColor: main,
       backgroundColor: alpha(main, 0.1),
       fill: 'origin',
-      tension: 0.3,
+      cubicInterpolationMode: 'monotone',
       borderWidth: 2,
       pointRadius: result.labels.length > 40 ? 0 : 3,
       pointHoverRadius: 5,
@@ -91,16 +91,21 @@ export function renderChart(canvas, result, { onDrill } = {}) {
       opts.plugins.legend.position = 'top';
       opts.plugins.legend.align = 'start';
     }
+    // El área rellena se mide desde cero; con valores negativos el eje se ajusta solo.
+    opts.scales.y.beginAtZero = true;
     opts.interaction = { mode: 'index', intersect: false };
     config = { type: 'line', data: { labels: result.labels, datasets: ds }, options: opts };
   } else {
     const horizontal = t === 'hbar';
     if (horizontal) {
       opts.indexAxis = 'y';
-      [opts.scales.x.ticks.callback, opts.scales.y.ticks.callback] = [opts.scales.y.ticks.callback, undefined];
+      opts.scales.x.ticks.callback = opts.scales.y.ticks.callback;
+      delete opts.scales.y.ticks.callback;
+      opts.scales.x.beginAtZero = true;
       opts.scales.y.grid.display = false;
     } else {
       opts.scales.x.grid.display = false;
+      opts.scales.y.beginAtZero = true;
     }
     opts.interaction = { mode: 'nearest', intersect: true, axis: horizontal ? 'y' : 'x' };
     const isHist = t === 'histogram';
