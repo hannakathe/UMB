@@ -4,8 +4,36 @@
     {
       "name": "datavision",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["--no-warnings", "server/index.js"],
+      "runtimeArgs": [
+        "--no-warnings",
+        "server/index.js"
+      ],
       "port": 3000
+    },
+    {
+      "name": "datavision-ai-pages",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "C:/Users/Usuario/Proyectos/Universidad/Repositories_U/datavision-ai/scripts/preview-pages.js"
+      ],
+      "port": 4173
+    },
+    {
+      "name": "datavision-ai-local",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "--no-warnings",
+        "C:/Users/Usuario/Proyectos/Universidad/Repositories_U/datavision-ai/server/index.js"
+      ],
+      "port": 3000
+    },
+    {
+      "name": "datavision-ai-pages-root",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "C:/Users/Usuario/AppData/Local/Temp/claude/C--Users-Usuario-Proyectos-Universidad-Repositories-U-UMB-Sexto-Semestre-Inteligencia-Negocios-taller-IA-modelos-empresariales/76d07d4f-b1db-4acc-ba8c-44e71c076d75/scratchpad/pages-root.mjs"
+      ],
+      "port": 4174
     }
   ]
 }
