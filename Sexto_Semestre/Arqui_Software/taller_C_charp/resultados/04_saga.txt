@@ -1,0 +1,10 @@
+--- COMPRA CON PATRÓN SAGA (ORQUESTACIÓN) ---
+Estado Inicial -> Laptops: 5 | Saldo: $1000
+
+=> Inventario: Descontando 1 Laptop...
+=> Pagos: Cobrando $1500...
+[FALLO EN LA SAGA] Fondos insuficientes en la cuenta del cliente.
+<= Inventario (COMPENSACIÓN): Devolviendo 1 Laptop...
+SAGA ABORTADA CORRECTAMENTE
+
+Estado Final -> Laptops: 5 | Saldo: $1000

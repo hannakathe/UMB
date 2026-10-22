@@ -1,0 +1,4 @@
+--- INICIANDO ERP MULTIHILO ---
+Órdenes procesadas: 49
+Inventario final (deben quedar 50): 97
+¡ERROR ARQUITECTÓNICO CRÍTICO! El estado del ERP es inconsistente.

@@ -1,0 +1,8 @@
+--- COMPRA SIN SAGA (TRY-CATCH INGENUO) ---
+Estado Inicial -> Laptops: 5 | Saldo: $1000
+
+=> Inventario: Descontando 1 Laptop...
+=> Pagos: Cobrando $1500...
+[ERROR DE SISTEMA] Fondos insuficientes en la cuenta del cliente.
+
+Estado Final -> Laptops: 4 | Saldo: $1000

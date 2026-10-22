@@ -1,0 +1,7 @@
+--- INICIANDO ERP MULTIHILO (REFACTORIZADO) ---
+Inventario Inicial de Laptops: 100
+
+
+--- REPORTE FINAL DEL ERP ---
+Órdenes realmente procesadas: 50
+Inventario Final de Laptops: 50
