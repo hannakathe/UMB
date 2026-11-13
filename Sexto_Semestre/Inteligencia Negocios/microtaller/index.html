@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📚 Gestión de Biblioteca — Microtaller | Hanna Abril</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f3ee; --card:#ffffff; --ink:#1f2433; --muted:#6b7080; --line:#e7e1d6;
+  --c1:#2f6fdb; --c2:#1aa37a; --c3:#e8a317; --c4:#d9485f; --c5:#7b5cd6; --c6:#0fa3b1; --c7:#c2683a;
+  --navy:#1b2a4a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+header{background:linear-gradient(120deg,var(--navy),#2c3f6b 60%,#3b4f80);color:#fff;padding:28px 32px 0}
+.hwrap{max-width:1240px;margin:auto}
+.htop{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+h1{font-family:Fraunces,serif;font-size:2.1rem;font-weight:800;letter-spacing:-.5px}
+.sub{opacity:.8;font-size:.95rem}
+.who{text-align:right;font-size:.85rem;opacity:.85}
+.who b{display:block;font-size:1rem;opacity:1}
+nav{display:flex;gap:4px;margin-top:22px;flex-wrap:wrap}
+nav button{background:transparent;border:0;color:#c9d3ea;font:600 .92rem Inter;padding:11px 18px;border-radius:12px 12px 0 0;cursor:pointer}
+nav button:hover{color:#fff;background:rgba(255,255,255,.08)}
+nav button.on{background:var(--bg);color:var(--navy)}
+main{max-width:1240px;margin:auto;padding:28px 32px 60px}
+section{display:none}section.on{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+h2{font-family:Fraunces,serif;font-size:1.5rem;margin-bottom:6px}
+h3{font-size:1rem;margin-bottom:12px}
+.lead{color:var(--muted);margin-bottom:20px}
+.grid{display:grid;gap:18px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(max-width:820px){.g2{grid-template-columns:1fr}}
+.g3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:14px;margin-bottom:18px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;border-top:5px solid var(--k)}
+.kpi .lbl{font-size:.78rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+.kpi .val{font-family:Fraunces,serif;font-size:2.1rem;font-weight:800;color:var(--k);line-height:1.1;margin:4px 0}
+.kpi .val.small{font-size:1.05rem;font-family:Inter;font-weight:700;line-height:1.3;margin:8px 0 4px}
+.kpi .hint{font-size:.78rem;color:var(--muted)}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;font-size:.75rem;font-weight:600;white-space:nowrap}
+.st-Devuelto{background:#dff3ea;color:#11734f}
+.st-Devuelto.con.retraso,.st-Tarde{background:#fdf0d5;color:#8a5a00}
+.st-Activo{background:#e2ebfb;color:#1f4fa3}
+.st-Retrasado{background:#fbe1e5;color:#a32035}
+form .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+label{display:block;font-size:.82rem;font-weight:600;margin:12px 0 5px}
+input,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font:inherit;background:#fcfbf8}
+input:focus,select:focus{outline:2px solid var(--c1);border-color:transparent}
+.btn{margin-top:16px;border:0;border-radius:10px;padding:11px 18px;font:600 .92rem Inter;cursor:pointer;color:#fff;background:var(--c1)}
+.btn.green{background:var(--c2)}.btn.ghost{background:#eee8dc;color:var(--ink)}.btn.red{background:var(--c4)}
+.btn:hover{filter:brightness(1.07)}
+.msg{margin-top:12px;font-size:.88rem;padding:10px 12px;border-radius:10px;display:none}
+.msg.ok{display:block;background:#dff3ea;color:#11734f}.msg.err{display:block;background:#fbe1e5;color:#a32035}
+table{width:100%;border-collapse:collapse;font-size:.86rem}
+th{text-align:left;font-size:.74rem;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);padding:10px 8px;border-bottom:2px solid var(--line);position:sticky;top:0;background:#fff}
+td{padding:9px 8px;border-bottom:1px solid var(--line)}
+tr:hover td{background:#faf8f3}
+.tbl{max-height:520px;overflow:auto}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.toolbar input,.toolbar select{width:auto;min-width:180px}
+.chart svg{width:100%;height:auto;display:block}
+.chart text{font-family:Inter;fill:var(--ink)}
+.legend{display:flex;flex-wrap:wrap;gap:10px 16px;margin-top:10px;font-size:.82rem}
+.legend span::before{content:"";display:inline-block;width:11px;height:11px;border-radius:3px;background:var(--c);margin-right:6px;vertical-align:-1px}
+.prob p{margin-bottom:12px}
+.prob ul{margin:8px 0 14px 20px}.prob li{margin-bottom:6px}
+.box{border-left:5px solid var(--b);background:#fff;border-radius:12px;padding:16px 18px;border:1px solid var(--line);border-left-width:5px}
+.box h3{color:var(--b)}
+.concl{counter-reset:c}
+.concl .box{position:relative;padding-left:64px;margin-bottom:16px}
+.concl .box::before{counter-increment:c;content:counter(c);position:absolute;left:16px;top:16px;width:34px;height:34px;border-radius:50%;background:var(--b);color:#fff;font:800 1.1rem Fraunces;display:grid;place-items:center}
+.note{font-size:.8rem;color:var(--muted);margin-top:10px}
+.avail{font-weight:700}
+.badge0{color:var(--c4)}.badge1{color:var(--c2)}
+footer{text-align:center;color:var(--muted);font-size:.8rem;padding:20px}
+@media(max-width:640px){form .row{grid-template-columns:1fr}header,main{padding-left:16px;padding-right:16px}h1{font-size:1.6rem}}
+</style>
+</head>
+<body>
+<header><div class="hwrap">
+  <div class="htop">
+    <div><h1>📚 Gestión de Biblioteca</h1><div class="sub">Registro de préstamos y devoluciones · libros prestados, disponibles, más consultados y retrasos</div></div>
+    <div class="who"><b>Hanna Abril</b>Microtaller · Entregable individual<br>Fecha de corte: <span id="hoy"></span></div>
+  </div>
+  <nav id="nav">
+    <button data-s="problema" class="on">🧩 1. Problema</button>
+    <button data-s="registro">📝 2–3. Registro</button>
+    <button data-s="dashboard">📊 4. Dashboard</button>
+    <button data-s="datos">🗂️ Base de datos</button>
+    <button data-s="conclusiones">💡 5. Conclusiones</button>
+  </nav>
+</div></header>
+
+<main>
+<!-- ============ 1. PROBLEMA ============ -->
+<section id="problema" class="on">
+  <h2>🧩 Identificación del problema</h2>
+  <p class="lead">¿Qué situación busca solucionar este microtaller?</p>
+  <div class="grid g2">
+    <div class="card prob">
+      <h3>📌 Situación actual</h3>
+      <p>La biblioteca lleva el control de préstamos en cuadernos y hojas sueltas. Con decenas de préstamos al mes, este registro manual genera problemas:</p>
+      <ul>
+        <li>❓ No se sabe con certeza <b>cuántos ejemplares hay disponibles</b> de un libro sin revisar los estantes.</li>
+        <li>⏰ Los <b>retrasos en las devoluciones</b> se detectan tarde o nunca, porque nadie cruza fechas límite con la fecha actual.</li>
+        <li>📈 No hay información sobre <b>qué libros y categorías se piden más</b>, así que las compras de nuevos ejemplares se deciden sin datos.</li>
+        <li>🔍 Buscar el historial de un usuario o de un libro toma mucho tiempo.</li>
+      </ul>
+    </div>
+    <div class="card prob">
+      <h3>🎯 Objetivo de la solución</h3>
+      <p>Construir una aplicación web sencilla que permita:</p>
+      <ul>
+        <li>📝 <b>Registrar préstamos</b> (libro, usuario, fecha y plazo) validando que haya ejemplares disponibles.</li>
+        <li>↩️ <b>Registrar devoluciones</b> y marcar automáticamente si fueron a tiempo o con retraso.</li>
+        <li>📊 Ver un <b>dashboard</b> con indicadores de libros prestados, disponibles, más consultados y retrasos.</li>
+        <li>💾 Guardar y <b>exportar</b> la base de datos en CSV para análisis posterior.</li>
+      </ul>
+      <p><b>Preguntas que se responden con los datos:</b> ¿Cuántos libros están prestados hoy? ¿Cuántos ejemplares quedan disponibles? ¿Qué libros se consultan más? ¿Qué porcentaje de préstamos se devuelve tarde?</p>
+    </div>
+  </div>
+  <div class="grid g3" style="margin-top:18px">
+    <div class="box" style="--b:var(--c1)"><h3>🗃️ Datos</h3>Base ficticia: <b id="pb-libros"></b> títulos, <b id="pb-usuarios"></b> usuarios y <b id="pb-prest"></b> préstamos registrados entre agosto y noviembre de 2026.</div>
+    <div class="box" style="--b:var(--c2)"><h3>🛠️ Tecnología</h3>HTML + CSS + JavaScript en un solo archivo. Gráficas en SVG propias, sin librerías externas. Datos guardados en el navegador (localStorage).</div>
+    <div class="box" style="--b:var(--c5)"><h3>📏 Regla de negocio</h3>Plazo estándar de préstamo: <b>14 días</b>. Un préstamo está <b>retrasado</b> si no se ha devuelto y la fecha actual supera su fecha límite.</div>
+  </div>
+</section>
+
+<!-- ============ 2-3. REGISTRO ============ -->
+<section id="registro">
+  <h2>📝 Registro de préstamos y devoluciones</h2>
+  <p class="lead">Desarrollo técnico: formularios que actualizan la base de datos y el dashboard al instante.</p>
+  <div class="grid g2">
+    <div class="card">
+      <h3>📤 Nuevo préstamo</h3>
+      <form id="fPrestamo">
+        <label>Libro</label>
+        <select id="pLibro" required></select>
+        <label>Usuario</label>
+        <input id="pUsuario" list="dlUsuarios" placeholder="Nombre del usuario" required>
+        <datalist id="dlUsuarios"></datalist>
+        <div class="row">
+          <div><label>Fecha de préstamo</label><input type="date" id="pFecha" required></div>
+          <div><label>Plazo (días)</label><input type="number" id="pDias" value="14" min="1" max="60" required></div>
+        </div>
+        <button class="btn" type="submit">✅ Registrar préstamo</button>
+        <div class="msg" id="mPrestamo"></div>
+      </form>
+    </div>
+    <div class="card">
+      <h3>📥 Registrar devolución</h3>
+      <form id="fDevolucion">
+        <label>Préstamo pendiente</label>
+        <select id="dPrestamo" required></select>
+        <label>Fecha de devolución</label>
+        <input type="date" id="dFecha" required>
+        <button class="btn green" type="submit">↩️ Registrar devolución</button>
+        <div class="msg" id="mDevolucion"></div>
+      </form>
+      <h3 style="margin-top:22px">➕ Nuevo libro al catálogo</h3>
+      <form id="fLibro">
+        <div class="row">
+          <div><label>Título</label><input id="lTitulo" required></div>
+          <div><label>Autor</label><input id="lAutor" required></div>
+        </div>
+        <div class="row">
+          <div><label>Categoría</label><select id="lCat"></select></div>
+          <div><label>Ejemplares</label><input type="number" id="lEj" value="1" min="1" required></div>
+        </div>
+        <button class="btn ghost" type="submit">📗 Agregar libro</button>
+        <div class="msg" id="mLibro"></div>
+      </form>
+    </div>
+  </div>
+  <div class="card" style="margin-top:18px">
+    <h3>📚 Disponibilidad del catálogo</h3>
+    <div class="tbl" style="max-height:380px"><table id="tCatalogo"></table></div>
+  </div>
+</section>
+
+<!-- ============ 4. DASHBOARD ============ -->
+<section id="dashboard">
+  <h2>📊 Dashboard de la biblioteca</h2>
+  <p class="lead">Indicadores calculados en tiempo real a partir de la base de datos. Fecha de corte: <b class="hoyTxt"></b>.</p>
+  <div class="kpis" id="kpis"></div>
+  <div class="grid g2">
+    <div class="card chart"><h3>🏷️ Préstamos por categoría</h3><div id="chCat"></div></div>
+    <div class="card chart"><h3>🚦 Estado de los préstamos</h3><div id="chEstado"></div></div>
+    <div class="card chart"><h3>🏆 Top 5 libros más consultados</h3><div id="chTop"></div></div>
+    <div class="card chart"><h3>📅 Préstamos por mes</h3><div id="chMes"></div></div>
+  </div>
+  <div class="card" style="margin-top:18px">
+    <h3>⏰ Préstamos retrasados (pendientes de devolución)</h3>
+    <div class="tbl" style="max-height:300px"><table id="tRetrasos"></table></div>
+  </div>
+</section>
+
+<!-- ============ DATOS ============ -->
+<section id="datos">
+  <h2>🗂️ Base de datos de préstamos</h2>
+  <p class="lead">Cada fila es un registro. Puedes filtrar, buscar y exportar a CSV.</p>
+  <div class="card">
+    <div class="toolbar">
+      <input id="fBuscar" placeholder="🔎 Buscar libro o usuario…">
+      <select id="fEstado"><option value="">Todos los estados</option><option>Activo</option><option>Retrasado</option><option>Devuelto</option><option>Devuelto con retraso</option></select>
+      <button class="btn" id="bCsv" style="margin:0">⬇️ Exportar préstamos CSV</button>
+      <button class="btn ghost" id="bCsvLib" style="margin:0">⬇️ Exportar libros CSV</button>
+      <button class="btn red" id="bReset" style="margin:0">♻️ Restaurar datos iniciales</button>
+    </div>
+    <div class="note" id="cuenta"></div>
+    <div class="tbl"><table id="tPrestamos"></table></div>
+  </div>
+</section>
+
+<!-- ============ 5. CONCLUSIONES ============ -->
+<section id="conclusiones">
+  <h2>💡 Análisis de resultados</h2>
+  <p class="lead">Tres conclusiones basadas en la información obtenida (se recalculan con los datos actuales).</p>
+  <div class="concl" id="concl"></div>
+  <div class="card" style="margin-top:6px">
+    <h3>🧭 Recomendaciones</h3>
+    <ul style="margin-left:20px" id="recs"></ul>
+  </div>
+</section>
+</main>
+<footer>📚 Microtaller Gestión de Biblioteca · Hanna Abril · Datos ficticios con fines académicos</footer>
+
+<script>
+const SEED = {"libros": [{"id": "L001", "titulo": "Cien años de soledad", "autor": "Gabriel García Márquez", "categoria": "Novela", "ejemplares": 3}, {"id": "L002", "titulo": "El amor en los tiempos del cólera", "autor": "Gabriel García Márquez", "categoria": "Novela", "ejemplares": 2}, {"id": "L003", "titulo": "La vorágine", "autor": "José Eustasio Rivera", "categoria": "Novela", "ejemplares": 2}, {"id": "L004", "titulo": "María", "autor": "Jorge Isaacs", "categoria": "Novela", "ejemplares": 2}, {"id": "L005", "titulo": "Delirio", "autor": "Laura Restrepo", "categoria": "Novela", "ejemplares": 1}, {"id": "L006", "titulo": "1984", "autor": "George Orwell", "categoria": "Novela", "ejemplares": 2}, {"id": "L007", "titulo": "Breve historia del tiempo", "autor": "Stephen Hawking", "categoria": "Ciencia", "ejemplares": 2}, {"id": "L008", "titulo": "Cosmos", "autor": "Carl Sagan", "categoria": "Ciencia", "ejemplares": 2}, {"id": "L009", "titulo": "El gen egoísta", "autor": "Richard Dawkins", "categoria": "Ciencia", "ejemplares": 1}, {"id": "L010", "titulo": "Sapiens", "autor": "Yuval Noah Harari", "categoria": "Historia", "ejemplares": 3}, {"id": "L011", "titulo": "Las venas abiertas de América Latina", "autor": "Eduardo Galeano", "categoria": "Historia", "ejemplares": 2}, {"id": "L012", "titulo": "Colombia: una nación a pesar de sí misma", "autor": "David Bushnell", "categoria": "Historia", "ejemplares": 1}, {"id": "L013", "titulo": "Código limpio", "autor": "Robert C. Martin", "categoria": "Tecnología", "ejemplares": 3}, {"id": "L014", "titulo": "Introducción a los algoritmos", "autor": "Thomas H. Cormen", "categoria": "Tecnología", "ejemplares": 2}, {"id": "L015", "titulo": "Python para todos", "autor": "Raúl González Duque", "categoria": "Tecnología", "ejemplares": 2}, {"id": "L016", "titulo": "Fundamentos de bases de datos", "autor": "Abraham Silberschatz", "categoria": "Tecnología", "ejemplares": 2}, {"id": "L017", "titulo": "Diseño centrado en el usuario", "autor": "Don Norman", "categoria": "Tecnología", "ejemplares": 1}, {"id": "L018", "titulo": "El principito", "autor": "Antoine de Saint-Exupéry", "categoria": "Infantil", "ejemplares": 3}, {"id": "L019", "titulo": "Harry Potter y la piedra filosofal", "autor": "J. K. Rowling", "categoria": "Infantil", "ejemplares": 2}, {"id": "L020", "titulo": "Matilda", "autor": "Roald Dahl", "categoria": "Infantil", "ejemplares": 1}, {"id": "L021", "titulo": "Veinte poemas de amor", "autor": "Pablo Neruda", "categoria": "Poesía", "ejemplares": 2}, {"id": "L022", "titulo": "Antología poética", "autor": "José Asunción Silva", "categoria": "Poesía", "ejemplares": 1}, {"id": "L023", "titulo": "Hábitos atómicos", "autor": "James Clear", "categoria": "Desarrollo personal", "ejemplares": 2}, {"id": "L024", "titulo": "El arte de la guerra", "autor": "Sun Tzu", "categoria": "Desarrollo personal", "ejemplares": 1}], "usuarios": ["Ana Martínez", "Carlos Rojas", "Laura Gómez", "Andrés Pérez", "Valentina Ríos", "Juan Camilo Torres", "Daniela Castro", "Santiago López", "Mariana Herrera", "Felipe Morales", "Sofía Vargas", "Julián Ortiz", "Camila Suárez", "Mateo Jiménez"], "prestamos": [{"id": "P001", "libroId": "L015", "usuario": "Valentina Ríos", "fechaPrestamo": "2026-08-04", "fechaLimite": "2026-08-18", "fechaDevolucion": "2026-08-28"}, {"id": "P002", "libroId": "L015", "usuario": "Santiago López", "fechaPrestamo": "2026-08-06", "fechaLimite": "2026-08-20", "fechaDevolucion": "2026-08-20"}, {"id": "P003", "libroId": "L015", "usuario": "Laura Gómez", "fechaPrestamo": "2026-08-12", "fechaLimite": "2026-08-26", "fechaDevolucion": "2026-08-26"}, {"id": "P004", "libroId": "L013", "usuario": "Valentina Ríos", "fechaPrestamo": "2026-08-13", "fechaLimite": "2026-08-27", "fechaDevolucion": "2026-09-03"}, {"id": "P005", "libroId": "L010", "usuario": "Felipe Morales", "fechaPrestamo": "2026-08-19", "fechaLimite": "2026-09-02", "fechaDevolucion": "2026-09-02"}, {"id": "P006", "libroId": "L006", "usuario": "Daniela Castro", "fechaPrestamo": "2026-08-19", "fechaLimite": "2026-09-02", "fechaDevolucion": "2026-09-02"}, {"id": "P007", "libroId": "L015", "usuario": "Mateo Jiménez", "fechaPrestamo": "2026-08-20", "fechaLimite": "2026-09-03", "fechaDevolucion": "2026-09-02"}, {"id": "P008", "libroId": "L001", "usuario": "Sofía Vargas", "fechaPrestamo": "2026-08-21", "fechaLimite": "2026-09-04", "fechaDevolucion": "2026-09-06"}, {"id": "P009", "libroId": "L006", "usuario": "Camila Suárez", "fechaPrestamo": "2026-08-21", "fechaLimite": "2026-09-04", "fechaDevolucion": "2026-09-01"}, {"id": "P010", "libroId": "L018", "usuario": "Juan Camilo Torres", "fechaPrestamo": "2026-08-26", "fechaLimite": "2026-09-09", "fechaDevolucion": null}, {"id": "P011", "libroId": "L013", "usuario": "Julián Ortiz", "fechaPrestamo": "2026-08-26", "fechaLimite": "2026-09-09", "fechaDevolucion": null}, {"id": "P012", "libroId": "L014", "usuario": "Ana Martínez", "fechaPrestamo": "2026-08-30", "fechaLimite": "2026-09-13", "fechaDevolucion": "2026-09-20"}, {"id": "P013", "libroId": "L014", "usuario": "Juan Camilo Torres", "fechaPrestamo": "2026-08-31", "fechaLimite": "2026-09-14", "fechaDevolucion": "2026-09-21"}, {"id": "P014", "libroId": "L004", "usuario": "Carlos Rojas", "fechaPrestamo": "2026-09-01", "fechaLimite": "2026-09-15", "fechaDevolucion": "2026-09-19"}, {"id": "P015", "libroId": "L021", "usuario": "Mariana Herrera", "fechaPrestamo": "2026-09-01", "fechaLimite": "2026-09-15", "fechaDevolucion": "2026-09-22"}, {"id": "P016", "libroId": "L018", "usuario": "Mateo Jiménez", "fechaPrestamo": "2026-09-04", "fechaLimite": "2026-09-18", "fechaDevolucion": null}, {"id": "P017", "libroId": "L009", "usuario": "Carlos Rojas", "fechaPrestamo": "2026-09-05", "fechaLimite": "2026-09-19", "fechaDevolucion": "2026-09-16"}, {"id": "P018", "libroId": "L010", "usuario": "Santiago López", "fechaPrestamo": "2026-09-05", "fechaLimite": "2026-09-19", "fechaDevolucion": "2026-09-19"}, {"id": "P019", "libroId": "L013", "usuario": "Juan Camilo Torres", "fechaPrestamo": "2026-09-07", "fechaLimite": "2026-09-21", "fechaDevolucion": "2026-09-16"}, {"id": "P020", "libroId": "L003", "usuario": "Andrés Pérez", "fechaPrestamo": "2026-09-09", "fechaLimite": "2026-09-23", "fechaDevolucion": "2026-09-25"}, {"id": "P021", "libroId": "L015", "usuario": "Julián Ortiz", "fechaPrestamo": "2026-09-09", "fechaLimite": "2026-09-23", "fechaDevolucion": "2026-09-27"}, {"id": "P022", "libroId": "L021", "usuario": "Mateo Jiménez", "fechaPrestamo": "2026-09-12", "fechaLimite": "2026-09-26", "fechaDevolucion": "2026-10-06"}, {"id": "P023", "libroId": "L019", "usuario": "Camila Suárez", "fechaPrestamo": "2026-09-17", "fechaLimite": "2026-10-01", "fechaDevolucion": "2026-09-26"}, {"id": "P024", "libroId": "L006", "usuario": "Daniela Castro", "fechaPrestamo": "2026-09-18", "fechaLimite": "2026-10-02", "fechaDevolucion": "2026-09-27"}, {"id": "P025", "libroId": "L001", "usuario": "Felipe Morales", "fechaPrestamo": "2026-09-26", "fechaLimite": "2026-10-10", "fechaDevolucion": "2026-10-10"}, {"id": "P026", "libroId": "L022", "usuario": "Santiago López", "fechaPrestamo": "2026-09-27", "fechaLimite": "2026-10-11", "fechaDevolucion": "2026-10-13"}, {"id": "P027", "libroId": "L024", "usuario": "Daniela Castro", "fechaPrestamo": "2026-09-27", "fechaLimite": "2026-10-11", "fechaDevolucion": "2026-10-15"}, {"id": "P028", "libroId": "L023", "usuario": "Mateo Jiménez", "fechaPrestamo": "2026-09-27", "fechaLimite": "2026-10-11", "fechaDevolucion": "2026-10-06"}, {"id": "P029", "libroId": "L003", "usuario": "Ana Martínez", "fechaPrestamo": "2026-09-29", "fechaLimite": "2026-10-13", "fechaDevolucion": "2026-10-10"}, {"id": "P030", "libroId": "L009", "usuario": "Felipe Morales", "fechaPrestamo": "2026-10-04", "fechaLimite": "2026-10-18", "fechaDevolucion": "2026-10-25"}, {"id": "P031", "libroId": "L024", "usuario": "Camila Suárez", "fechaPrestamo": "2026-10-10", "fechaLimite": "2026-10-24", "fechaDevolucion": "2026-10-24"}, {"id": "P032", "libroId": "L001", "usuario": "Julián Ortiz", "fechaPrestamo": "2026-10-12", "fechaLimite": "2026-10-26", "fechaDevolucion": null}, {"id": "P033", "libroId": "L002", "usuario": "Laura Gómez", "fechaPrestamo": "2026-10-14", "fechaLimite": "2026-10-28", "fechaDevolucion": "2026-11-07"}, {"id": "P034", "libroId": "L001", "usuario": "Camila Suárez", "fechaPrestamo": "2026-10-19", "fechaLimite": "2026-11-02", "fechaDevolucion": "2026-10-30"}, {"id": "P035", "libroId": "L019", "usuario": "Mariana Herrera", "fechaPrestamo": "2026-10-23", "fechaLimite": "2026-11-06", "fechaDevolucion": "2026-11-06"}, {"id": "P036", "libroId": "L018", "usuario": "Felipe Morales", "fechaPrestamo": "2026-10-24", "fechaLimite": "2026-11-07", "fechaDevolucion": "2026-11-06"}, {"id": "P037", "libroId": "L001", "usuario": "Laura Gómez", "fechaPrestamo": "2026-10-25", "fechaLimite": "2026-11-08", "fechaDevolucion": null}, {"id": "P038", "libroId": "L023", "usuario": "Valentina Ríos", "fechaPrestamo": "2026-10-27", "fechaLimite": "2026-11-10", "fechaDevolucion": "2026-11-09"}, {"id": "P039", "libroId": "L003", "usuario": "Ana Martínez", "fechaPrestamo": "2026-10-27", "fechaLimite": "2026-11-10", "fechaDevolucion": "2026-11-05"}, {"id": "P040", "libroId": "L023", "usuario": "Mariana Herrera", "fechaPrestamo": "2026-10-29", "fechaLimite": "2026-11-12", "fechaDevolucion": null}, {"id": "P041", "libroId": "L017", "usuario": "Laura Gómez", "fechaPrestamo": "2026-10-29", "fechaLimite": "2026-11-12", "fechaDevolucion": "2026-11-07"}, {"id": "P042", "libroId": "L014", "usuario": "Valentina Ríos", "fechaPrestamo": "2026-10-29", "fechaLimite": "2026-11-12", "fechaDevolucion": null}, {"id": "P043", "libroId": "L022", "usuario": "Daniela Castro", "fechaPrestamo": "2026-11-04", "fechaLimite": "2026-11-18", "fechaDevolucion": null}, {"id": "P044", "libroId": "L024", "usuario": "Camila Suárez", "fechaPrestamo": "2026-11-06", "fechaLimite": "2026-11-20", "fechaDevolucion": null}, {"id": "P045", "libroId": "L003", "usuario": "Mariana Herrera", "fechaPrestamo": "2026-11-06", "fechaLimite": "2026-11-20", "fechaDevolucion": null}, {"id": "P046", "libroId": "L006", "usuario": "Mateo Jiménez", "fechaPrestamo": "2026-11-07", "fechaLimite": "2026-11-21", "fechaDevolucion": "2026-11-12"}, {"id": "P047", "libroId": "L023", "usuario": "Mateo Jiménez", "fechaPrestamo": "2026-11-12", "fechaLimite": "2026-11-26", "fechaDevolucion": null}, {"id": "P048", "libroId": "L018", "usuario": "Santiago López", "fechaPrestamo": "2026-11-12", "fechaLimite": "2026-11-26", "fechaDevolucion": null}]};
+const KEY = 'biblio_hanna_v1';
+const CATS = ['Novela','Ciencia','Historia','Tecnología','Infantil','Poesía','Desarrollo personal'];
+const CAT_COLOR = {'Novela':'#2f6fdb','Ciencia':'#0fa3b1','Historia':'#c2683a','Tecnología':'#7b5cd6','Infantil':'#e8a317','Poesía':'#d9485f','Desarrollo personal':'#1aa37a'};
+const ST_COLOR = {'Devuelto':'#1aa37a','Devuelto con retraso':'#e8a317','Activo':'#2f6fdb','Retrasado':'#d9485f'};
+const MESES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+
+let DB;
+function load(){ try{ const s=localStorage.getItem(KEY); if(s){DB=JSON.parse(s);return;} }catch(e){} DB=JSON.parse(JSON.stringify(SEED)); }
+function save(){ try{ localStorage.setItem(KEY,JSON.stringify(DB)); }catch(e){} }
+
+const pad=n=>String(n).padStart(2,'0');
+const iso=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const HOY = iso(new Date());
+const parse=s=>{const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d);};
+const addDays=(s,n)=>{const d=parse(s);d.setDate(d.getDate()+n);return iso(d);};
+const diff=(a,b)=>Math.round((parse(a)-parse(b))/86400000);
+const fmt=s=>{if(!s)return '—';const d=parse(s);return `${pad(d.getDate())}/${MESES[d.getMonth()]}/${d.getFullYear()}`;};
+const libro=id=>DB.libros.find(l=>l.id===id);
+function estado(p){
+  if(p.fechaDevolucion) return p.fechaDevolucion>p.fechaLimite?'Devuelto con retraso':'Devuelto';
+  return HOY>p.fechaLimite?'Retrasado':'Activo';
+}
+const activos=id=>DB.prestamos.filter(p=>p.libroId===id&&!p.fechaDevolucion).length;
+const disp=l=>l.ejemplares-activos(l.id);
+const pill=s=>`<span class="pill ${s==='Devuelto con retraso'?'st-Tarde':'st-'+s}">${s}</span>`;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- Stats ---------- */
+function stats(){
+  const P=DB.prestamos, L=DB.libros;
+  const totalEj=L.reduce((a,l)=>a+l.ejemplares,0);
+  const prestados=P.filter(p=>!p.fechaDevolucion).length;
+  const est={}; P.forEach(p=>{const s=estado(p);est[s]=(est[s]||0)+1;});
+  const devueltos=(est['Devuelto']||0)+(est['Devuelto con retraso']||0);
+  const porLibro={}; P.forEach(p=>porLibro[p.libroId]=(porLibro[p.libroId]||0)+1);
+  const top=Object.entries(porLibro).sort((a,b)=>b[1]-a[1]||libro(a[0]).titulo.localeCompare(libro(b[0]).titulo));
+  const porCat={}; P.forEach(p=>{const c=libro(p.libroId).categoria;porCat[c]=(porCat[c]||0)+1;});
+  const porMes={}; P.forEach(p=>{const k=p.fechaPrestamo.slice(0,7);porMes[k]=(porMes[k]||0)+1;});
+  const retr=P.filter(p=>estado(p)==='Retrasado').map(p=>({...p,dias:diff(HOY,p.fechaLimite)})).sort((a,b)=>b.dias-a.dias);
+  const sinDisp=L.filter(l=>disp(l)<=0);
+  const promDiasRetrasoDev = (()=>{const t=P.filter(p=>estado(p)==='Devuelto con retraso');return t.length?t.reduce((a,p)=>a+diff(p.fechaDevolucion,p.fechaLimite),0)/t.length:0;})();
+  return {totalEj,prestados,disponibles:totalEj-prestados,est,devueltos,top,porCat,porMes,retr,sinDisp,promDiasRetrasoDev,
+    tasaTiempo: devueltos? (est['Devuelto']||0)/devueltos*100 : 0,
+    tasaRetraso: P.length? ((est['Devuelto con retraso']||0)+(est['Retrasado']||0))/P.length*100 : 0};
+}
+
+/* ---------- SVG charts ---------- */
+function barsV(data,colors,h=260){
+  const W=520,H=h,pl=34,pb=58,pt=16,max=Math.max(...data.map(d=>d[1]),1);
+  const step=Math.ceil(max/5)||1, top=Math.ceil(max/step)*step;
+  const bw=(W-pl-10)/data.length;
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img">`;
+  for(let v=0;v<=top;v+=step){const y=H-pb-(v/top)*(H-pb-pt);s+=`<line x1="${pl}" x2="${W}" y1="${y}" y2="${y}" stroke="#eee6d8"/><text x="${pl-6}" y="${y+4}" font-size="11" text-anchor="end" fill="#6b7080">${v}</text>`;}
+  data.forEach((d,i)=>{const bh=(d[1]/top)*(H-pb-pt),x=pl+i*bw+bw*.18,y=H-pb-bh,w=bw*.64;
+    s+=`<rect x="${x}" y="${y}" width="${w}" height="${bh}" rx="6" fill="${colors[i]}"><title>${esc(d[0])}: ${d[1]}</title></rect>`;
+    s+=`<text x="${x+w/2}" y="${y-6}" font-size="12" font-weight="700" text-anchor="middle">${d[1]}</text>`;
+    const lb=d[0].length>11?d[0].split(' ')[0]:d[0];
+    s+=`<text x="${x+w/2}" y="${H-pb+18}" font-size="11.5" text-anchor="middle" fill="#3a3f50">${esc(lb)}</text>`;});
+  return s+'</svg>';
+}
+function donut(data){
+  const tot=data.reduce((a,d)=>a+d[1],0)||1,R=90,r=56,cx=130,cy=120;let a0=-Math.PI/2,s=`<svg viewBox="0 0 520 240">`;
+  data.forEach(d=>{if(!d[1])return;const a1=a0+d[1]/tot*Math.PI*2,lg=a1-a0>Math.PI?1:0;
+    const p=(R0,a)=>[cx+R0*Math.cos(a),cy+R0*Math.sin(a)];
+    const [x1,y1]=p(R,a0),[x2,y2]=p(R,a1),[x3,y3]=p(r,a1),[x4,y4]=p(r,a0);
+    const path=d[1]===tot?`M${cx-R},${cy}a${R},${R} 0 1,0 ${2*R},0a${R},${R} 0 1,0 ${-2*R},0M${cx-r},${cy}a${r},${r} 0 1,1 ${2*r},0a${r},${r} 0 1,1 ${-2*r},0`
+      :`M${x1},${y1}A${R},${R} 0 ${lg} 1 ${x2},${y2}L${x3},${y3}A${r},${r} 0 ${lg} 0 ${x4},${y4}Z`;
+    s+=`<path d="${path}" fill="${ST_COLOR[d[0]]}" stroke="#fff" stroke-width="2"><title>${d[0]}: ${d[1]}</title></path>`;a0=a1;});
+  s+=`<text x="${cx}" y="${cy-2}" text-anchor="middle" font-size="30" font-weight="800" font-family="Fraunces">${tot}</text><text x="${cx}" y="${cy+18}" text-anchor="middle" font-size="11" fill="#6b7080">préstamos</text>`;
+  data.forEach((d,i)=>{const y=52+i*40;s+=`<rect x="270" y="${y}" width="14" height="14" rx="3" fill="${ST_COLOR[d[0]]}"/><text x="292" y="${y+12}" font-size="15" font-weight="600">${d[0]}</text><text x="292" y="${y+30}" font-size="13.5" fill="#6b7080">${d[1]} · ${(d[1]/tot*100).toFixed(1)}%</text>`;});
+  return s+'</svg>';
+}
+function barsH(data){
+  const W=520,rowH=40,H=data.length*rowH+10,pl=210,max=Math.max(...data.map(d=>d[1]),1);let s=`<svg viewBox="0 0 ${W} ${H}">`;
+  const pal=['#2f6fdb','#4a84e2','#6a9ae8','#8bb0ee','#a9c4f2'];
+  data.forEach((d,i)=>{const y=i*rowH+6,w=(d[1]/max)*(W-pl-40),t=d[0].length>30?d[0].slice(0,29)+'…':d[0];
+    s+=`<text x="${pl-10}" y="${y+19}" font-size="12.5" text-anchor="end">${esc(t)}</text><rect x="${pl}" y="${y+4}" width="${w}" height="22" rx="6" fill="${pal[i]||'#a9c4f2'}"><title>${esc(d[0])}: ${d[1]}</title></rect><text x="${pl+w+8}" y="${y+20}" font-size="12.5" font-weight="700">${d[1]}</text>`;});
+  return s+'</svg>';
+}
+function line(data){
+  const W=520,H=250,pl=34,pr=20,pb=40,pt=24,max=Math.max(...data.map(d=>d[1]),1),top=Math.ceil(max/5)*5||5;
+  const x=i=>pl+(data.length===1?(W-pl-pr)/2:i*(W-pl-pr)/(data.length-1)),y=v=>H-pb-(v/top)*(H-pb-pt);
+  let s=`<svg viewBox="0 0 ${W} ${H}">`;
+  for(let v=0;v<=top;v+=top/5){s+=`<line x1="${pl}" x2="${W-pr}" y1="${y(v)}" y2="${y(v)}" stroke="#eee6d8"/><text x="${pl-6}" y="${y(v)+4}" font-size="11" text-anchor="end" fill="#6b7080">${v}</text>`;}
+  const pts=data.map((d,i)=>`${x(i)},${y(d[1])}`).join(' ');
+  s+=`<polygon points="${x(0)},${y(0)} ${pts} ${x(data.length-1)},${y(0)}" fill="#7b5cd6" opacity=".12"/>`;
+  s+=`<polyline points="${pts}" fill="none" stroke="#7b5cd6" stroke-width="3" stroke-linejoin="round"/>`;
+  data.forEach((d,i)=>{s+=`<circle cx="${x(i)}" cy="${y(d[1])}" r="6" fill="#fff" stroke="#7b5cd6" stroke-width="3"><title>${d[0]}: ${d[1]}</title></circle><text x="${x(i)}" y="${y(d[1])-12}" text-anchor="middle" font-size="12" font-weight="700">${d[1]}</text><text x="${x(i)}" y="${H-pb+20}" text-anchor="middle" font-size="12" fill="#3a3f50">${d[0]}</text>`;});
+  return s+'</svg>';
+}
+
+/* ---------- Render ---------- */
+function renderAll(){ renderSelects(); renderCatalogo(); renderDashboard(); renderTabla(); renderConclusiones(); renderProblema(); }
+function renderProblema(){
+  document.getElementById('pb-libros').textContent=DB.libros.length;
+  document.getElementById('pb-usuarios').textContent=new Set([...DB.usuarios,...DB.prestamos.map(p=>p.usuario)]).size;
+  document.getElementById('pb-prest').textContent=DB.prestamos.length;
+}
+function renderSelects(){
+  const sel=document.getElementById('pLibro');
+  sel.innerHTML=DB.libros.slice().sort((a,b)=>a.titulo.localeCompare(b.titulo)).map(l=>{const d=disp(l);return `<option value="${l.id}" ${d<=0?'disabled':''}>${esc(l.titulo)} — ${d>0?d+' disponible(s)':'sin ejemplares'}</option>`;}).join('');
+  const us=new Set([...DB.usuarios,...DB.prestamos.map(p=>p.usuario)]);
+  document.getElementById('dlUsuarios').innerHTML=[...us].sort().map(u=>`<option value="${esc(u)}">`).join('');
+  const pend=DB.prestamos.filter(p=>!p.fechaDevolucion);
+  document.getElementById('dPrestamo').innerHTML=pend.length?pend.map(p=>`<option value="${p.id}">${p.id} · ${esc(libro(p.libroId).titulo)} · ${esc(p.usuario)} ${estado(p)==='Retrasado'?'⚠️':''}</option>`).join(''):'<option value="">No hay préstamos pendientes</option>';
+  document.getElementById('lCat').innerHTML=CATS.map(c=>`<option>${c}</option>`).join('');
+}
+function renderCatalogo(){
+  const rows=DB.libros.map(l=>{const a=activos(l.id),d=l.ejemplares-a,tot=DB.prestamos.filter(p=>p.libroId===l.id).length;
+    return `<tr><td>${l.id}</td><td><b>${esc(l.titulo)}</b><br><span style="color:#6b7080;font-size:.8rem">${esc(l.autor)}</span></td><td><span class="pill" style="background:${CAT_COLOR[l.categoria]}22;color:${CAT_COLOR[l.categoria]}">${l.categoria}</span></td><td>${l.ejemplares}</td><td>${a}</td><td class="avail ${d>0?'badge1':'badge0'}">${d>0?'✅ '+d:'⛔ 0'}</td><td>${tot}</td></tr>`;}).join('');
+  document.getElementById('tCatalogo').innerHTML=`<thead><tr><th>ID</th><th>Libro</th><th>Categoría</th><th>Ejemplares</th><th>Prestados</th><th>Disponibles</th><th>Veces prestado</th></tr></thead><tbody>${rows}</tbody>`;
+}
+function renderDashboard(){
+  const S=stats(), [topId,topN]=S.top[0]||['',0];
+  const K=[
+    ['📚 Total de préstamos',DB.prestamos.length,'Registrados en la base','var(--c5)'],
+    ['📤 Libros prestados',S.prestados,`De ${S.totalEj} ejemplares (${(S.prestados/S.totalEj*100).toFixed(0)}% en circulación)`,'var(--c1)'],
+    ['✅ Ejemplares disponibles',S.disponibles,`${S.sinDisp.length} título(s) sin ejemplares libres`,'var(--c2)'],
+    ['⏰ Préstamos retrasados',S.retr.length,'Pendientes y con fecha límite vencida','var(--c4)'],
+    ['🎯 Devolución a tiempo',S.tasaTiempo.toFixed(1)+'%',`${S.est['Devuelto']||0} de ${S.devueltos} devoluciones`,'var(--c3)'],
+    ['🏆 Libro más consultado',topId?esc(libro(topId).titulo):'—',`${topN} préstamos`,'var(--c6)',true],
+  ];
+  document.getElementById('kpis').innerHTML=K.map(k=>`<div class="kpi" style="--k:${k[3]}"><div class="lbl">${k[0]}</div><div class="val ${k[4]?'small':''}">${k[1]}</div><div class="hint">${k[2]}</div></div>`).join('');
+  const cat=Object.entries(S.porCat).sort((a,b)=>b[1]-a[1]);
+  document.getElementById('chCat').innerHTML=barsV(cat,cat.map(c=>CAT_COLOR[c[0]]||'#999'))+`<div class="legend">${cat.map(c=>`<span style="--c:${CAT_COLOR[c[0]]}">${c[0]}</span>`).join('')}</div>`;
+  const order=['Devuelto','Devuelto con retraso','Activo','Retrasado'];
+  document.getElementById('chEstado').innerHTML=donut(order.map(o=>[o,S.est[o]||0]));
+  document.getElementById('chTop').innerHTML=barsH(S.top.slice(0,5).map(([id,n])=>[libro(id).titulo,n]));
+  const mes=Object.entries(S.porMes).sort().map(([k,v])=>[MESES[+k.slice(5)-1]+' '+k.slice(2,4),v]);
+  document.getElementById('chMes').innerHTML=line(mes)+(mes.length&&mes[mes.length-1][0].startsWith(MESES[new Date().getMonth()])?'<div class="note">* El mes actual está en curso (datos parciales).</div>':'');
+  document.getElementById('tRetrasos').innerHTML=S.retr.length?`<thead><tr><th>ID</th><th>Libro</th><th>Usuario</th><th>Fecha límite</th><th>Días de retraso</th></tr></thead><tbody>${S.retr.map(p=>`<tr><td>${p.id}</td><td>${esc(libro(p.libroId).titulo)}</td><td>${esc(p.usuario)}</td><td>${fmt(p.fechaLimite)}</td><td><span class="pill st-Retrasado">${p.dias} día${p.dias===1?'':'s'}</span></td></tr>`).join('')}</tbody>`:'<tr><td>🎉 No hay préstamos retrasados.</td></tr>';
+}
+function renderTabla(){
+  const q=document.getElementById('fBuscar').value.toLowerCase(),fe=document.getElementById('fEstado').value;
+  const rows=DB.prestamos.slice().reverse().filter(p=>{const l=libro(p.libroId);return (!q||l.titulo.toLowerCase().includes(q)||p.usuario.toLowerCase().includes(q))&&(!fe||estado(p)===fe);});
+  document.getElementById('cuenta').textContent=`Mostrando ${rows.length} de ${DB.prestamos.length} registros`;
+  document.getElementById('tPrestamos').innerHTML=`<thead><tr><th>ID</th><th>Libro</th><th>Categoría</th><th>Usuario</th><th>Préstamo</th><th>Límite</th><th>Devolución</th><th>Estado</th></tr></thead><tbody>${rows.map(p=>{const l=libro(p.libroId);return `<tr><td>${p.id}</td><td>${esc(l.titulo)}</td><td>${l.categoria}</td><td>${esc(p.usuario)}</td><td>${fmt(p.fechaPrestamo)}</td><td>${fmt(p.fechaLimite)}</td><td>${fmt(p.fechaDevolucion)}</td><td>${pill(estado(p))}</td></tr>`;}).join('')}</tbody>`;
+}
+function renderConclusiones(){
+  const S=stats(),P=DB.prestamos.length;
+  const cat=Object.entries(S.porCat).sort((a,b)=>b[1]-a[1]);
+  const top3=S.top.slice(0,3).map(([id,n])=>`<i>${esc(libro(id).titulo)}</i> (${n})`).join(', ');
+  const c12=cat.slice(0,2), pctTop2=((c12.reduce((a,c)=>a+c[1],0))/P*100).toFixed(0);
+  const tarde=S.est['Devuelto con retraso']||0;
+  const fewCat=cat.filter(c=>c[1]<=2).map(c=>c[0]);
+  const C=[
+    ['var(--c1)','📈 La demanda se concentra en pocas categorías y títulos',
+     `<b>${c12[0][0]}</b> (${c12[0][1]} préstamos) y <b>${c12[1][0]}</b> (${c12[1][1]}) suman el <b>${pctTop2}%</b> de todos los préstamos. Los títulos más consultados son ${top3}. ${fewCat.length?`En cambio, ${fewCat.join(' y ')} casi no se piden. `:''}Esto indica que las próximas compras de ejemplares deberían priorizar esas categorías y títulos.`],
+    ['var(--c4)','⏰ Los retrasos son el principal problema operativo',
+     `El <b>${S.tasaRetraso.toFixed(1)}%</b> de los préstamos tuvo o tiene retraso: ${tarde} se devolvieron tarde (en promedio <b>${S.promDiasRetrasoDev.toFixed(1)} días</b> después de la fecha límite) y <b>${S.retr.length}</b> siguen sin devolverse con la fecha vencida. Solo el <b>${S.tasaTiempo.toFixed(1)}%</b> de las devoluciones fue a tiempo. Sin un sistema que avise, estos ejemplares quedan bloqueados para otros usuarios.`],
+    ['var(--c2)','📚 Hay buena disponibilidad general, pero no en los libros populares',
+     `Hoy están prestados <b>${S.prestados}</b> de ${S.totalEj} ejemplares, así que quedan <b>${S.disponibles}</b> disponibles (${(S.disponibles/S.totalEj*100).toFixed(0)}%). Sin embargo, ${S.sinDisp.length?`<b>${S.sinDisp.length}</b> título(s) no tienen ejemplares libres (${S.sinDisp.map(l=>'<i>'+esc(l.titulo)+'</i>').join(', ')}), y `:''}parte de los ejemplares prestados corresponde a préstamos retrasados. Recuperar esos libros liberaría inventario sin necesidad de comprar más.`],
+  ];
+  document.getElementById('concl').innerHTML=C.map(c=>`<div class="box" style="--b:${c[0]}"><h3>${c[1]}</h3><p>${c[2]}</p></div>`).join('');
+  document.getElementById('recs').innerHTML=[
+    '🔔 Enviar recordatorios automáticos 2 días antes de la fecha límite y el día del vencimiento.',
+    '📦 Comprar ejemplares adicionales de los títulos del Top 5 y de la categoría más pedida.',
+    '🚫 Definir una política para usuarios con retrasos repetidos (por ejemplo, suspender nuevos préstamos hasta que devuelvan).',
+    '📊 Revisar el dashboard cada mes para detectar cambios en la demanda.'
+  ].map(r=>`<li style="margin-bottom:6px">${r}</li>`).join('');
+}
+
+/* ---------- Events ---------- */
+document.getElementById('nav').onclick=e=>{const b=e.target.closest('button');if(!b)return;document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x===b));document.querySelectorAll('section').forEach(s=>s.classList.toggle('on',s.id===b.dataset.s));window.scrollTo(0,0);};
+function msg(id,ok,t){const m=document.getElementById(id);m.className='msg '+(ok?'ok':'err');m.innerHTML=t;setTimeout(()=>m.className='msg',5000);}
+document.getElementById('fPrestamo').onsubmit=e=>{e.preventDefault();
+  const id=document.getElementById('pLibro').value,u=document.getElementById('pUsuario').value.trim(),f=document.getElementById('pFecha').value,d=+document.getElementById('pDias').value;
+  const l=libro(id); if(!l||disp(l)<=0) return msg('mPrestamo',false,'⛔ No hay ejemplares disponibles de este libro.');
+  if(!u) return msg('mPrestamo',false,'⚠️ Escribe el nombre del usuario.');
+  const n=Math.max(0,...DB.prestamos.map(p=>+p.id.slice(1)))+1, pid='P'+String(n).padStart(3,'0');
+  DB.prestamos.push({id:pid,libroId:id,usuario:u,fechaPrestamo:f,fechaLimite:addDays(f,d),fechaDevolucion:null});
+  if(!DB.usuarios.includes(u))DB.usuarios.push(u);
+  save();renderAll();msg('mPrestamo',true,`✅ Préstamo <b>${pid}</b> registrado. Fecha límite: <b>${fmt(addDays(f,d))}</b>.`);document.getElementById('pUsuario').value='';};
+document.getElementById('fDevolucion').onsubmit=e=>{e.preventDefault();
+  const id=document.getElementById('dPrestamo').value,f=document.getElementById('dFecha').value,p=DB.prestamos.find(x=>x.id===id);
+  if(!p) return msg('mDevolucion',false,'⚠️ Selecciona un préstamo.');
+  if(f<p.fechaPrestamo) return msg('mDevolucion',false,'⚠️ La devolución no puede ser anterior al préstamo.');
+  p.fechaDevolucion=f;save();renderAll();
+  const r=diff(f,p.fechaLimite);msg('mDevolucion',r<=0,r>0?`⚠️ Devolución registrada con <b>${r} día(s) de retraso</b>.`:'✅ Devolución registrada a tiempo.');};
+document.getElementById('fLibro').onsubmit=e=>{e.preventDefault();
+  const n=Math.max(0,...DB.libros.map(l=>+l.id.slice(1)))+1,id='L'+String(n).padStart(3,'0');
+  DB.libros.push({id,titulo:document.getElementById('lTitulo').value.trim(),autor:document.getElementById('lAutor').value.trim(),categoria:document.getElementById('lCat').value,ejemplares:+document.getElementById('lEj').value});
+  save();renderAll();e.target.reset();msg('mLibro',true,`📗 Libro <b>${id}</b> agregado al catálogo.`);};
+document.getElementById('fBuscar').oninput=renderTabla;document.getElementById('fEstado').onchange=renderTabla;
+function csv(name,head,rows){const q=v=>`"${String(v??'').replace(/"/g,'""')}"`;const t='﻿'+[head,...rows].map(r=>r.map(q).join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/csv;charset=utf-8'}));a.download=name;a.click();}
+document.getElementById('bCsv').onclick=()=>csv('prestamos_biblioteca.csv',['id_prestamo','id_libro','titulo','categoria','usuario','fecha_prestamo','fecha_limite','fecha_devolucion','estado'],DB.prestamos.map(p=>{const l=libro(p.libroId);return [p.id,l.id,l.titulo,l.categoria,p.usuario,p.fechaPrestamo,p.fechaLimite,p.fechaDevolucion||'',estado(p)];}));
+document.getElementById('bCsvLib').onclick=()=>csv('libros_biblioteca.csv',['id_libro','titulo','autor','categoria','ejemplares','prestados','disponibles'],DB.libros.map(l=>[l.id,l.titulo,l.autor,l.categoria,l.ejemplares,activos(l.id),disp(l)]));
+document.getElementById('bReset').onclick=()=>{DB=JSON.parse(JSON.stringify(SEED));save();renderAll();};
+
+load();
+document.getElementById('hoy').textContent=fmt(HOY);document.querySelectorAll('.hoyTxt').forEach(x=>x.textContent=fmt(HOY));
+document.getElementById('pFecha').value=HOY;document.getElementById('dFecha').value=HOY;
+renderAll();
+if(location.hash){const b=document.querySelector(`nav button[data-s="${location.hash.slice(1)}"]`);if(b)b.click();}
+</script>
+</body>
+</html>
