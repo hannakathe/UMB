@@ -3,165 +3,263 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📚 Gestión de Biblioteca — Microtaller | Hanna Abril</title>
+<title>Gestión de Biblioteca — Microtaller | Hanna Abril</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#f6f3ee; --card:#ffffff; --ink:#1f2433; --muted:#6b7080; --line:#e7e1d6;
-  --c1:#2f6fdb; --c2:#1aa37a; --c3:#e8a317; --c4:#d9485f; --c5:#7b5cd6; --c6:#0fa3b1; --c7:#c2683a;
-  --navy:#1b2a4a;
+  --bg:#f5f6f8; --card:#fff; --ink:#0f172a; --ink2:#334155; --muted:#64748b; --line:#e5e7eb; --line2:#eef0f3;
+  --side:#0f172a; --side2:#1e293b; --sideTxt:#94a3b8;
+  --acc:#1d4ed8; --acc2:#1e3a8a; --accSoft:#eff4ff;
+  --ok:#15803d; --okSoft:#ecfdf3; --warn:#b45309; --warnSoft:#fff7ed; --bad:#b91c1c; --badSoft:#fef2f2;
+  --r:10px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
-header{background:linear-gradient(120deg,var(--navy),#2c3f6b 60%,#3b4f80);color:#fff;padding:28px 32px 0}
-.hwrap{max-width:1240px;margin:auto}
-.htop{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
-h1{font-family:Fraunces,serif;font-size:2.1rem;font-weight:800;letter-spacing:-.5px}
-.sub{opacity:.8;font-size:.95rem}
-.who{text-align:right;font-size:.85rem;opacity:.85}
-.who b{display:block;font-size:1rem;opacity:1}
-nav{display:flex;gap:4px;margin-top:22px;flex-wrap:wrap}
-nav button{background:transparent;border:0;color:#c9d3ea;font:600 .92rem Inter;padding:11px 18px;border-radius:12px 12px 0 0;cursor:pointer}
-nav button:hover{color:#fff;background:rgba(255,255,255,.08)}
-nav button.on{background:var(--bg);color:var(--navy)}
-main{max-width:1240px;margin:auto;padding:28px 32px 60px}
+body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.app{display:grid;grid-template-columns:240px 1fr;min-height:100vh;background:linear-gradient(to right,var(--side) 240px,transparent 240px)}
+/* Sidebar */
+aside{background:var(--side);color:#e2e8f0;padding:22px 14px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column}
+.brand{display:flex;align-items:center;gap:10px;padding:0 8px 22px;border-bottom:1px solid var(--side2);margin-bottom:16px}
+.logo{width:34px;height:34px;border-radius:8px;background:var(--acc);display:grid;place-items:center}
+.brand b{display:block;font-size:14px;letter-spacing:.2px}
+.brand span{font-size:11.5px;color:var(--sideTxt)}
+.navlbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#64748b;padding:8px 10px 6px;font-weight:600}
+nav button{display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;color:var(--sideTxt);font:500 13.5px Inter;padding:9px 10px;border-radius:7px;cursor:pointer;text-align:left;margin-bottom:2px}
+nav button:hover{background:var(--side2);color:#e2e8f0}
+nav button.on{background:var(--side2);color:#fff;box-shadow:inset 3px 0 0 var(--acc)}
+nav button svg{flex:none;opacity:.9}
+.sidefoot{margin-top:auto;padding:14px 10px 0;border-top:1px solid var(--side2);display:flex;gap:10px;align-items:center}
+.avatar{width:32px;height:32px;border-radius:50%;background:#334155;display:grid;place-items:center;font-weight:600;font-size:12px;color:#e2e8f0}
+.sidefoot b{font-size:13px;display:block}.sidefoot span{font-size:11.5px;color:var(--sideTxt)}
+/* Topbar */
+.topbar{height:62px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 32px;position:sticky;top:0;z-index:5}
+.crumb{font-size:12.5px;color:var(--muted)}.crumb b{color:var(--ink);font-weight:600}
+.tright{display:flex;align-items:center;gap:14px;font-size:12.5px;color:var(--muted)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:5px 12px;background:#fff;color:var(--ink2);font-weight:500}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--ok)}
+main{padding:28px 32px 48px;max-width:1280px}
 section{display:none}section.on{display:block}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
-h2{font-family:Fraunces,serif;font-size:1.5rem;margin-bottom:6px}
-h3{font-size:1rem;margin-bottom:12px}
-.lead{color:var(--muted);margin-bottom:20px}
-.grid{display:grid;gap:18px}
+.phead{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:22px;flex-wrap:wrap}
+h1{font-size:22px;font-weight:700;letter-spacing:-.3px}
+.lead{color:var(--muted);margin-top:4px}
+h3{font-size:14px;font-weight:600;color:var(--ink)}
+.chead{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:10px}
+.chead small{color:var(--muted);font-size:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.grid{display:grid;gap:16px}
 .g2{grid-template-columns:repeat(2,minmax(0,1fr))}
-@media(max-width:820px){.g2{grid-template-columns:1fr}}
-.g3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:14px;margin-bottom:18px}
-.kpi{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;border-top:5px solid var(--k)}
-.kpi .lbl{font-size:.78rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px}
-.kpi .val{font-family:Fraunces,serif;font-size:2.1rem;font-weight:800;color:var(--k);line-height:1.1;margin:4px 0}
-.kpi .val.small{font-size:1.05rem;font-family:Inter;font-weight:700;line-height:1.3;margin:8px 0 4px}
-.kpi .hint{font-size:.78rem;color:var(--muted)}
-.pill{display:inline-block;padding:2px 10px;border-radius:999px;font-size:.75rem;font-weight:600;white-space:nowrap}
-.st-Devuelto{background:#dff3ea;color:#11734f}
-.st-Devuelto.con.retraso,.st-Tarde{background:#fdf0d5;color:#8a5a00}
-.st-Activo{background:#e2ebfb;color:#1f4fa3}
-.st-Retrasado{background:#fbe1e5;color:#a32035}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g64{grid-template-columns:3fr 2fr}
+.mt{margin-top:16px}
+/* KPIs */
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px;margin-bottom:16px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.kpi .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;min-height:36px;color:var(--muted);font-size:12px;font-weight:500}
+.kpi .ic{width:28px;height:28px;border-radius:7px;display:grid;place-items:center;background:var(--accSoft);color:var(--acc)}
+.kpi .ic.bad{background:var(--badSoft);color:var(--bad)}.kpi .ic.ok{background:var(--okSoft);color:var(--ok)}.kpi .ic.warn{background:var(--warnSoft);color:var(--warn)}
+.kpi .val{font-size:26px;font-weight:700;letter-spacing:-.6px;margin:10px 0 2px;color:var(--ink)}
+.kpi .val.txt{font-size:15px;letter-spacing:0;line-height:1.3;margin:12px 0 4px}
+.kpi .hint{font-size:11.5px;color:var(--muted)}
+/* Tags */
+.tag{display:inline-flex;align-items:center;gap:6px;padding:2px 9px;border-radius:6px;font-size:12px;font-weight:500;white-space:nowrap;border:1px solid}
+.tag::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.t-ok{color:var(--ok);background:var(--okSoft);border-color:#c7ecd5}
+.t-warn{color:var(--warn);background:var(--warnSoft);border-color:#fbdcb8}
+.t-act{color:var(--acc);background:var(--accSoft);border-color:#d3e0ff}
+.t-bad{color:var(--bad);background:var(--badSoft);border-color:#f8cfcf}
+.cat{font-size:12px;color:var(--ink2);background:#f1f5f9;border-radius:6px;padding:2px 8px;white-space:nowrap}
+/* Forms */
 form .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-label{display:block;font-size:.82rem;font-weight:600;margin:12px 0 5px}
-input,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font:inherit;background:#fcfbf8}
-input:focus,select:focus{outline:2px solid var(--c1);border-color:transparent}
-.btn{margin-top:16px;border:0;border-radius:10px;padding:11px 18px;font:600 .92rem Inter;cursor:pointer;color:#fff;background:var(--c1)}
-.btn.green{background:var(--c2)}.btn.ghost{background:#eee8dc;color:var(--ink)}.btn.red{background:var(--c4)}
-.btn:hover{filter:brightness(1.07)}
-.msg{margin-top:12px;font-size:.88rem;padding:10px 12px;border-radius:10px;display:none}
-.msg.ok{display:block;background:#dff3ea;color:#11734f}.msg.err{display:block;background:#fbe1e5;color:#a32035}
-table{width:100%;border-collapse:collapse;font-size:.86rem}
-th{text-align:left;font-size:.74rem;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);padding:10px 8px;border-bottom:2px solid var(--line);position:sticky;top:0;background:#fff}
-td{padding:9px 8px;border-bottom:1px solid var(--line)}
-tr:hover td{background:#faf8f3}
-.tbl{max-height:520px;overflow:auto}
+label{display:block;font-size:12.5px;font-weight:500;color:var(--ink2);margin:14px 0 6px}
+input,select{width:100%;height:38px;padding:0 11px;border:1px solid #d6dae1;border-radius:8px;font:inherit;background:#fff;color:var(--ink)}
+input:focus,select:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px #dbe6ff}
+.btn{display:inline-flex;align-items:center;gap:8px;height:38px;margin-top:18px;border:1px solid var(--acc);border-radius:8px;padding:0 16px;font:600 13px Inter;cursor:pointer;color:#fff;background:var(--acc)}
+.btn:hover{background:var(--acc2)}
+.btn.sec{background:#fff;color:var(--ink2);border-color:#d6dae1}.btn.sec:hover{background:#f8fafc}
+.btn.dan{background:#fff;color:var(--bad);border-color:#f3c5c5}.btn.dan:hover{background:var(--badSoft)}
+.msg{margin-top:12px;font-size:13px;padding:10px 12px;border-radius:8px;display:none;border:1px solid}
+.msg.ok{display:block;background:var(--okSoft);color:var(--ok);border-color:#c7ecd5}.msg.err{display:block;background:var(--badSoft);color:var(--bad);border-color:#f8cfcf}
+.divider{height:1px;background:var(--line);margin:22px 0 4px}
+/* Tables */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);padding:10px 12px;background:#f8fafc;border-bottom:1px solid var(--line);position:sticky;top:0}
+td{padding:11px 12px;border-bottom:1px solid var(--line2);color:var(--ink2)}
+td.id{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--muted)}
+tr:hover td{background:#fafbfc}
+.tbl{max-height:520px;overflow:auto;border:1px solid var(--line);border-radius:8px}
+.sub2{display:block;font-size:12px;color:var(--muted)}
+.num{text-align:right;font-variant-numeric:tabular-nums}
 .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
-.toolbar input,.toolbar select{width:auto;min-width:180px}
+.toolbar input,.toolbar select{width:auto;min-width:200px}
+.toolbar .btn{margin:0}
+.toolbar .sp{flex:1}
+.stock{display:flex;align-items:center;gap:8px;font-variant-numeric:tabular-nums}
+.bar{width:60px;height:6px;border-radius:3px;background:#e9edf3;overflow:hidden}.bar i{display:block;height:100%;background:var(--acc)}
+/* Charts */
 .chart svg{width:100%;height:auto;display:block}
-.chart text{font-family:Inter;fill:var(--ink)}
-.legend{display:flex;flex-wrap:wrap;gap:10px 16px;margin-top:10px;font-size:.82rem}
-.legend span::before{content:"";display:inline-block;width:11px;height:11px;border-radius:3px;background:var(--c);margin-right:6px;vertical-align:-1px}
-.prob p{margin-bottom:12px}
-.prob ul{margin:8px 0 14px 20px}.prob li{margin-bottom:6px}
-.box{border-left:5px solid var(--b);background:#fff;border-radius:12px;padding:16px 18px;border:1px solid var(--line);border-left-width:5px}
-.box h3{color:var(--b)}
-.concl{counter-reset:c}
-.concl .box{position:relative;padding-left:64px;margin-bottom:16px}
-.concl .box::before{counter-increment:c;content:counter(c);position:absolute;left:16px;top:16px;width:34px;height:34px;border-radius:50%;background:var(--b);color:#fff;font:800 1.1rem Fraunces;display:grid;place-items:center}
-.note{font-size:.8rem;color:var(--muted);margin-top:10px}
-.avail{font-weight:700}
-.badge0{color:var(--c4)}.badge1{color:var(--c2)}
-footer{text-align:center;color:var(--muted);font-size:.8rem;padding:20px}
-@media(max-width:640px){form .row{grid-template-columns:1fr}header,main{padding-left:16px;padding-right:16px}h1{font-size:1.6rem}}
+.chart text{font-family:Inter;fill:var(--ink2)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:8px;font-size:12px;color:var(--ink2)}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--c);margin-right:6px;vertical-align:-1px}
+/* Content blocks */
+.prose p{color:var(--ink2);margin-bottom:10px}
+.list{list-style:none}
+.list li{display:flex;gap:12px;padding:12px 0;border-top:1px solid var(--line2);color:var(--ink2)}
+.list li:first-child{border-top:0;padding-top:4px}
+.list .n{flex:none;width:24px;height:24px;border-radius:6px;background:#f1f5f9;color:var(--ink2);font-weight:600;font-size:12px;display:grid;place-items:center}
+.list b{color:var(--ink);font-weight:600}
+.fact{display:flex;gap:14px;align-items:flex-start}
+.fact .ic{flex:none;width:36px;height:36px;border-radius:8px;background:var(--accSoft);color:var(--acc);display:grid;place-items:center}
+.fact h3{margin-bottom:4px}.fact p{color:var(--muted);font-size:13px}
+.qs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+.q{border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:13px;color:var(--ink2);background:#fafbfc}
+.concl{display:grid;gap:14px}
+.ccard{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;display:grid;grid-template-columns:44px 1fr;gap:16px}
+.ccard .num2{width:36px;height:36px;border-radius:8px;background:var(--side);color:#fff;font-weight:700;display:grid;place-items:center}
+.ccard h3{font-size:15px;margin-bottom:6px}
+.ccard p{color:var(--ink2)}
+.ccard b{color:var(--ink)}
+.metric{display:inline-block;margin-top:12px;font-size:12px;color:var(--muted);border-top:1px solid var(--line2);padding-top:10px;width:100%}
+.metric strong{color:var(--ink);font-size:13px;margin-right:4px}
+.note{font-size:12px;color:var(--muted);margin-top:10px}
+/* Home / landing */
+.hero{position:relative;overflow:hidden;background:var(--side);color:#e2e8f0;border-radius:14px;padding:52px 48px;display:grid;grid-template-columns:1.25fr 1fr;gap:36px;align-items:center}
+.hero::after{content:"";position:absolute;right:-120px;top:-120px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(29,78,216,.45),transparent 65%)}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#93b4ff;background:rgba(29,78,216,.18);border:1px solid rgba(147,180,255,.25);padding:5px 12px;border-radius:999px}
+.hero h1{font-size:38px;line-height:1.15;letter-spacing:-1px;color:#fff;margin:18px 0 14px}
+.hero h1 span{color:#93b4ff}
+.hero p{color:#a8b3c7;font-size:15.5px;max-width:520px}
+.cta{display:flex;gap:10px;margin-top:26px;flex-wrap:wrap}
+.cta .btn{margin:0;height:42px;padding:0 20px}
+.btn.light{background:transparent;color:#e2e8f0;border-color:#334155}.btn.light:hover{background:#1e293b}
+.preview{position:relative;z-index:1;background:#fff;border-radius:12px;padding:18px;color:var(--ink);box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.preview .pv-h{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:12px}
+.pv-k{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pv-k div{border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.pv-k small{font-size:11px;color:var(--muted);display:block}
+.pv-k b{font-size:22px;letter-spacing:-.5px}
+.pv-bars{display:flex;align-items:flex-end;gap:8px;height:70px;margin-top:14px;padding-top:6px;border-top:1px solid var(--line2)}
+.pv-bars i{flex:1;background:#a5b8dc;border-radius:3px 3px 0 0}.pv-bars i:nth-child(-n+2){background:#1e3a8a}
+.strip{display:grid;grid-template-columns:repeat(4,1fr);background:#fff;border:1px solid var(--line);border-radius:var(--r);margin-top:16px}
+.strip div{padding:18px 22px;border-left:1px solid var(--line)}.strip div:first-child{border-left:0}
+.strip b{display:block;font-size:24px;letter-spacing:-.5px}.strip span{font-size:12.5px;color:var(--muted)}
+.sec-t{text-align:center;margin:44px 0 22px}.sec-t h2{font-size:22px;letter-spacing:-.3px}.sec-t p{color:var(--muted);margin-top:4px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.step{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.step .sn{font-size:12px;font-weight:600;color:var(--acc);letter-spacing:.5px}
+.step h3{margin:8px 0 6px;font-size:15px}.step p{color:var(--muted);font-size:13.5px}
+.mods{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.mod{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:22px;cursor:pointer;transition:border-color .15s,box-shadow .15s;text-align:left;font:inherit;color:inherit}
+.mod:hover{border-color:#b9c9ee;box-shadow:0 6px 20px rgba(15,23,42,.06)}
+.mod .ic{width:40px;height:40px;border-radius:9px;background:var(--accSoft);color:var(--acc);display:grid;place-items:center;margin-bottom:14px}
+.mod h3{font-size:15px;margin-bottom:6px}.mod p{color:var(--muted);font-size:13.5px}
+.mod .go{display:inline-block;margin-top:14px;font-size:13px;font-weight:600;color:var(--acc)}
+.why{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.why .card ul{list-style:none;margin-top:10px}.why .card li{display:flex;gap:10px;padding:7px 0;color:var(--ink2)}
+.why .card li svg{flex:none;margin-top:3px}
+.why .bad li svg{color:var(--bad)}.why .good li svg{color:var(--ok)}
+@media(max-width:900px){.hero,.why{grid-template-columns:1fr}.steps,.mods,.strip{grid-template-columns:1fr}.strip div{border-left:0;border-top:1px solid var(--line)}.hero{padding:32px 24px}.hero h1{font-size:28px}}
+footer{color:var(--muted);font-size:12px;padding:0 32px 24px}
+@media(max-width:1200px){.kpis{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:900px){.app{grid-template-columns:1fr}aside{position:static;height:auto}.g2,.g3,.g64,.qs{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}main,.topbar{padding-left:16px;padding-right:16px}}
 </style>
 </head>
 <body>
-<header><div class="hwrap">
-  <div class="htop">
-    <div><h1>📚 Gestión de Biblioteca</h1><div class="sub">Registro de préstamos y devoluciones · libros prestados, disponibles, más consultados y retrasos</div></div>
-    <div class="who"><b>Hanna Abril</b>Microtaller · Entregable individual<br>Fecha de corte: <span id="hoy"></span></div>
+<div class="app">
+<aside>
+  <div class="brand">
+    <div class="logo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v16H6.5A2.5 2.5 0 0 0 4 21.5"/><path d="M19 17v4H6.5"/></svg></div>
+    <div><b>Biblioteca Central</b><span>Sistema de préstamos</span></div>
   </div>
   <nav id="nav">
-    <button data-s="problema" class="on">🧩 1. Problema</button>
-    <button data-s="registro">📝 2–3. Registro</button>
-    <button data-s="dashboard">📊 4. Dashboard</button>
-    <button data-s="datos">🗂️ Base de datos</button>
-    <button data-s="conclusiones">💡 5. Conclusiones</button>
+    <button data-s="inicio" class="on" data-t="Inicio"><i data-ic="home"></i>Inicio</button>
+    <div class="navlbl" style="padding-top:14px">Operación</div>
+    <button data-s="registro" data-t="Préstamos y devoluciones"><i data-ic="swap"></i>Préstamos</button>
+    <button data-s="datos" data-t="Base de datos"><i data-ic="db"></i>Base de datos</button>
+    <div class="navlbl" style="padding-top:14px">Análisis</div>
+    <button data-s="dashboard" data-t="Dashboard"><i data-ic="chart"></i>Dashboard</button>
   </nav>
-</div></header>
+  <div class="sidefoot"><div class="avatar">HA</div><div><b>Hanna Abril</b><span>Microtaller individual</span></div></div>
+</aside>
 
+<div>
+<div class="topbar">
+  <div class="crumb">Biblioteca Central / <b id="crumb">Inicio</b></div>
+  <div class="tright"><span class="chip"><span class="dot"></span>Datos al <span class="hoyTxt"></span></span></div>
+</div>
 <main>
-<!-- ============ 1. PROBLEMA ============ -->
-<section id="problema" class="on">
-  <h2>🧩 Identificación del problema</h2>
-  <p class="lead">¿Qué situación busca solucionar este microtaller?</p>
-  <div class="grid g2">
-    <div class="card prob">
-      <h3>📌 Situación actual</h3>
-      <p>La biblioteca lleva el control de préstamos en cuadernos y hojas sueltas. Con decenas de préstamos al mes, este registro manual genera problemas:</p>
-      <ul>
-        <li>❓ No se sabe con certeza <b>cuántos ejemplares hay disponibles</b> de un libro sin revisar los estantes.</li>
-        <li>⏰ Los <b>retrasos en las devoluciones</b> se detectan tarde o nunca, porque nadie cruza fechas límite con la fecha actual.</li>
-        <li>📈 No hay información sobre <b>qué libros y categorías se piden más</b>, así que las compras de nuevos ejemplares se deciden sin datos.</li>
-        <li>🔍 Buscar el historial de un usuario o de un libro toma mucho tiempo.</li>
-      </ul>
+<!-- HOME -->
+<section id="inicio" class="on">
+  <div class="hero">
+    <div style="position:relative;z-index:1">
+      <span class="eyebrow">Sistema de gestión de préstamos</span>
+      <h1>Controla cada libro que sale <span>y cada libro que vuelve.</span></h1>
+      <p>Biblioteca Central reemplaza el cuaderno de préstamos por un registro digital: sabes qué ejemplares están disponibles, quién tiene libros vencidos y qué títulos se piden más, todo en un solo lugar.</p>
+      <div class="cta">
+        <button class="btn" data-go="registro"><i data-ic="plus"></i>Registrar un préstamo</button>
+        <button class="btn light" data-go="dashboard"><i data-ic="chart"></i>Ver dashboard</button>
+      </div>
     </div>
-    <div class="card prob">
-      <h3>🎯 Objetivo de la solución</h3>
-      <p>Construir una aplicación web sencilla que permita:</p>
-      <ul>
-        <li>📝 <b>Registrar préstamos</b> (libro, usuario, fecha y plazo) validando que haya ejemplares disponibles.</li>
-        <li>↩️ <b>Registrar devoluciones</b> y marcar automáticamente si fueron a tiempo o con retraso.</li>
-        <li>📊 Ver un <b>dashboard</b> con indicadores de libros prestados, disponibles, más consultados y retrasos.</li>
-        <li>💾 Guardar y <b>exportar</b> la base de datos en CSV para análisis posterior.</li>
-      </ul>
-      <p><b>Preguntas que se responden con los datos:</b> ¿Cuántos libros están prestados hoy? ¿Cuántos ejemplares quedan disponibles? ¿Qué libros se consultan más? ¿Qué porcentaje de préstamos se devuelve tarde?</p>
+    <div class="preview" data-go="dashboard" style="cursor:pointer">
+      <div class="pv-h"><b style="color:var(--ink)">Resumen de hoy</b><span class="hoyTxt"></span></div>
+      <div class="pv-k" id="pvK"></div>
+      <div class="pv-bars" id="pvBars"></div>
     </div>
   </div>
-  <div class="grid g3" style="margin-top:18px">
-    <div class="box" style="--b:var(--c1)"><h3>🗃️ Datos</h3>Base ficticia: <b id="pb-libros"></b> títulos, <b id="pb-usuarios"></b> usuarios y <b id="pb-prest"></b> préstamos registrados entre agosto y noviembre de 2026.</div>
-    <div class="box" style="--b:var(--c2)"><h3>🛠️ Tecnología</h3>HTML + CSS + JavaScript en un solo archivo. Gráficas en SVG propias, sin librerías externas. Datos guardados en el navegador (localStorage).</div>
-    <div class="box" style="--b:var(--c5)"><h3>📏 Regla de negocio</h3>Plazo estándar de préstamo: <b>14 días</b>. Un préstamo está <b>retrasado</b> si no se ha devuelto y la fecha actual supera su fecha límite.</div>
+  <div class="strip" id="strip"></div>
+
+  <div class="sec-t"><h2>Cómo funciona</h2><p>Tres pasos para pasar del registro manual a decisiones con datos.</p></div>
+  <div class="steps">
+    <div class="step"><span class="sn">PASO 1</span><h3>Registra</h3><p>Cada préstamo se guarda con libro, usuario y fecha. El sistema calcula la fecha límite y solo deja prestar libros con ejemplares libres.</p></div>
+    <div class="step"><span class="sn">PASO 2</span><h3>Controla</h3><p>Al registrar la devolución, el sistema marca si llegó a tiempo o con retraso y actualiza el inventario al instante.</p></div>
+    <div class="step"><span class="sn">PASO 3</span><h3>Analiza</h3><p>El dashboard convierte los registros en indicadores: libros prestados, disponibles, más consultados y retrasos.</p></div>
+  </div>
+
+  <div class="sec-t"><h2>Módulos</h2><p>Todo lo que necesita la operación diaria de la biblioteca.</p></div>
+  <div class="mods">
+    <button class="mod" data-go="registro"><div class="ic"><i data-ic="swap"></i></div><h3>Préstamos y devoluciones</h3><p>Formularios de registro e inventario del catálogo con la disponibilidad de cada título.</p><span class="go">Abrir módulo →</span></button>
+    <button class="mod" data-go="datos"><div class="ic"><i data-ic="db"></i></div><h3>Base de datos</h3><p>Historial completo de préstamos con búsqueda, filtros por estado y exportación a CSV.</p><span class="go">Abrir módulo →</span></button>
+    <button class="mod" data-go="dashboard"><div class="ic"><i data-ic="chart"></i></div><h3>Dashboard</h3><p>Seis indicadores clave y cuatro gráficas que se actualizan con cada registro.</p><span class="go">Abrir módulo →</span></button>
+  </div>
+
+  <div class="why">
+    <div class="card bad"><h3>Antes: control en cuaderno</h3><ul>
+      <li><i data-ic="x"></i>No se sabe qué ejemplares están libres sin ir al estante.</li>
+      <li><i data-ic="x"></i>Los retrasos se descubren tarde o nunca.</li>
+      <li><i data-ic="x"></i>Las compras de libros se deciden por intuición.</li></ul></div>
+    <div class="card good"><h3>Ahora: Biblioteca Central</h3><ul>
+      <li><i data-ic="check"></i>Disponibilidad exacta de cada título en tiempo real.</li>
+      <li><i data-ic="check"></i>Lista de préstamos vencidos con días de retraso.</li>
+      <li><i data-ic="check"></i>Ranking de libros y categorías con más demanda.</li></ul></div>
   </div>
 </section>
 
-<!-- ============ 2-3. REGISTRO ============ -->
+<!-- REGISTRO -->
 <section id="registro">
-  <h2>📝 Registro de préstamos y devoluciones</h2>
-  <p class="lead">Desarrollo técnico: formularios que actualizan la base de datos y el dashboard al instante.</p>
+  <div class="phead"><div><h1>Préstamos y devoluciones</h1><p class="lead">Los registros actualizan el inventario y el dashboard al instante.</p></div></div>
   <div class="grid g2">
     <div class="card">
-      <h3>📤 Nuevo préstamo</h3>
+      <div class="chead"><h3>Nuevo préstamo</h3><small>Solo libros con ejemplares disponibles</small></div>
       <form id="fPrestamo">
-        <label>Libro</label>
-        <select id="pLibro" required></select>
-        <label>Usuario</label>
-        <input id="pUsuario" list="dlUsuarios" placeholder="Nombre del usuario" required>
-        <datalist id="dlUsuarios"></datalist>
+        <label>Libro</label><select id="pLibro" required></select>
+        <label>Usuario</label><input id="pUsuario" list="dlUsuarios" placeholder="Nombre completo" required><datalist id="dlUsuarios"></datalist>
         <div class="row">
           <div><label>Fecha de préstamo</label><input type="date" id="pFecha" required></div>
           <div><label>Plazo (días)</label><input type="number" id="pDias" value="14" min="1" max="60" required></div>
         </div>
-        <button class="btn" type="submit">✅ Registrar préstamo</button>
+        <button class="btn" type="submit"><i data-ic="plus"></i>Registrar préstamo</button>
         <div class="msg" id="mPrestamo"></div>
       </form>
     </div>
     <div class="card">
-      <h3>📥 Registrar devolución</h3>
+      <div class="chead"><h3>Registrar devolución</h3><small>Préstamos pendientes</small></div>
       <form id="fDevolucion">
-        <label>Préstamo pendiente</label>
-        <select id="dPrestamo" required></select>
-        <label>Fecha de devolución</label>
-        <input type="date" id="dFecha" required>
-        <button class="btn green" type="submit">↩️ Registrar devolución</button>
+        <label>Préstamo</label><select id="dPrestamo" required></select>
+        <label>Fecha de devolución</label><input type="date" id="dFecha" required>
+        <button class="btn" type="submit"><i data-ic="check"></i>Registrar devolución</button>
         <div class="msg" id="mDevolucion"></div>
       </form>
-      <h3 style="margin-top:22px">➕ Nuevo libro al catálogo</h3>
+      <div class="divider"></div>
+      <div class="chead" style="margin-top:14px;margin-bottom:0"><h3>Agregar libro al catálogo</h3></div>
       <form id="fLibro">
         <div class="row">
           <div><label>Título</label><input id="lTitulo" required></div>
@@ -171,71 +269,85 @@ footer{text-align:center;color:var(--muted);font-size:.8rem;padding:20px}
           <div><label>Categoría</label><select id="lCat"></select></div>
           <div><label>Ejemplares</label><input type="number" id="lEj" value="1" min="1" required></div>
         </div>
-        <button class="btn ghost" type="submit">📗 Agregar libro</button>
+        <button class="btn sec" type="submit"><i data-ic="plus"></i>Agregar libro</button>
         <div class="msg" id="mLibro"></div>
       </form>
     </div>
   </div>
-  <div class="card" style="margin-top:18px">
-    <h3>📚 Disponibilidad del catálogo</h3>
-    <div class="tbl" style="max-height:380px"><table id="tCatalogo"></table></div>
+  <div class="card mt">
+    <div class="chead"><h3>Inventario del catálogo</h3><small id="invSum"></small></div>
+    <div class="tbl" style="max-height:400px"><table id="tCatalogo"></table></div>
   </div>
 </section>
 
-<!-- ============ 4. DASHBOARD ============ -->
+<!-- DASHBOARD -->
 <section id="dashboard">
-  <h2>📊 Dashboard de la biblioteca</h2>
-  <p class="lead">Indicadores calculados en tiempo real a partir de la base de datos. Fecha de corte: <b class="hoyTxt"></b>.</p>
+  <div class="phead"><div><h1>Dashboard</h1><p class="lead">Indicadores calculados en tiempo real a partir de la base de datos.</p></div></div>
   <div class="kpis" id="kpis"></div>
   <div class="grid g2">
-    <div class="card chart"><h3>🏷️ Préstamos por categoría</h3><div id="chCat"></div></div>
-    <div class="card chart"><h3>🚦 Estado de los préstamos</h3><div id="chEstado"></div></div>
-    <div class="card chart"><h3>🏆 Top 5 libros más consultados</h3><div id="chTop"></div></div>
-    <div class="card chart"><h3>📅 Préstamos por mes</h3><div id="chMes"></div></div>
+    <div class="card chart"><div class="chead"><h3>Préstamos por categoría</h3><small>Total histórico</small></div><div id="chCat"></div></div>
+    <div class="card chart"><div class="chead"><h3>Estado de los préstamos</h3><small>Distribución</small></div><div id="chEstado"></div></div>
+    <div class="card chart"><div class="chead"><h3>Libros más consultados</h3><small>Top 5</small></div><div id="chTop"></div></div>
+    <div class="card chart"><div class="chead"><h3>Préstamos por mes</h3><small>Tendencia</small></div><div id="chMes"></div></div>
   </div>
-  <div class="card" style="margin-top:18px">
-    <h3>⏰ Préstamos retrasados (pendientes de devolución)</h3>
-    <div class="tbl" style="max-height:300px"><table id="tRetrasos"></table></div>
+  <div class="card mt">
+    <div class="chead"><h3>Préstamos vencidos pendientes de devolución</h3><small id="retSum"></small></div>
+    <div class="tbl" style="max-height:320px"><table id="tRetrasos"></table></div>
   </div>
 </section>
 
-<!-- ============ DATOS ============ -->
+<!-- DATOS -->
 <section id="datos">
-  <h2>🗂️ Base de datos de préstamos</h2>
-  <p class="lead">Cada fila es un registro. Puedes filtrar, buscar y exportar a CSV.</p>
+  <div class="phead"><div><h1>Base de datos de préstamos</h1><p class="lead">Cada fila es un registro. Busca, filtra por estado o exporta a CSV.</p></div></div>
   <div class="card">
     <div class="toolbar">
-      <input id="fBuscar" placeholder="🔎 Buscar libro o usuario…">
+      <input id="fBuscar" placeholder="Buscar por libro o usuario">
       <select id="fEstado"><option value="">Todos los estados</option><option>Activo</option><option>Retrasado</option><option>Devuelto</option><option>Devuelto con retraso</option></select>
-      <button class="btn" id="bCsv" style="margin:0">⬇️ Exportar préstamos CSV</button>
-      <button class="btn ghost" id="bCsvLib" style="margin:0">⬇️ Exportar libros CSV</button>
-      <button class="btn red" id="bReset" style="margin:0">♻️ Restaurar datos iniciales</button>
+      <span class="sp"></span>
+      <button class="btn sec" id="bCsv"><i data-ic="down"></i>Préstamos CSV</button>
+      <button class="btn sec" id="bCsvLib"><i data-ic="down"></i>Libros CSV</button>
+      <button class="btn dan" id="bReset"><i data-ic="reset"></i>Restaurar datos</button>
     </div>
-    <div class="note" id="cuenta"></div>
+    <div class="note" id="cuenta" style="margin:0 0 10px"></div>
     <div class="tbl"><table id="tPrestamos"></table></div>
   </div>
 </section>
 
-<!-- ============ 5. CONCLUSIONES ============ -->
-<section id="conclusiones">
-  <h2>💡 Análisis de resultados</h2>
-  <p class="lead">Tres conclusiones basadas en la información obtenida (se recalculan con los datos actuales).</p>
-  <div class="concl" id="concl"></div>
-  <div class="card" style="margin-top:6px">
-    <h3>🧭 Recomendaciones</h3>
-    <ul style="margin-left:20px" id="recs"></ul>
-  </div>
-</section>
 </main>
-<footer>📚 Microtaller Gestión de Biblioteca · Hanna Abril · Datos ficticios con fines académicos</footer>
+<footer>Biblioteca Central · Microtaller de gestión de biblioteca · Hanna Abril · Datos ficticios con fines académicos</footer>
+</div>
+</div>
 
 <script>
 const SEED = {"libros": [{"id": "L001", "titulo": "Cien años de soledad", "autor": "Gabriel García Márquez", "categoria": "Novela", "ejemplares": 3}, {"id": "L002", "titulo": "El amor en los tiempos del cólera", "autor": "Gabriel García Márquez", "categoria": "Novela", "ejemplares": 2}, {"id": "L003", "titulo": "La vorágine", "autor": "José Eustasio Rivera", "categoria": "Novela", "ejemplares": 2}, {"id": "L004", "titulo": "María", "autor": "Jorge Isaacs", "categoria": "Novela", "ejemplares": 2}, {"id": "L005", "titulo": "Delirio", "autor": "Laura Restrepo", "categoria": "Novela", "ejemplares": 1}, {"id": "L006", "titulo": "1984", "autor": "George Orwell", "categoria": "Novela", "ejemplares": 2}, {"id": "L007", "titulo": "Breve historia del tiempo", "autor": "Stephen Hawking", "categoria": "Ciencia", "ejemplares": 2}, {"id": "L008", "titulo": "Cosmos", "autor": "Carl Sagan", "categoria": "Ciencia", "ejemplares": 2}, {"id": "L009", "titulo": "El gen egoísta", "autor": "Richard Dawkins", "categoria": "Ciencia", "ejemplares": 1}, {"id": "L010", "titulo": "Sapiens", "autor": "Yuval Noah Harari", "categoria": "Historia", "ejemplares": 3}, {"id": "L011", "titulo": "Las venas abiertas de América Latina", "autor": "Eduardo Galeano", "categoria": "Historia", "ejemplares": 2}, {"id": "L012", "titulo": "Colombia: una nación a pesar de sí misma", "autor": "David Bushnell", "categoria": "Historia", "ejemplares": 1}, {"id": "L013", "titulo": "Código limpio", "autor": "Robert C. Martin", "categoria": "Tecnología", "ejemplares": 3}, {"id": "L014", "titulo": "Introducción a los algoritmos", "autor": "Thomas H. Cormen", "categoria": "Tecnología", "ejemplares": 2}, {"id": "L015", "titulo": "Python para todos", "autor": "Raúl González Duque", "categoria": "Tecnología", "ejemplares": 2}, {"id": "L016", "titulo": "Fundamentos de bases de datos", "autor": "Abraham Silberschatz", "categoria": "Tecnología", "ejemplares": 2}, {"id": "L017", "titulo": "Diseño centrado en el usuario", "autor": "Don Norman", "categoria": "Tecnología", "ejemplares": 1}, {"id": "L018", "titulo": "El principito", "autor": "Antoine de Saint-Exupéry", "categoria": "Infantil", "ejemplares": 3}, {"id": "L019", "titulo": "Harry Potter y la piedra filosofal", "autor": "J. K. Rowling", "categoria": "Infantil", "ejemplares": 2}, {"id": "L020", "titulo": "Matilda", "autor": "Roald Dahl", "categoria": "Infantil", "ejemplares": 1}, {"id": "L021", "titulo": "Veinte poemas de amor", "autor": "Pablo Neruda", "categoria": "Poesía", "ejemplares": 2}, {"id": "L022", "titulo": "Antología poética", "autor": "José Asunción Silva", "categoria": "Poesía", "ejemplares": 1}, {"id": "L023", "titulo": "Hábitos atómicos", "autor": "James Clear", "categoria": "Desarrollo personal", "ejemplares": 2}, {"id": "L024", "titulo": "El arte de la guerra", "autor": "Sun Tzu", "categoria": "Desarrollo personal", "ejemplares": 1}], "usuarios": ["Ana Martínez", "Carlos Rojas", "Laura Gómez", "Andrés Pérez", "Valentina Ríos", "Juan Camilo Torres", "Daniela Castro", "Santiago López", "Mariana Herrera", "Felipe Morales", "Sofía Vargas", "Julián Ortiz", "Camila Suárez", "Mateo Jiménez"], "prestamos": [{"id": "P001", "libroId": "L015", "usuario": "Valentina Ríos", "fechaPrestamo": "2026-08-04", "fechaLimite": "2026-08-18", "fechaDevolucion": "2026-08-28"}, {"id": "P002", "libroId": "L015", "usuario": "Santiago López", "fechaPrestamo": "2026-08-06", "fechaLimite": "2026-08-20", "fechaDevolucion": "2026-08-20"}, {"id": "P003", "libroId": "L015", "usuario": "Laura Gómez", "fechaPrestamo": "2026-08-12", "fechaLimite": "2026-08-26", "fechaDevolucion": "2026-08-26"}, {"id": "P004", "libroId": "L013", "usuario": "Valentina Ríos", "fechaPrestamo": "2026-08-13", "fechaLimite": "2026-08-27", "fechaDevolucion": "2026-09-03"}, {"id": "P005", "libroId": "L010", "usuario": "Felipe Morales", "fechaPrestamo": "2026-08-19", "fechaLimite": "2026-09-02", "fechaDevolucion": "2026-09-02"}, {"id": "P006", "libroId": "L006", "usuario": "Daniela Castro", "fechaPrestamo": "2026-08-19", "fechaLimite": "2026-09-02", "fechaDevolucion": "2026-09-02"}, {"id": "P007", "libroId": "L015", "usuario": "Mateo Jiménez", "fechaPrestamo": "2026-08-20", "fechaLimite": "2026-09-03", "fechaDevolucion": "2026-09-02"}, {"id": "P008", "libroId": "L001", "usuario": "Sofía Vargas", "fechaPrestamo": "2026-08-21", "fechaLimite": "2026-09-04", "fechaDevolucion": "2026-09-06"}, {"id": "P009", "libroId": "L006", "usuario": "Camila Suárez", "fechaPrestamo": "2026-08-21", "fechaLimite": "2026-09-04", "fechaDevolucion": "2026-09-01"}, {"id": "P010", "libroId": "L018", "usuario": "Juan Camilo Torres", "fechaPrestamo": "2026-08-26", "fechaLimite": "2026-09-09", "fechaDevolucion": null}, {"id": "P011", "libroId": "L013", "usuario": "Julián Ortiz", "fechaPrestamo": "2026-08-26", "fechaLimite": "2026-09-09", "fechaDevolucion": null}, {"id": "P012", "libroId": "L014", "usuario": "Ana Martínez", "fechaPrestamo": "2026-08-30", "fechaLimite": "2026-09-13", "fechaDevolucion": "2026-09-20"}, {"id": "P013", "libroId": "L014", "usuario": "Juan Camilo Torres", "fechaPrestamo": "2026-08-31", "fechaLimite": "2026-09-14", "fechaDevolucion": "2026-09-21"}, {"id": "P014", "libroId": "L004", "usuario": "Carlos Rojas", "fechaPrestamo": "2026-09-01", "fechaLimite": "2026-09-15", "fechaDevolucion": "2026-09-19"}, {"id": "P015", "libroId": "L021", "usuario": "Mariana Herrera", "fechaPrestamo": "2026-09-01", "fechaLimite": "2026-09-15", "fechaDevolucion": "2026-09-22"}, {"id": "P016", "libroId": "L018", "usuario": "Mateo Jiménez", "fechaPrestamo": "2026-09-04", "fechaLimite": "2026-09-18", "fechaDevolucion": null}, {"id": "P017", "libroId": "L009", "usuario": "Carlos Rojas", "fechaPrestamo": "2026-09-05", "fechaLimite": "2026-09-19", "fechaDevolucion": "2026-09-16"}, {"id": "P018", "libroId": "L010", "usuario": "Santiago López", "fechaPrestamo": "2026-09-05", "fechaLimite": "2026-09-19", "fechaDevolucion": "2026-09-19"}, {"id": "P019", "libroId": "L013", "usuario": "Juan Camilo Torres", "fechaPrestamo": "2026-09-07", "fechaLimite": "2026-09-21", "fechaDevolucion": "2026-09-16"}, {"id": "P020", "libroId": "L003", "usuario": "Andrés Pérez", "fechaPrestamo": "2026-09-09", "fechaLimite": "2026-09-23", "fechaDevolucion": "2026-09-25"}, {"id": "P021", "libroId": "L015", "usuario": "Julián Ortiz", "fechaPrestamo": "2026-09-09", "fechaLimite": "2026-09-23", "fechaDevolucion": "2026-09-27"}, {"id": "P022", "libroId": "L021", "usuario": "Mateo Jiménez", "fechaPrestamo": "2026-09-12", "fechaLimite": "2026-09-26", "fechaDevolucion": "2026-10-06"}, {"id": "P023", "libroId": "L019", "usuario": "Camila Suárez", "fechaPrestamo": "2026-09-17", "fechaLimite": "2026-10-01", "fechaDevolucion": "2026-09-26"}, {"id": "P024", "libroId": "L006", "usuario": "Daniela Castro", "fechaPrestamo": "2026-09-18", "fechaLimite": "2026-10-02", "fechaDevolucion": "2026-09-27"}, {"id": "P025", "libroId": "L001", "usuario": "Felipe Morales", "fechaPrestamo": "2026-09-26", "fechaLimite": "2026-10-10", "fechaDevolucion": "2026-10-10"}, {"id": "P026", "libroId": "L022", "usuario": "Santiago López", "fechaPrestamo": "2026-09-27", "fechaLimite": "2026-10-11", "fechaDevolucion": "2026-10-13"}, {"id": "P027", "libroId": "L024", "usuario": "Daniela Castro", "fechaPrestamo": "2026-09-27", "fechaLimite": "2026-10-11", "fechaDevolucion": "2026-10-15"}, {"id": "P028", "libroId": "L023", "usuario": "Mateo Jiménez", "fechaPrestamo": "2026-09-27", "fechaLimite": "2026-10-11", "fechaDevolucion": "2026-10-06"}, {"id": "P029", "libroId": "L003", "usuario": "Ana Martínez", "fechaPrestamo": "2026-09-29", "fechaLimite": "2026-10-13", "fechaDevolucion": "2026-10-10"}, {"id": "P030", "libroId": "L009", "usuario": "Felipe Morales", "fechaPrestamo": "2026-10-04", "fechaLimite": "2026-10-18", "fechaDevolucion": "2026-10-25"}, {"id": "P031", "libroId": "L024", "usuario": "Camila Suárez", "fechaPrestamo": "2026-10-10", "fechaLimite": "2026-10-24", "fechaDevolucion": "2026-10-24"}, {"id": "P032", "libroId": "L001", "usuario": "Julián Ortiz", "fechaPrestamo": "2026-10-12", "fechaLimite": "2026-10-26", "fechaDevolucion": null}, {"id": "P033", "libroId": "L002", "usuario": "Laura Gómez", "fechaPrestamo": "2026-10-14", "fechaLimite": "2026-10-28", "fechaDevolucion": "2026-11-07"}, {"id": "P034", "libroId": "L001", "usuario": "Camila Suárez", "fechaPrestamo": "2026-10-19", "fechaLimite": "2026-11-02", "fechaDevolucion": "2026-10-30"}, {"id": "P035", "libroId": "L019", "usuario": "Mariana Herrera", "fechaPrestamo": "2026-10-23", "fechaLimite": "2026-11-06", "fechaDevolucion": "2026-11-06"}, {"id": "P036", "libroId": "L018", "usuario": "Felipe Morales", "fechaPrestamo": "2026-10-24", "fechaLimite": "2026-11-07", "fechaDevolucion": "2026-11-06"}, {"id": "P037", "libroId": "L001", "usuario": "Laura Gómez", "fechaPrestamo": "2026-10-25", "fechaLimite": "2026-11-08", "fechaDevolucion": null}, {"id": "P038", "libroId": "L023", "usuario": "Valentina Ríos", "fechaPrestamo": "2026-10-27", "fechaLimite": "2026-11-10", "fechaDevolucion": "2026-11-09"}, {"id": "P039", "libroId": "L003", "usuario": "Ana Martínez", "fechaPrestamo": "2026-10-27", "fechaLimite": "2026-11-10", "fechaDevolucion": "2026-11-05"}, {"id": "P040", "libroId": "L023", "usuario": "Mariana Herrera", "fechaPrestamo": "2026-10-29", "fechaLimite": "2026-11-12", "fechaDevolucion": null}, {"id": "P041", "libroId": "L017", "usuario": "Laura Gómez", "fechaPrestamo": "2026-10-29", "fechaLimite": "2026-11-12", "fechaDevolucion": "2026-11-07"}, {"id": "P042", "libroId": "L014", "usuario": "Valentina Ríos", "fechaPrestamo": "2026-10-29", "fechaLimite": "2026-11-12", "fechaDevolucion": null}, {"id": "P043", "libroId": "L022", "usuario": "Daniela Castro", "fechaPrestamo": "2026-11-04", "fechaLimite": "2026-11-18", "fechaDevolucion": null}, {"id": "P044", "libroId": "L024", "usuario": "Camila Suárez", "fechaPrestamo": "2026-11-06", "fechaLimite": "2026-11-20", "fechaDevolucion": null}, {"id": "P045", "libroId": "L003", "usuario": "Mariana Herrera", "fechaPrestamo": "2026-11-06", "fechaLimite": "2026-11-20", "fechaDevolucion": null}, {"id": "P046", "libroId": "L006", "usuario": "Mateo Jiménez", "fechaPrestamo": "2026-11-07", "fechaLimite": "2026-11-21", "fechaDevolucion": "2026-11-12"}, {"id": "P047", "libroId": "L023", "usuario": "Mateo Jiménez", "fechaPrestamo": "2026-11-12", "fechaLimite": "2026-11-26", "fechaDevolucion": null}, {"id": "P048", "libroId": "L018", "usuario": "Santiago López", "fechaPrestamo": "2026-11-12", "fechaLimite": "2026-11-26", "fechaDevolucion": null}]};
 const KEY = 'biblio_hanna_v1';
 const CATS = ['Novela','Ciencia','Historia','Tecnología','Infantil','Poesía','Desarrollo personal'];
-const CAT_COLOR = {'Novela':'#2f6fdb','Ciencia':'#0fa3b1','Historia':'#c2683a','Tecnología':'#7b5cd6','Infantil':'#e8a317','Poesía':'#d9485f','Desarrollo personal':'#1aa37a'};
-const ST_COLOR = {'Devuelto':'#1aa37a','Devuelto con retraso':'#e8a317','Activo':'#2f6fdb','Retrasado':'#d9485f'};
+const ST_COLOR = {'Devuelto':'#1e3a8a','Activo':'#7c9bd6','Devuelto con retraso':'#d4a24c','Retrasado':'#b91c1c'};
+const ST_TAG = {'Devuelto':'t-ok','Activo':'t-act','Devuelto con retraso':'t-warn','Retrasado':'t-bad'};
 const MESES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+const ICONS = {
+  info:'<circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/>',
+  swap:'<path d="M7 7h11l-3-3M17 17H6l3 3"/>',
+  db:'<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>',
+  chart:'<path d="M3 3v18h18"/><path d="M8 17v-5M13 17V8M18 17v-9"/>',
+  doc:'<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/>',
+  code:'<path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  check:'<path d="m5 12 5 5 9-10"/>',
+  down:'<path d="M12 4v12m0 0-5-5m5 5 5-5M5 20h14"/>',
+  reset:'<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>',
+  book:'<path d="M4 19.5V5a2 2 0 0 1 2-2h13v16H6.5A2.5 2.5 0 0 0 4 21.5"/><path d="M19 17v4H6.5"/>',
+  out:'<path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',
+  shelf:'<path d="M4 4v16M20 4v16M4 12h16M4 20h16M8 4v8M12 4v8M15 13v7"/>',
+  alert:'<path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/>',
+  target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',
+  home:'<path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/>',
+  x:'<path d="M18 6 6 18M6 6l12 12"/>',
+  star:'<path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/>'
+};
+const ic=(n,s=16)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[n]}</svg>`;
+function paintIcons(root=document){root.querySelectorAll('i[data-ic]').forEach(i=>{i.outerHTML=ic(i.dataset.ic,i.closest('.fact')?18:16);});}
 
 let DB;
 function load(){ try{ const s=localStorage.getItem(KEY); if(s){DB=JSON.parse(s);return;} }catch(e){} DB=JSON.parse(JSON.stringify(SEED)); }
@@ -247,7 +359,7 @@ const HOY = iso(new Date());
 const parse=s=>{const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d);};
 const addDays=(s,n)=>{const d=parse(s);d.setDate(d.getDate()+n);return iso(d);};
 const diff=(a,b)=>Math.round((parse(a)-parse(b))/86400000);
-const fmt=s=>{if(!s)return '—';const d=parse(s);return `${pad(d.getDate())}/${MESES[d.getMonth()]}/${d.getFullYear()}`;};
+const fmt=s=>{if(!s)return '—';const d=parse(s);return `${pad(d.getDate())} ${MESES[d.getMonth()].toLowerCase()} ${d.getFullYear()}`;};
 const libro=id=>DB.libros.find(l=>l.id===id);
 function estado(p){
   if(p.fechaDevolucion) return p.fechaDevolucion>p.fechaLimite?'Devuelto con retraso':'Devuelto';
@@ -255,10 +367,10 @@ function estado(p){
 }
 const activos=id=>DB.prestamos.filter(p=>p.libroId===id&&!p.fechaDevolucion).length;
 const disp=l=>l.ejemplares-activos(l.id);
-const pill=s=>`<span class="pill ${s==='Devuelto con retraso'?'st-Tarde':'st-'+s}">${s}</span>`;
+const tag=s=>`<span class="tag ${ST_TAG[s]}">${s}</span>`;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pl=(n,s,p)=>`${n} ${n===1?s:p}`;
 
-/* ---------- Stats ---------- */
 function stats(){
   const P=DB.prestamos, L=DB.libros;
   const totalEj=L.reduce((a,l)=>a+l.ejemplares,0);
@@ -271,160 +383,148 @@ function stats(){
   const porMes={}; P.forEach(p=>{const k=p.fechaPrestamo.slice(0,7);porMes[k]=(porMes[k]||0)+1;});
   const retr=P.filter(p=>estado(p)==='Retrasado').map(p=>({...p,dias:diff(HOY,p.fechaLimite)})).sort((a,b)=>b.dias-a.dias);
   const sinDisp=L.filter(l=>disp(l)<=0);
-  const promDiasRetrasoDev = (()=>{const t=P.filter(p=>estado(p)==='Devuelto con retraso');return t.length?t.reduce((a,p)=>a+diff(p.fechaDevolucion,p.fechaLimite),0)/t.length:0;})();
+  const tarde=P.filter(p=>estado(p)==='Devuelto con retraso');
+  const promDiasRetrasoDev = tarde.length?tarde.reduce((a,p)=>a+diff(p.fechaDevolucion,p.fechaLimite),0)/tarde.length:0;
   return {totalEj,prestados,disponibles:totalEj-prestados,est,devueltos,top,porCat,porMes,retr,sinDisp,promDiasRetrasoDev,
     tasaTiempo: devueltos? (est['Devuelto']||0)/devueltos*100 : 0,
     tasaRetraso: P.length? ((est['Devuelto con retraso']||0)+(est['Retrasado']||0))/P.length*100 : 0};
 }
 
-/* ---------- SVG charts ---------- */
-function barsV(data,colors,h=260){
-  const W=520,H=h,pl=34,pb=58,pt=16,max=Math.max(...data.map(d=>d[1]),1);
-  const step=Math.ceil(max/5)||1, top=Math.ceil(max/step)*step;
-  const bw=(W-pl-10)/data.length;
+/* ---------- Charts (SVG) ---------- */
+const GRID='#eef0f3', AX='#64748b';
+function barsV(data){
+  const W=520,H=270,pl=30,pb=44,pt=22,max=Math.max(...data.map(d=>d[1]),1);
+  const step=Math.ceil(max/5)||1, top=Math.ceil(max/step)*step, bw=(W-pl-6)/data.length;
   let s=`<svg viewBox="0 0 ${W} ${H}" role="img">`;
-  for(let v=0;v<=top;v+=step){const y=H-pb-(v/top)*(H-pb-pt);s+=`<line x1="${pl}" x2="${W}" y1="${y}" y2="${y}" stroke="#eee6d8"/><text x="${pl-6}" y="${y+4}" font-size="11" text-anchor="end" fill="#6b7080">${v}</text>`;}
-  data.forEach((d,i)=>{const bh=(d[1]/top)*(H-pb-pt),x=pl+i*bw+bw*.18,y=H-pb-bh,w=bw*.64;
-    s+=`<rect x="${x}" y="${y}" width="${w}" height="${bh}" rx="6" fill="${colors[i]}"><title>${esc(d[0])}: ${d[1]}</title></rect>`;
-    s+=`<text x="${x+w/2}" y="${y-6}" font-size="12" font-weight="700" text-anchor="middle">${d[1]}</text>`;
-    const lb=d[0].length>11?d[0].split(' ')[0]:d[0];
-    s+=`<text x="${x+w/2}" y="${H-pb+18}" font-size="11.5" text-anchor="middle" fill="#3a3f50">${esc(lb)}</text>`;});
+  for(let v=0;v<=top;v+=step){const y=H-pb-(v/top)*(H-pb-pt);s+=`<line x1="${pl}" x2="${W}" y1="${y}" y2="${y}" stroke="${GRID}"/><text x="${pl-8}" y="${y+4}" font-size="11" text-anchor="end" fill="${AX}">${v}</text>`;}
+  data.forEach((d,i)=>{const bh=(d[1]/top)*(H-pb-pt),x=pl+i*bw+bw*.22,y=H-pb-bh,w=bw*.56;
+    const col=i===0?'#1e3a8a':i===1?'#3b5ba5':'#a5b8dc';
+    s+=`<rect x="${x}" y="${y}" width="${w}" height="${bh}" rx="3" fill="${col}"><title>${esc(d[0])}: ${d[1]}</title></rect>`;
+    s+=`<text x="${x+w/2}" y="${y-7}" font-size="12" font-weight="600" text-anchor="middle" fill="#0f172a">${d[1]}</text>`;
+    const lb=d[0]==='Desarrollo personal'?'Des. pers.':d[0];
+    s+=`<text x="${x+w/2}" y="${H-pb+18}" font-size="11" text-anchor="middle" fill="${AX}">${esc(lb)}</text>`;});
   return s+'</svg>';
 }
 function donut(data){
-  const tot=data.reduce((a,d)=>a+d[1],0)||1,R=90,r=56,cx=130,cy=120;let a0=-Math.PI/2,s=`<svg viewBox="0 0 520 240">`;
+  const tot=data.reduce((a,d)=>a+d[1],0)||1,R=92,r=66,cx=125,cy=122;let a0=-Math.PI/2,s=`<svg viewBox="0 0 520 244">`;
   data.forEach(d=>{if(!d[1])return;const a1=a0+d[1]/tot*Math.PI*2,lg=a1-a0>Math.PI?1:0;
     const p=(R0,a)=>[cx+R0*Math.cos(a),cy+R0*Math.sin(a)];
     const [x1,y1]=p(R,a0),[x2,y2]=p(R,a1),[x3,y3]=p(r,a1),[x4,y4]=p(r,a0);
-    const path=d[1]===tot?`M${cx-R},${cy}a${R},${R} 0 1,0 ${2*R},0a${R},${R} 0 1,0 ${-2*R},0M${cx-r},${cy}a${r},${r} 0 1,1 ${2*r},0a${r},${r} 0 1,1 ${-2*r},0`
-      :`M${x1},${y1}A${R},${R} 0 ${lg} 1 ${x2},${y2}L${x3},${y3}A${r},${r} 0 ${lg} 0 ${x4},${y4}Z`;
-    s+=`<path d="${path}" fill="${ST_COLOR[d[0]]}" stroke="#fff" stroke-width="2"><title>${d[0]}: ${d[1]}</title></path>`;a0=a1;});
-  s+=`<text x="${cx}" y="${cy-2}" text-anchor="middle" font-size="30" font-weight="800" font-family="Fraunces">${tot}</text><text x="${cx}" y="${cy+18}" text-anchor="middle" font-size="11" fill="#6b7080">préstamos</text>`;
-  data.forEach((d,i)=>{const y=52+i*40;s+=`<rect x="270" y="${y}" width="14" height="14" rx="3" fill="${ST_COLOR[d[0]]}"/><text x="292" y="${y+12}" font-size="15" font-weight="600">${d[0]}</text><text x="292" y="${y+30}" font-size="13.5" fill="#6b7080">${d[1]} · ${(d[1]/tot*100).toFixed(1)}%</text>`;});
+    s+=`<path d="M${x1},${y1}A${R},${R} 0 ${lg} 1 ${x2},${y2}L${x3},${y3}A${r},${r} 0 ${lg} 0 ${x4},${y4}Z" fill="${ST_COLOR[d[0]]}" stroke="#fff" stroke-width="2"><title>${d[0]}: ${d[1]}</title></path>`;a0=a1;});
+  s+=`<text x="${cx}" y="${cy+4}" text-anchor="middle" font-size="30" font-weight="700" fill="#0f172a">${tot}</text><text x="${cx}" y="${cy+24}" text-anchor="middle" font-size="11.5" fill="${AX}">préstamos</text>`;
+  data.forEach((d,i)=>{const y=40+i*46;
+    s+=`<rect x="262" y="${y}" width="10" height="10" rx="2" fill="${ST_COLOR[d[0]]}"/><text x="280" y="${y+9}" font-size="13" fill="#334155">${d[0]}</text>`;
+    s+=`<text x="505" y="${y+9}" font-size="13" font-weight="600" text-anchor="end" fill="#0f172a">${d[1]}</text><text x="505" y="${y+26}" font-size="11.5" text-anchor="end" fill="${AX}">${(d[1]/tot*100).toFixed(1)}%</text>`;
+    s+=`<line x1="262" x2="505" y1="${y+34}" y2="${y+34}" stroke="${GRID}"/>`;});
   return s+'</svg>';
 }
 function barsH(data){
-  const W=520,rowH=40,H=data.length*rowH+10,pl=210,max=Math.max(...data.map(d=>d[1]),1);let s=`<svg viewBox="0 0 ${W} ${H}">`;
-  const pal=['#2f6fdb','#4a84e2','#6a9ae8','#8bb0ee','#a9c4f2'];
-  data.forEach((d,i)=>{const y=i*rowH+6,w=(d[1]/max)*(W-pl-40),t=d[0].length>30?d[0].slice(0,29)+'…':d[0];
-    s+=`<text x="${pl-10}" y="${y+19}" font-size="12.5" text-anchor="end">${esc(t)}</text><rect x="${pl}" y="${y+4}" width="${w}" height="22" rx="6" fill="${pal[i]||'#a9c4f2'}"><title>${esc(d[0])}: ${d[1]}</title></rect><text x="${pl+w+8}" y="${y+20}" font-size="12.5" font-weight="700">${d[1]}</text>`;});
+  const W=520,rowH=46,H=data.length*rowH+4,max=Math.max(...data.map(d=>d[1]),1);let s=`<svg viewBox="0 0 ${W} ${H}">`;
+  data.forEach((d,i)=>{const y=i*rowH,w=(d[1]/max)*(W-40);
+    s+=`<text x="0" y="${y+14}" font-size="12.5" fill="#334155">${esc(d[0])}</text><text x="${W}" y="${y+14}" font-size="12.5" font-weight="600" text-anchor="end" fill="#0f172a">${pl(d[1],'préstamo','préstamos')}</text>`;
+    s+=`<rect x="0" y="${y+22}" width="${W}" height="8" rx="4" fill="#eef1f6"/><rect x="0" y="${y+22}" width="${w}" height="8" rx="4" fill="${i===0?'#1e3a8a':'#5677b8'}"><title>${esc(d[0])}: ${d[1]}</title></rect>`;});
   return s+'</svg>';
 }
 function line(data){
-  const W=520,H=250,pl=34,pr=20,pb=40,pt=24,max=Math.max(...data.map(d=>d[1]),1),top=Math.ceil(max/5)*5||5;
-  const x=i=>pl+(data.length===1?(W-pl-pr)/2:i*(W-pl-pr)/(data.length-1)),y=v=>H-pb-(v/top)*(H-pb-pt);
-  let s=`<svg viewBox="0 0 ${W} ${H}">`;
-  for(let v=0;v<=top;v+=top/5){s+=`<line x1="${pl}" x2="${W-pr}" y1="${y(v)}" y2="${y(v)}" stroke="#eee6d8"/><text x="${pl-6}" y="${y(v)+4}" font-size="11" text-anchor="end" fill="#6b7080">${v}</text>`;}
+  const W=520,H=260,pl=30,pr=24,pb=36,pt=26,max=Math.max(...data.map(d=>d[1]),1),top=Math.ceil(max/5)*5||5;
+  const x=i=>pl+12+(data.length===1?(W-pl-pr)/2:i*(W-pl-pr-24)/(data.length-1)),y=v=>H-pb-(v/top)*(H-pb-pt);
+  let s=`<svg viewBox="0 0 ${W} ${H}"><defs><linearGradient id="gA" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#1d4ed8" stop-opacity=".16"/><stop offset="1" stop-color="#1d4ed8" stop-opacity="0"/></linearGradient></defs>`;
+  for(let v=0;v<=top;v+=top/5){s+=`<line x1="${pl}" x2="${W-pr+12}" y1="${y(v)}" y2="${y(v)}" stroke="${GRID}"/><text x="${pl-8}" y="${y(v)+4}" font-size="11" text-anchor="end" fill="${AX}">${v}</text>`;}
   const pts=data.map((d,i)=>`${x(i)},${y(d[1])}`).join(' ');
-  s+=`<polygon points="${x(0)},${y(0)} ${pts} ${x(data.length-1)},${y(0)}" fill="#7b5cd6" opacity=".12"/>`;
-  s+=`<polyline points="${pts}" fill="none" stroke="#7b5cd6" stroke-width="3" stroke-linejoin="round"/>`;
-  data.forEach((d,i)=>{s+=`<circle cx="${x(i)}" cy="${y(d[1])}" r="6" fill="#fff" stroke="#7b5cd6" stroke-width="3"><title>${d[0]}: ${d[1]}</title></circle><text x="${x(i)}" y="${y(d[1])-12}" text-anchor="middle" font-size="12" font-weight="700">${d[1]}</text><text x="${x(i)}" y="${H-pb+20}" text-anchor="middle" font-size="12" fill="#3a3f50">${d[0]}</text>`;});
+  s+=`<polygon points="${x(0)},${y(0)} ${pts} ${x(data.length-1)},${y(0)}" fill="url(#gA)"/>`;
+  s+=`<polyline points="${pts}" fill="none" stroke="#1d4ed8" stroke-width="2.5" stroke-linejoin="round"/>`;
+  data.forEach((d,i)=>{s+=`<circle cx="${x(i)}" cy="${y(d[1])}" r="4.5" fill="#fff" stroke="#1d4ed8" stroke-width="2.5"><title>${d[0]}: ${d[1]}</title></circle><text x="${x(i)}" y="${y(d[1])-12}" text-anchor="middle" font-size="12" font-weight="600" fill="#0f172a">${d[1]}</text><text x="${x(i)}" y="${H-pb+20}" text-anchor="middle" font-size="11.5" fill="${AX}">${d[0]}</text>`;});
   return s+'</svg>';
 }
 
 /* ---------- Render ---------- */
-function renderAll(){ renderSelects(); renderCatalogo(); renderDashboard(); renderTabla(); renderConclusiones(); renderProblema(); }
-function renderProblema(){
-  document.getElementById('pb-libros').textContent=DB.libros.length;
-  document.getElementById('pb-usuarios').textContent=new Set([...DB.usuarios,...DB.prestamos.map(p=>p.usuario)]).size;
-  document.getElementById('pb-prest').textContent=DB.prestamos.length;
+function renderAll(){ renderHome(); renderSelects(); renderCatalogo(); renderDashboard(); renderTabla(); }
+function renderHome(){
+  const S=stats(),[topId,topN]=S.top[0]||['',0];
+  document.getElementById('pvK').innerHTML=[['Prestados',S.prestados],['Disponibles',S.disponibles],['Retrasados',S.retr.length],['A tiempo',S.tasaTiempo.toFixed(0)+'%']].map(k=>`<div><small>${k[0]}</small><b style="${k[0]==='Retrasados'?'color:#b91c1c':''}">${k[1]}</b></div>`).join('');
+  const cat=Object.values(S.porCat).sort((a,b)=>b-a),mx=Math.max(...cat,1);
+  document.getElementById('pvBars').innerHTML=cat.map(v=>`<i style="height:${v/mx*100}%"></i>`).join('');
+  document.getElementById('strip').innerHTML=[[DB.libros.length,'títulos en el catálogo'],[S.totalEj,'ejemplares registrados'],[DB.prestamos.length,'préstamos gestionados'],[new Set(DB.prestamos.map(p=>p.usuario)).size,'usuarios atendidos']].map(s=>`<div><b>${s[0]}</b><span>${s[1]}</span></div>`).join('');
 }
 function renderSelects(){
-  const sel=document.getElementById('pLibro');
-  sel.innerHTML=DB.libros.slice().sort((a,b)=>a.titulo.localeCompare(b.titulo)).map(l=>{const d=disp(l);return `<option value="${l.id}" ${d<=0?'disabled':''}>${esc(l.titulo)} — ${d>0?d+' disponible(s)':'sin ejemplares'}</option>`;}).join('');
+  document.getElementById('pLibro').innerHTML=DB.libros.slice().sort((a,b)=>a.titulo.localeCompare(b.titulo)).map(l=>{const d=disp(l);return `<option value="${l.id}" ${d<=0?'disabled':''}>${esc(l.titulo)} · ${d>0?pl(d,'disponible','disponibles'):'sin ejemplares'}</option>`;}).join('');
   const us=new Set([...DB.usuarios,...DB.prestamos.map(p=>p.usuario)]);
   document.getElementById('dlUsuarios').innerHTML=[...us].sort().map(u=>`<option value="${esc(u)}">`).join('');
   const pend=DB.prestamos.filter(p=>!p.fechaDevolucion);
-  document.getElementById('dPrestamo').innerHTML=pend.length?pend.map(p=>`<option value="${p.id}">${p.id} · ${esc(libro(p.libroId).titulo)} · ${esc(p.usuario)} ${estado(p)==='Retrasado'?'⚠️':''}</option>`).join(''):'<option value="">No hay préstamos pendientes</option>';
+  document.getElementById('dPrestamo').innerHTML=pend.length?pend.map(p=>`<option value="${p.id}">${p.id} · ${esc(libro(p.libroId).titulo)} · ${esc(p.usuario)}${estado(p)==='Retrasado'?' (vencido)':''}</option>`).join(''):'<option value="">No hay préstamos pendientes</option>';
   document.getElementById('lCat').innerHTML=CATS.map(c=>`<option>${c}</option>`).join('');
 }
 function renderCatalogo(){
+  const S=stats();
+  document.getElementById('invSum').textContent=`${DB.libros.length} títulos · ${S.totalEj} ejemplares · ${S.disponibles} disponibles`;
   const rows=DB.libros.map(l=>{const a=activos(l.id),d=l.ejemplares-a,tot=DB.prestamos.filter(p=>p.libroId===l.id).length;
-    return `<tr><td>${l.id}</td><td><b>${esc(l.titulo)}</b><br><span style="color:#6b7080;font-size:.8rem">${esc(l.autor)}</span></td><td><span class="pill" style="background:${CAT_COLOR[l.categoria]}22;color:${CAT_COLOR[l.categoria]}">${l.categoria}</span></td><td>${l.ejemplares}</td><td>${a}</td><td class="avail ${d>0?'badge1':'badge0'}">${d>0?'✅ '+d:'⛔ 0'}</td><td>${tot}</td></tr>`;}).join('');
-  document.getElementById('tCatalogo').innerHTML=`<thead><tr><th>ID</th><th>Libro</th><th>Categoría</th><th>Ejemplares</th><th>Prestados</th><th>Disponibles</th><th>Veces prestado</th></tr></thead><tbody>${rows}</tbody>`;
+    return `<tr><td class="id">${l.id}</td><td><b style="color:#0f172a;font-weight:600">${esc(l.titulo)}</b><span class="sub2">${esc(l.autor)}</span></td><td><span class="cat">${l.categoria}</span></td><td class="num">${l.ejemplares}</td><td class="num">${a}</td><td><div class="stock"><div class="bar"><i style="width:${l.ejemplares?d/l.ejemplares*100:0}%;${d<=0?'background:#b91c1c':''}"></i></div>${d>0?d:'<span style="color:#b91c1c;font-weight:600">Agotado</span>'}</div></td><td class="num">${tot}</td></tr>`;}).join('');
+  document.getElementById('tCatalogo').innerHTML=`<thead><tr><th>ID</th><th>Libro</th><th>Categoría</th><th class="num">Ejemplares</th><th class="num">Prestados</th><th>Disponibles</th><th class="num">Veces prestado</th></tr></thead><tbody>${rows}</tbody>`;
 }
 function renderDashboard(){
   const S=stats(), [topId,topN]=S.top[0]||['',0];
   const K=[
-    ['📚 Total de préstamos',DB.prestamos.length,'Registrados en la base','var(--c5)'],
-    ['📤 Libros prestados',S.prestados,`De ${S.totalEj} ejemplares (${(S.prestados/S.totalEj*100).toFixed(0)}% en circulación)`,'var(--c1)'],
-    ['✅ Ejemplares disponibles',S.disponibles,`${S.sinDisp.length} título(s) sin ejemplares libres`,'var(--c2)'],
-    ['⏰ Préstamos retrasados',S.retr.length,'Pendientes y con fecha límite vencida','var(--c4)'],
-    ['🎯 Devolución a tiempo',S.tasaTiempo.toFixed(1)+'%',`${S.est['Devuelto']||0} de ${S.devueltos} devoluciones`,'var(--c3)'],
-    ['🏆 Libro más consultado',topId?esc(libro(topId).titulo):'—',`${topN} préstamos`,'var(--c6)',true],
+    ['Total de préstamos',DB.prestamos.length,'Registros históricos','book',''],
+    ['Libros prestados',S.prestados,`${(S.prestados/S.totalEj*100).toFixed(0)}% de ${S.totalEj} ejemplares`,'out',''],
+    ['Ejemplares disponibles',S.disponibles,`${pl(S.sinDisp.length,'título agotado','títulos agotados')}`,'shelf','ok'],
+    ['Préstamos retrasados',S.retr.length,'Vencidos sin devolver','alert','bad'],
+    ['Devolución a tiempo',S.tasaTiempo.toFixed(1)+'%',`${S.est['Devuelto']||0} de ${S.devueltos} devoluciones`,'target','warn'],
+    ['Libro más consultado',topId?esc(libro(topId).titulo):'—',pl(topN,'préstamo','préstamos'),'star','',true],
   ];
-  document.getElementById('kpis').innerHTML=K.map(k=>`<div class="kpi" style="--k:${k[3]}"><div class="lbl">${k[0]}</div><div class="val ${k[4]?'small':''}">${k[1]}</div><div class="hint">${k[2]}</div></div>`).join('');
+  document.getElementById('kpis').innerHTML=K.map(k=>`<div class="kpi"><div class="top">${k[0]}<span class="ic ${k[4]}">${ic(k[3],15)}</span></div><div class="val ${k[5]?'txt':''}">${k[1]}</div><div class="hint">${k[2]}</div></div>`).join('');
   const cat=Object.entries(S.porCat).sort((a,b)=>b[1]-a[1]);
-  document.getElementById('chCat').innerHTML=barsV(cat,cat.map(c=>CAT_COLOR[c[0]]||'#999'))+`<div class="legend">${cat.map(c=>`<span style="--c:${CAT_COLOR[c[0]]}">${c[0]}</span>`).join('')}</div>`;
-  const order=['Devuelto','Devuelto con retraso','Activo','Retrasado'];
+  document.getElementById('chCat').innerHTML=barsV(cat);
+  const order=['Devuelto','Activo','Devuelto con retraso','Retrasado'];
   document.getElementById('chEstado').innerHTML=donut(order.map(o=>[o,S.est[o]||0]));
   document.getElementById('chTop').innerHTML=barsH(S.top.slice(0,5).map(([id,n])=>[libro(id).titulo,n]));
-  const mes=Object.entries(S.porMes).sort().map(([k,v])=>[MESES[+k.slice(5)-1]+' '+k.slice(2,4),v]);
-  document.getElementById('chMes').innerHTML=line(mes)+(mes.length&&mes[mes.length-1][0].startsWith(MESES[new Date().getMonth()])?'<div class="note">* El mes actual está en curso (datos parciales).</div>':'');
-  document.getElementById('tRetrasos').innerHTML=S.retr.length?`<thead><tr><th>ID</th><th>Libro</th><th>Usuario</th><th>Fecha límite</th><th>Días de retraso</th></tr></thead><tbody>${S.retr.map(p=>`<tr><td>${p.id}</td><td>${esc(libro(p.libroId).titulo)}</td><td>${esc(p.usuario)}</td><td>${fmt(p.fechaLimite)}</td><td><span class="pill st-Retrasado">${p.dias} día${p.dias===1?'':'s'}</span></td></tr>`).join('')}</tbody>`:'<tr><td>🎉 No hay préstamos retrasados.</td></tr>';
+  const mes=Object.entries(S.porMes).sort().map(([k,v])=>[MESES[+k.slice(5)-1]+' '+k.slice(0,4),v]);
+  document.getElementById('chMes').innerHTML=line(mes)+(Object.keys(S.porMes).sort().pop()===HOY.slice(0,7)?'<div class="note">El mes actual está en curso (datos parciales).</div>':'');
+  document.getElementById('retSum').textContent=S.retr.length?pl(S.retr.length,'préstamo','préstamos')+' · '+S.retr.reduce((a,p)=>a+p.dias,0)+' días acumulados':'';
+  document.getElementById('tRetrasos').innerHTML=S.retr.length?`<thead><tr><th>ID</th><th>Libro</th><th>Usuario</th><th>Fecha límite</th><th class="num">Días de retraso</th></tr></thead><tbody>${S.retr.map(p=>`<tr><td class="id">${p.id}</td><td>${esc(libro(p.libroId).titulo)}</td><td>${esc(p.usuario)}</td><td>${fmt(p.fechaLimite)}</td><td class="num"><span class="tag t-bad">${pl(p.dias,'día','días')}</span></td></tr>`).join('')}</tbody>`:'<tr><td>No hay préstamos vencidos.</td></tr>';
 }
 function renderTabla(){
   const q=document.getElementById('fBuscar').value.toLowerCase(),fe=document.getElementById('fEstado').value;
   const rows=DB.prestamos.slice().reverse().filter(p=>{const l=libro(p.libroId);return (!q||l.titulo.toLowerCase().includes(q)||p.usuario.toLowerCase().includes(q))&&(!fe||estado(p)===fe);});
   document.getElementById('cuenta').textContent=`Mostrando ${rows.length} de ${DB.prestamos.length} registros`;
-  document.getElementById('tPrestamos').innerHTML=`<thead><tr><th>ID</th><th>Libro</th><th>Categoría</th><th>Usuario</th><th>Préstamo</th><th>Límite</th><th>Devolución</th><th>Estado</th></tr></thead><tbody>${rows.map(p=>{const l=libro(p.libroId);return `<tr><td>${p.id}</td><td>${esc(l.titulo)}</td><td>${l.categoria}</td><td>${esc(p.usuario)}</td><td>${fmt(p.fechaPrestamo)}</td><td>${fmt(p.fechaLimite)}</td><td>${fmt(p.fechaDevolucion)}</td><td>${pill(estado(p))}</td></tr>`;}).join('')}</tbody>`;
-}
-function renderConclusiones(){
-  const S=stats(),P=DB.prestamos.length;
-  const cat=Object.entries(S.porCat).sort((a,b)=>b[1]-a[1]);
-  const top3=S.top.slice(0,3).map(([id,n])=>`<i>${esc(libro(id).titulo)}</i> (${n})`).join(', ');
-  const c12=cat.slice(0,2), pctTop2=((c12.reduce((a,c)=>a+c[1],0))/P*100).toFixed(0);
-  const tarde=S.est['Devuelto con retraso']||0;
-  const fewCat=cat.filter(c=>c[1]<=2).map(c=>c[0]);
-  const C=[
-    ['var(--c1)','📈 La demanda se concentra en pocas categorías y títulos',
-     `<b>${c12[0][0]}</b> (${c12[0][1]} préstamos) y <b>${c12[1][0]}</b> (${c12[1][1]}) suman el <b>${pctTop2}%</b> de todos los préstamos. Los títulos más consultados son ${top3}. ${fewCat.length?`En cambio, ${fewCat.join(' y ')} casi no se piden. `:''}Esto indica que las próximas compras de ejemplares deberían priorizar esas categorías y títulos.`],
-    ['var(--c4)','⏰ Los retrasos son el principal problema operativo',
-     `El <b>${S.tasaRetraso.toFixed(1)}%</b> de los préstamos tuvo o tiene retraso: ${tarde} se devolvieron tarde (en promedio <b>${S.promDiasRetrasoDev.toFixed(1)} días</b> después de la fecha límite) y <b>${S.retr.length}</b> siguen sin devolverse con la fecha vencida. Solo el <b>${S.tasaTiempo.toFixed(1)}%</b> de las devoluciones fue a tiempo. Sin un sistema que avise, estos ejemplares quedan bloqueados para otros usuarios.`],
-    ['var(--c2)','📚 Hay buena disponibilidad general, pero no en los libros populares',
-     `Hoy están prestados <b>${S.prestados}</b> de ${S.totalEj} ejemplares, así que quedan <b>${S.disponibles}</b> disponibles (${(S.disponibles/S.totalEj*100).toFixed(0)}%). Sin embargo, ${S.sinDisp.length?`<b>${S.sinDisp.length}</b> título(s) no tienen ejemplares libres (${S.sinDisp.map(l=>'<i>'+esc(l.titulo)+'</i>').join(', ')}), y `:''}parte de los ejemplares prestados corresponde a préstamos retrasados. Recuperar esos libros liberaría inventario sin necesidad de comprar más.`],
-  ];
-  document.getElementById('concl').innerHTML=C.map(c=>`<div class="box" style="--b:${c[0]}"><h3>${c[1]}</h3><p>${c[2]}</p></div>`).join('');
-  document.getElementById('recs').innerHTML=[
-    '🔔 Enviar recordatorios automáticos 2 días antes de la fecha límite y el día del vencimiento.',
-    '📦 Comprar ejemplares adicionales de los títulos del Top 5 y de la categoría más pedida.',
-    '🚫 Definir una política para usuarios con retrasos repetidos (por ejemplo, suspender nuevos préstamos hasta que devuelvan).',
-    '📊 Revisar el dashboard cada mes para detectar cambios en la demanda.'
-  ].map(r=>`<li style="margin-bottom:6px">${r}</li>`).join('');
+  document.getElementById('tPrestamos').innerHTML=`<thead><tr><th>ID</th><th>Libro</th><th>Categoría</th><th>Usuario</th><th>Préstamo</th><th>Límite</th><th>Devolución</th><th>Estado</th></tr></thead><tbody>${rows.map(p=>{const l=libro(p.libroId);return `<tr><td class="id">${p.id}</td><td>${esc(l.titulo)}</td><td><span class="cat">${l.categoria}</span></td><td>${esc(p.usuario)}</td><td>${fmt(p.fechaPrestamo)}</td><td>${fmt(p.fechaLimite)}</td><td>${fmt(p.fechaDevolucion)}</td><td>${tag(estado(p))}</td></tr>`;}).join('')}</tbody>`;
 }
 
 /* ---------- Events ---------- */
-document.getElementById('nav').onclick=e=>{const b=e.target.closest('button');if(!b)return;document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x===b));document.querySelectorAll('section').forEach(s=>s.classList.toggle('on',s.id===b.dataset.s));window.scrollTo(0,0);};
+function go(sec){const b=document.querySelector(`nav button[data-s="${sec}"]`);if(!b)return;document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x===b));document.querySelectorAll('section').forEach(s=>s.classList.toggle('on',s.id===sec));document.getElementById('crumb').textContent=b.dataset.t;window.scrollTo(0,0);}
+document.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g)go(g.dataset.go);});
+document.getElementById('nav').onclick=e=>{const b=e.target.closest('button');if(b)go(b.dataset.s);};
 function msg(id,ok,t){const m=document.getElementById(id);m.className='msg '+(ok?'ok':'err');m.innerHTML=t;setTimeout(()=>m.className='msg',5000);}
 document.getElementById('fPrestamo').onsubmit=e=>{e.preventDefault();
   const id=document.getElementById('pLibro').value,u=document.getElementById('pUsuario').value.trim(),f=document.getElementById('pFecha').value,d=+document.getElementById('pDias').value;
-  const l=libro(id); if(!l||disp(l)<=0) return msg('mPrestamo',false,'⛔ No hay ejemplares disponibles de este libro.');
-  if(!u) return msg('mPrestamo',false,'⚠️ Escribe el nombre del usuario.');
+  const l=libro(id); if(!l||disp(l)<=0) return msg('mPrestamo',false,'No hay ejemplares disponibles de este libro.');
+  if(!u) return msg('mPrestamo',false,'Escribe el nombre del usuario.');
   const n=Math.max(0,...DB.prestamos.map(p=>+p.id.slice(1)))+1, pid='P'+String(n).padStart(3,'0');
   DB.prestamos.push({id:pid,libroId:id,usuario:u,fechaPrestamo:f,fechaLimite:addDays(f,d),fechaDevolucion:null});
   if(!DB.usuarios.includes(u))DB.usuarios.push(u);
-  save();renderAll();msg('mPrestamo',true,`✅ Préstamo <b>${pid}</b> registrado. Fecha límite: <b>${fmt(addDays(f,d))}</b>.`);document.getElementById('pUsuario').value='';};
+  save();renderAll();msg('mPrestamo',true,`Préstamo <b>${pid}</b> registrado. Fecha límite: <b>${fmt(addDays(f,d))}</b>.`);document.getElementById('pUsuario').value='';};
 document.getElementById('fDevolucion').onsubmit=e=>{e.preventDefault();
   const id=document.getElementById('dPrestamo').value,f=document.getElementById('dFecha').value,p=DB.prestamos.find(x=>x.id===id);
-  if(!p) return msg('mDevolucion',false,'⚠️ Selecciona un préstamo.');
-  if(f<p.fechaPrestamo) return msg('mDevolucion',false,'⚠️ La devolución no puede ser anterior al préstamo.');
+  if(!p) return msg('mDevolucion',false,'Selecciona un préstamo.');
+  if(f<p.fechaPrestamo) return msg('mDevolucion',false,'La devolución no puede ser anterior al préstamo.');
   p.fechaDevolucion=f;save();renderAll();
-  const r=diff(f,p.fechaLimite);msg('mDevolucion',r<=0,r>0?`⚠️ Devolución registrada con <b>${r} día(s) de retraso</b>.`:'✅ Devolución registrada a tiempo.');};
+  const r=diff(f,p.fechaLimite);msg('mDevolucion',r<=0,r>0?`Devolución registrada con <b>${pl(r,'día','días')} de retraso</b>.`:'Devolución registrada a tiempo.');};
 document.getElementById('fLibro').onsubmit=e=>{e.preventDefault();
   const n=Math.max(0,...DB.libros.map(l=>+l.id.slice(1)))+1,id='L'+String(n).padStart(3,'0');
   DB.libros.push({id,titulo:document.getElementById('lTitulo').value.trim(),autor:document.getElementById('lAutor').value.trim(),categoria:document.getElementById('lCat').value,ejemplares:+document.getElementById('lEj').value});
-  save();renderAll();e.target.reset();msg('mLibro',true,`📗 Libro <b>${id}</b> agregado al catálogo.`);};
+  save();renderAll();e.target.reset();msg('mLibro',true,`Libro <b>${id}</b> agregado al catálogo.`);};
 document.getElementById('fBuscar').oninput=renderTabla;document.getElementById('fEstado').onchange=renderTabla;
 function csv(name,head,rows){const q=v=>`"${String(v??'').replace(/"/g,'""')}"`;const t='﻿'+[head,...rows].map(r=>r.map(q).join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/csv;charset=utf-8'}));a.download=name;a.click();}
 document.getElementById('bCsv').onclick=()=>csv('prestamos_biblioteca.csv',['id_prestamo','id_libro','titulo','categoria','usuario','fecha_prestamo','fecha_limite','fecha_devolucion','estado'],DB.prestamos.map(p=>{const l=libro(p.libroId);return [p.id,l.id,l.titulo,l.categoria,p.usuario,p.fechaPrestamo,p.fechaLimite,p.fechaDevolucion||'',estado(p)];}));
 document.getElementById('bCsvLib').onclick=()=>csv('libros_biblioteca.csv',['id_libro','titulo','autor','categoria','ejemplares','prestados','disponibles'],DB.libros.map(l=>[l.id,l.titulo,l.autor,l.categoria,l.ejemplares,activos(l.id),disp(l)]));
 document.getElementById('bReset').onclick=()=>{DB=JSON.parse(JSON.stringify(SEED));save();renderAll();};
 
+paintIcons();
 load();
-document.getElementById('hoy').textContent=fmt(HOY);document.querySelectorAll('.hoyTxt').forEach(x=>x.textContent=fmt(HOY));
+document.querySelectorAll('.hoyTxt').forEach(x=>x.textContent=fmt(HOY));
 document.getElementById('pFecha').value=HOY;document.getElementById('dFecha').value=HOY;
 renderAll();
-if(location.hash){const b=document.querySelector(`nav button[data-s="${location.hash.slice(1)}"]`);if(b)b.click();}
+if(location.hash)go(location.hash.slice(1));
+window.addEventListener('hashchange',()=>go(location.hash.slice(1)));
 </script>
 </body>
 </html>
