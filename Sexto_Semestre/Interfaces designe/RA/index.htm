@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Museo de bolsillo 🏛️ — Demo Model Viewer AR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<!-- 1) Única dependencia: el componente <model-viewer> de Google -->
+<script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.4.0/dist/model-viewer.min.js"></script>
+<style>
+  :root{
+    --bg:#f4f2fb; --panel:#ffffff; --line:#e2ddf3; --txt:#1e1a33; --muted:#625d80; --soft:#f1eefb;
+    --accent:#6c4cf0; --ok:#14a37a; --warn:#e8952a; --bad:#d9435f; --blue:#2f8fd6;
+  }
+  *{box-sizing:border-box}
+  button{font-family:inherit}
+  body{margin:0;font-family:"Space Grotesk",system-ui,sans-serif;background:var(--bg);color:var(--txt)}
+  header{padding:28px 20px 10px;max-width:1100px;margin:auto}
+  h1{margin:0;font-size:clamp(1.6rem,4vw,2.4rem)}
+  header p{color:var(--muted);margin:.4rem 0 0}
+  .tag{display:inline-block;font-size:.75rem;padding:3px 10px;border-radius:99px;background:#6c4cf01a;color:var(--accent);border:1px solid #6c4cf055;margin-bottom:10px}
+  main{max-width:1100px;margin:auto;padding:10px 20px 40px;display:grid;grid-template-columns:1.4fr 1fr;gap:20px}
+  @media (max-width:820px){main{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 8px 24px #2e2a5c12}
+  model-viewer{width:100%;height:520px;--poster-color:transparent;transition:background .3s}
+  model-viewer.claro{background:linear-gradient(180deg,#ffffff 0%,#f3f0fb 55%,#dcd6ee 100%)}
+  model-viewer.estudio{background:radial-gradient(ellipse at 50% 85%,#fdfcff 0%,#e9e5f5 45%,#bdb6d6 100%)}
+  model-viewer.oscuro{background:radial-gradient(circle at 50% 30%,#3a3566,#1b1730)}
+  .ar-btn{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);border:0;border-radius:99px;padding:12px 22px;font:600 1rem "Space Grotesk",system-ui,sans-serif;background:var(--accent);color:#fff;box-shadow:0 6px 20px #6c4cf055;cursor:pointer}
+  .progress{position:absolute;left:0;top:0;height:4px;background:var(--ok);width:0;transition:width .2s}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;padding:14px}
+  .chips button{flex:1;min-width:110px;border:1px solid var(--line);background:var(--soft);color:var(--txt);border-radius:12px;padding:10px;font:600 .95rem "Space Grotesk",system-ui,sans-serif;cursor:pointer}
+  .chips button.on{border-color:var(--accent);background:#6c4cf022;color:var(--accent)}
+  .side{padding:18px}
+  .side h2{margin:0 0 6px;font-size:1.2rem}
+  .side p{color:var(--muted);margin:0 0 14px;line-height:1.5}
+  .row{display:flex;align-items:center;gap:10px;margin:10px 0}
+  .row label{width:100px;font-size:.9rem;color:var(--muted)}
+  .row output{width:38px;text-align:right;font:600 .85rem 'JetBrains Mono',monospace;color:var(--accent)}
+  .row select{flex:1;padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:var(--soft);color:var(--txt);font:inherit}
+  .row input[type=range]{flex:1;accent-color:var(--accent)}
+  .toggle{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+  .toggle button{border:1px solid var(--line);background:var(--soft);color:var(--txt);border-radius:10px;padding:8px 12px;font:.85rem "Space Grotesk",system-ui,sans-serif;cursor:pointer}
+  .status{font-family:"JetBrains Mono",monospace;font-size:.8rem;background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:12px;line-height:1.7}
+  .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:middle}
+  .code{grid-column:1/-1;background:#1b1730;border-color:#1b1730}
+  pre{margin:0;padding:18px;overflow:auto;font:13px/1.6 "JetBrains Mono",monospace;color:#cfd5ff}
+  .k{color:#b9aeff} .a{color:#7cc4ff} .s{color:#7fe0c2} .c{color:#8a85aa}
+  .hotspot{width:22px;height:22px;border-radius:50%;border:2px solid #fff;background:var(--warn);cursor:pointer;position:relative}
+  .hotspot span{position:absolute;left:28px;top:-4px;white-space:nowrap;background:#1b1730e6;color:#fff;padding:4px 8px;border-radius:8px;font-size:.75rem;display:none}
+  .hotspot:hover span,.hotspot:focus span{display:block}
+  footer{text-align:center;color:var(--muted);font-size:.8rem;padding-bottom:30px}
+</style>
+</head>
+<body>
+<header>
+  <span class="tag">Diseño de Interfaces · Guía 5 · Plataformas de RA</span>
+  <h1>🏛️ Museo de bolsillo con &lt;model-viewer&gt;</h1>
+  <p>Escoge una pieza, gírala con el dedo o el mouse y, desde el celular, tócala en “Ver en mi espacio” para ponerla sobre tu mesa.</p>
+</header>
+
+<main>
+  <section class="card" style="position:relative">
+    <model-viewer id="mv" class="claro"
+      src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"
+      alt="Modelo 3D de un astronauta"
+      ar
+      ar-modes="webxr scene-viewer quick-look"
+      ar-scale="auto"
+      ar-placement="floor"
+      camera-controls
+      touch-action="pan-y"
+      auto-rotate
+      shadow-intensity="1.5"
+      shadow-softness="0.6"
+      exposure="1"
+      environment-image="neutral">
+      <button class="hotspot" slot="hotspot-casco" data-position="0 1.75 0.35" data-normal="0 0 1"><span>🪖 Casco con visor reflectivo</span></button>
+      <div class="progress" slot="progress-bar" id="bar"></div>
+      <button slot="ar-button" class="ar-btn">📱 Ver en mi espacio</button>
+    </model-viewer>
+    <div class="chips" id="chips">
+      <button class="on" data-src="https://modelviewer.dev/shared-assets/models/Astronaut.glb" data-alt="Modelo 3D de un astronauta">🧑‍🚀 Astronauta</button>
+      <button data-src="https://modelviewer.dev/shared-assets/models/RobotExpressive.glb" data-alt="Robot animado">🤖 Robot</button>
+      <button data-src="https://modelviewer.dev/shared-assets/models/Horse.glb" data-alt="Caballo animado">🐴 Caballo</button>
+    </div>
+  </section>
+
+  <aside class="card side">
+    <h2>🎛️ Panel de pruebas</h2>
+    <p>Cada control cambia un atributo del componente en vivo. Sirve para explicar en clase qué hace cada uno.</p>
+
+    <div class="row"><label>☀️ Exposición</label><input type="range" id="exp" min="0.2" max="2.5" step="0.1" value="1"><output id="expV">1.0</output></div>
+    <div class="row"><label>🌑 Sombra</label><input type="range" id="sh" min="0" max="2" step="0.1" value="1.5"><output id="shV">1.5</output></div>
+    <div class="row"><label>🌫️ Suavidad</label><input type="range" id="soft" min="0" max="1" step="0.05" value="0.6"><output id="softV">0.6</output></div>
+    <div class="row"><label>💡 Luz</label><select id="env"><option value="neutral">Estudio neutro</option><option value="legacy">Clásica (más contraste)</option></select></div>
+    <div class="row"><label>🖼️ Fondo</label><select id="bg"><option value="claro">Claro (piso)</option><option value="estudio">Estudio</option><option value="oscuro">Oscuro</option></select></div>
+
+    <div class="toggle">
+      <button id="rot">⏸️ Detener giro</button>
+      <button id="anim">▶️ Animación</button>
+      <button id="cam">🎯 Reiniciar cámara</button>
+    </div>
+
+    <div class="status" id="status">
+      <div><span class="dot" style="background:var(--muted)"></span>Cargando modelo…</div>
+    </div>
+  </aside>
+
+  <section class="card code">
+<pre><span class="c">&lt;!-- Esto es todo lo que hace falta para tener RA en una página --&gt;</span>
+<span class="k">&lt;script</span> <span class="a">type</span>=<span class="s">"module"</span> <span class="a">src</span>=<span class="s">"https://cdn.jsdelivr.net/npm/@google/model-viewer@4.4.0/dist/model-viewer.min.js"</span><span class="k">&gt;&lt;/script&gt;</span>
+
+<span class="k">&lt;model-viewer</span>
+  <span class="a">src</span>=<span class="s">"Astronaut.glb"</span>  <span class="c">&lt;!-- modelo 3D en glTF/GLB --&gt;</span>
+  <span class="a">alt</span>=<span class="s">"Modelo 3D de un astronauta"</span>  <span class="c">&lt;!-- accesibilidad --&gt;</span>
+  <span class="a">ar</span>  <span class="c">&lt;!-- activa el botón de RA --&gt;</span>
+  <span class="a">ar-modes</span>=<span class="s">"webxr scene-viewer quick-look"</span> <span class="c">&lt;!-- orden de preferencia --&gt;</span>
+  <span class="a">ar-placement</span>=<span class="s">"floor"</span>  <span class="c">&lt;!-- piso o pared --&gt;</span>
+  <span class="a">camera-controls auto-rotate shadow-intensity</span>=<span class="s">"1"</span><span class="k">&gt;</span>
+<span class="k">&lt;/model-viewer&gt;</span></pre>
+  </section>
+</main>
+<footer>Modelos de ejemplo: shared-assets de modelviewer.dev · Para probar la RA hay que abrir la página por HTTPS (por ejemplo, GitHub Pages) desde un celular compatible.</footer>
+
+<script>
+  const mv = document.getElementById('mv');
+  const bar = document.getElementById('bar');
+  const status = document.getElementById('status');
+  const chips = document.getElementById('chips');
+
+  const line = (color, txt) => `<div><span class="dot" style="background:var(--${color})"></span>${txt}</div>`;
+
+  function pintarEstado(extra = '') {
+    const anims = mv.availableAnimations || [];
+    status.innerHTML =
+      line('ok', 'Modelo cargado ✅') +
+      line(mv.canActivateAR ? 'ok' : 'warn',
+           mv.canActivateAR ? 'Este dispositivo puede abrir RA 📱' : 'Sin RA aquí (normal en PC) 💻') +
+      line('blue', `Animaciones: ${anims.length ? anims.slice(0,4).join(', ') : 'ninguna'}`) + extra;
+  }
+
+  mv.addEventListener('progress', e => {
+    const p = e.detail.totalProgress;
+    bar.style.width = (p * 100) + '%';
+    if (p === 1) setTimeout(() => bar.style.width = 0, 400);
+  });
+  mv.addEventListener('load', () => pintarEstado());
+  mv.addEventListener('error', () => status.innerHTML = line('bad', 'No se pudo cargar el modelo ❌ (revisa la conexión)'));
+  mv.addEventListener('ar-status', e => pintarEstado(line('accent', `Estado RA: ${e.detail.status}`)));
+
+  chips.addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    [...chips.children].forEach(x => x.classList.toggle('on', x === b));
+    status.innerHTML = line('muted', 'Cargando modelo…');
+    mv.src = b.dataset.src; mv.alt = b.dataset.alt;
+    // el hotspot del casco solo tiene sentido en el astronauta
+    mv.querySelector('.hotspot').style.display = b.dataset.src.includes('Astronaut') ? '' : 'none';
+  });
+
+  const slider = (id, prop) => { const el = document.getElementById(id), out = document.getElementById(id + 'V');
+    el.oninput = () => { mv[prop] = Number(el.value); out.textContent = Number(el.value).toFixed(id === 'soft' ? 2 : 1); }; };
+  slider('exp', 'exposure'); slider('sh', 'shadowIntensity'); slider('soft', 'shadowSoftness');
+  document.getElementById('env').onchange = e => mv.environmentImage = e.target.value;
+  document.getElementById('bg').onchange = e => mv.className = e.target.value;
+
+  const rot = document.getElementById('rot');
+  rot.onclick = () => { mv.autoRotate = !mv.autoRotate; rot.textContent = mv.autoRotate ? '⏸️ Detener giro' : '🔄 Girar solo'; };
+
+  const anim = document.getElementById('anim');
+  anim.onclick = () => {
+    if (!mv.availableAnimations.length) { pintarEstado(line('warn', 'Este modelo no trae animaciones')); return; }
+    mv.paused ? mv.play() : mv.pause();
+    anim.textContent = mv.paused ? '▶️ Animación' : '⏸️ Pausar animación';
+  };
+  document.getElementById('cam').onclick = () => { mv.cameraOrbit = 'auto auto auto'; mv.fieldOfView = 'auto'; mv.jumpCameraToGoal(); };
+</script>
+</body>
+</html>
